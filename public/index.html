@@ -5,7 +5,52 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title>seatsmart-electron</title>
+    <title>Seatsmart</title>
+    <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --yellow: #FCBB04;
+      --red: #D2360A;
+      --black: #000000;
+      --dark-gray: #040404;
+      --gray: #6C6C6C;
+      --light-gray: #E5E5E5;
+      --white: #FFFFFF;
+    }
+
+    @font-face {
+      font-family: 'Merriweather';
+      src: url('<%= BASE_URL %>Merriweather.ttf');
+      font-family: 'ArchivoNarrow';
+      src: url('<%= BASE_URL %>ArchivoNarrow.ttf');
+    }
+
+    h1 {
+      font-family: 'Merriweather';
+    }
+
+    h2 {
+      font-family: 'ArchivoNarrow';
+    }
+
+    h3 {
+      font-family: 'ArchivoNarrow';
+      font-weight: 500;
+    }
+
+    h4 {
+      font-family: 'ArchivoNarrow';
+      font-weight: 400;
+    }
+
+    body {
+      font-family: 'Merriweather';
+    }
+    </style>
   </head>
   <body>
     <noscript>
