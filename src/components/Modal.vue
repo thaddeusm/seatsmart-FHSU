@@ -1,7 +1,8 @@
 <template>
-	<div>
-		<div id="overlay" @click="$emit('trigger-close')"></div>
-		<div id="modal">
+	<div id="modalContainer">
+		<div id="overlay" v-if="dismissable" @click="$emit('trigger-close')"></div>
+		<div id="overlay" v-else></div>
+		<div id="modal" :class="[size === 'large' ? 'large' : 'small']">
 			<slot name="content"></slot>
 		</div>
 	</div>
@@ -9,15 +10,17 @@
 
 <script>
 export default {
-	name: 'Modal'
+	name: 'Modal',
+	props: ['dismissable', 'size']
 }
 </script>
 
 <style scoped>
 #overlay {
 	position: fixed;
-	z-index: 150;
+	z-index: 190;
 	top: 0;
+	left: 0;
 	width: 100vw;
 	height: 100vh;
 	opacity: .8;
@@ -25,14 +28,26 @@ export default {
 }
 
 #modal {
-	height: 80vh;
-	width: 80vw;
 	background: var(--light-gray);
 	position: absolute;
-	top: 50%;
-	left: 50%;
-	margin-top: -40vh;
-	margin-left: -40vw;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	margin: auto;
+	overflow: auto;
 	z-index: 200;
+	border: 3px solid var(--yellow);
+	border-radius: 5px;
+}
+
+.large {
+	height: 600px;
+	width: 950px;
+}
+
+.small {
+	height: 375px;
+	width: 700px;
 }
 </style>

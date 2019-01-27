@@ -1,35 +1,445 @@
 <template>
-	<div>
-		<aside>
+	<div id="settingsContainer">
+		<aside id="settingsNavigation">
 			<div id="navigationLogo">
 				<img src="@/assets/cog.svg" alt="settings icon">
 			</div>
 			<ul id="navigationList">
-				<li class="active">Behaviors</li>
-				<li>Calculation</li>
-				<li>About</li>
+				<li class="active" ref="help"><button class="button-link" @click="changeContent('help')">Help</button></li>
+				<li class="inactive" ref="behaviors"><button class="button-link" @click="changeContent('behaviors')">Behaviors</button></li>
+				<li class="inactive" ref="calculation"><button class="button-link" @click="changeContent('calculation')">Calculation</button></li>
+				<li class="inactive" ref="about"><button class="button-link" @click="changeContent('about')">About</button></li>
 			</ul>
 			<div id="navigationFooter">
-				<button @click="$emit('trigger-modal-close')">Close</button>
+				<button v-if="!updated" @click="$emit('trigger-modal-close')">Close</button>
+				<button v-else @click="saveChanges">Save</button>
 			</div>
 		</aside>
-		<section>
-			
+		<section id="settingsContent">
+			<section v-if="content == 'help'">
+				<Help />
+			</section>
+			<section v-if="content == 'behaviors'">
+				<h2>Behaviors</h2>
+				<p>What does participation mean to you?  Add the positive and negative behaviors you would like to track with Seatsmart below.  You can also set different weights for these behaviors, which will impact how the application calculates student progress.</p>
+				<section id="alert">
+					<h4>{{ alertMessage }}</h4>
+				</section>
+				<Tabs :sections="[{label: 'Positive', color: 'yellow'}, {label: 'Negative', color: 'red'}]">
+					<template slot="Positive"">
+						<div class="label-row black-border">
+							<span>Abbreviation</span>
+							<span>Description</span>
+							<span>Weight</span>
+						</div>
+						<div ref="formArea">
+							<div class="form-group" v-for="(behavior, index) in positiveBehaviors" :key="index">
+								<section class="inline select-wrapper">
+									<v-select v-model="behavior.Abbreviation" :options="[
+										'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+										'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+									]" @keyup="alertMessage = ''"></v-select>
+								</section>
+								<input type="text" name="description" v-model="behavior.Description">
+								<section class="inline select-wrapper">
+									<v-select v-model="behavior.Weight" :options="[
+										'low', 'medium', 'strong'
+									]" @keyup="alertMessage = ''"></v-select>
+								</section>
+								<button class="delete-button black-text" @click="removeFormGroup('positive', index)">-</button>
+							</div>
+							<section id="addButtonArea">
+								<button class="add-button black-text" @click="addFormGroup('positive')">+</button>
+							</section>
+						</div>
+					</template>
+					<template slot="Negative">
+						<div class="label-row white-border">
+							<span>Abbreviation</span>
+							<span>Description</span>
+							<span>Weight</span>
+						</div>
+						<div ref="formArea">
+							<div class="form-group" v-for="(behavior, index) in negativeBehaviors" :key="index">
+								<section class="inline select-wrapper">
+									<v-select v-model="behavior.Abbreviation" :options="[
+										'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+										'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+									]" @keyup="alertMessage = ''"></v-select>
+								</section>
+								<input type="text" name="description" v-model="behavior.Description">
+								<section class="inline select-wrapper">
+									<v-select v-model="behavior.Weight" :options="[
+										'low', 'medium', 'strong'
+									]" @keyup="alertMessage = ''"></v-select>
+								</section>
+								<button v-if="index !== 0" class="delete-button white-text" @click="removeFormGroup('negative', index)">-</button>
+							</div>
+							<section id="addButtonArea">
+								<button class="add-button white-text" @click="addFormGroup('negative')">+</button>
+							</section>
+						</div>
+					</template>
+				</Tabs>
+			</section>
+			<section v-if="content == 'calculation'">
+				<h2>Calculation</h2>
+				<p>As students' participation records accumulate, seatsmart will calculate participation trends to provide charts and other visual cues.  Calculations can be done in two ways:</p>
+				<section class="radio-heading">
+					<span class="radio-label">Balanced</span>
+					<img class="radio-icon" src="@/assets/balance.svg" alt="balanced calculation">
+					<div class="radio-wrapper">
+						<input type="radio" id="optionOne" value="balanced" v-model="calculation" @click="updated = true">
+					</div>
+				</section>
+				<section class="radio-heading">
+					<span class="radio-label">No News is Good News</span>
+					<img class="radio-icon" src="@/assets/nonews.svg" alt="no news is good news calculation">
+					<div class="radio-wrapper">
+						<input type="radio" id="optionTwo" value="nonews" v-model="calculation" @click="updated = true">
+					</div>
+				</section>
+			</section>
+			<section v-if="content == 'about'">
+				<h2>About Seatsmart</h2>
+				<p>This is a paragraph about Seatsmart.</p>
+			</section>
 		</section>
 	</div>
 </template>
 
 <script>
+import Tabs from '@/components/Tabs.vue'
+import Help from '@/components/Help.vue'
+import TouchBar from '@/components/TouchBar.vue'
+
 export default {
 	name: 'Settings',
+	components: {
+		Tabs,
+		Help,
+		TouchBar
+	},
 	data() {
 		return {
-			window: 'behaviors'
+			content: 'help',
+			updated: false,
+			alertMessage: '',
+			calculation: 'balanced',
+			positiveBehaviors: [
+				{
+					Abbreviation: null,
+					Description: null,
+					Weight: null
+				}
+			],
+			negativeBehaviors: [
+				{
+					Abbreviation: null,
+					Description: null,
+					Weight: null
+				}
+			]
+		}
+	},
+	mounted() {
+		this.calculation = this.$store.state.preferences.calculation
+		this.positiveBehaviors = this.$store.state.preferences.positiveBehaviors
+		this.negativeBehaviors = this.$store.state.preferences.negativeBehaviors
+	},
+	methods: {
+		changeContent(area) {
+			this.content = area
+
+			let areas = ['help', 'behaviors', 'calculation', 'about']
+
+			areas.forEach((a) => {
+				if (a !== area) {
+					this.$refs[`${a}`].classList = 'inactive'
+				}
+			});
+			
+			this.$refs[`${area}`].classList = 'active'
+		},
+		selectForm(form) {
+			if (form == 'positive') {
+				return this.positiveBehaviors
+			} else {
+				return this.negativeBehaviors
+			}
+		},
+		errorExists(form) {
+			let formToCheck = this.selectForm(form)
+
+			let error = false
+
+			for (let i = 0; i<formToCheck.length; i++) {
+				if (formToCheck[i].Abbreviation == null) {
+					this.alertMessage = `Please select an abbreviation for the ${form} behavior.`
+					error = true
+					break
+				} else if (formToCheck[i].Description == null) {
+					this.alertMessage = `Please enter a description for the ${form} behavior.`
+					error = true
+					break
+				} else if (formToCheck[i].Weight == null) {
+					this.alertMessage = `Please select a weight for the ${form} behavior.`
+					error = true
+					break
+				}
+			}
+
+			return error
+		},
+		addFormGroup(form) {
+			this.alertMessage = ''
+
+			let obj = {
+				Abbreviation: null,
+				Description: null,
+				Weight: null
+			}
+
+			let formToEdit = this.selectForm(form)
+
+			formToEdit.push(obj)
+			this.updated = true
+			
+		},
+		removeFormGroup(form, index) {
+			this.alertMessage = ''
+
+			let formToEdit = this.selectForm(form)
+
+			if (this.selectForm(form)[index].Description !== 'Absent') {
+				formToEdit.splice(index, 1)
+
+				this.updated = true
+			} else {
+				this.alertMessage = 'Sorry, absences cannot be removed as a category.'
+			}
+		},
+		saveChanges() {
+			if (!this.errorExists('positive') && !this.errorExists('negative')) {
+				this.$store.dispatch('setPreferences', {
+					progress: this.$store.state.preferences.progress,
+					calculation: this.calculation,
+					positiveBehaviors: this.positiveBehaviors,
+					negativeBehaviors: this.negativeBehaviors
+				})
+
+				let scope = this
+
+				setTimeout(function() {
+					scope.$store.dispatch('getPreferences')
+				}, 1000, scope)
+
+				this.$emit('trigger-modal-close')
+			}
 		}
 	}
 }
 </script>
 
 <style scoped>
+#settingsContainer {
+	display: grid;
+	width: 100%;
+	height: 100%;
+	grid-template-columns: 175px 1fr;
+	grid-template-areas: "navigation content";
+}
 
+#settingsNavigation {
+	grid-area: "navigation";
+	background: var(--gray);
+	border-top-left-radius: 2px;
+	border-bottom-left-radius: 2px;
+}
+
+#settingsContent {
+	grid-area: "content";
+	background: var(--light-gray);
+	border-top-right-radius: 2px;
+	border-bottom-right-radius: 2px;
+	padding: 45px 70px;
+	overflow: auto;
+}
+
+#navigationLogo {
+	text-align: center;
+	margin: 40px 0 70px 0;
+}
+
+img {
+	width: 35px;
+}
+
+.button-link {
+	background: none;
+	border: none;
+	outline: none;
+	cursor: pointer;
+	font-family: 'Merriweather';
+	font-size: 22px;
+}
+
+.inactive > button {
+	color: var(--white);
+}
+
+.active {
+	background: var(--light-gray);
+	color: var(--black);
+}
+
+li {
+	padding: 5px 22px;
+	margin: 50px 0;
+}
+
+ul {
+	list-style: none;
+}
+
+p {
+	margin: 10px 0;
+	line-height: 1.8;
+}
+
+h3 {
+	margin-top: 30px;
+}
+
+#navigationFooter {
+	margin-top: 90px;
+	text-align: center;
+}
+
+#navigationFooter > button {
+	font-family: 'ArchivoNarrow';
+	font-size: 16px;
+	padding: 5px 12px;
+	border-radius: 5px;
+	cursor: pointer;
+	box-shadow: 0px 0px 1px var(--black);
+	outline: none;
+}
+
+/* Form styles */
+.select-wrapper {
+	background: var(--white);
+	border-radius: 4px;
+	margin: 10px 10px;
+	width: 160px;
+	color: var(--black);
+	font-family: 'ArchivoNarrow';
+}
+
+.inline {
+	display: inline-block;
+}
+
+input {
+	border-radius: 4px;
+	font-family: 'ArchivoNarrow';
+	font-size: 15px;
+	padding: 7px 10px 9px 10px;
+	margin: 10px 10px;
+	width: 140px;
+	color: var(--black);
+	border: 1px solid var(--light-gray);
+	outline: none;
+}
+
+.label-row {
+	padding-left: 5px;
+	padding-bottom: 5px;
+}
+
+.black-border {
+	border-bottom: 1px solid var(--black);
+}
+
+.white-border {
+	border-bottom: 1px solid var(--white);
+}
+
+.label-row > span {
+	display: inline-block;
+	width: 160px;
+	margin: 0 10px;
+}
+
+.delete-button {
+	background: none;
+	outline: none;
+	font-size: 50px;
+	border: none;
+	cursor: pointer;
+	margin-top: -10px;
+	margin-left: 10px;
+	vertical-align: middle;
+}
+
+#addButtonArea {
+	text-align: center;
+	margin-top: 20px;
+}
+
+.add-button {
+	background: none;
+	outline: none;
+	cursor: pointer;
+	font-size: 40px;
+	border: none;
+	font-family: 'Merriweather';
+}
+
+#alert {
+	text-align: center;
+	color: var(--red);
+	padding: 10px;
+	height: 20px;
+}
+
+.black-text {
+	color: var(--black);
+}
+
+.white-text {
+	color: var(--white);
+}
+
+.radio-heading {
+	display: grid;
+	grid-template-columns: 90% 5% 5%;
+	grid-template-rows: 100%;
+	grid-template-areas: "text image radio";
+	align-items: center;
+	width: 100%;
+	height: 40px;
+}
+
+.radio-heading > img {
+	text-align: right;
+}
+
+.radio-text {
+	grid-area: "text";
+	vertical-align: middle;
+	font-family: 'ArchivoNarrow';
+	font-size: 24px;
+}
+
+.radio-icon {
+	width: 30px;
+	/*margin-left: 5px;*/
+	padding-bottom: 4px;
+	grid-area: "image";
+}
+
+.radio-wrapper {
+	grid-area: "radio";
+}
 </style>

@@ -1,6 +1,8 @@
 {
   "name": "Seatsmart",
   "version": "0.1.0",
+  "author": "Thaddeus McCleary",
+  "description": "a classroom participation tracking application",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -13,9 +15,13 @@
     "electron-window-state": "^5.0.3",
     "moment": "^2.23.0",
     "nedb": "^1.8.0",
+    "taskbook": "^0.2.0",
     "vue": "^2.5.17",
+    "vue-drag-drop": "^1.1.4",
     "vue-router": "^3.0.1",
-    "vuex": "^3.0.1"
+    "vue-select": "^2.5.1",
+    "vuex": "^3.0.1",
+    "xlsx": "^0.14.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.2.0",

@@ -2,7 +2,8 @@
 	<aside>
 		<button @click="closeWindow"><img src="@/assets/close.svg" alt="close icon"></button>
 		<button @click="minimizeWindow"><img src="@/assets/minimize.svg" alt="minimize icon"></button>
-		<button @click="maximizeWindow"><img src="@/assets/maximize.svg" alt="maximize icon"></button>
+		<button v-if="maximized" @click="restoreWindow"><img src="@/assets/restore.svg" alt="restore icon"></button>
+		<button v-else @click="maximizeWindow"><img src="@/assets/maximize.svg" alt="maximize icon"></button>
 	</aside>
 </template>
 
@@ -11,18 +12,41 @@ const remote = require('electron').remote
 
 export default {
 	name: 'WindowFrame',
+	data() {
+		return {
+			maximized: false
+		}
+	},
 	methods: {
 		closeWindow() {
-			let window = remote.getCurrentWindow();
-			window.close();
+			let window = remote.getCurrentWindow()
+			window.close()
 		},
 		minimizeWindow() {
-			let window = remote.getCurrentWindow();
-			window.minimize();
+			let window = remote.getCurrentWindow()
+			window.minimize()
 		},
 		maximizeWindow() {
-			let window = remote.getCurrentWindow();
-			window.maximize();
+			let window = remote.getCurrentWindow()
+			window.setFullScreen(true)
+			this.maximized = true
+		},
+		restoreWindow() {
+			let window = remote.getCurrentWindow()
+			if (window.isFullScreen()) {
+				window.setFullScreen(false)
+			} else {
+				window.unmaximize()
+			}
+			
+			this.maximized = false
+		}
+	},
+	mounted() {
+		let window = remote.getCurrentWindow()
+
+		if (window.isFullScreen()) {
+			this.maximized = true
 		}
 	}
 }

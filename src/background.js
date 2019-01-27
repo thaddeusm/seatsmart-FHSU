@@ -6,7 +6,27 @@ import {
   installVueDevtools
 } from 'vue-cli-plugin-electron-builder/lib'
 import path from 'path'
-const windowStateKeeper = require('electron-window-state')
+import Datastore from 'nedb'
+
+const userDocs = app.getPath('documents');
+
+// initialize datastores
+global.classes = new Datastore({
+  filename: `${userDocs}/Seatsmart/classes.db`,
+  autoload: true
+})
+
+global.students = new Datastore({
+  filename: `${userDocs}/Seatsmart/students.db`,
+  autoload: true
+})
+
+global.notes = new Datastore({
+  filename: `${userDocs}/Seatsmart/notes.db`,
+  autoload: true
+})
+
+
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -16,27 +36,22 @@ let win
 // Standard scheme must be registered before the app is ready
 protocol.registerStandardSchemes(['app'], { secure: true })
 function createWindow () {
-  // Load the previous state with fallback to defaults
-  let mainWindowState = windowStateKeeper({
-    defaultWidth: 1000,
-    defaultHeight: 800
-  })
 
   // Create the window using the state information
   win = new BrowserWindow({
-    'x': mainWindowState.x,
-    'y': mainWindowState.y,
-    'width': mainWindowState.width,
-    'height': mainWindowState.height,
-    'minWidth': 1000,
-    'minHeight': 800,
-    'frame': false
+    'frame': false,
+    'backgroundColor': '#000000',
+    'show': false
   })
 
-  // Let us register listeners on the window, so we can update the state
-  // automatically (the listeners will be removed when the window is closed)
-  // and restore the maximized or full screen state
-  mainWindowState.manage(win)
+  win.maximize()
+  win.setResizable(false),
+  win.show()
+
+  let {width, height} = require('electron').screen.getPrimaryDisplay().size
+
+  global.screenWidth = width
+  global.screenHeight = height
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
@@ -48,10 +63,20 @@ function createWindow () {
     win.loadURL('app://./index.html')
   }
 
+  require('./toolbarmenu')
+
   win.on('closed', () => {
     win = null
   })
+
+  // production
+  // win.on('ready-to-show', function() { 
+  //   win.show(); 
+  //   win.focus(); 
+  // });
 }
+
+
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {

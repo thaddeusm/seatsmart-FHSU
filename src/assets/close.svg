@@ -1,12 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 21.0.2, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="24px"
-	 height="24px" viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
-<g id="Black">
-	<polygon fill="none" stroke="#FCBB04" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="14.5,12 
-		21,5.5 18.5,3 12,9.5 5.5,3 3,5.5 9.5,12 3,18.5 5.5,21 12,14.5 18.5,21 21,18.5 	"/>
-</g>
-<g id="Frames-24px">
-	<rect fill="none" width="24" height="24"/>
-</g>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;">
+    <use id="Black" xlink:href="#_Image1" x="1.5" y="1.5" width="21px" height="21px"/>
+    <rect id="Frames-24px" x="0" y="0" width="24" height="24" style="fill:none;"/>
+    <defs>
+        <image id="_Image1" width="21px" height="21px" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABEElEQVQ4jbWVPQ6CMBzFX1u2Dgy6GI+iR3DQhVkn2DQh0ZHopifQSXeIrpxB484RWB0cjCF1UCI2QgHrSxj68X78oe0r8Cn+eqoo32Ny2L7HhO8xYXLYZWh5HpYO7mZsTQhACdDv0F54EvHtjnMRMOsZdGkvPL493PeY2M+fbzM57MPi3c4DZueYHPZ+/qwYAKey4XLFZrhMHEKA7ZStZXBaoRDAaJU4lys2uZ8iV/dLX2lwu4lJJWAZcBwY1YEqsGvRqBawCFxmTKl2E5M4MIRr0Sjb71o0igNDtBoYVwJqr1T7P9W++tr36T9O1Eeg1FkoZaCoAkMVOABAZFCqwgT64iEEGC4lj87kl6XljnoArps44eoxcAgAAAAASUVORK5CYII="/>
+    </defs>
 </svg>
