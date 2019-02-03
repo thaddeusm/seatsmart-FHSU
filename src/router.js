@@ -4,6 +4,7 @@ import Home from './views/Home.vue'
 import ChartCreation from './views/ChartCreation.vue'
 import Chart from './views/Chart.vue'
 import BulkNote from './views/BulkNote.vue'
+import RearrangeSeats from './views/RearrangeSeats.vue'
 
 Vue.use(Router)
 
@@ -31,6 +32,11 @@ export default new Router({
         path: '/chart/bulknote/:id',
         props: true,
         component: BulkNote
+    },
+    {
+        path: '/chart/rearrange/:id',
+        props: true,
+        component: RearrangeSeats
     }
   ]
 })

@@ -49,9 +49,10 @@
         </template>
       </Modal>
     </transition>
-    <TouchBar :show="!modalOpen" :bar="[
-      {type: 'spacer', size: 'flexible'},
-      {type: 'button', label: 'Settings', method: openModal}
+    <TouchBar :show="!modalOpen && !alertModalOpen" :bar="[
+        {type: 'button', label: 'New Chart', method: function() {$router.push('/charts/new')}},
+        {type: 'spacer', size: 'flexible'},
+        {type: 'button', label: 'Settings', method: openModal}
     ]"/>
   </div>
 </template>
@@ -112,7 +113,6 @@ export default {
     deleteClass(id) {
       db.deleteSomething('classes', {_id: id})
         .then((num) => {
-          console.log(num)
 
           this.alertModalOpen = false
           this.alertModalClass = ''
@@ -207,6 +207,8 @@ export default {
   mounted() {
     this.populateClasses()
 
+    this.$store.dispatch('setLastView', '/')
+
     let scope = this
 
     setTimeout(function() {
@@ -244,6 +246,7 @@ export default {
 main {
   text-align: center;
   width: 100%;
+  margin-bottom: 100px;
 }
 
 button {
@@ -259,7 +262,8 @@ footer {
 }
 
 .class-button-area {
-  display: inline-block;
+    display: inline-block;
+    margin: 20px 0;
 }
 
 .class-button-area > * {

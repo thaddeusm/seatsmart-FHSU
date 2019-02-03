@@ -3,7 +3,7 @@
 	:class="[trend === 0 ? 'gray' : '', trend < 0 ? 'red' : '', trend > 0 ? 'yellow' : '']">
 		<section id="cardBody" v-if="student.firstName !== ''">
 			<!-- <h3 v-if="name !== ''">{{ name.split('(')[1].split(')')[0] }}</h3> -->
-			<h3>{{ student.firstName }}</h3>
+			<h2>{{ student.firstName }}</h2>
 		</section>
 		<section id="cardFooter" v-if="student.firstName !== ''">
 			<h4 v-if="trend > 0">{{ '+' + trend + '' }}</h4>
@@ -93,9 +93,18 @@ export default {
 				return this.notes
 			}
 		},
+		calculationPreference() {
+			return this.$store.state.preferences.calculation
+		},
 		trend() {
 			if (this.notes.length === 0) {
-				return 0
+				// if calculation preference is 'no news is good news'
+				// compensate by recommending an increase of 4 points
+				if (this.calculationPreference == 'nonews') {
+					return 4
+				} else {
+					return 0
+				}
 			} else {
 				let thisWeek = moment().week()
 				let thisWeeksNotes = []
@@ -106,35 +115,39 @@ export default {
 					}
 				}
 
-				let trendNumber = 0
-				for (let i=0; i<thisWeeksNotes.length; i++) {
-					if (thisWeeksNotes[i].type === 'positive') {
-						switch (thisWeeksNotes[i].behavior.Weight) {
-							case ('low'):
-								trendNumber += 2
-								break
-							case ('medium'):
-								trendNumber += 4
-								break
-							case ('strong'):
-								trendNumber += 8
-								break
-						}
-					} else {
-						switch (thisWeeksNotes[i].behavior.Weight) {
-							case ('low'):
-								trendNumber -= 2
-								break
-							case ('medium'):
-								trendNumber -= 4
-								break
-							case ('strong'):
-								trendNumber -= 8
-								break
+				if (thisWeeksNotes.length === 0 && this.calculationPreference == 'nonews') {
+					return 4
+				} else {
+					let trendNumber = 0
+					for (let i=0; i<thisWeeksNotes.length; i++) {
+						if (thisWeeksNotes[i].type === 'positive') {
+							switch (thisWeeksNotes[i].behavior.Weight) {
+								case ('low'):
+									trendNumber += 2
+									break
+								case ('medium'):
+									trendNumber += 4
+									break
+								case ('strong'):
+									trendNumber += 8
+									break
+							}
+						} else {
+							switch (thisWeeksNotes[i].behavior.Weight) {
+								case ('low'):
+									trendNumber -= 2
+									break
+								case ('medium'):
+									trendNumber -= 4
+									break
+								case ('strong'):
+									trendNumber -= 8
+									break
+							}
 						}
 					}
+					return trendNumber
 				}
-				return trendNumber
 			}
 		},
 		numberOfAbsences() {
@@ -169,7 +182,7 @@ export default {
 						}
 					}
 				}
-				// emit
+
 				return absentToday
 			}
 		}
@@ -199,6 +212,10 @@ export default {
 						db.readSomething('notes', {student: this.student._id})
 							.then((notes) => {
 								this.notes = notes
+
+								if (this.isAbsentToday) {
+									this.$emit('absence', this.student._id)
+								}
 							})
 					}
 				})

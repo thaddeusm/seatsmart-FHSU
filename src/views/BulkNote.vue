@@ -10,9 +10,9 @@
             <section id="buttonCardArea">
                 <div class="row" v-for="(row, index) in classStudents" :key="`row${index}`">
                     <ButtonCard
-                        v-for="(student, index) in row"
+                        v-for="(student, subIndex) in row"
                         :button="true"
-                        :key="`column${index}`"
+                        :key="`column${subIndex}`"
                         :text="student.firstName"
                         :onClick="addStudent"
                         :param="student._id"
@@ -21,6 +21,11 @@
                 </div>
             </section>
         </main>
+        <TouchBar :show="true" :bar="[
+			{type: 'spacer', size: 'flexible'},
+			{type: 'button', label: 'Cancel', method: function() {$router.push(`/chart/${id}`)}},
+			{type: 'spacer', size: 'flexible'},
+	    ]"/>
     </div>
 </template>
 
@@ -30,6 +35,7 @@ import db from '@/db.js'
 import TitleBar from '@/components/TitleBar.vue'
 import NoteForm from '@/components/NoteForm.vue'
 import ButtonCard from '@/components/ButtonCard.vue'
+import TouchBar from '@/components/TouchBar.vue'
 
 export default {
 	name: 'BulkNote',
@@ -37,7 +43,8 @@ export default {
 	components: {
         TitleBar,
         NoteForm,
-        ButtonCard
+        ButtonCard,
+        TouchBar
 	},
 	data() {
 		return {
@@ -97,6 +104,7 @@ export default {
                         for (let i=0; i<sortedStudents.length; i++) {
                             this.classStudents[sortedStudents[i].seat.row - 1][sortedStudents[i].seat.column - 1] = sortedStudents[i]
                         }
+
 
                     })
             })

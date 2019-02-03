@@ -80,6 +80,12 @@ export default {
 			this.note.dateNoted = moment()
 
 			if (this.type == 'single') {
+				if (this.note.type === 'negative' && this.note.behavior.Abbreviation === 'A') {
+					if (moment(this.note.dateNoted._d).dayOfYear() === moment().dayOfYear()) {
+						this.$emit('absence', this.note.student)
+					}
+				}
+
 				db.createSomething('notes', this.note)
 					.then(() => {
 						this.$store.dispatch('setLastUpdatedStudent', this.student._id)
@@ -90,6 +96,12 @@ export default {
 
 				for (let i=0; i<this.students.length; i++) {
 					this.note.student = this.students[studentIndex]
+
+					if (this.note.type === 'negative' && this.note.behavior.Abbreviation === 'A') {
+						if (moment(this.note.dateNoted._d).dayOfYear() === moment().dayOfYear()) {
+							this.$emit('absence', this.note.student)
+						}
+					}
 
 					db.createSomething('notes', this.note)
 						.then(() => {

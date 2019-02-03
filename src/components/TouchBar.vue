@@ -24,7 +24,7 @@ export default {
 				let touchbar = new TouchBar(touchbarItems)
 
 				// display touchbar
-				
+
 				window.setTouchBar(touchbar)
 			} else {
 				window.setTouchBar(null)
@@ -48,13 +48,13 @@ export default {
 	},
 	mounted() {
 		/*
-		
+
 		API example:
 		bar = [{type: 'button', label: '', method: ''}, {type: 'spacer', size: 'flexible'}]
 
 		*/
 		let window = remote.getCurrentWindow()
-		
+
 		// clear previous
 		window.setTouchBar()
 		// built touchbar elements stored in an array

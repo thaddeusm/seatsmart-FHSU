@@ -6,34 +6,66 @@
 		<main id="chartMain">
 			<section v-if="!inverted" class="row" v-for="(row, index) in classInfo.rows" :style="rowMargins" :key="`row${index}`">
 				<div v-for="(column, subIndex) in classInfo.columns" class="column" :style="cardStyle">
-					<NameCard :type="cardType" :row="index + 1" :column="subIndex + 1" :classId="classInfo._id" v-on:open-note-modal="openNoteModal" :chosen="chosenSeat.row == index + 1 && chosenSeat.column == subIndex + 1" />
+					<NameCard
+						:type="cardType"
+						:row="index + 1"
+						:column="subIndex + 1"
+						:classId="classInfo._id"
+						v-on:open-note-modal="openNoteModal"
+						v-on:absence="addAbsence"
+						:chosen="chosenSeat.row == index + 1 && chosenSeat.column == subIndex + 1"
+					/>
 				</div>
 			</section>
 			<section v-if="inverted" class="row" v-for="(row, index) in classInfo.rows" :style="rowMargins" :key="`invertedRow${index}`">
 				<div v-for="(column, subIndex) in classInfo.columns" class="column" :style="cardStyle">
-					<NameCard :type="cardType" :row="classInfo.rows - index" :column="classInfo.columns - subIndex" :classId="classInfo._id" v-on:open-note-modal="openNoteModal" :chosen="chosenSeat.row == index + 1 && chosenSeat.column == subIndex + 1" />
+					<NameCard
+						:type="cardType"
+						:row="classInfo.rows - index"
+						:column="classInfo.columns - subIndex"
+						:classId="classInfo._id"
+						v-on:open-note-modal="openNoteModal"
+						v-on:absence="addAbsence"
+						:chosen="chosenSeat.row == index + 1 && chosenSeat.column == subIndex + 1" />
 				</div>
 			</section>
 		</main>
 		<footer id="chartFooter">
-			<ActionBar background="var(--gray)" :hamburger="true" v-on:expand="calculateCardSize('large')" v-on:contract="calculateCardSize('small')" :collapsed="inverted">
+			<ActionBar background="var(--gray)" :hamburger="true" v-on:expand="calculateCardSize('large')" v-on:contract="calculateCardSize('small')" :collapsed="false">
 		        <template slot="left">
 		        	<router-link to="/"><img src="@/assets/home.svg" alt="home icon"></router-link>
 		        </template>
 		        <template slot="center">
-		        	<button @click="setLastView(`/chart/${id}`)" class="action-button"><img src="@/assets/editwhite.svg" alt="edit icon"></button>
-		        	<router-link :to="`/chart/rearrange/${id}`" class="action-button"><img src="@/assets/rearrange.svg" alt="rearrange icon"></router-link>
-		        	<button @dblclick="clearRandom" @click="selectRandom" class="action-button"><img src="@/assets/random.svg" alt="select random student icon"></button>
-		        	<button @click="toggleCardStyle" class="action-button"><img src="@/assets/changecard.svg" alt="change card style icon"></button>
+		        	<button @click="setLastView(`/chart/${id}`)" class="action-button">
+						<img src="@/assets/editwhite.svg" alt="edit icon">
+						<span class="tooltip">edit class information</span>
+					</button>
+		        	<button @click="rearrangeSeats" class="action-button">
+						<img src="@/assets/rearrange.svg" alt="rearrange icon">
+						<span class="tooltip">edit seat assignments</span>
+					</button>
+		        	<button @dblclick="clearRandom" @click="selectRandom" class="action-button">
+						<img src="@/assets/random.svg" alt="select random student icon">
+						<span class="tooltip">select a random student</span>
+					</button>
+		        	<button @click="toggleCardStyle" class="action-button">
+						<img src="@/assets/changecard.svg" alt="change card style icon">
+						<span class="tooltip">toggle card styles</span>
+					</button>
 		        	<button @click="showTrends" class="action-button">
 		        		<img v-if="!showingTrends" src="@/assets/trendicon.svg" alt="show participation trends icon">
 		        		<img v-else src="@/assets/trendiconyellow.svg" alt="show participation trends icon">
+						<span class="tooltip">show/hide week trends</span>
 		        	</button>
 					<button @click="invertChart" class="action-button">
 						<img src="@/assets/present.svg" alt="present icon" v-if="!inverted">
 						<img src="@/assets/presentyellow.svg" alt="present icon" v-else>
+						<span class="tooltip">toggle presentation mode</span>
 					</button>
-		        	<router-link :to="`/chart/bulknote/${id}`" class="action-button"><img src="@/assets/groupnote.svg" alt="group note icon"></router-link>
+		        	<button @click="createBulkNote" class="action-button">
+						<img src="@/assets/groupnote.svg" alt="group note icon">
+						<span class="tooltip">note for multiple students</span>
+					</button>
 		        </template>
 		        <template slot="right">
 		        	<button @click="openModal"><img src="@/assets/cog.svg" alt="settings icon"></button>
@@ -43,7 +75,12 @@
 		<transition name="fade">
       		<Modal v-if="noteModalOpen" v-on:trigger-close="noteModalOpen = false" :dismissable="true" size="large">
         		<template slot="content">
-          			<NoteForm type="single" :student="newNoteStudent" v-on:trigger-modal-close="noteModalOpen = false" />
+          			<NoteForm
+						type="single"
+						:student="newNoteStudent"
+						v-on:trigger-modal-close="noteModalOpen = false"
+						v-on:absence="addAbsence"
+					/>
         		</template>
       		</Modal>
     	</transition>
@@ -54,6 +91,18 @@
         		</template>
       		</Modal>
     	</transition>
+		<TouchBar :show="!modalOpen" :bar="[
+			{type: 'button', label: '🏠', method: function() {$router.push('/')}},
+			{type: 'spacer', size: 'small'},
+			{type: 'button', label: 'Edit', method: function() {setLastView(`/chart/${id}`)}},
+			{type: 'button', label: 'Random', method: function() {selectRandom()}},
+			{type: 'button', label: 'Style', method: function() {toggleCardStyle()}},
+			{type: 'button', label: 'Trends', method: function() {showTrends()}},
+			{type: 'button', label: 'Present', method: function() {invertChart()}},
+			{type: 'button', label: 'Bulk', method: function() {createBulkNote()}},
+			{type: 'spacer', size: 'small'},
+	    	{type: 'button', label: '⚙️', method: openModal}
+	    ]"/>
 	</div>
 </template>
 
@@ -68,6 +117,7 @@ import ActionBar from '@/components/ActionBar.vue'
 import Modal from '@/components/Modal.vue'
 import Settings from '@/components/Settings.vue'
 import NoteForm from '@/components/NoteForm.vue'
+import TouchBar from '@/components/TouchBar.vue'
 
 export default {
 	name: 'Chart',
@@ -78,7 +128,8 @@ export default {
 		ActionBar,
 		Modal,
 		Settings,
-		NoteForm
+		NoteForm,
+		TouchBar
 	},
 	data() {
 		return {
@@ -135,7 +186,8 @@ export default {
 			],
 			cardType: 'complex',
 			showingTrends: false,
-			inverted: false
+			inverted: false,
+			absentStudents: []
 		}
 	},
 	methods: {
@@ -187,7 +239,12 @@ export default {
     		this.$router.push(`/chart/edit/${this.id}`)
     	},
     	selectRandom() {
-    		let student = this.students[this.randomStudent]
+			// check to ensure selected student is not absent today
+			if (this.absentStudents.indexOf(this.students[this.randomStudent]._id) !== -1) {
+				this.randomStudent++
+			}
+			let student = this.students[this.randomStudent]
+
     		this.chosenSeat.row = student.seat.row
     		this.chosenSeat.column = student.seat.column
     		this.randomStudent++
@@ -223,6 +280,15 @@ export default {
 				this.cardType = 'complex'
 			}
 
+		},
+		addAbsence(studentID) {
+			this.absentStudents.push(studentID)
+		},
+		rearrangeSeats() {
+			this.$router.push(`/chart/rearrange/${this.id}`)
+		},
+		createBulkNote() {
+			this.$router.push(`/chart/bulknote/${this.id}`)
 		},
     	shuffle(arr) {
     		var j, x, i;
@@ -298,6 +364,39 @@ button {
 
 .action-button {
 	margin: 0 5%;
+	position: relative;
+}
+
+.action-button:hover .tooltip {
+	visibility: visible;
+}
+
+.tooltip {
+	visibility: hidden;
+	position: absolute;
+	background: var(--yellow);
+	width: 150px;
+	padding: 5px;
+	bottom: 100%;
+	left: 50%;
+	text-align: center;
+	z-index: 100;
+	margin-left: -75px;
+	margin-bottom: 21px;
+	border-radius: 5px;
+	font-family: 'Merriweather';
+	font-size: 1em;
+}
+
+.tooltip::after {
+	content: " ";
+	position: absolute;
+	top: 100%; /* At the bottom of the tooltip */
+	left: 50%;
+	margin-left: -10px;
+	border-width: 5px;
+	border-style: solid;
+	border-color: var(--yellow) transparent transparent transparent;
 }
 
 .fade-enter-active, .fade-leave-active {

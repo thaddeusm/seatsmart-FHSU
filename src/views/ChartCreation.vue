@@ -95,7 +95,6 @@
 		<section id="progressNodes">
 			<ProgressNodes :steps="steps" :progress="progress" />
 		</section>
-		<TouchBar :show="true" :bar="[]"/>
     	<Modal v-if="modalOpen" v-on:trigger-close="modalOpen = false" :dismissable="true" size="large">
     		<template slot="content">
     			<div class="modal-header">
@@ -135,6 +134,11 @@
     			</div>
     		</template>
     	</Modal>
+		<TouchBar :show="true" :bar="[
+			{type: 'spacer', size: 'flexible'},
+			{type: 'button', label: 'Back', method: routeBack},
+			{type: 'spacer', size: 'flexible'},
+	    ]"/>
 	</div>
 </template>
 
@@ -260,7 +264,7 @@ export default {
 					if (Number.parseInt(this.classChart.rows) * Number.parseInt(this.classChart.columns) < this.classStudents.length) {
 						this.alertMessage = 'There are not enough seats in the chart for students'
 						error = true
-					} 
+					}
 			}
 
 			return error
@@ -292,7 +296,7 @@ export default {
 			}
 
 			this.classStudents.push(obj)
-			
+
 		},
 		removeFormGroup(index) {
 			this.alertMessage = ''
@@ -304,7 +308,7 @@ export default {
 			const files = event.dataTransfer.files
 
 			let path = event.dataTransfer.files.item(0).path
-			
+
 			this.processXLSX(path)
 		},
 		handleOpen() {
@@ -363,7 +367,7 @@ export default {
 			}
 
 			this.classStudents.shift()
-			
+
 			if (this.classStudents.length === 0) {
 				this.alertMessage = 'Please check the file type (xlsx) and try again.'
 			} else {
@@ -437,9 +441,6 @@ export default {
 						student.seat.column = col
 
 						db.createSomething('students', student)
-							.then((result) => {
-								console.log(result)
-							})
 
 						if (col === this.classChart.columns) {
 							col = 1
@@ -447,6 +448,7 @@ export default {
 						} else {
 							col++
 						}
+
 					}
 
 					if (this.$store.state.preferences.progress.length == 0) {
@@ -477,7 +479,7 @@ export default {
 						this.$router.push(`/chart/${this.classChart._id}`)
 					}
 				}
-				
+
 			}
 		}
 	},
@@ -521,7 +523,7 @@ export default {
 	display: grid;
 	grid-template-rows: 5% 15% 60% 20%;
 	grid-template-columns: 50% 50%;
-	grid-template-areas: 
+	grid-template-areas:
 		'back back'
 		'head head'
 		'diagram chartForm'
