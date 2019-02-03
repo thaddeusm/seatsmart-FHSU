@@ -10,7 +10,7 @@
     </header>
     <main>
       <div class="class-button-area" v-for="(classToDisplay, index) in classesToDisplay">
-        <ButtonCard :icon="classToDisplay.name" :text="classToDisplay.semester + ' ' + classToDisplay.year" :to="`/chart/${classToDisplay._id}`" :key="index"/>
+        <ButtonCard :button="false" :icon="classToDisplay.name" :text="classToDisplay.semester + ' ' + classToDisplay.year" :to="`/chart/${classToDisplay._id}`" :key="index"/>
         <div class="modify-button-area">
           <button @click="editClass(classToDisplay._id)" class="modify-class-button"><img src="@/assets/edit.svg" alt="edit icon"></button>
           <button @click="promptDeleteClass(classToDisplay._id, classToDisplay.name)" class="modify-class-button"><img src="@/assets/delete.svg" alt="delete icon"></button>
@@ -50,7 +50,7 @@
       </Modal>
     </transition>
     <TouchBar :show="!modalOpen" :bar="[
-      {type: 'spacer', size: 'flexible'}, 
+      {type: 'spacer', size: 'flexible'},
       {type: 'button', label: 'Settings', method: openModal}
     ]"/>
   </div>
@@ -101,6 +101,7 @@ export default {
       this.modalOpen = true
     },
     editClass(id) {
+      this.$store.dispatch('setLastView', '/')
       this.$router.push(`/chart/edit/${id}`)
     },
     promptDeleteClass(id, name) {
@@ -188,7 +189,7 @@ export default {
           for (let i=0; i<unordered.length; i++) {
             if (unordered[i].year == thisYear && unordered[i].semester == thisSemester) {
               firstPriority.push(unordered[i])
-            } else if (unordered[i].semester == lastSemester) { 
+            } else if (unordered[i].semester == lastSemester) {
               secondPriority.push(unordered[i])
             } else {
               remainder.push(unordered[i])
@@ -261,6 +262,10 @@ footer {
   display: inline-block;
 }
 
+.class-button-area > * {
+    margin: 0 30px;
+}
+
 .modal-button {
   background: none;
   outline: none;
@@ -316,7 +321,7 @@ footer {
 }
 
 .fade-enter-active, .fade-leave-active {
-  transition: opacity .3s;
+  transition: opacity .2s;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;

@@ -173,19 +173,30 @@ export default {
 
 			let error = false
 
+			let abbreviations = {"A": 0, "B": 0, "C": 0, "D": 0, "E": 0, "F": 0, "G": 0, "H": 0, "I": 0, "J": 0, "K": 0, "L": 0, "M": 0, "N": 0, "O": 0, "P": 0, "Q": 0, "R": 0, "S": 0, "T": 0, "U": 0, "V": 0, "W": 0, "X": 0, "Y": 0, "Z": 0}
+
 			for (let i = 0; i<formToCheck.length; i++) {
 				if (formToCheck[i].Abbreviation == null) {
 					this.alertMessage = `Please select an abbreviation for the ${form} behavior.`
 					error = true
-					break
 				} else if (formToCheck[i].Description == null) {
 					this.alertMessage = `Please enter a description for the ${form} behavior.`
 					error = true
-					break
 				} else if (formToCheck[i].Weight == null) {
 					this.alertMessage = `Please select a weight for the ${form} behavior.`
 					error = true
-					break
+				}
+
+				abbreviations[formToCheck[i].Abbreviation]++
+			}
+
+			if (!error) {
+				for (let i=0; i<Object.keys(abbreviations).length; i++) {
+					if (Object.values(abbreviations)[i] > 1) {
+						this.alertMessage = `There are multiple ${form} behaviors with the same abbreviation.`
+						error = true
+						break
+					}
 				}
 			}
 

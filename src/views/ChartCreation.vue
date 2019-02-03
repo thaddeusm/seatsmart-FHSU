@@ -1,7 +1,7 @@
 <template>
 	<div id="container">
 		<section id="backArea">
-			<button class="home-button" @click="routeToHome"><img class="back-arrow" src="@/assets/backarrow.svg" alt="back arrow"> back home</button>
+			<button class="home-button" @click="routeBack"><img class="back-arrow" src="@/assets/backarrow.svg" alt="back arrow"> back</button>
 		</section>
 		<header>
 			<h1 ref="pageHeader" v-if="id == undefined">New Chart</h1>
@@ -192,6 +192,11 @@ export default {
 			]
 		}
 	},
+	computed: {
+		lastView() {
+			return this.$store.state.lastView
+		}
+	},
 	methods: {
 		saveClassChart() {
 			if (this.classChart._id !== null) {
@@ -380,12 +385,12 @@ export default {
 				}
 			}]
 		},
-		routeToHome() {
+		routeBack() {
 			if (this.classChart._id !== null && this.mode == 'new') {
 				db.deleteSomething('classes' ,{_id: this.classChart._id})
 			}
 
-			this.$router.push('/')
+			this.$router.push(this.lastView)
 		},
 		cancelSeatingChange() {
 			this.alertModalOpen = false
@@ -530,7 +535,7 @@ export default {
 }
 
 header {
-	margin: 40px 0;
+	margin: 30px 0;
 	grid-area: head;
 	text-align: center;
 }

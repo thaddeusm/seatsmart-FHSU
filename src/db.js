@@ -16,7 +16,7 @@ function getDB(name) {
 	}
 }
 
-/* 
+/*
 classes:
 {
 	columns: Integer,
@@ -31,11 +31,23 @@ students:
 	firstName: String,
 	lastName: String,
 	tigerID: String,
-	class: Integer
+	class: String
 	seat: {
 		row: Integer,
 		column: Integer
 	}
+}
+
+notes:
+{
+	behavior: {
+		Abbreviation: null,
+		Description: null,
+		Weight: null
+	},
+	student: null,
+	dateNoted: {},
+	comment: null
 }
 */
 

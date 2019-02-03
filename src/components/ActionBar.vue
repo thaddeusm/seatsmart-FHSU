@@ -20,10 +20,19 @@
 <script>
 export default {
 	name: 'ActionBar',
-	props: ['background', 'hamburger'],
+	props: ['background', 'hamburger', 'collapsed'],
 	data() {
 		return {
 			display: true
+		}
+	},
+	watch: {
+		collapsed() {
+			if (this.collapsed !== null) {
+				if (this.collapsed == true) {
+					this.toggleDisplay()
+				}
+			}
 		}
 	},
 	methods: {
@@ -33,6 +42,13 @@ export default {
 				this.$emit('contract')
 			} else {
 				this.$emit('expand')
+			}
+		}
+	},
+	mounted() {
+		if (this.collapsed !== null) {
+			if (this.collapsed == true) {
+				this.toggleDisplay()
 			}
 		}
 	}
@@ -64,6 +80,7 @@ section {
 
 .center-buttons {
 	grid-area: "center";
+	text-align: center;
 }
 
 .right-button {
