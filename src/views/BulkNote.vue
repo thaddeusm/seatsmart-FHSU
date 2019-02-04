@@ -7,17 +7,20 @@
             <section id="formArea">
                 <NoteForm :students="studentIDs" type="multiple" :to="`/chart/${id}`" />
             </section>
-            <section id="buttonCardArea">
-                <div class="row" v-for="(row, index) in classStudents" :key="`row${index}`">
-                    <ButtonCard
-                        v-for="(student, subIndex) in row"
-                        :button="true"
-                        :key="`column${subIndex}`"
-                        :text="student.firstName"
-                        :onClick="addStudent"
-                        :param="student._id"
-                        :selected="studentIDs.indexOf(student._id) !== -1"
-                    />
+            <section id="buttonCardArea" v-if="loaded">
+                <div class="row" v-for="(row, index) in grid" :key="`row${index}`">
+                    <div v-for="(student, subIndex) in row" class="card-wrapper">
+                        <ButtonCard
+                            v-if="student._id !== 'blank'"
+                            :button="true"
+                            :key="`column${subIndex}`"
+                            :text="student.firstName"
+                            :onClick="addStudent"
+                            :param="student._id"
+                            :selected="studentIDs.indexOf(student._id) !== -1"
+                        />
+                        <button class="blank-card" v-else disabled></button>
+                    </div>
                 </div>
             </section>
         </main>
@@ -57,55 +60,60 @@ export default {
                 year: null
             },
             studentIDs: [],
-            classStudents: [
-                [
-                    {
-                        _id: 'blank',
-                        firstName: 'blank',
-                        lastName: 'blank',
-                        selected: false,
-                        class: 'blank',
-                        seat: {
-                            column: 0,
-                            row: 0
-                        }
-                    }
-                ]
-            ]
-		}
+            grid: [[{
+                _id: 'blank',
+                firstName: '',
+                lastName: '',
+                class: '',
+                selected: '',
+                seat: {
+                    row: 0,
+                    column: 0
+                }
+            }]],
+            loaded: false
+        }
 	},
 	methods: {
         addStudent(id) {
             this.studentIDs.push(id)
         }
 	},
-    mounted() {
+    created() {
         db.readSomething('classes', {_id: this.id})
             .then((results) => {
                 this.classChart = results[0]
+                this.grid.splice(0, 1)
+                for (let i=0; i<this.classChart.rows; i++) {
+					this.grid.push([])
+
+					for (let k=0; k<this.classChart.columns; k++) {
+						this.grid[i].push({
+                            _id: 'blank',
+                            firstName: '',
+                            lastName: '',
+                            class: '',
+                            selected: '',
+                            seat: {
+                                row: 0,
+                                column: 0
+                            }
+                        })
+					}
+				}
 
                 db.readSomething('students', {class: this.id})
                     .then((results) => {
-                        let sortedStudents = results.sort((a,b) => {
-                            if (a.seat.row === b.seat.row) {
-                                return a.seat.column - b.seat.column
-                            } else {
-                                return a.seat.row - b.seat.row
-                            }
-                        })
 
-                        for (let i=1; i<this.classChart.rows; i++) {
-                            this.classStudents.push([])
-                            for (let k=1; k<this.classChart.columns; k++) {
-                                this.classStudents[i].push({})
-                            }
+                        for (let i=0; i<results.length; i++) {
+                            let thisStudent = results[i]
+                            let thisRow = thisStudent.seat.row
+                            let thisColumn = thisStudent.seat.column
+
+                            this.grid[thisRow - 1][thisColumn - 1] = thisStudent
                         }
 
-                        for (let i=0; i<sortedStudents.length; i++) {
-                            this.classStudents[sortedStudents[i].seat.row - 1][sortedStudents[i].seat.column - 1] = sortedStudents[i]
-                        }
-
-
+                        this.loaded = true
                     })
             })
     }
@@ -141,5 +149,25 @@ export default {
 
 .row > * {
     margin: 15px 10px;
+}
+
+.card-wrapper {
+    display: inline-block;
+}
+
+.blank-card {
+	background: var(--gray);
+	padding: 7px 20px 17px 20px;
+	color: var(--black);
+	border-radius: 10px;
+	outline: none;
+	border: 3px solid var(--gray);
+	cursor: not-allowed;
+	display: inline-block;
+	text-decoration: none;
+	transition: .05s border ease;
+	height: 70px;
+	width: 125px;
+	vertical-align: middle;
 }
 </style>

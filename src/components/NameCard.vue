@@ -206,7 +206,9 @@ export default {
 						this.student = result[0]
 
 						if (this.student.firstName.indexOf('(') !== -1) {
-							this.student.firstName = this.student.firstName.split('(')[1].split(')')[0]
+							this.student.firstName = this.student.firstName.split('(')[1].split(')')[0].split(' ')[0]
+						} else {
+							this.student.firstName = this.student.firstName.split(' ')[0]
 						}
 
 						db.readSomething('notes', {student: this.student._id})

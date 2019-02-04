@@ -6,7 +6,7 @@
 				<section class="left-button">
 					<slot name="left"></slot>
 				</section>
-				<section class="center-buttons">
+				<section :class="[nowrap ? 'nowrap' : '', 'center-buttons']">
 					<slot name="center"></slot>
 				</section>
 				<section class="right-button">
@@ -20,7 +20,7 @@
 <script>
 export default {
 	name: 'ActionBar',
-	props: ['background', 'hamburger', 'collapsed'],
+	props: ['background', 'hamburger', 'collapsed', 'nowrap'],
 	data() {
 		return {
 			display: true
@@ -107,6 +107,12 @@ button {
 
 .hamburger-button > img {
 	width: 20px;
+}
+
+.nowrap {
+	overflow-x: scroll;
+	overflow-y: hidden;
+	white-space: nowrap;
 }
 
 .slide-enter-active {

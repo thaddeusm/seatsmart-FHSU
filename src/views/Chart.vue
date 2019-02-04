@@ -42,7 +42,7 @@
 					</button>
 		        	<button @click="rearrangeSeats" class="action-button">
 						<img src="@/assets/rearrange.svg" alt="rearrange icon">
-						<span class="tooltip">edit seat assignments</span>
+						<span class="tooltip">change student seating</span>
 					</button>
 		        	<button @dblclick="clearRandom" @click="selectRandom" class="action-button">
 						<img src="@/assets/random.svg" alt="select random student icon">
@@ -380,7 +380,7 @@ button {
 	bottom: 100%;
 	left: 50%;
 	text-align: center;
-	z-index: 100;
+	z-index: 1000;
 	margin-left: -75px;
 	margin-bottom: 21px;
 	border-radius: 5px;
