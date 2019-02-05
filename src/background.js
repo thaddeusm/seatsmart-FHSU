@@ -7,7 +7,6 @@ import {
 } from 'vue-cli-plugin-electron-builder/lib'
 import path from 'path'
 import Datastore from 'nedb'
-
 const userDocs = app.getPath('documents');
 
 // initialize datastores
@@ -70,9 +69,9 @@ function createWindow () {
   })
 
   // production
-  // win.on('ready-to-show', function() { 
-  //   win.show(); 
-  //   win.focus(); 
+  // win.on('ready-to-show', function() {
+  //   win.show();
+  //   win.focus();
   // });
 }
 

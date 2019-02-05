@@ -88,52 +88,63 @@
 				</div>
 				<section class="progress-button-area">
 					<button class="progress-button" @click="changeProgress(2)">back</button>
-					<button class="progress-button" @click="viewSavedChart">view chart</button>
+					<button class="progress-button" @click="viewSavedChart" v-if="classStudents.length > 2">view chart</button>
 				</section>
 			</section>
 		</section>
 		<section id="progressNodes">
 			<ProgressNodes :steps="steps" :progress="progress" />
 		</section>
-    	<Modal v-if="modalOpen" v-on:trigger-close="modalOpen = false" :dismissable="true" size="large">
-    		<template slot="content">
-    			<div class="modal-header">
-    				<h1>Import a FHSU Roster</h1>
-    			</div>
-    			<div class="modal-body">
-    				<div class="step">
-    					<img src="@/assets/tiger.png" alt="FHSU tiger">
-    					<h2>Teaching > Course Rosters on Tiger Central</h2>
-    					<h2>1</h2>
-    				</div>
-    				<div class="step">
-    					<img src="@/assets/excel.svg" alt="Excel file icon">
-    					<h2>Click on the Excel icon next to a course</h2>
-    					<h2>2</h2>
-    				</div>
-    				<div class="step">
-    					<img src="@/assets/import.svg" alt="import icon">
-    					<h2>import or drag the Excel file into Seatsmart</h2>
-    					<h2>3</h2>
-    				</div>
-    			</div>
-    			<div class="modal-footer">
-    				<button class="modal-footer-button" @click="modalOpen = false">Got it</button>
-    			</div>
-    		</template>
-    	</Modal>
-    	<Modal v-if="alertModalOpen" v-on:trigger-close="alertModalOpen = false" :dismissable="true" size="small">
-    		<template slot="content">
-    			<div class="alert-modal-body">
-    				<h2>The edited chart causes a seating conflict with at least one student.</h2>
-    				<h2>Do you want to reset seating assignments and proceed with current edits?</h2>
-    			</div>
-    			<div class="alert-modal-footer">
-    				<button class="modal-footer-button yellow" @click="resetSeating">Yes</button>
-    				<button class="modal-footer-button" @click="cancelSeatingChange">cancel</button>
-    			</div>
-    		</template>
-    	</Modal>
+		<transition name="fade">
+	    	<Modal v-if="modalOpen" v-on:trigger-close="modalOpen = false" :dismissable="true" size="large">
+	    		<template slot="content">
+	    			<div class="modal-header">
+	    				<h1>Import a FHSU Roster</h1>
+	    			</div>
+	    			<div class="modal-body">
+	    				<div class="step">
+	    					<img src="@/assets/tiger.png" alt="FHSU tiger">
+	    					<h2>Teaching > Course Rosters on Tiger Central</h2>
+	    					<h2>1</h2>
+	    				</div>
+	    				<div class="step">
+	    					<img src="@/assets/excel.svg" alt="Excel file icon">
+	    					<h2>Click on the Excel icon next to a course</h2>
+	    					<h2>2</h2>
+	    				</div>
+	    				<div class="step">
+	    					<img src="@/assets/import.svg" alt="import icon">
+	    					<h2>import or drag the Excel file into Seatsmart</h2>
+	    					<h2>3</h2>
+	    				</div>
+	    			</div>
+	    			<div class="modal-footer">
+	    				<button class="modal-footer-button" @click="modalOpen = false">Got it</button>
+	    			</div>
+	    		</template>
+	    	</Modal>
+		</transition>
+		<transition name="fade">
+	    	<Modal v-if="alertModalOpen" v-on:trigger-close="alertModalOpen = false" :dismissable="true" size="small">
+	    		<template slot="content">
+	    			<div class="alert-modal-body" v-if="seatingConflict">
+	    				<h2>The edited chart causes a seating conflict with at least one student.</h2>
+	    				<h2>Do you want to reset seating assignments and proceed with current edits?</h2>
+	    			</div>
+					<div class="alert-modal-body" v-else-if="incompleteInformation">
+	    				<h2>Some information is missing about the student(s) you have added.</h2>
+	    				<h2>Please fill in the missing information and try again.</h2>
+	    			</div>
+	    			<div class="alert-modal-footer" v-if="seatingConflict">
+	    				<button class="modal-footer-button yellow" @click="resetSeating">Yes</button>
+	    				<button class="modal-footer-button" @click="cancelSeatingChange">cancel</button>
+	    			</div>
+					<div class="alert-modal-footer" v-else-if="incompleteInformation">
+	    				<button class="modal-footer-button" @click="alertModalOpen = false">Got it</button>
+	    			</div>
+	    		</template>
+	    	</Modal>
+		</transition>
 		<TouchBar :show="true" :bar="[
 			{type: 'spacer', size: 'flexible'},
 			{type: 'button', label: 'Back', method: routeBack},
@@ -193,7 +204,11 @@ export default {
 						row: null
 					}
 				}
-			]
+			],
+			deletedStudents: [],
+			numberOfStudentsAdded: 0,
+			seatingConflict: false,
+			incompleteInformation: false
 		}
 	},
 	computed: {
@@ -265,6 +280,7 @@ export default {
 						this.alertMessage = 'There are not enough seats in the chart for students'
 						error = true
 					}
+					break
 			}
 
 			return error
@@ -294,13 +310,19 @@ export default {
 					column: null
 				}
 			}
+			if (this.mode === 'edit') {
+				this.numberOfStudentsAdded++
+				console.log(this.unusedSeats)
+			}
 
 			this.classStudents.push(obj)
 
 		},
 		removeFormGroup(index) {
 			this.alertMessage = ''
-
+			if (this.mode === 'edit') {
+				this.deletedStudents.push(this.classStudents[index])
+			}
 			this.classStudents.splice(index, 1)
 		},
 		handleDrop(data, event) {
@@ -426,6 +448,11 @@ export default {
 			this.$router.push(`/chart/${this.classChart._id}`)
 		},
 		viewSavedChart() {
+			// filter empty form groups
+			let studentsToSave = this.classStudents.filter((student) => {
+				return student.firstName !== null && student.lastName !== null && student.tigerID !== null
+			})
+
 			// ensure there are enough seats for listed students
 			if (this.errorExists(4) === true) {
 				this.progress = 1
@@ -434,8 +461,8 @@ export default {
 					// randomly place students in unique seats
 					let col = 1
 					let row = 1
-					for (let i=0; i<this.classStudents.length; i++) {
-						let student = this.classStudents[i]
+					for (let i=0; i<studentsToSave.length; i++) {
+						let student = studentsToSave[i]
 
 						student.seat.row = row
 						student.seat.column = col
@@ -451,7 +478,7 @@ export default {
 
 					}
 
-					if (this.$store.state.preferences.progress.length == 0) {
+					if (this.$store.state.preferences.progress.indexOf('created class') === -1) {
 						this.$store.dispatch('setPreferences', {
 							progress: ['created class'],
 							calculation: this.$store.state.preferences.calculation,
@@ -462,18 +489,60 @@ export default {
 
 					this.$router.push(`/chart/${this.classChart._id}`)
 				} else {
+					// check for deleted students
+					if (this.deletedStudents.length !== 0) {
+						for (let i=0; i<this.deletedStudents.length; i++) {
+							db.deleteSomething('students', {_id: this.deletedStudents[i]._id})
+								.then((numDeleted) => {
+									if (numDeleted > 0) {
+										console.log(`${this.deletedStudents[i].firstName} was deleted`)
+									}
+								})
+						}
+					}
+
+					// check for added students
+					if (this.numberOfStudentsAdded > 0) {
+						this.incompleteInformation = false
+						// check for missing info
+						for (let i=0; i<this.numberOfStudentsAdded; i++) {
+							let index = i + 1
+							let newStudent = this.classStudents[this.classStudents.length - index]
+
+							if (newStudent.firstName == null || newStudent.lastName == null || newStudent.tigerID == null) {
+								this.incompleteInformation = true
+								break
+							}
+						}
+
+					}
+
 					// check for errors with student's current seats
-					let seatingConflict = false
+					this.seatingConflict = false
 					for (let i=0; i<this.classStudents.length; i++) {
 						if (this.classStudents[i].seat.row > this.classChart.rows || this.classStudents[i].seat.column > this.classChart.columns) {
-							seatingConflict = true
+							this.seatingConflict = true
 							break
 						}
 					}
 
-					if (seatingConflict) {
+					if (this.incompleteInformation) {
+						this.alertModalOpen = true
+					} else if (this.seatingConflict) {
 						this.alertModalOpen = true
 					} else {
+						// if all information, save new students
+						if (!this.incompleteInformation) {
+
+							for (let i=0; i<this.numberOfStudentsAdded; i++) {
+								let index = i + 1
+								let newStudent = this.classStudents[this.classStudents.length - index]
+
+								db.createSomething('students', newStudent)
+
+							}
+						}
+
 						this.saveClassChart()
 
 						this.$router.push(`/chart/${this.classChart._id}`)
@@ -500,6 +569,7 @@ export default {
 					db.readSomething('students', {class: this.id})
 						.then((students) => {
 							this.classStudents = students
+
 						})
 				})
 		} else {
@@ -531,13 +601,13 @@ export default {
 }
 
 #backArea {
-	padding-top: 40px;
+	padding-top: 30px;
 	padding-left: 15px;
 	grid-area: back;
 }
 
 header {
-	margin: 30px 0;
+	margin: 25px 0;
 	grid-area: head;
 	text-align: center;
 }
@@ -623,6 +693,10 @@ h1 {
 
 .progress-button:nth-child(2) {
 	margin-left: 10px;
+}
+
+progress-button:disabled {
+	cursor: not-allowed;
 }
 
 #formOne {
@@ -868,5 +942,12 @@ h1 {
   background: var(--gray);
   text-align: center;
   height: 75px;
+}
+
+.fade-enter-active, .fade-leave-active {
+    transition: opacity .2s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
 }
 </style>

@@ -3,7 +3,8 @@
 	:class="[trend === 0 ? 'gray' : '', trend < 0 ? 'red' : '', trend > 0 ? 'yellow' : '']">
 		<section id="cardBody" v-if="student.firstName !== ''">
 			<!-- <h3 v-if="name !== ''">{{ name.split('(')[1].split(')')[0] }}</h3> -->
-			<h2>{{ student.firstName }}</h2>
+			<h3 v-if="conserveSpace">{{ student.firstName }}</h3>
+			<h2 v-else>{{ student.firstName }}</h2>
 		</section>
 		<section id="cardFooter" v-if="student.firstName !== ''">
 			<h4 v-if="trend > 0">{{ '+' + trend + '' }}</h4>
@@ -24,11 +25,12 @@
 		</section>
 		<section id="cardBody" v-if="student.firstName !== ''">
 			<!-- <h3 v-if="name !== ''">{{ name.split('(')[1].split(')')[0] }}</h3> -->
-			<h2>{{ student.firstName }}</h2>
+			<h3 v-if="conserveSpace">{{ student.firstName }}</h3>
+			<h2 v-else>{{ student.firstName }}</h2>
 		</section>
 		<section id="cardFooter" v-if="student.firstName !== ''">
 			<AbbreviationCircle v-if="notes.length !== 0 && type !== 'simple'" v-for="(note, index) in latestNotes" :key="index" :behavior="note.behavior" size="small" :color="note.type === 'positive' ? 'yellow' : 'red'" />
-			<button class="simple-button" id="moreButton"><img src="@/assets/more.svg" alt="more icon"></button>
+			<button class="simple-button" id="moreButton" @click="$router.push(`/student/${student._id}`)"><img src="@/assets/more.svg" alt="more icon"></button>
 		</section>
 	</div>
 </template>
@@ -40,7 +42,7 @@ import AbbreviationCircle from '@/components/AbbreviationCircle.vue'
 
 export default {
 	name: 'NameCard',
-	props: ['type', 'column', 'row', 'classId', 'chosen'],
+	props: ['type', 'column', 'row', 'classId', 'chosen', 'conserveSpace'],
 	components: {
 		AbbreviationCircle
 	},
@@ -66,7 +68,8 @@ export default {
 					},
 					student: null,
 					type: null,
-					dateNoted: {}
+					dateNoted: {},
+					_id: ''
 				}
 			]
 		}
@@ -245,7 +248,7 @@ export default {
 		"leftHeader centerHeader rightHeader"
 		"cardBody   cardBody cardBody"
 		"cardFooter cardFooter cardFooter";
-	grid-template-rows: 20% 40% 40%;
+	grid-template-rows: 30% 30% 40%;
 	grid-template-columns: 1fr 1fr 1fr;
 	border-radius: 10px;
 }

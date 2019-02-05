@@ -24,7 +24,6 @@ export default {
 				let touchbar = new TouchBar(touchbarItems)
 
 				// display touchbar
-
 				window.setTouchBar(touchbar)
 			} else {
 				window.setTouchBar(null)
@@ -68,7 +67,9 @@ export default {
 		let touchbar = new TouchBar(touchbarItems)
 
 		// display touchbar
-		window.setTouchBar(touchbar)
+		if (this.show) {
+			window.setTouchBar(touchbar)
+		}
 	}
 }
 </script>

@@ -9,6 +9,7 @@
 
 <script>
 const remote = require('electron').remote
+import api from '@/preferences.js'
 
 export default {
 	name: 'WindowFrame',
@@ -38,7 +39,7 @@ export default {
 			} else {
 				window.unmaximize()
 			}
-			
+
 			this.maximized = false
 		}
 	},

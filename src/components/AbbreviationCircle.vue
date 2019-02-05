@@ -30,7 +30,7 @@ export default {
 
 <style scoped>
 #abbreviation {
-	
+
 }
 
 span {
@@ -38,12 +38,11 @@ span {
 }
 
 .small {
-	font-size: .8em;
+	font-size: .7em;
 	display: inline-block;
-	width: 1.6em;
-	height: 1.5em;
-	padding-top: .1em;
-	border-radius: 1.6em;
+	width: 1.3em;
+	height: 1.3em;
+	border-radius: 1.3em;
 	margin: 0 3%;
 }
 

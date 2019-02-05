@@ -12,30 +12,28 @@ export default new Vuex.Store({
   },
   mutations: {
   	getPreferences(state, preferences) {
-      state.preferences = preferences
+        state.preferences = preferences
   	},
   	setPreferences(state, newPreferences) {
-  		state.preferences = newPreferences
+  	    state.preferences = newPreferences
+        api.setPreferences(newPreferences)
   	},
     setLastUpdatedStudent(state, studentID) {
-      state.lastUpdatedStudent = studentID
+        state.lastUpdatedStudent = studentID
     },
     setLastView(state, lastView) {
-      state.lastView = lastView
+        state.lastView = lastView
     }
   },
   actions: {
   	getPreferences(context) {
-  		api.getPreferences()
-        .then((preferences) => {
-          context.commit('getPreferences', preferences)
-        })
+        api.getPreferences()
+            .then((preferences) => {
+                context.commit('getPreferences', preferences)
+            })
   	},
   	setPreferences(context, newPreferences) {
-  		api.setPreferences(newPreferences)
-        .then((newPreferences) => {
-          context.commit('setPreferences', newPreferences)
-        })
+  		context.commit('setPreferences', newPreferences)
   	},
     setLastUpdatedStudent(context, studentID) {
       context.commit('setLastUpdatedStudent', studentID)

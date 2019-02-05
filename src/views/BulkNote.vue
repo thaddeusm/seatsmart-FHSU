@@ -76,7 +76,14 @@ export default {
 	},
 	methods: {
         addStudent(id) {
-            this.studentIDs.push(id)
+            // ensure the id isn't already stored
+            let idIndexCheck = this.studentIDs.indexOf(id)
+
+            if (idIndexCheck == -1) {
+                this.studentIDs.push(id)
+            } else {
+                this.studentIDs.splice(idIndexCheck, 1)
+            }
         }
 	},
     created() {
@@ -169,5 +176,12 @@ export default {
 	height: 70px;
 	width: 125px;
 	vertical-align: middle;
+}
+
+.fade-enter-active, .fade-leave-active {
+    transition: opacity .2s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
 }
 </style>

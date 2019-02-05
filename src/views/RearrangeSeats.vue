@@ -20,11 +20,15 @@
 					</button>
 				</template>
 				<template slot="center">
-					<div class="drag-area">
+					<div class="drag-area" v-if="studentsToPlace.length > 0">
 						<drag :effect-allowed="['link']" v-for="(student, index) in studentsToPlace" :transfer-data="{student: student, index: index}" :key="`student${index}`" class="drag">
 							<span v-if="student.firstName.indexOf('(') !== -1">{{ student.firstName.split('(')[1].split(')')[0].split(' ')[0] }}</span>
 							<span v-else>{{ student.firstName.split(' ')[0] }}</span>
 						</drag>
+					</div>
+					<div class="button-labels" v-else>
+						<span><---- save changes</span>
+						<span>discard changes ----></span>
 					</div>
 				</template>
 				<template slot="right">
@@ -34,52 +38,59 @@
 				</template>
 			</ActionBar>
 		</footer>
-		<Modal v-if="introModalOpen" size="large" :dismissable="true" v-on:trigger-close="closeIntroModal">
-			<template slot="content">
-				<div class="modal-header">
-    				<h1>How to Change Student Seating</h1>
-    			</div>
-    			<div class="modal-body">
-    				<div class="step">
-    					<drag class="drag" :effect-allowed="['link']"><span v-if="!testDropComplete">Tina</span></drag>
-    					<h2>Click and drag a student name into the chart</h2>
-    					<h2>1</h2>
-    				</div>
-    				<div class="step">
-    					<drop class="drop-card border" @drop="handleTestDrop">
-							<h2 v-if="testDropComplete">Tina</h2>
-						</drop>
-    					<h2>Drop the name into an empty seat</h2>
-    					<h2>2</h2>
-    				</div>
-    				<div class="step">
-						<div class="drop-card border">
-							<h2>{{exampleText}}</h2>
-							<button class="delete-button" @click="testDropComplete = false">x</button>
-						</div>
-    					<h2>Click the 'x' to undo the seat assignment</h2>
-    					<h2>3</h2>
-    				</div>
-    			</div>
-    			<div class="modal-footer">
-    				<button class="modal-footer-button" @click="closeIntroModal">Got it</button>
-    			</div>
-			</template>
-		</Modal>
-		<Modal v-if="choiceModalOpen" :dismissable="false" size="small">
-    		<template slot="content">
-    			<div class="choice-modal-body">
-    				<h2>Do you want to start with a blank chart or students' original seats?</h2>
-    			</div>
-    			<div class="choice-modal-footer">
-    				<button class="modal-footer-button yellow" @click="setChoice('blank')">Blank</button>
-    				<button class="modal-footer-button" @click="setChoice('original')">Original</button>
-    			</div>
-    		</template>
-    	</Modal>
-		<!-- <TouchBar :show="true" :bar="[
-	      {type: 'button', label: 'Settings', method: openModal}
-	    ]"/> -->
+		<transition name="fade">
+			<Modal v-if="introModalOpen" size="large" :dismissable="true" v-on:trigger-close="closeIntroModal">
+				<template slot="content">
+					<div class="modal-header">
+	    				<h1>How to Change Student Seating</h1>
+	    			</div>
+	    			<div class="modal-body">
+	    				<div class="step">
+	    					<drag class="drag" :effect-allowed="['link']"><span v-if="!testDropComplete">Tina</span></drag>
+	    					<h2>Click and drag a student name into the chart</h2>
+	    					<h2>1</h2>
+	    				</div>
+	    				<div class="step">
+	    					<drop class="drop-card border" @drop="handleTestDrop">
+								<h2 v-if="testDropComplete">Tina</h2>
+							</drop>
+	    					<h2>Drop the name into an empty seat</h2>
+	    					<h2>2</h2>
+	    				</div>
+	    				<div class="step">
+							<div class="drop-card border">
+								<h2>{{exampleText}}</h2>
+								<button class="delete-button" @click="testDropComplete = false">x</button>
+							</div>
+	    					<h2>Click the 'x' to undo the seat assignment</h2>
+	    					<h2>3</h2>
+	    				</div>
+	    			</div>
+	    			<div class="modal-footer">
+	    				<button class="modal-footer-button" @click="closeIntroModal">Got it</button>
+	    			</div>
+				</template>
+			</Modal>
+		</transition>
+		<transition name="fade">
+			<Modal v-if="choiceModalOpen" :dismissable="false" size="small">
+	    		<template slot="content">
+	    			<div class="choice-modal-body">
+	    				<h2>Do you want to start with a blank chart or students' current seats?</h2>
+	    			</div>
+	    			<div class="choice-modal-footer">
+	    				<button class="modal-footer-button yellow" @click="setChoice('blank')">Blank</button>
+	    				<button class="modal-footer-button" @click="setChoice('current')">Current</button>
+	    			</div>
+	    		</template>
+	    	</Modal>
+		</transition>
+		<TouchBar :show="!choiceModalOpen && !introModalOpen" :bar="[
+			{type: 'spacer', size: 'flexible'},
+			{type: 'button', label: 'save changes', method: function() {saveSeats()}},
+			{type: 'button', label: 'discard changes', method: function() {$router.push(`/chart/${id}`)}},
+			{type: 'spacer', size: 'flexible'}
+	    ]"/>
 	</div>
 </template>
 
@@ -145,7 +156,7 @@ export default {
 	},
 	computed: {
 		progress() {
-			return this.$store.state.preferences.progress.length
+			return this.$store.state.preferences.progress
 		}
 	},
 	methods: {
@@ -185,17 +196,17 @@ export default {
 			event.preventDefault()
 			this.studentsToPlace.splice(data.index, 1)
 			this.grid[row][column].student = data.student
-			this.placedStudents.push({student: data.student, originalIndex: data.index})
+			this.placedStudents.push({student: data.student, currentIndex: data.index})
 		},
 		handleTestDrop() {
 			this.testDropComplete = true
 		},
 		clearSeat(row, column) {
 			let student = this.grid[row][column].student
-			let originalIndex
+			let currentIndex
 			for (let i=0; i<this.placedStudents.length; i++) {
 				if (this.placedStudents[i].student._id === student._id) {
-					originalIndex = this.placedStudents[i].originalIndex
+					currentIndex = this.placedStudents[i].currentIndex
 					this.placedStudents.splice(i, 1)
 					break
 				}
@@ -213,7 +224,7 @@ export default {
 				}
 			}
 
-			this.studentsToPlace.splice(originalIndex, 0, student)
+			this.studentsToPlace.splice(currentIndex, 0, student)
 			this.grid[row][column].student = blankStudentObj
 		},
 		closeIntroModal() {
@@ -224,43 +235,55 @@ export default {
 			this.choice = choice
 			this.choiceModalOpen = false
 
-			if (choice === 'original') {
-				this.placeInOriginalSeats()
-				this.studentsToPlace = []
+			if (choice === 'current') {
+				this.placeInCurrentSeats()
 			}
 		},
-		placeInOriginalSeats() {
+		placeInCurrentSeats() {
+			let remainingStudents = []
 			for (let i=0; i<this.studentsToPlace.length; i++) {
 				let thisStudent = this.studentsToPlace[i]
-				let row = thisStudent.seat.row - 1
-				let column = thisStudent.seat.column - 1
-				this.placedStudents.push({student: thisStudent, originalIndex: i})
-				this.grid[row][column].student = thisStudent
-			}
-		},
-		saveSeats() {
-			for (let i=0; i<this.grid.length; i++) {
-				for (let k=0; k<this.grid[i].length; k++) {
-					let studentToUpdate = this.grid[i][k].student
-					if (studentToUpdate._id !== '') {
-						studentToUpdate.seat = this.grid[i][k].newSeat
-
-						db.updateSomething('students', {_id: this.grid[i][k].student._id}, studentToUpdate)
-					}
+				if (thisStudent.seat.row !== null) {
+					let row = thisStudent.seat.row - 1
+					let column = thisStudent.seat.column - 1
+					this.placedStudents.push({student: thisStudent, currentIndex: i})
+					this.grid[row][column].student = thisStudent
+				} else {
+					remainingStudents.push(thisStudent)
 				}
 			}
 
-			if (this.progress === 1) {
-				console.log('working')
-				this.$store.dispatch('setPreferences', {
-					progress: ['created class', 'rearranged seats'],
-					calculation: this.$store.state.preferences.calculation,
-					positiveBehaviors: this.$store.state.preferences.positiveBehaviors,
-					negativeBehaviors: this.$store.state.preferences.negativeBehaviors
-				})
+			if (remainingStudents.length > 0) {
+				this.studentsToPlace = remainingStudents
+			} else {
+				this.studentsToPlace = []
 			}
 
-			this.$router.push(`/chart/${this.id}`)
+		},
+		saveSeats() {
+			if (this.studentsToPlace.length == 0) {
+				for (let i=0; i<this.grid.length; i++) {
+					for (let k=0; k<this.grid[i].length; k++) {
+						let studentToUpdate = this.grid[i][k].student
+						if (studentToUpdate._id !== '') {
+							studentToUpdate.seat = this.grid[i][k].newSeat
+
+							db.updateSomething('students', {_id: this.grid[i][k].student._id}, studentToUpdate)
+						}
+					}
+				}
+
+				if (this.progress.indexOf('rearranged seats') === -1) {
+					this.$store.dispatch('setPreferences', {
+						progress: ['created class', 'rearranged seats'],
+						calculation: this.$store.state.preferences.calculation,
+						positiveBehaviors: this.$store.state.preferences.positiveBehaviors,
+						negativeBehaviors: this.$store.state.preferences.negativeBehaviors
+					})
+				}
+
+				this.$router.push(`/chart/${this.id}`)
+			}
 		}
 	},
 	created() {
@@ -298,7 +321,7 @@ export default {
 					.then(results => {
 						this.studentsToPlace = results
 
-						if (this.progress === 1) {
+						if (this.progress.indexOf('rearranged seats') === -1) {
 							this.choiceModalOpen = false
 							this.introModalOpen = true
 						}
@@ -384,7 +407,7 @@ button {
 }
 
 .drop-card > h2 {
-	margin: 20px 0 10px 0;
+	margin: 16% 0 5% 0;
 }
 
 .delete-button {
@@ -466,5 +489,18 @@ button {
 	background: var(--gray);
 	text-align: center;
 	height: 75px;
+}
+
+.button-labels > span {
+	font-family: 'Merriweather';
+	font-size: 1em;
+	margin: 0 15%;
+}
+
+.fade-enter-active, .fade-leave-active {
+    transition: opacity .2s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
 }
 </style>

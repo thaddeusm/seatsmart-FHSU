@@ -8,6 +8,7 @@
 				<div v-for="(column, subIndex) in classInfo.columns" class="column" :style="cardStyle">
 					<NameCard
 						:type="cardType"
+						:conserveSpace="isHuge"
 						:row="index + 1"
 						:column="subIndex + 1"
 						:classId="classInfo._id"
@@ -21,6 +22,7 @@
 				<div v-for="(column, subIndex) in classInfo.columns" class="column" :style="cardStyle">
 					<NameCard
 						:type="cardType"
+						:conserveSpace="isHuge"
 						:row="classInfo.rows - index"
 						:column="classInfo.columns - subIndex"
 						:classId="classInfo._id"
@@ -85,23 +87,35 @@
       		</Modal>
     	</transition>
 		<transition name="fade">
-      		<Modal v-if="modalOpen" v-on:trigger-close="modalOpen = false" :dismissable="false" size="large">
+      		<Modal v-if="modalOpen" v-on:trigger-close="closeSettings" :dismissable="false" size="large">
         		<template slot="content">
-          			<Settings v-on:trigger-modal-close="modalOpen = false"/>
+          			<Settings v-on:trigger-modal-close="closeSettings"/>
         		</template>
       		</Modal>
     	</transition>
+		<transition name="fade">
+			<Modal v-if="alert.isAlert" :dismissable="false" size="small">
+				<template slot="content">
+					<div class="alert-modal-body">
+	    				<h2 v-html="alert.alertMessage"></h2>
+	    			</div>
+	    			<div class="alert-modal-footer">
+	    				<button class="modal-footer-button yellow" @click="alert.action" v-if="alert.action !== null">Ok</button>
+	    				<button class="modal-footer-button" @click="alert.isAlert = false" v-else>Got it</button>
+	    			</div>
+				</template>
+			</Modal>
+		</transition>
 		<TouchBar :show="!modalOpen" :bar="[
-			{type: 'button', label: '🏠', method: function() {$router.push('/')}},
-			{type: 'spacer', size: 'small'},
-			{type: 'button', label: 'Edit', method: function() {setLastView(`/chart/${id}`)}},
-			{type: 'button', label: 'Random', method: function() {selectRandom()}},
-			{type: 'button', label: 'Style', method: function() {toggleCardStyle()}},
-			{type: 'button', label: 'Trends', method: function() {showTrends()}},
-			{type: 'button', label: 'Present', method: function() {invertChart()}},
-			{type: 'button', label: 'Bulk', method: function() {createBulkNote()}},
-			{type: 'spacer', size: 'small'},
-	    	{type: 'button', label: '⚙️', method: openModal}
+			{type: 'spacer', size: 'flexible'},
+			{type: 'button', label: '✏️', method: function() {setLastView(`/chart/${id}`)}},
+			{type: 'button', label: '🔀', method: function() {rearrangeSeats()}},
+			{type: 'button', label: '🎲', method: function() {selectRandom()}},
+			{type: 'button', label: '🎫', method: function() {toggleCardStyle()}},
+			{type: 'button', label: '📈', method: function() {showTrends()}},
+			{type: 'button', label: '📺', method: function() {invertChart()}},
+			{type: 'button', label: '➕', method: function() {createBulkNote()}},
+			{type: 'spacer', size: 'flexible'}
 	    ]"/>
 	</div>
 </template>
@@ -187,7 +201,18 @@ export default {
 			cardType: 'complex',
 			showingTrends: false,
 			inverted: false,
-			absentStudents: []
+			absentStudents: [],
+			unplacedStudents: [],
+			alert: {
+				isAlert: false,
+				alertMessage: '',
+				action: null
+			}
+		}
+	},
+	computed: {
+		isHuge() {
+			return this.classInfo.rows > 7 && this.classInfo.columns > 7
 		}
 	},
 	methods: {
@@ -198,9 +223,9 @@ export default {
 			let heightAdjusted
 
 			if (size == 'small') {
-				heightAdjusted = totalHeight * .78
+				heightAdjusted = totalHeight * .83
 			} else {
-				heightAdjusted = totalHeight * .88
+				heightAdjusted = totalHeight * .90
 			}
 
 			let totalCardWidth = totalWidth / this.classInfo.columns
@@ -216,7 +241,7 @@ export default {
 
 
 			let totalPossibleVerticalSpace = totalCardHeight * this.classInfo.rows
-			let totalUsedVerticalSpace = totalPossibleVerticalSpace * .7
+			let totalUsedVerticalSpace = totalPossibleVerticalSpace * .75
 			let remainingVerticalSpace = heightAdjusted - totalUsedVerticalSpace
 			let gaps = this.classInfo.rows + 2
 			let verticalMargin = remainingVerticalSpace / gaps
@@ -300,7 +325,32 @@ export default {
 		    }
 
 		    return arr
-    	}
+    	},
+		closeSettings() {
+			this.modalOpen = false
+
+			if (this.$store.state.preferences.progress.indexOf('viewed class chart') === -1) {
+				this.$store.dispatch('setPreferences', {
+					progress: ['created class', 'rearranged seats', 'viewed class chart'],
+					calculation: this.$store.state.preferences.calculation,
+					positiveBehaviors: this.$store.state.preferences.positiveBehaviors,
+					negativeBehaviors: this.$store.state.preferences.negativeBehaviors
+				})
+			}
+		}
+	},
+	mounted() {
+		if (this.$store.state.preferences.progress.indexOf('rearranged seats') === -1) {
+			let scope = this
+
+			setTimeout(function() {
+				scope.alert.isAlert = true
+				scope.alert.alertMessage = 'Students have been sorted into random seats.<br><br>Try editing seat assignments now.'
+				scope.alert.action = scope.rearrangeSeats
+			}, 3000, scope)
+		} else if (this.$store.state.preferences.progress.indexOf('viewed class chart') === -1) {
+			this.modalOpen = true
+		}
 	},
 	created() {
 		db.readSomething('classes', {_id: this.id})
@@ -312,6 +362,23 @@ export default {
 				db.readSomething('students', {class: this.id})
 					.then((students) => {
 						this.students = this.shuffle(students)
+						for (let i=0; i<this.students.length; i++) {
+							if (this.students[i].seat.row == null) {
+								console.log('found')
+								this.unplacedStudents.push(this.students[i])
+							}
+						}
+
+						if (this.unplacedStudents.length === 1) {
+							this.alert.isAlert = true
+							this.alert.alertMessage = 'A student you have added does not have a seat.<br><br>Assign them one now.'
+							this.alert.action = this.rearrangeSeats
+						} else if (this.unplacedStudents.length > 1) {
+							this.alert.isAlert = true
+							this.alert.alertMessage = 'Students you have added do not have a seat.<br><br>Assign them one now.'
+							this.alert.action = this.rearrangeSeats
+						}
+
 					})
 			})
 	}
@@ -397,6 +464,42 @@ button {
 	border-width: 5px;
 	border-style: solid;
 	border-color: var(--yellow) transparent transparent transparent;
+}
+
+.yellow {
+	background: var(--yellow);
+}
+
+.alert-modal-body {
+  height: 180px;
+  padding-top: 120px;
+  text-align: center;
+}
+
+.alert-modal-footer {
+  background: var(--gray);
+  text-align: center;
+  height: 75px;
+}
+
+.modal-footer {
+	background: var(--gray);
+	text-align: center;
+	height: 70px;
+}
+
+.modal-footer-button {
+	padding: 5px 10px;
+	background: var(--light-gray);
+	color: var(--black);
+	font-family: 'ArchivoNarrow';
+	font-size: 18px;
+	border-radius: 5px;
+	cursor: pointer;
+	outline: none;
+	margin-top: 20px;
+  	margin-left: 10px;
+  	margin-right: 10px;
 }
 
 .fade-enter-active, .fade-leave-active {
