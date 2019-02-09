@@ -35,7 +35,6 @@ export default {
 	bottom: 0;
 	right: 0;
 	margin: auto;
-	overflow: auto;
 	z-index: 200;
 	border: 3px solid var(--yellow);
 	border-radius: 5px;

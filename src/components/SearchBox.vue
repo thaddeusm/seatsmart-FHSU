@@ -1,13 +1,14 @@
 <template>
 	<div>
-		<input v-model="term" type="text">
-		<img src="@/assets/search.svg" alt="search icon">
+		<input v-model="term" :placeholder="placeholder" type="text" @keyup.enter="$emit('start-search', term.toLowerCase())">
+		<button @click="$emit('start-search', term.toLowerCase())"><img src="@/assets/search.svg" alt="search icon"></button>
 	</div>
 </template>
 
 <script>
 export default {
 	name: 'SearchBox',
+	props: ['placeholder', 'startTerm'],
 	data() {
 		return {
 			term: ''
@@ -32,6 +33,14 @@ input {
 	border: 2px solid var(--gray);
 }
 
+button {
+    background: none;
+    outline: none;
+    border: none;
+    cursor: pointer;
+	margin-left: -50px;
+}
+
 ::selection {
 	background: var(--yellow);
 }
@@ -41,8 +50,7 @@ input:focus {
 }
 
 img {
-	margin-left: -50px;
 	vertical-align: middle;
-	margin-top: -5px;
+	margin-bottom: 6px;
 }
 </style>

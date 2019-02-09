@@ -1,6 +1,6 @@
 <template>
 	<transition name="fade">
-		<div v-if="loaded" id="abbreviation" :class="[size === 'large' ? 'large' : 'small', color]">
+		<div v-if="loaded" id="abbreviation" :class="[size, color]">
 			<span>{{ behavior.Abbreviation }}</span>
 		</div>
 	</transition>
@@ -43,6 +43,16 @@ span {
 	width: 1.3em;
 	height: 1.3em;
 	border-radius: 1.3em;
+	margin: 0 3%;
+}
+
+.medium {
+	font-size: 1.5em;
+	display: inline-block;
+	width: 2em;
+	height: 1.7em;
+	padding-top: .3em;
+	border-radius: 2em;
 	margin: 0 3%;
 }
 

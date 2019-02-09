@@ -6,8 +6,10 @@
 		<main>
 			<div class="row" v-for="(row, index) in grid" :key="`row${index}`" :style="rowMargins">
 				<drop class="drop-card" v-for="(column, subIndex) in row" :key="`column${subIndex}`" @drop="handleDrop(index, subIndex, ...arguments)" :style="cardStyle">
-					<h2 v-if="column.student.firstName.indexOf('(') !== -1">{{ column.student.firstName.split('(')[1].split(')')[0].split(' ')[0] }}</h2>
-					<h2 v-else>{{ column.student.firstName.split(' ')[0] }}</h2>
+					<h2 v-if="classChart.columns < 7 && column.student.firstName.indexOf('(') !== -1">{{ column.student.firstName.split('(')[1].split(')')[0].split(' ')[0] }}</h2>
+					<h2 v-else-if="classChart.columns < 7">{{ column.student.firstName.split(' ')[0] }}</h2>
+					<h3 v-if="classChart.columns >= 7 && column.student.firstName.indexOf('(') !== -1">{{ column.student.firstName.split('(')[1].split(')')[0].split(' ')[0] }}</h3>
+					<h3 v-else-if="classChart.columns >= 7">{{ column.student.firstName.split(' ')[0] }}</h3>
 					<button v-if="column.student.firstName !== ''" @click="clearSeat(index, subIndex)" class="delete-button">x</button>
 				</drop>
 			</div>
@@ -166,7 +168,7 @@ export default {
 			let totalHeight = remote.getGlobal('screenHeight')
 			let heightAdjusted
 
-			heightAdjusted = totalHeight * .78
+			heightAdjusted = totalHeight * .83
 
 			let totalCardWidth = totalWidth / this.classChart.columns
 			let totalCardHeight = heightAdjusted / this.classChart.rows
@@ -181,7 +183,7 @@ export default {
 
 
 			let totalPossibleVerticalSpace = totalCardHeight * this.classChart.rows
-			let totalUsedVerticalSpace = totalPossibleVerticalSpace * .7
+			let totalUsedVerticalSpace = totalPossibleVerticalSpace * .75
 			let remainingVerticalSpace = heightAdjusted - totalUsedVerticalSpace
 			let gaps = this.classChart.rows + 2
 			let verticalMargin = remainingVerticalSpace / gaps
@@ -407,7 +409,11 @@ button {
 }
 
 .drop-card > h2 {
-	margin: 16% 0 5% 0;
+	margin: 12% 0 5% 0;
+}
+
+.drop-card > h3 {
+	margin: 10% 0 2% 0;
 }
 
 .delete-button {

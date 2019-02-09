@@ -14,6 +14,7 @@
 						:classId="classInfo._id"
 						v-on:open-note-modal="openNoteModal"
 						v-on:absence="addAbsence"
+						v-on:notes-found="addToAllNotes"
 						:chosen="chosenSeat.row == index + 1 && chosenSeat.column == subIndex + 1"
 					/>
 				</div>
@@ -28,6 +29,7 @@
 						:classId="classInfo._id"
 						v-on:open-note-modal="openNoteModal"
 						v-on:absence="addAbsence"
+						v-on:notes-found="addToAllNotes"
 						:chosen="chosenSeat.row == index + 1 && chosenSeat.column == subIndex + 1" />
 				</div>
 			</section>
@@ -207,7 +209,8 @@ export default {
 				isAlert: false,
 				alertMessage: '',
 				action: null
-			}
+			},
+			allNotes: []
 		}
 	},
 	computed: {
@@ -337,6 +340,23 @@ export default {
 					negativeBehaviors: this.$store.state.preferences.negativeBehaviors
 				})
 			}
+		},
+		addToAllNotes(studentNotes) {
+			for (let i=0; i<studentNotes.length; i++) {
+				this.allNotes.push(studentNotes[i])
+			}
+		},
+		sortAllNotes() {
+			let sortedNotes = this.allNotes.sort((a, b) => {
+				let dateA = a.dateNoted._d
+				let dateB = b.dateNoted._d
+
+				return dateA < dateB ? -1 : 1
+			})
+
+			if (sortedNotes.length > 0) {
+				this.$store.dispatch('setEarliestDateNoted', sortedNotes[0].dateNoted)
+			}
 		}
 	},
 	mounted() {
@@ -356,6 +376,9 @@ export default {
 		db.readSomething('classes', {_id: this.id})
 			.then((classInfo) => {
 				this.classInfo = classInfo[0]
+
+				// update last view in $store
+				this.$store.dispatch('setLastView', `/chart/${this.classInfo._id}`)
 
 				this.calculateCardSize('small')
 
@@ -379,6 +402,13 @@ export default {
 							this.alert.action = this.rearrangeSeats
 						}
 
+						this.$store.dispatch('setEarliestDateNoted', '')
+
+						let scope = this
+						setTimeout(function() {
+							scope.sortAllNotes()
+						}, 1500, scope)
+
 					})
 			})
 	}
@@ -400,16 +430,16 @@ export default {
 }
 
 #chartHeader {
-	grid-area: "header";
+	grid-area: header;
 }
 
 #chartMain {
-	grid-area: "main";
+	grid-area: main;
 	overflow: auto;
 }
 
 #chartFooter {
-	grid-area: "footer";
+	grid-area: footer;
 }
 
 .row {

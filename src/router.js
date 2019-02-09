@@ -6,6 +6,7 @@ import Chart from './views/Chart.vue'
 import BulkNote from './views/BulkNote.vue'
 import RearrangeSeats from './views/RearrangeSeats.vue'
 import Student from './views/Student.vue'
+import Search from './views/Search.vue'
 
 Vue.use(Router)
 
@@ -43,6 +44,11 @@ export default new Router({
         path: '/student/:id',
         props: true,
         component: Student
+    },
+    {
+        path:'/search/:term',
+        props: true,
+        component: Search
     }
   ]
 })

@@ -1,9 +1,11 @@
 <template>
 	<button v-if="button && display" class="button-card" @click="onClick(param)">
-		<h2>
+		<h2 class="button-h2">
 			{{ name }}
 		</h2>
-		<img v-if="selected" src="@/assets/checkhexagon.svg" alt="checkmark" class="checkmark">
+		<div id="checkmarkArea">
+			<img v-if="selected" src="@/assets/checkhexagon.svg" alt="checkmark" class="checkmark">
+		</div>
 	</button>
 	<router-link v-else-if="!button" class="button-card" v-bind:to="to">
 		<h1 v-if="icon === '+'">
@@ -70,6 +72,10 @@ export default {
 	border: 3px solid var(--yellow);
 }
 
+#checkmarkArea {
+	height: 20px;
+}
+
 .checkmark {
 	height: 18px;
 }
@@ -80,5 +86,9 @@ h1 {
 
 h2 {
 	margin: 10px 0;
+}
+
+.button-h2 {
+	margin: 0 0 15px 0;
 }
 </style>

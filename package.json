@@ -12,8 +12,6 @@
     "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
-    "electron-window-state": "^5.0.3",
-    "laue": "^0.2.0",
     "moment": "^2.23.0",
     "nedb": "^1.8.0",
     "vue": "^2.5.17",

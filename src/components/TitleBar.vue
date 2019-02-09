@@ -1,7 +1,8 @@
 <template>
 	<header id="titleBarContainer">
 		<div :class="[compact ? 'small-line' : 'line']"></div>
-		<h4 v-if="compact && title.length > 15">{{ shortTitle }}</h4>
+		<h4 v-if="classID !== undefined">{{ returnedTitle }}</h4>
+		<h4 v-else-if="compact && title.length > 15">{{ title.slice(0, 13) + '...' }}</h4>
 		<h4 v-else-if="compact">{{ title }}</h4>
 		<h2 v-else-if="!compact">{{ title }}</h2>
 		<div :class="[compact ? 'small-line' : 'line']"></div>
@@ -9,12 +10,14 @@
 </template>
 
 <script>
+import db from '@/db'
+
 export default {
 	name: 'TitleBar',
-	props: ['title', 'compact'],
+	props: ['title', 'compact', 'classID'],
 	computed: {
-		shortTitle() {
-			return this.title.slice(0, 15)
+		returnedTitle() {
+			return this.$store.state.allClasses[this.classID]
 		}
 	}
 }

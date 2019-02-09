@@ -3,8 +3,12 @@
 	:class="[trend === 0 ? 'gray' : '', trend < 0 ? 'red' : '', trend > 0 ? 'yellow' : '']">
 		<section id="cardBody" v-if="student.firstName !== ''">
 			<!-- <h3 v-if="name !== ''">{{ name.split('(')[1].split(')')[0] }}</h3> -->
-			<h3 v-if="conserveSpace">{{ student.firstName }}</h3>
-			<h2 v-else>{{ student.firstName }}</h2>
+			<h3 class="student-name" v-if="conserveSpace">
+				{{ student.firstName }} {{ student.lastName[0] }}.
+			</h3>
+			<h2 class="student-name" v-else>
+				{{ student.firstName }} {{ student.lastName[0] }}.
+			</h2>
 		</section>
 		<section id="cardFooter" v-if="student.firstName !== ''">
 			<h4 v-if="trend > 0">{{ '+' + trend + '' }}</h4>
@@ -25,12 +29,17 @@
 		</section>
 		<section id="cardBody" v-if="student.firstName !== ''">
 			<!-- <h3 v-if="name !== ''">{{ name.split('(')[1].split(')')[0] }}</h3> -->
-			<h3 v-if="conserveSpace">{{ student.firstName }}</h3>
-			<h2 v-else>{{ student.firstName }}</h2>
+			<h3 class="student-name" v-if="conserveSpace">
+				{{ student.firstName }} {{ student.lastName[0] }}.
+			</h3>
+			<h2 class="student-name" v-else>
+				{{ student.firstName }} {{ student.lastName[0] }}.
+			</h2>
 		</section>
 		<section id="cardFooter" v-if="student.firstName !== ''">
 			<AbbreviationCircle v-if="notes.length !== 0 && type !== 'simple'" v-for="(note, index) in latestNotes" :key="index" :behavior="note.behavior" size="small" :color="note.type === 'positive' ? 'yellow' : 'red'" />
-			<button class="simple-button" id="moreButton" @click="$router.push(`/student/${student._id}`)"><img src="@/assets/more.svg" alt="more icon"></button>
+			<button v-if="studentID !== undefined" class="simple-button more-button" @click="viewStudentProfile"><img src="@/assets/more.svg" alt="more icon"></button>
+			<button v-else class="simple-button more-button" @click="$router.push(`/student/${student._id}`)"><img src="@/assets/more.svg" alt="more icon"></button>
 		</section>
 	</div>
 </template>
@@ -42,7 +51,7 @@ import AbbreviationCircle from '@/components/AbbreviationCircle.vue'
 
 export default {
 	name: 'NameCard',
-	props: ['type', 'column', 'row', 'classId', 'chosen', 'conserveSpace'],
+	props: ['type', 'column', 'row', 'classId', 'chosen', 'conserveSpace', 'studentID'],
 	components: {
 		AbbreviationCircle
 	},
@@ -69,9 +78,11 @@ export default {
 					student: null,
 					type: null,
 					dateNoted: {},
-					_id: ''
+					_id: '',
+                    comment: null
 				}
-			]
+			],
+			sentNotes: false
 		}
 	},
 	computed: {
@@ -203,32 +214,105 @@ export default {
 			this.updateStudent()
 		},
 		getStudent() {
-			db.readSomething('students', {seat: {row: this.row, column: this.column}, class: this.classId})
-				.then((result) => {
-					if (result.length !== 0) {
-						this.student = result[0]
+			if (!this.studentID) {
+				db.readSomething('students', {seat: {row: this.row, column: this.column}, class: this.classId})
+					.then((result) => {
+						if (result.length !== 0) {
+							this.student = result[0]
 
-						if (this.student.firstName.indexOf('(') !== -1) {
-							this.student.firstName = this.student.firstName.split('(')[1].split(')')[0].split(' ')[0]
-						} else {
-							this.student.firstName = this.student.firstName.split(' ')[0]
+							if (this.student.firstName.indexOf('(') !== -1) {
+								this.student.firstName = this.student.firstName.split('(')[1].split(')')[0].split(' ')[0]
+							} else {
+								this.student.firstName = this.student.firstName.split(' ')[0]
+							}
+
+							db.readSomething('notes', {student: this.student._id})
+								.then((notes) => {
+									this.notes = notes
+
+									if (this.isAbsentToday) {
+										this.$emit('absence', this.student._id)
+									}
+
+									if (notes.length !== 0) {
+										if (!this.sentNotes) {
+											this.$emit('notes-found', notes)
+											this.sentNotes = true
+										}
+									}
+
+								})
 						}
+					})
+			} else {
+				db.readSomething('students', {_id: this.studentID })
+					.then((result) => {
+						if (result.length !== 0) {
+							this.student = result[0]
 
-						db.readSomething('notes', {student: this.student._id})
-							.then((notes) => {
-								this.notes = notes
+							if (this.student.firstName.indexOf('(') !== -1) {
+								this.student.firstName = this.student.firstName.split('(')[1].split(')')[0].split(' ')[0]
+							} else {
+								this.student.firstName = this.student.firstName.split(' ')[0]
+							}
 
-								if (this.isAbsentToday) {
-									this.$emit('absence', this.student._id)
-								}
-							})
-					}
-				})
+							db.readSomething('notes', {student: this.studentID})
+								.then((notes) => {
+									this.notes = notes
+
+									if (this.isAbsentToday) {
+										this.$emit('absence', this.studentID)
+									}
+
+									if (notes.length !== 0) {
+										if (!this.sentNotes) {
+											this.$emit('notes-found', notes)
+											this.sentNotes = true
+										}
+									}
+
+								})
+						}
+					})
+			}
+
 		},
 		updateStudent() {
 			db.updateSomething('students', {_id: this.student._id}, this.student)
 				.then((numUpdated) => {
 					this.getStudent()
+				})
+		},
+		viewStudentProfile() {
+			// get all notes from student's class and sort
+			let classStudents = []
+			let classNotes = []
+
+			db.readSomething('students', {class: this.student.class})
+				.then(foundStudents => {
+					classStudents = foundStudents
+
+					for (let i=0; i<classStudents.length; i++) {
+						db.readSomething('notes', {student: classStudents[i]._id})
+							.then(foundNotes => {
+								for (let k=0; k<foundNotes.length; k++) {
+									classNotes.push(foundNotes[k])
+								}
+
+								let sortedNotes = classNotes.sort((a, b) => {
+									let dateA = a.dateNoted._d
+									let dateB = b.dateNoted._d
+
+									return dateA < dateB ? -1 : 1
+								})
+
+								if (sortedNotes.length > 0) {
+									this.$store.dispatch('setEarliestDateNoted', sortedNotes[0].dateNoted)
+								}
+
+								this.$router.push(`/student/${this.studentID}`)
+							})
+					}
 				})
 		}
 	},
@@ -302,12 +386,12 @@ export default {
 	padding-top: 10%;
 }
 
-#moreButton {
+.more-button {
 	vertical-align: middle;
 	margin: 0 3%;
 }
 
-#moreButton > img {
+.more-button > img {
 	width: 15px;
 }
 

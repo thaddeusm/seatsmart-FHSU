@@ -497,6 +497,11 @@ export default {
 									if (numDeleted > 0) {
 										console.log(`${this.deletedStudents[i].firstName} was deleted`)
 									}
+
+									db.deleteSomething('notes', {student: this.deletedStudents[i]._id})
+										.then((numNotesDeleted) => {
+											console.log(`${numNotesDeleted} notes were deleted`)
+										})
 								})
 						}
 					}

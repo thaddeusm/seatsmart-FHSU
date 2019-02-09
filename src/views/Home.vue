@@ -2,7 +2,7 @@
     <div id="container">
         <header>
             <section id="searchArea">
-                <SearchBox />
+                <SearchBox v-on:start-search="search" placeholder="student name" />
             </section>
             <section id="logoArea">
                 <img id="logo" src="@/assets/logo.svg" alt="seatsmart logo">
@@ -44,7 +44,7 @@
                     </div>
                     <div class="modal-footer">
                         <button class="modal-footer-button yellow" @click="deleteClass(alertModalClassID)">Yes</button>
-                        <button class="modal-footer-button" @click="alertModalOpen = false">cancel</button>
+                        <button class="modal-footer-button" @click="alertModalOpen = false">Cancel</button>
                     </div>
                 </template>
             </Modal>
@@ -59,13 +59,14 @@
 
 <script>
 import db from '@/db'
+import moment from 'moment'
+
 import SearchBox from '@/components/SearchBox.vue'
 import ButtonCard from '@/components/ButtonCard.vue'
 import ActionBar from '@/components/ActionBar.vue'
 import Modal from '@/components/Modal.vue'
 import Settings from '@/components/Settings.vue'
 import TouchBar from '@/components/TouchBar.vue'
-import moment from 'moment'
 
 const { app } = require('electron').remote;
 
@@ -111,15 +112,26 @@ export default {
             this.alertModalClassID = id
         },
         deleteClass(id) {
+            // delete class and its associated records (studens and their notes)
             db.deleteSomething('classes', {_id: id})
-            .then((num) => {
+                .then((num) => {
+                    db.readSomething('students', {class: id})
+                        .then(classStudents => {
+                            for (let i=0; i<classStudents.length; i++) {
+                                db.deleteSomething('students', {_id: classStudents[i]._id})
+                                    .then(() => {
+                                        db.deleteSomething('notes', {student: classStudents[i]._id})
+                                    })
+                            }
+                        })
 
-                this.alertModalOpen = false
-                this.alertModalClass = ''
-                this.alertModalClassID = ''
 
-                this.populateClasses()
-            })
+                    this.alertModalOpen = false
+                    this.alertModalClass = ''
+                    this.alertModalClassID = ''
+
+                    this.populateClasses()
+                })
         },
         populateClasses() {
             db.readSomething('classes', {})
@@ -199,10 +211,15 @@ export default {
                 this.classesToDisplay = firstPriority.concat(secondPriority, remainder)
 
             })
+        },
+        search(term) {
+            this.$router.push(`/search/${term}`)
         }
     },
     created() {
         this.$store.dispatch('getPreferences')
+        this.$store.dispatch('getAllStudents')
+        this.$store.dispatch('getAllClasses')
     },
     mounted() {
         this.populateClasses()
@@ -231,6 +248,8 @@ export default {
 
 #searchArea {
     text-align: right;
+    padding-top: 20px;
+    padding-right: 26px;
 }
 
 #logoArea {
