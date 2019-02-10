@@ -3,12 +3,12 @@
 	:class="[trend === 0 ? 'gray' : '', trend < 0 ? 'red' : '', trend > 0 ? 'yellow' : '']">
 		<section id="cardBody" v-if="student.firstName !== ''">
 			<!-- <h3 v-if="name !== ''">{{ name.split('(')[1].split(')')[0] }}</h3> -->
-			<h3 class="student-name" v-if="conserveSpace">
+			<h6 class="student-name" v-if="conserveSpace">
 				{{ student.firstName }} {{ student.lastName[0] }}.
-			</h3>
-			<h2 class="student-name" v-else>
+			</h6>
+			<h4 class="student-name" v-else>
 				{{ student.firstName }} {{ student.lastName[0] }}.
-			</h2>
+			</h4>
 		</section>
 		<section id="cardFooter" v-if="student.firstName !== ''">
 			<h6 v-if="trend > 0">{{ '+' + trend + '' }}</h6>
@@ -29,12 +29,12 @@
 		</section>
 		<section id="cardBody" v-if="student.firstName !== ''">
 			<!-- <h3 v-if="name !== ''">{{ name.split('(')[1].split(')')[0] }}</h3> -->
-			<h3 class="student-name" v-if="conserveSpace">
+			<h6 class="student-name" v-if="conserveSpace">
 				{{ student.firstName }} {{ student.lastName[0] }}.
-			</h3>
-			<h2 class="student-name" v-else>
+			</h6>
+			<h4 class="student-name" v-else>
 				{{ student.firstName }} {{ student.lastName[0] }}.
-			</h2>
+			</h4>
 		</section>
 		<section id="cardFooter" v-if="student.firstName !== ''">
 			<AbbreviationCircle v-if="notes.length !== 0 && type !== 'simple'" v-for="(note, index) in latestNotes" :key="index" :behavior="note.behavior" size="small" :color="note.type === 'positive' ? 'yellow' : 'red'" />
@@ -332,7 +332,7 @@ export default {
 		"leftHeader centerHeader rightHeader"
 		"cardBody   cardBody cardBody"
 		"cardFooter cardFooter cardFooter";
-	grid-template-rows: 30% 30% 40%;
+	grid-template-rows: 30% 35% 35%;
 	grid-template-columns: 1fr 1fr 1fr;
 	border-radius: 10px;
 }

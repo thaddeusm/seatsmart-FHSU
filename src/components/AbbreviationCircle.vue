@@ -32,9 +32,10 @@ export default {
 .small {
 	font-size: 12px;
 	display: inline-block;
-	width: 15px;
-	height: 15px;
-	border-radius: 15px;
+	width: 18px;
+	height: 16px;
+	padding-top: 2px;
+	border-radius: 18px;
 	margin: 0 3%;
 }
 
@@ -42,8 +43,8 @@ export default {
 	font-size: 22px;
 	display: inline-block;
 	width: 40px;
-	height: 33px;
-	padding-top: 7px;
+	height: 31px;
+	padding-top: 9px;
 	border-radius: 40px;
 	margin: 0 3%;
 }

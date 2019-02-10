@@ -29,8 +29,8 @@
 						</drag>
 					</div>
 					<div class="button-labels" v-else>
-						<span><---- save changes</span>
-						<span>discard changes ----></span>
+						<span class="button-label"><---- save changes</span>
+						<span class="button-label">discard changes ----></span>
 					</div>
 				</template>
 				<template slot="right">
@@ -168,7 +168,7 @@ export default {
 			let totalHeight = remote.getGlobal('screenHeight')
 			let heightAdjusted
 
-			heightAdjusted = totalHeight * .83
+			heightAdjusted = totalHeight * .80
 
 			let totalCardWidth = totalWidth / this.classChart.columns
 			let totalCardHeight = heightAdjusted / this.classChart.rows
@@ -183,7 +183,7 @@ export default {
 
 
 			let totalPossibleVerticalSpace = totalCardHeight * this.classChart.rows
-			let totalUsedVerticalSpace = totalPossibleVerticalSpace * .75
+			let totalUsedVerticalSpace = totalPossibleVerticalSpace * .77
 			let remainingVerticalSpace = heightAdjusted - totalUsedVerticalSpace
 			let gaps = this.classChart.rows + 2
 			let verticalMargin = remainingVerticalSpace / gaps
@@ -494,10 +494,12 @@ button {
 	height: 75px;
 }
 
-.button-labels > span {
-	font-size: 14px;
+.button-label {
+	font-size: 18px;
 	margin: 0 15%;
 }
+
+
 
 .fade-enter-active, .fade-leave-active {
     transition: opacity .2s;

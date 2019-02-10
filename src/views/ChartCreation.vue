@@ -130,12 +130,12 @@
 				<template slot="content">
 					<img src="@/assets/alert.svg" alt="alert icon" class="alert-icon-large">
 					<div class="alert-modal-body" v-if="seatingConflict">
-						<h2>The edited chart causes a seating conflict with at least one student.</h2>
-						<h2>Do you want to reset seating assignments and proceed with current edits?</h2>
+						<h4>The edited chart causes a seating conflict with at least one student.</h4>
+						<h4>Do you want to reset seating assignments and proceed with current edits?</h4>
 					</div>
 					<div class="alert-modal-body" v-else-if="incompleteInformation">
-						<h2>Some information is missing about the student(s) you have added.</h2>
-						<h2>Please fill in the missing information and try again.</h2>
+						<h4>Some information is missing about the student(s) you have added.</h4>
+						<h4>Please fill in the missing information and try again.</h4>
 					</div>
 					<div class="alert-modal-footer" v-if="seatingConflict">
 						<button class="modal-footer-button yellow" @click="resetSeating">Yes</button>
@@ -915,6 +915,10 @@ progress-button:disabled {
 	height: 150px;
 	padding-top: 70px;
 	text-align: center;
+}
+
+.alert-modal-body > h4:first-child {
+	margin-bottom: 10px;
 }
 
 .alert-modal-footer {

@@ -215,7 +215,7 @@ export default {
 	},
 	computed: {
 		isHuge() {
-			return this.classInfo.rows > 7 && this.classInfo.columns > 7
+			return this.classInfo.rows > 7 || this.classInfo.columns > 7
 		}
 	},
 	methods: {
