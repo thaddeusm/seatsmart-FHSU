@@ -29,6 +29,16 @@ export default {
 </script>
 
 <style scoped>
+.extra-small {
+	font-size: 10px;
+	display: inline-block;
+	width: 14px;
+	height: 13px;
+	padding-top: 1px;
+	border-radius: 14px;
+	margin: 0 3%;
+}
+
 .small {
 	font-size: 12px;
 	display: inline-block;

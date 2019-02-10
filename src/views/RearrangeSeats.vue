@@ -324,8 +324,8 @@ export default {
 						this.studentsToPlace = results
 
 						if (this.progress.indexOf('rearranged seats') === -1) {
-							this.choiceModalOpen = false
 							this.introModalOpen = true
+							this.choiceModalOpen = false
 						}
 					})
 			})

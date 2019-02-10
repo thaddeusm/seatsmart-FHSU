@@ -37,9 +37,9 @@
 			</h4>
 		</section>
 		<section id="cardFooter" v-if="student.firstName !== ''">
-			<AbbreviationCircle v-if="notes.length !== 0 && type !== 'simple'" v-for="(note, index) in latestNotes" :key="index" :behavior="note.behavior" size="small" :color="note.type === 'positive' ? 'yellow' : 'red'" />
+			<AbbreviationCircle v-if="notes.length !== 0 && type !== 'simple'" v-for="(note, index) in latestNotes" :key="index" :behavior="note.behavior" :size="conserveSpace ? 'extra-small' : 'small'" :color="note.type === 'positive' ? 'yellow' : 'red'" />
 			<button v-if="studentID !== undefined" class="simple-button more-button" @click="viewStudentProfile"><img src="@/assets/more.svg" alt="more icon"></button>
-			<button v-else class="simple-button more-button" @click="$router.push(`/student/${student._id}`)"><img src="@/assets/more.svg" alt="more icon"></button>
+			<button v-else class="simple-button more-button" @click="$router.push(`/student/${student._id}`)"><img src="@/assets/more.svg" alt="more icon" :class="[conserveSpace ? 'more-icon-smaller' : 'more-icon']"></button>
 		</section>
 	</div>
 </template>
@@ -377,20 +377,28 @@ export default {
 
 #cardFooter {
 	grid-area: cardFooter;
+	align-items: center;
 }
 
 #addNoteButton {
-	font-size: 1.4em;
-	padding-top: 4%;
+	font-size: 18px;
+	padding-top: 3px;
 }
 
 .more-button {
-	vertical-align: middle;
 	margin: 0 3%;
 }
 
-.more-button > img {
+.more-icon {
 	width: 15px;
+	padding-bottom: 3px;
+	vertical-align: middle;
+}
+
+.more-icon-smaller {
+	width: 12px;
+	vertical-align: middle;
+	padding-bottom: 2px;
 }
 
 .chosen {

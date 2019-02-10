@@ -39,8 +39,9 @@
         <transition name="fade">
             <Modal v-if="alertModalOpen" v-on:trigger-close="alertModalOpen = false" :dismissable="true" size="small">
                 <template slot="content">
+                    <img src="@/assets/alert.svg" alt="alert icon" class="alert-icon-large">
                     <div class="modal-body">
-                        <h2>Are you sure you want to permanently delete {{ alertModalClass }}?</h2>
+                        <h4>Are you sure you want to permanently delete {{ alertModalClass }}?</h4>
                     </div>
                     <div class="modal-footer">
                         <button class="modal-footer-button yellow" @click="deleteClass(alertModalClassID)">Yes</button>
@@ -301,8 +302,8 @@ footer {
 }
 
 .modal-body {
-    height: 180px;
-    padding-top: 120px;
+    height: 150px;
+    padding-top: 70px;
     text-align: center;
 }
 
@@ -323,6 +324,15 @@ footer {
     margin-top: 25px;
     margin-left: 10px;
     margin-right: 10px;
+}
+
+.alert-icon-large {
+	vertical-align: middle;
+	width: 50px;
+	margin-top: 30px;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .yellow {

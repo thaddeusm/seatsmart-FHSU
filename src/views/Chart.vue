@@ -394,11 +394,11 @@ export default {
 
 						if (this.unplacedStudents.length === 1) {
 							this.alert.isAlert = true
-							this.alert.alertMessage = 'A student you have added does not have a seat.<br><br>Assign them one now.'
+							this.alert.alertMessage = "A student you have added does not have a seat.<br><br>Let's assign them one now."
 							this.alert.action = this.rearrangeSeats
 						} else if (this.unplacedStudents.length > 1) {
 							this.alert.isAlert = true
-							this.alert.alertMessage = 'Students you have added do not have a seat.<br><br>Assign them one now.'
+							this.alert.alertMessage = "Students you have added do not have a seat.<br><br>Let's assign them one now."
 							this.alert.action = this.rearrangeSeats
 						}
 
