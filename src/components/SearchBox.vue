@@ -28,7 +28,6 @@ input {
 	border-radius: 10px;
 	padding: 7px 12px;
 	font-size: 1.2em;
-	font-family: 'ArchivoNarrow';
 	background: var(--light-gray);
 	border: 2px solid var(--gray);
 }

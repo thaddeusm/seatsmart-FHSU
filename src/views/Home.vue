@@ -22,7 +22,7 @@
         <footer>
             <ActionBar background="var(--black)" :hamburger="false">
                 <template slot="left">
-                    <h4>v.0.1</h4>
+                    <h6>v.0.1</h6>
                 </template>
                 <template slot="right">
                     <button @click="openModal"><img src="@/assets/cog.svg" alt="settings icon"></button>
@@ -115,6 +115,7 @@ export default {
             // delete class and its associated records (studens and their notes)
             db.deleteSomething('classes', {_id: id})
                 .then((num) => {
+                    this.$store.dispatch('getAllClasses')
                     db.readSomething('students', {class: id})
                         .then(classStudents => {
                             for (let i=0; i<classStudents.length; i++) {
@@ -295,7 +296,6 @@ footer {
     color: var(--red);
     border: none;
     cursor: pointer;
-    font-family: 'ArchivoNarrow';
     vertical-align: text-top;
     font-size: 16px;
 }
@@ -316,7 +316,6 @@ footer {
     padding: 5px 10px;
     background: var(--light-gray);
     color: var(--black);
-    font-family: 'ArchivoNarrow';
     font-size: 18px;
     border-radius: 5px;
     cursor: pointer;

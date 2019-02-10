@@ -11,9 +11,9 @@
 			</h2>
 		</section>
 		<section id="cardFooter" v-if="student.firstName !== ''">
-			<h4 v-if="trend > 0">{{ '+' + trend + '' }}</h4>
-			<h4 v-if="trend < 0">{{ '' + trend + '' }}</h4>
-			<h4 v-if="trend === 0">(no change)</h4>
+			<h6 v-if="trend > 0">{{ '+' + trend + '' }}</h6>
+			<h6 v-if="trend < 0">{{ '' + trend + '' }}</h6>
+			<h6 v-if="trend === 0">(no change)</h6>
 		</section>
 	</div>
 	<div v-else id="cardContainer" :class="[chosen ? 'chosen' : '', 'gray', isAbsentToday ? 'absent' : '']">
@@ -345,8 +345,7 @@ export default {
 }
 
 #absences {
-	font-family: 'ArchivoNarrow';
-	font-size: 1.1em;
+	font-size: 16px;
 	color: var(--red);
 }
 
@@ -381,9 +380,8 @@ export default {
 }
 
 #addNoteButton {
-	font-family: 'Merriweather';
 	font-size: 1.4em;
-	padding-top: 10%;
+	padding-top: 4%;
 }
 
 .more-button {

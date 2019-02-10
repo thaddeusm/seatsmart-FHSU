@@ -41,8 +41,8 @@
                         <AbbreviationCircle :behavior="note.behavior" size="medium" :color="note.type === 'positive' ? 'yellow' : 'red'"/>
                     </section>
                     <section class="note-body">
-                        <h4>{{ note.behavior.Description }}</h4>
-                        <h5>on {{ note.dateNoted.formatted }}</h5>
+                        <h5>{{ note.behavior.Description }}</h5>
+                        <span class="date-text">on {{ note.dateNoted.formatted }}</span>
                         <p v-if="note.comment == '' || note.comment == null" class="center">- no comment -</p>
                         <p v-else>{{ note.comment }}</p>
                         <button @click="promptDelete(note._id)" class="delete-button"><img src="@/assets/delete.svg" alt="delete icon"></button>
@@ -211,8 +211,10 @@ export default {
             // filter out notes not created this month
             let notesThisMonth = []
             for (let i=0; i<this.notes.length; i++) {
-                if (moment(this.notes[i].dateNoted._d).month() === thisMonth) {
-                    notesThisMonth.push(this.notes[i])
+                if (this.notes.length !== 0) {
+                    if (moment(this.notes[i].dateNoted._d).month() === thisMonth) {
+                        notesThisMonth.push(this.notes[i])
+                    }
                 }
             }
 
@@ -267,8 +269,6 @@ export default {
                 }
             }
 
-            // remove the starting default value
-            trendArr.shift()
             return trendArr
         },
         invertedNotes() {
@@ -515,12 +515,13 @@ main {
 #tigerArea > h5 {
     display: inline-block;
     color: var(--yellow);
+    font-size: 18px;
 }
 
 #tigerLogo {
-    width: 20px;
+    width: 24px;
     vertical-align: middle;
-    margin-right: 5px;
+    margin-right: 10px;
 }
 
 #addNoteArea {
@@ -528,7 +529,7 @@ main {
 }
 
 #addNoteButton {
-    font-family: 'Merriweather';
+    font-family: "ArchivoNarrow";
     font-size: 3em;
 }
 
@@ -554,13 +555,12 @@ main {
     padding: 10px;
 }
 
-.note-body > h4 {
+.note-body > h5 {
     text-align: center;
-    font-family: 'Merriweather';
+    margin-bottom: 3px;
 }
 
 .note-body > p {
-    font-family: 'ArchivoNarrow';
     font-weight: 100;
     background: var(--white);
     padding: 5px 12px;
@@ -569,13 +569,6 @@ main {
     overflow: auto;
     margin: 10px 0 7px 0;
     text-align: left;
-}
-
-.note-body > h5 {
-    font-family: 'ArchivoNarrow';
-    font-weight: 300;
-    font-size: .8em;
-    margin-top: 5px;
 }
 
 .delete-button {
@@ -611,7 +604,6 @@ main {
     color: var(--red);
     border: none;
     cursor: pointer;
-    font-family: 'ArchivoNarrow';
     vertical-align: text-top;
     font-size: 16px;
 }
@@ -632,7 +624,6 @@ main {
     padding: 5px 10px;
     background: var(--light-gray);
     color: var(--black);
-    font-family: 'ArchivoNarrow';
     font-size: 18px;
     border-radius: 5px;
     cursor: pointer;

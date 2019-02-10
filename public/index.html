@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -8,91 +8,115 @@
     <title>Seatsmart</title>
     <style>
     * {
-      margin: 0;
-      padding: 0;
+        margin: 0;
+        padding: 0;
     }
 
     :root {
-      --yellow: #FCBB04;
-      --red: #D2360A;
-      --black: #000000;
-      --dark-gray: #040404;
-      --gray: #6C6C6C;
-      --light-gray: #E5E5E5;
-      --white: #FFFFFF;
+        --yellow: #FCBB04;
+        --red: #D2360A;
+        --black: #000000;
+        --dark-gray: #040404;
+        --gray: #6C6C6C;
+        --light-gray: #E5E5E5;
+        --white: #FFFFFF;
     }
 
     @font-face {
-      font-family: 'Merriweather';
-      src: url('<%= BASE_URL %>Merriweather.ttf');
-      font-family: 'ArchivoNarrow';
-      src: url('<%= BASE_URL %>ArchivoNarrow.ttf');
+        font-family: "ArchivoNarrow";
+        src: url('<%= BASE_URL %>ArchivoNarrow.ttf');
     }
 
     h1 {
-      font-family: 'Merriweather';
-      -webkit-user-select: none;
-      font-weight: 400;
+        font-family: "ArchivoNarrow";
+        -webkit-user-select: none;
+        font-weight: 400;
+        font-size: 32px;
     }
 
     h2 {
-      font-family: 'ArchivoNarrow';
-      font-weight: 400;
-      -webkit-user-select: none;
+        font-family: "ArchivoNarrow";
+        font-weight: 400;
+        -webkit-user-select: none;
+        font-size: 28px;
     }
 
     h3 {
-      font-family: 'ArchivoNarrow';
-      font-weight: 500;
-      -webkit-user-select: none;
+        font-family: "ArchivoNarrow";
+        font-weight: 500;
+        -webkit-user-select: none;
+        font-size: 26px;
     }
 
     h4 {
-      font-family: 'ArchivoNarrow';
-      font-weight: 400;
-      -webkit-user-select: none;
+        font-family: "ArchivoNarrow";
+        font-weight: 400;
+        -webkit-user-select: none;
+        font-size: 24px;
     }
 
     h5 {
-      font-family: 'Merriweather';
-      font-weight: 400;
-      -webkit-user-select: none;
+        font-family: "ArchivoNarrow";
+        font-weight: 400;
+        -webkit-user-select: none;
+        font-size: 22px;
+    }
+
+    h6 {
+        font-family: "ArchivoNarrow";
+        font-weight: 400;
+        -webkit-user-select: none;
+        font-size: 20px;
     }
 
     p {
-      -webkit-user-select: none;
+        -webkit-user-select: none;
+        font-family: "ArchivoNarrow";
+        font-size: 18px;
     }
 
     span {
-      -webkit-user-select: none;
+        -webkit-user-select: none;
+        font-family: "ArchivoNarrow";
     }
 
     li {
-      -webkit-user-select: none;
+        -webkit-user-select: none;
+        font-family: "ArchivoNarrow";
     }
 
     button {
-      -webkit-user-select: none;
+        -webkit-user-select: none;
+        font-family: "ArchivoNarrow";
     }
 
     a {
-      -webkit-user-select: none;
+        -webkit-user-select: none;
+        font-family: "ArchivoNarrow";
     }
 
     img {
-      -webkit-user-select: none;
+        -webkit-user-select: none;
+    }
+
+    input {
+        font-family: "ArchivoNarrow";
+    }
+
+    textarea {
+        font-family: "ArchivoNarrow";
     }
 
     body {
-      font-family: 'Merriweather';
+        font-family: "ArchivoNarrow";
     }
     </style>
-  </head>
-  <body>
+</head>
+<body>
     <noscript>
-      <strong>We're sorry but seatsmart-electron doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+        <strong>We're sorry but seatsmart-electron doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->
-  </body>
+</body>
 </html>

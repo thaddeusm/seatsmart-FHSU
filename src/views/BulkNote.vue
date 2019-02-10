@@ -137,7 +137,7 @@ export default {
 }
 
 #formArea {
-    width: 70%;
+    width: 75%;
     height: 100%;
     min-width: 700px;
     margin: 0 auto;

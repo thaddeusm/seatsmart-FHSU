@@ -99,7 +99,7 @@
 			<Modal v-if="alert.isAlert" :dismissable="false" size="small">
 				<template slot="content">
 					<div class="alert-modal-body">
-	    				<h2 v-html="alert.alertMessage"></h2>
+	    				<h4 v-html="alert.alertMessage"></h4>
 	    			</div>
 	    			<div class="alert-modal-footer">
 	    				<button class="modal-footer-button yellow" @click="alert.action" v-if="alert.action !== null">Ok</button>
@@ -226,9 +226,9 @@ export default {
 			let heightAdjusted
 
 			if (size == 'small') {
-				heightAdjusted = totalHeight * .83
+				heightAdjusted = totalHeight * .80
 			} else {
-				heightAdjusted = totalHeight * .90
+				heightAdjusted = totalHeight * .88
 			}
 
 			let totalCardWidth = totalWidth / this.classInfo.columns
@@ -244,7 +244,7 @@ export default {
 
 
 			let totalPossibleVerticalSpace = totalCardHeight * this.classInfo.rows
-			let totalUsedVerticalSpace = totalPossibleVerticalSpace * .75
+			let totalUsedVerticalSpace = totalPossibleVerticalSpace * .77
 			let remainingVerticalSpace = heightAdjusted - totalUsedVerticalSpace
 			let gaps = this.classInfo.rows + 2
 			let verticalMargin = remainingVerticalSpace / gaps
@@ -481,8 +481,8 @@ button {
 	margin-left: -75px;
 	margin-bottom: 21px;
 	border-radius: 5px;
-	font-family: 'Merriweather';
-	font-size: 1em;
+	font-family: "ArchivoNarrow";
+	font-size: 14px;
 }
 
 .tooltip::after {
@@ -522,7 +522,6 @@ button {
 	padding: 5px 10px;
 	background: var(--light-gray);
 	color: var(--black);
-	font-family: 'ArchivoNarrow';
 	font-size: 18px;
 	border-radius: 5px;
 	cursor: pointer;

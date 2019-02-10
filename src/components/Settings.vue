@@ -158,7 +158,7 @@ export default {
 					this.$refs[`${a}`].classList = 'inactive'
 				}
 			});
-			
+
 			this.$refs[`${area}`].classList = 'active'
 		},
 		selectForm(form) {
@@ -215,7 +215,7 @@ export default {
 
 			formToEdit.push(obj)
 			this.updated = true
-			
+
 		},
 		removeFormGroup(form, index) {
 			this.alertMessage = ''
@@ -262,14 +262,14 @@ export default {
 }
 
 #settingsNavigation {
-	grid-area: "navigation";
+	grid-area: navigation;
 	background: var(--gray);
 	border-top-left-radius: 2px;
 	border-bottom-left-radius: 2px;
 }
 
 #settingsContent {
-	grid-area: "content";
+	grid-area: content;
 	background: var(--light-gray);
 	border-top-right-radius: 2px;
 	border-bottom-right-radius: 2px;
@@ -291,8 +291,7 @@ img {
 	border: none;
 	outline: none;
 	cursor: pointer;
-	font-family: 'Merriweather';
-	font-size: 22px;
+	font-size: 26px;
 }
 
 .inactive > button {
@@ -328,7 +327,6 @@ h3 {
 }
 
 #navigationFooter > button {
-	font-family: 'ArchivoNarrow';
 	font-size: 16px;
 	padding: 5px 12px;
 	border-radius: 5px;
@@ -344,7 +342,7 @@ h3 {
 	margin: 10px 10px;
 	width: 160px;
 	color: var(--black);
-	font-family: 'ArchivoNarrow';
+	font-family: "ArchivoNarrow";
 }
 
 .inline {
@@ -353,7 +351,6 @@ h3 {
 
 input {
 	border-radius: 4px;
-	font-family: 'ArchivoNarrow';
 	font-size: 15px;
 	padding: 7px 10px 9px 10px;
 	margin: 10px 10px;
@@ -404,7 +401,6 @@ input {
 	cursor: pointer;
 	font-size: 40px;
 	border: none;
-	font-family: 'Merriweather';
 }
 
 #alert {
@@ -432,25 +428,29 @@ input {
 	height: 40px;
 }
 
+.radio-label {
+	font-size: 18px;
+}
+
 .radio-heading > img {
 	text-align: right;
 }
 
 .radio-text {
-	grid-area: "text";
+	grid-area: text;
 	vertical-align: middle;
-	font-family: 'ArchivoNarrow';
-	font-size: 24px;
+	font-family: "ArchivoNarrow";
+	font-size: 28px;
 }
 
 .radio-icon {
 	width: 30px;
 	/*margin-left: 5px;*/
 	padding-bottom: 4px;
-	grid-area: "image";
+	grid-area: image;
 }
 
 .radio-wrapper {
-	grid-area: "radio";
+	grid-area: radio;
 }
 </style>

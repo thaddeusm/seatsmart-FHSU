@@ -177,7 +177,6 @@ export default {
 	box-shadow: 0px 0px 2px var(--black);
 	width: 300px;
 	display: block;
-	font-family: 'ArchivoNarrow';
 	font-size: 1.4em;
 	padding: 10px;
 	outline: none;
@@ -209,7 +208,6 @@ export default {
 
 .footer-button {
 	padding: 5px 10px;
-	font-family: 'ArchivoNarrow';
 	font-size: 18px;
 	border-radius: 5px;
 	cursor: pointer;
@@ -238,7 +236,6 @@ textarea {
 	border: 1px solid var(--gray);
 	padding: 15px;
 	font-size: 1.3em;
-	font-family: 'ArchivoNarrow';
 	outline: none;
 }
 

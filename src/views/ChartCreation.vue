@@ -1,50 +1,50 @@
 <template>
 	<div id="container">
-		<section id="backArea">
-			<button class="home-button" @click="routeBack"><img class="back-arrow" src="@/assets/backarrow.svg" alt="back arrow"> back</button>
-		</section>
 		<header>
 			<h1 ref="pageHeader" v-if="id == undefined">New Chart</h1>
 			<h1 ref="pageHeader" v-else>Edit Chart ({{ classChart.name }})</h1>
-			<h3 v-if="progress == 1">Enter the rows and columns of seating in the classroom:</h3>
-			<h3 v-if="progress == 2">Fill in information about the class:</h3>
-			<h3 v-if="progress == 3">Create a student list or import the XLSX from TigerCentral <button class="modal-button" @click="modalOpen = true">(?)</button></h3>
+			<h6 v-if="progress == 1">Enter the rows and columns of seating in the classroom:</h6>
+			<h6 v-if="progress == 2 && mode == 'new'">Fill in information about the class:</h6>
+			<h6 v-if="progress == 2 && mode == 'edit'">Edit information about the class:</h6>
+			<h6 v-if="progress == 3 && mode == 'new'">Create a student list or import the XLSX from TigerCentral <button class="modal-button" @click="modalOpen = true">(?)</button></h6>
+			<h6 v-if="progress == 3 && mode == 'edit'">Edit the student list:</h6>
 		</header>
 		<section id="diagram">
 			<SeatingDiagram :rows="classChart.rows" :columns="classChart.columns" />
 		</section>
 		<section id="chartForm">
 			<section class="error-area">
-				<h4>{{ alertMessage }}</h4>
+				<h4><img v-if="alertMessage.length > 0" src="@/assets/alert.svg" alt="alert icon" class="alert-icon-small"> {{ alertMessage }}</h4>
 			</section>
 			<section id="formOne" v-if="progress == 1">
 				<Tabs :sections="[{label: 'columns', color: 'yellow'}, {label: 'rows', color: 'gray'}]">
 					<template slot="columns">
-						<button v-for="(columnsButton, index) of 9" :class="[classChart.columns == index + 1 ? 'selected' : '', 'number-button']"" :ref="`columnsButton${index + 1}`" @click="selectNumber('columns', index)">{{ index + 1 }}</button>
+						<button v-for="(columnsButton, index) of 9" :class="[classChart.columns == index + 1 ? 'selected' : '', 'number-button']" :ref="`columnsButton${index + 1}`" @click="selectNumber('columns', index)">{{ index + 1 }}</button>
 					</template>
 					<template slot="rows">
-						<button v-for="(rowsButton, index) of 9" :class="[classChart.rows == index + 1 ? 'selected' : '', 'number-button']"" :ref="`rowsButton${index + 1}`" @click="selectNumber('rows', index)">{{ index + 1 }}</button>
+						<button v-for="(rowsButton, index) of 9" :class="[classChart.rows == index + 1 ? 'selected' : '', 'number-button']" :ref="`rowsButton${index + 1}`" @click="selectNumber('rows', index)">{{ index + 1 }}</button>
 					</template>
 				</Tabs>
 				<section class="progress-button-area">
+					<button class="progress-button" @click="routeBack"><img class="back-icon" src="@/assets/backarrowwhite.svg" alt="back icon"></button>
 					<button class="progress-button" @click="changeProgress(2)">add class info</button>
 				</section>
 			</section>
 			<section id="formTwo" v-if="progress == 2">
 				<div class="form-container">
-					<h2>Class Information</h2>
+					<h3>Class Information</h3>
 					<div class="input-wrapper">
-						<h3>Name</h3>
+						<h5>Name</h5>
 						<input class="large-input" type="text" name="className" v-model="classChart.name" placeholder="(VFA, Leadership, etc.)">
 					</div>
 					<div class="input-wrapper">
 						<div class="label-row">
-							<h3 class="select-label">Semester</h3>
-							<h3 class="select-label">Year</h3>
+							<h5 class="select-label">Semester</h5>
+							<h5 class="select-label">Year</h5>
 						</div>
 						<div class="select-wrapper">
 							<v-select v-model="classChart.semester" :options="[
-								'Fall', 'Spring', 'Summer'
+							'Fall', 'Spring', 'Summer'
 							]"></v-select>
 						</div>
 						<div class="select-wrapper">
@@ -59,13 +59,14 @@
 			</section>
 			<section id="formThree" v-if="progress == 3">
 				<div class="form-container-large">
-					<h2>Import or Create Class Roster</h2>
+					<h3 v-if="mode === 'new'">Import or Create Class Roster</h3>
+					<h3 v-else>Edit Class Roster</h3>
 					<div class="input-area">
-						<drop class="drop-area" @drop="handleDrop" v-if="!importSuccess">
+						<drop class="drop-area" @drop="handleDrop" v-if="mode === 'new' && !importSuccess">
 							<button class="drop-area-button" @click="handleOpen">import roster</button>
 							<span>or drag and drop here</span>
 						</drop>
-						<div class="drop-area" v-else>
+						<div class="drop-area" v-else-if="mode === 'new' && importSuccess">
 							<button class="drop-area-button" @click="resetImport">import a different file</button>
 						</div>
 						<div class="label-row black-border">
@@ -96,60 +97,61 @@
 			<ProgressNodes :steps="steps" :progress="progress" />
 		</section>
 		<transition name="fade">
-	    	<Modal v-if="modalOpen" v-on:trigger-close="modalOpen = false" :dismissable="true" size="large">
-	    		<template slot="content">
-	    			<div class="modal-header">
-	    				<h1>Import a FHSU Roster</h1>
-	    			</div>
-	    			<div class="modal-body">
-	    				<div class="step">
-	    					<img src="@/assets/tiger.png" alt="FHSU tiger">
-	    					<h2>Teaching > Course Rosters on Tiger Central</h2>
-	    					<h2>1</h2>
-	    				</div>
-	    				<div class="step">
-	    					<img src="@/assets/excel.svg" alt="Excel file icon">
-	    					<h2>Click on the Excel icon next to a course</h2>
-	    					<h2>2</h2>
-	    				</div>
-	    				<div class="step">
-	    					<img src="@/assets/import.svg" alt="import icon">
-	    					<h2>import or drag the Excel file into Seatsmart</h2>
-	    					<h2>3</h2>
-	    				</div>
-	    			</div>
-	    			<div class="modal-footer">
-	    				<button class="modal-footer-button" @click="modalOpen = false">Got it</button>
-	    			</div>
-	    		</template>
-	    	</Modal>
+			<Modal v-if="modalOpen" v-on:trigger-close="modalOpen = false" :dismissable="true" size="large">
+				<template slot="content">
+					<div class="modal-header">
+						<h1>Import a FHSU Roster</h1>
+					</div>
+					<div class="modal-body">
+						<div class="step">
+							<img src="@/assets/tiger.png" alt="FHSU tiger">
+							<h5>Teaching > Course Rosters on Tiger Central</h5>
+							<h5>1</h5>
+						</div>
+						<div class="step">
+							<img src="@/assets/excel.svg" alt="Excel file icon">
+							<h5>Click on the Excel icon next to a course</h5>
+							<h5>2</h5>
+						</div>
+						<div class="step">
+							<img src="@/assets/import.svg" alt="import icon">
+							<h5>import or drag the Excel file into Seatsmart</h5>
+							<h5>3</h5>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button class="modal-footer-button" @click="modalOpen = false">Got it</button>
+					</div>
+				</template>
+			</Modal>
 		</transition>
 		<transition name="fade">
-	    	<Modal v-if="alertModalOpen" v-on:trigger-close="alertModalOpen = false" :dismissable="true" size="small">
-	    		<template slot="content">
-	    			<div class="alert-modal-body" v-if="seatingConflict">
-	    				<h2>The edited chart causes a seating conflict with at least one student.</h2>
-	    				<h2>Do you want to reset seating assignments and proceed with current edits?</h2>
-	    			</div>
+			<Modal v-if="alertModalOpen" v-on:trigger-close="alertModalOpen = false" :dismissable="true" size="small">
+				<template slot="content">
+					<img src="@/assets/alert.svg" alt="alert icon" class="alert-icon-large">
+					<div class="alert-modal-body" v-if="seatingConflict">
+						<h2>The edited chart causes a seating conflict with at least one student.</h2>
+						<h2>Do you want to reset seating assignments and proceed with current edits?</h2>
+					</div>
 					<div class="alert-modal-body" v-else-if="incompleteInformation">
-	    				<h2>Some information is missing about the student(s) you have added.</h2>
-	    				<h2>Please fill in the missing information and try again.</h2>
-	    			</div>
-	    			<div class="alert-modal-footer" v-if="seatingConflict">
-	    				<button class="modal-footer-button yellow" @click="resetSeating">Yes</button>
-	    				<button class="modal-footer-button" @click="cancelSeatingChange">cancel</button>
-	    			</div>
+						<h2>Some information is missing about the student(s) you have added.</h2>
+						<h2>Please fill in the missing information and try again.</h2>
+					</div>
+					<div class="alert-modal-footer" v-if="seatingConflict">
+						<button class="modal-footer-button yellow" @click="resetSeating">Yes</button>
+						<button class="modal-footer-button" @click="cancelSeatingChange">cancel</button>
+					</div>
 					<div class="alert-modal-footer" v-else-if="incompleteInformation">
-	    				<button class="modal-footer-button" @click="alertModalOpen = false">Got it</button>
-	    			</div>
-	    		</template>
-	    	</Modal>
+						<button class="modal-footer-button" @click="alertModalOpen = false">Got it</button>
+					</div>
+				</template>
+			</Modal>
 		</transition>
 		<TouchBar :show="true" :bar="[
-			{type: 'spacer', size: 'flexible'},
-			{type: 'button', label: 'Back', method: routeBack},
-			{type: 'spacer', size: 'flexible'},
-	    ]"/>
+		{type: 'spacer', size: 'flexible'},
+		{type: 'button', label: 'Back', method: routeBack},
+		{type: 'spacer', size: 'flexible'},
+		]"/>
 	</div>
 </template>
 
@@ -258,29 +260,29 @@ export default {
 
 			switch (step) {
 				case 2:
-					if (this.classChart.columns == 1) {
-						this.alertMessage = "Please verify the number of columns."
-						error = true
-					} else if (this.classChart.rows == 1) {
-						this.alertMessage = "Please verify the number of rows."
-						error = true
-					}
-					break
+				if (this.classChart.columns == 1) {
+					this.alertMessage = "Please verify the number of columns."
+					error = true
+				} else if (this.classChart.rows == 1) {
+					this.alertMessage = "Please verify the number of rows."
+					error = true
+				}
+				break
 				case 3:
-					if (this.classChart.semester == null) {
-						this.alertMessage = "Please select a semester."
-						error = true
-					} else if (this.classChart.year == null) {
-						this.alertMessage = "Please select a year."
-						error = true
-					}
-					break
+				if (this.classChart.semester == null) {
+					this.alertMessage = "Please select a semester."
+					error = true
+				} else if (this.classChart.year == null) {
+					this.alertMessage = "Please select a year."
+					error = true
+				}
+				break
 				case 4:
-					if (Number.parseInt(this.classChart.rows) * Number.parseInt(this.classChart.columns) < this.classStudents.length) {
-						this.alertMessage = 'There are not enough seats in the chart for students'
-						error = true
-					}
-					break
+				if (Number.parseInt(this.classChart.rows) * Number.parseInt(this.classChart.columns) < this.classStudents.length) {
+					this.alertMessage = 'There are not enough seats in the chart for students'
+					error = true
+				}
+				break
 			}
 
 			return error
@@ -334,9 +336,12 @@ export default {
 			this.processXLSX(path)
 		},
 		handleOpen() {
-			let path = dialog.showOpenDialog({ properties: ['openFile'] })[0]
+			let path = dialog.showOpenDialog({ properties: ['openFile'] })
 
-			this.processXLSX(path)
+			// in case they click 'cancel' on the dialog box
+			if (path !== undefined) {
+				this.processXLSX(path[0])
+			}
 		},
 		processXLSX(path) {
 			var workbook = XLSX.readFile(path)
@@ -433,9 +438,9 @@ export default {
 				student.seat.column = col
 
 				db.updateSomething('students', {_id: student._id}, student)
-					.then((result) => {
-						console.log(result)
-					})
+				.then((result) => {
+					console.log(result)
+				})
 
 				if (col === this.classChart.columns) {
 					col = 1
@@ -493,16 +498,16 @@ export default {
 					if (this.deletedStudents.length !== 0) {
 						for (let i=0; i<this.deletedStudents.length; i++) {
 							db.deleteSomething('students', {_id: this.deletedStudents[i]._id})
-								.then((numDeleted) => {
-									if (numDeleted > 0) {
-										console.log(`${this.deletedStudents[i].firstName} was deleted`)
-									}
+							.then((numDeleted) => {
+								if (numDeleted > 0) {
+									console.log(`${this.deletedStudents[i].firstName} was deleted`)
+								}
 
-									db.deleteSomething('notes', {student: this.deletedStudents[i]._id})
-										.then((numNotesDeleted) => {
-											console.log(`${numNotesDeleted} notes were deleted`)
-										})
+								db.deleteSomething('notes', {student: this.deletedStudents[i]._id})
+								.then((numNotesDeleted) => {
+									console.log(`${numNotesDeleted} notes were deleted`)
 								})
+							})
 						}
 					}
 
@@ -560,23 +565,23 @@ export default {
 	created() {
 		if (this.id !== undefined) {
 			db.readSomething('classes', {_id: this.id})
-				.then((existingClass) => {
-					this.classChart.name = existingClass[0].name
-					this.classChart.columns = existingClass[0].columns
-					this.classChart.rows = existingClass[0].rows
-					this.classChart.semester = existingClass[0].semester
-					this.classChart.year = existingClass[0].year
-					this.classChart._id = existingClass[0]._id
+			.then((existingClass) => {
+				this.classChart.name = existingClass[0].name
+				this.classChart.columns = existingClass[0].columns
+				this.classChart.rows = existingClass[0].rows
+				this.classChart.semester = existingClass[0].semester
+				this.classChart.year = existingClass[0].year
+				this.classChart._id = existingClass[0]._id
 
 
-					this.mode = 'edit'
+				this.mode = 'edit'
 
-					db.readSomething('students', {class: this.id})
-						.then((students) => {
-							this.classStudents = students
+				db.readSomething('students', {class: this.id})
+				.then((students) => {
+					this.classStudents = students
 
-						})
 				})
+			})
 		} else {
 			this.classChart.columns = 1
 			this.classChart.rows = 1
@@ -591,34 +596,27 @@ export default {
 <style scoped>
 #container {
 	background: var(--light-gray);
-  	width: 100%;
-  	min-width: 100vw;
+	width: 100%;
+	min-width: 100vw;
 	min-height: 100vh;
 	height: 100%;
 	display: grid;
-	grid-template-rows: 5% 15% 60% 20%;
+	grid-template-rows: 20vh 65vh 10vh;
 	grid-template-columns: 50% 50%;
 	grid-template-areas:
-		'back back'
-		'head head'
-		'diagram chartForm'
-		'progressNodes progressNodes';
-}
-
-#backArea {
-	padding-top: 30px;
-	padding-left: 15px;
-	grid-area: back;
+	'head head'
+	'diagram chartForm'
+	'progressNodes progressNodes';
 }
 
 header {
-	margin: 25px 0;
 	grid-area: head;
 	text-align: center;
+	align-self: center;
 }
 
 h1 {
-	margin-bottom: 10px;
+	margin-bottom: 15px;
 }
 
 #diagram {
@@ -633,21 +631,6 @@ h1 {
 
 #progressNodes {
 	grid-area: progressNodes;
-}
-
-.home-button {
-	font-family: "ArchivoNarrow";
-	color: var(--black);
-	background: none;
-	outline: none;
-	cursor: pointer;
-	border: none;
-	font-size: 14px;
-}
-
-.home-button > img {
-	vertical-align: middle;
-	padding-bottom: 2px;
 }
 
 .error-area {
@@ -667,7 +650,6 @@ h1 {
 	margin: 5px;
 	border-radius: 10px;
 	font-size: 54px;
-	font-family: 'ArchivoNarrow';
 	cursor: pointer;
 	outline: none;
 }
@@ -689,7 +671,6 @@ h1 {
 	padding: 10px 15px;
 	background: var(--gray);
 	color: var(--white);
-	font-family: 'ArchivoNarrow';
 	font-size: 20px;
 	border-radius: 10px;
 	cursor: pointer;
@@ -715,7 +696,7 @@ progress-button:disabled {
 
 .form-container {
 	margin-top: 40px;
-	margin-bottom: 40px;
+	margin-bottom: 30px;
 	background: var(--yellow);
 	border-radius: 10px;
 	padding: 10px;
@@ -729,11 +710,11 @@ progress-button:disabled {
 	padding: 10px;
 }
 
-.form-container-large > h2 {
+.form-container-large > h3 {
 	text-align: center;
 }
 
-.form-container > h2 {
+.form-container > h3 {
 	text-align: center;
 }
 
@@ -744,13 +725,12 @@ progress-button:disabled {
 	border-radius: 10px;
 }
 
-.input-wrapper > h3 {
+.input-wrapper > h5 {
 	padding-left: 5px;
 }
 
 .large-input {
 	border-radius: 4px;
-	font-family: 'ArchivoNarrow';
 	font-size: 15px;
 	padding: 7px 10px 9px 10px;
 	margin: 10px 0 0 0;
@@ -762,7 +742,6 @@ progress-button:disabled {
 
 .small-input {
 	border-radius: 4px;
-	font-family: 'ArchivoNarrow';
 	font-size: 15px;
 	padding: 7px 10px 9px 10px;
 	margin: 10px 5px;
@@ -778,7 +757,7 @@ progress-button:disabled {
 	margin: 10px 0 10px 0;
 	width: 160px;
 	color: var(--black);
-	font-family: 'ArchivoNarrow';
+	font-family: "ArchivoNarrow";
 	display: inline-block;
 }
 
@@ -792,7 +771,7 @@ progress-button:disabled {
 }
 
 .select-label:nth-child(2) {
-	margin-left: 105px;
+	margin-left: 90px;
 }
 
 .label-row {
@@ -839,7 +818,6 @@ progress-button:disabled {
 	cursor: pointer;
 	font-size: 40px;
 	border: none;
-	font-family: 'Merriweather';
 }
 
 .drop-area {
@@ -856,17 +834,15 @@ progress-button:disabled {
 	padding: 5px 10px;
 	background: var(--light-gray);
 	color: var(--black);
-	font-family: 'ArchivoNarrow';
 	font-size: 16px;
 	border-radius: 5px;
 	cursor: pointer;
 	outline: none;
 }
 
-.drop-area > span{
+.drop-area > span {
 	color: var(--yellow);
 	margin-left: 15px;
-	font-family: 'ArchivoNarrow';
 }
 
 .modal-button {
@@ -875,7 +851,6 @@ progress-button:disabled {
 	color: var(--red);
 	border: none;
 	cursor: pointer;
-	font-family: 'ArchivoNarrow';
 	vertical-align: text-top;
 	font-size: 16px;
 }
@@ -909,7 +884,7 @@ progress-button:disabled {
 	vertical-align: middle;
 }
 
-.step > h2 {
+.step > h5 {
 	margin: 35px 0;
 }
 
@@ -923,14 +898,13 @@ progress-button:disabled {
 	padding: 5px 10px;
 	background: var(--light-gray);
 	color: var(--black);
-	font-family: 'ArchivoNarrow';
 	font-size: 18px;
 	border-radius: 5px;
 	cursor: pointer;
 	outline: none;
 	margin-top: 20px;
-  	margin-left: 10px;
-  	margin-right: 10px;
+	margin-left: 10px;
+	margin-right: 10px;
 }
 
 .yellow {
@@ -938,21 +912,42 @@ progress-button:disabled {
 }
 
 .alert-modal-body {
-  height: 180px;
-  padding-top: 120px;
-  text-align: center;
+	height: 150px;
+	padding-top: 70px;
+	text-align: center;
 }
 
 .alert-modal-footer {
-  background: var(--gray);
-  text-align: center;
-  height: 75px;
+	background: var(--gray);
+	text-align: center;
+	height: 75px;
+}
+
+.alert-icon-small {
+	vertical-align: middle;
+	width: 20px;
+	margin-bottom: 3px;
+	margin-right: 10px;
+}
+
+.alert-icon-large {
+	vertical-align: middle;
+	width: 50px;
+	margin-top: 30px;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.back-icon {
+	width: 15px;
 }
 
 .fade-enter-active, .fade-leave-active {
-    transition: opacity .2s;
+	transition: opacity .2s;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-    opacity: 0;
+	opacity: 0;
 }
 </style>
+				}

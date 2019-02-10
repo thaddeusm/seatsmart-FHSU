@@ -24,6 +24,11 @@
                     />
                 </div>
             </div>
+            <div v-if="noResults" id="noResults">
+                <img id="searchSplash" src="@/assets/searchimage.svg" alt="search illustration">
+                <h2>No students were found.</h2>
+                <h4>Be sure to search using students' "English" names.</h4>
+            </div>
         </main>
         <transition name="fade">
       		<Modal v-if="noteModalOpen" v-on:trigger-close="closeNoteModal" :dismissable="true" size="large">
@@ -70,7 +75,8 @@ export default {
             noteModalOpen: false,
             newNoteStudent: '',
             loaded: false,
-            placeholder: ''
+            placeholder: '',
+            noResults: false
         }
     },
     computed: {
@@ -112,9 +118,26 @@ export default {
                 }
             }
 
+            this.checkForNoResults()
+
             // update last page record in $store
             this.$store.dispatch('setLastView', `/search/${term}`)
 
+        },
+        checkForNoResults() {
+            let test = 0
+
+            for (let i=0; i<this.results.length; i++) {
+                if (this.results[i].length === 0) {
+                    test++
+                }
+            }
+
+            if (test === this.allClasses.length) {
+                this.noResults = true
+            } else {
+                this.noResults = false
+            }
         },
         openNoteModal(studentID) {
             this.newNoteStudent = studentID
@@ -190,11 +213,7 @@ main {
 }
 
 .result {
-    margin: 5% 0;
-}
-
-.result:first-child {
-    margin-top: 0;
+    margin-bottom: 10%;
 }
 
 .name-card-wrapper {
@@ -210,6 +229,20 @@ main {
     width: 145.8px!important;
     height: 94.5px!important;
     display: inline-block;
+}
+
+#noResults {
+
+}
+
+#searchSplash {
+    height: 200px;
+    width: 200px;
+    margin-bottom: 50px;
+}
+
+#noResults > h2 {
+    margin-bottom: 10px;
 }
 
 .fade-enter-active, .fade-leave-active {

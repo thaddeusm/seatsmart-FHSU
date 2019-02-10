@@ -78,7 +78,7 @@
 			<Modal v-if="choiceModalOpen" :dismissable="false" size="small">
 	    		<template slot="content">
 	    			<div class="choice-modal-body">
-	    				<h2>Do you want to start with a blank chart or students' current seats?</h2>
+	    				<h4>Do you want to start with a blank chart or students' current seats?</h4>
 	    			</div>
 	    			<div class="choice-modal-footer">
 	    				<button class="modal-footer-button yellow" @click="setChoice('blank')">Blank</button>
@@ -348,16 +348,16 @@ export default {
 }
 
 header {
-	grid-area: "header";
+	grid-area: header;
 }
 
 main {
-	grid-area: "main";
+	grid-area: main;
 	overflow: auto;
 }
 
 footer {
-	grid-area: "footer";
+	grid-area: footer;
 }
 
 button {
@@ -390,7 +390,6 @@ button {
 }
 
 .drag > span {
-	font-family: 'ArchivoNarrow';
 	font-size: 22px;
 	cursor: move;
 	vertical-align: middle;
@@ -419,7 +418,6 @@ button {
 .delete-button {
 	color: var(--red);
 	font-size: 18px;
-	font-family: 'ArchivoNarrow';
 }
 
 .modal-header {
@@ -465,7 +463,6 @@ button {
 	padding: 5px 10px;
 	background: var(--light-gray);
 	color: var(--black);
-	font-family: 'ArchivoNarrow';
 	font-size: 18px;
 	border-radius: 5px;
 	cursor: pointer;
@@ -498,8 +495,7 @@ button {
 }
 
 .button-labels > span {
-	font-family: 'Merriweather';
-	font-size: 1em;
+	font-size: 14px;
 	margin: 0 15%;
 }
 

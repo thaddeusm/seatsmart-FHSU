@@ -29,30 +29,22 @@ export default {
 </script>
 
 <style scoped>
-#abbreviation {
-
-}
-
-span {
-	font-family: 'ArchivoNarrow';
-}
-
 .small {
-	font-size: .7em;
+	font-size: 12px;
 	display: inline-block;
-	width: 1.3em;
-	height: 1.3em;
-	border-radius: 1.3em;
+	width: 15px;
+	height: 15px;
+	border-radius: 15px;
 	margin: 0 3%;
 }
 
 .medium {
-	font-size: 1.5em;
+	font-size: 22px;
 	display: inline-block;
-	width: 2em;
-	height: 1.7em;
-	padding-top: .3em;
-	border-radius: 2em;
+	width: 40px;
+	height: 33px;
+	padding-top: 7px;
+	border-radius: 40px;
 	margin: 0 3%;
 }
 
@@ -60,10 +52,10 @@ span {
 	font-size: 2.5em;
 	display: block;
 	width: 2.5em;
-	height: 1.9em;
+	height: 1.8em;
 	border-radius: 2.5em;
 	margin: 0 auto;
-	padding-top: .6em;
+	padding-top: .7em;
 	border: 1px solid var(--gray);
 }
 

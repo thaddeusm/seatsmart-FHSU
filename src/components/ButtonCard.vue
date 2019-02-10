@@ -1,8 +1,8 @@
 <template>
 	<button v-if="button && display" class="button-card" @click="onClick(param)">
-		<h2 class="button-h2">
+		<h4 class="button-h4">
 			{{ name }}
-		</h2>
+		</h4>
 		<div id="checkmarkArea">
 			<img v-if="selected" src="@/assets/checkhexagon.svg" alt="checkmark" class="checkmark">
 		</div>
@@ -11,12 +11,12 @@
 		<h1 v-if="icon === '+'">
 			{{ icon }}
 		</h1>
-		<h2 v-else-if="icon !== undefined">
+		<h4 v-else-if="icon !== undefined">
 			{{ icon.length > 10 ? `${icon.slice(0, 10)}...` : icon }}
-		</h2>
-		<h3>
+		</h4>
+		<h6>
 			{{ text }}
-		</h3>
+		</h6>
 	</router-link>
 </template>
 
@@ -84,11 +84,11 @@ h1 {
 	margin-bottom: 5px;
 }
 
-h2 {
+h4 {
 	margin: 10px 0;
 }
 
-.button-h2 {
-	margin: 0 0 15px 0;
+.button-h4 {
+	margin: 0 0 5px 0;
 }
 </style>

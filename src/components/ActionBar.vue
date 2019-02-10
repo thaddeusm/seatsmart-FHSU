@@ -75,17 +75,17 @@ section {
 
 .left-button {
 	text-align: center;
-	grid-area: "left";
+	grid-area: left;
 }
 
 .center-buttons {
-	grid-area: "center";
+	grid-area: center;
 	text-align: center;
 }
 
 .right-button {
 	text-align: center;
-	grid-area: "right";
+	grid-area: right;
 }
 
 img {

@@ -18,11 +18,11 @@ export default {
 
 .node {
 	display: inline-block;
-	width: 30px;
-	height: 30px;
-	border-radius: 50px;
-	margin: 70px 10px;
-	box-shadow: 0px 0px 2px var(--dark-gray);
+	width: 15px;
+	height: 15px;
+	border-radius: 15px;
+	margin: 35px 5px;
+	box-shadow: 0px 0px 1px var(--dark-gray);
 }
 
 .gray {

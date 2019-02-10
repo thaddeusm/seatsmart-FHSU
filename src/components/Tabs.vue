@@ -53,7 +53,6 @@ export default {
 .tab-button {
 	width: 33%;
 	padding: 10px 0;
-	font-family: 'ArchivoNarrow';
 	font-size: 20px;
 	margin: 0;
 	outline: none;
