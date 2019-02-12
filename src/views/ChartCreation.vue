@@ -527,6 +527,17 @@ export default {
 
 					}
 
+					// save any changes to current student info
+					for (let i=0; i<this.classStudents.length; i++) {
+						db.updateSomething('students', {_id: this.classStudents[i]._id}, {
+							$set: {
+								firstName: this.classStudents[i].firstName,
+								lastName: this.classStudents[i].lastName,
+								tigerID: this.classStudents[i].tigerID,
+							}
+						})
+					}
+
 					// check for errors with student's current seats
 					this.seatingConflict = false
 					for (let i=0; i<this.classStudents.length; i++) {
