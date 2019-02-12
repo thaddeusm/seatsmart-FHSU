@@ -17,16 +17,20 @@
 		</aside>
 		<section id="settingsContent">
 			<section v-if="content == 'help'">
-				<Help />
+				<Help v-on:change-content="changeContent" />
 			</section>
 			<section v-if="content == 'behaviors'">
-				<h2>Behaviors</h2>
-				<p>What does participation mean to you?  Add the positive and negative behaviors you would like to track with Seatsmart below.  You can also set different weights for these behaviors, which will impact how the application calculates student progress.</p>
+				<h1>Behaviors</h1>
+				<p>
+					What does participation mean to you?  Add the positive and negative behaviors
+					you would like to track with Seatsmart below.  You can also set different weights
+					for these behaviors, which will impact how the application calculates student progress.
+				</p>
 				<section id="alert">
-					<h4>{{ alertMessage }}</h4>
+					<h6><img v-if="alertMessage.length > 0" src="@/assets/alert.svg" alt="alert icon" class="alert-icon-small"> {{ alertMessage }}</h6>
 				</section>
 				<Tabs :sections="[{label: 'Positive', color: 'yellow'}, {label: 'Negative', color: 'red'}]">
-					<template slot="Positive"">
+					<template slot="Positive">
 						<div class="label-row black-border">
 							<span>Abbreviation</span>
 							<span>Description</span>
@@ -83,8 +87,13 @@
 				</Tabs>
 			</section>
 			<section v-if="content == 'calculation'">
-				<h2>Calculation</h2>
-				<p>As students' participation records accumulate, seatsmart will calculate participation trends to provide charts and other visual cues.  Calculations can be done in two ways:</p>
+				<h1>Calculation</h1>
+				<p>
+					As participation records accumulate, Seatsmart will calculate participation
+					trends to provide charts and other visual cues.  These are especially useful when
+					updating participation grades in Blackboard throughout the semester.  Calculations
+					can be made in two ways:
+				</p>
 				<section class="radio-heading">
 					<span class="radio-label">Balanced</span>
 					<img class="radio-icon" src="@/assets/balance.svg" alt="balanced calculation">
@@ -92,6 +101,14 @@
 						<input type="radio" id="optionOne" value="balanced" v-model="calculation" @click="updated = true">
 					</div>
 				</section>
+				<p class="radio-description">
+					By default, Seatsmart assumes that an instructor will be just as likely to note
+					students' positive behaviors as negative ones.  The application will simply adjust
+					a participation score up and down according to the type of behavior and its weight.
+					For example, a positive behavior you are tracking with a 'strong' weight will add
+					8 points.  If no notes are added for a student in a given week, the application
+					will suggest that no changes be made to the students' grade.
+				</p>
 				<section class="radio-heading">
 					<span class="radio-label">No News is Good News</span>
 					<img class="radio-icon" src="@/assets/nonews.svg" alt="no news is good news calculation">
@@ -99,10 +116,28 @@
 						<input type="radio" id="optionTwo" value="nonews" v-model="calculation" @click="updated = true">
 					</div>
 				</section>
+				<p class="radio-description">
+					Some instructors may find that they are more likely to record notes about negative
+					behaviors such as absences, cell phone use, missing homework, etc.  In this case, trend
+					calculations may not accurately reflex student performance.  'No News is Good News'
+					assumes that a student is participating well even if no notes are recorded pertaining to
+					them in a given week.
+				</p>
 			</section>
 			<section v-if="content == 'about'">
-				<h2>About Seatsmart</h2>
-				<p>This is a paragraph about Seatsmart.</p>
+				<h1>About</h1>
+				<p>
+					Seatsmart is being developed by Thaddeus McCleary as a convenient way to implement classroom
+					participation guidance by the Department of English at Fort Hays State University for
+					courses conducted at campuses in China.
+				</p>
+				<p>
+					Participation is considered an essential part of student performance and can impact final course grades.
+					A student begins the semester at the level of a 'C' letter grade for participation.  The instructor
+					regularly adjusts the grade throughout the semester, making it visible on Blackboard.  This is intended
+					to motivate students to make positive contributions during class sessions.  A course syllabus should define
+					how the instructor calculates the score, spelling out what behaviors are encouraged and discouraged.
+				</p>
 			</section>
 		</section>
 	</div>
@@ -198,6 +233,10 @@ export default {
 						break
 					}
 				}
+			}
+
+			if (error) {
+				this.changeContent('behaviors')
 			}
 
 			return error
@@ -314,7 +353,10 @@ ul {
 
 p {
 	margin: 10px 0;
-	line-height: 1.8;
+}
+
+h1 {
+	margin-bottom: 25px;
 }
 
 h3 {
@@ -428,8 +470,12 @@ input {
 	height: 40px;
 }
 
+.radio-heading:first-child {
+	margin: 0;
+}
+
 .radio-label {
-	font-size: 18px;
+	font-size: 22px;
 }
 
 .radio-heading > img {
@@ -450,7 +496,18 @@ input {
 	grid-area: image;
 }
 
+.radio-description {
+	margin-bottom: 50px;
+}
+
 .radio-wrapper {
 	grid-area: radio;
+}
+
+.alert-icon-small {
+	vertical-align: middle;
+	width: 20px;
+	margin-bottom: 5px;
+	margin-right: 5px;
 }
 </style>
