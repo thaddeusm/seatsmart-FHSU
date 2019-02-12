@@ -22,8 +22,8 @@
 			<section v-if="content == 'behaviors'">
 				<h1>Behaviors</h1>
 				<p>
-					What does participation mean to you?  Add the positive and negative behaviors
-					you would like to track with Seatsmart below.  You can also set different weights
+					What does participation mean to you?  Add positive and negative behaviors
+					you would like to track with Seatsmart below.  Set different weights
 					for these behaviors, which will impact how the application calculates student progress.
 				</p>
 				<section id="alert">
@@ -91,8 +91,10 @@
 				<p>
 					As participation records accumulate, Seatsmart will calculate participation
 					trends to provide charts and other visual cues.  These are especially useful when
-					updating participation grades in Blackboard throughout the semester.  Calculations
-					can be made in two ways:
+					updating participation grades in Blackboard throughout the semester.
+				</p>
+				<p>
+					Calculations can be made in two ways:
 				</p>
 				<section class="radio-heading">
 					<span class="radio-label">Balanced</span>
@@ -103,10 +105,9 @@
 				</section>
 				<p class="radio-description">
 					By default, Seatsmart assumes that an instructor will be just as likely to note
-					students' positive behaviors as negative ones.  The application will simply adjust
-					a participation score up and down according to the type of behavior and its weight.
-					For example, a positive behavior you are tracking with a 'strong' weight will add
-					8 points.  If no notes are added for a student in a given week, the application
+					students' positive behaviors as negative ones.  The application will adjust
+					a participation score up or down according to the type of behavior and its weight.
+					If no notes are added for a student in a given week, the application
 					will suggest that no changes be made to the students' grade.
 				</p>
 				<section class="radio-heading">
@@ -119,8 +120,8 @@
 				<p class="radio-description">
 					Some instructors may find that they are more likely to record notes about negative
 					behaviors such as absences, cell phone use, missing homework, etc.  In this case, trend
-					calculations may not accurately reflex student performance.  'No News is Good News'
-					assumes that a student is participating well even if no notes are recorded pertaining to
+					calculations may not accurately reflect student performance.  'No News is Good News'
+					assumes that a student is participating well if no notes are recorded pertaining to
 					them in a given week.
 				</p>
 			</section>
@@ -468,6 +469,7 @@ input {
 	align-items: center;
 	width: 100%;
 	height: 40px;
+	margin-top: 30px;
 }
 
 .radio-heading:first-child {
@@ -476,6 +478,9 @@ input {
 
 .radio-label {
 	font-size: 22px;
+	font-weight: 550;
+	border-left: 3px solid var(--yellow);
+	padding-left: 3px;
 }
 
 .radio-heading > img {
@@ -496,12 +501,12 @@ input {
 	grid-area: image;
 }
 
-.radio-description {
-	margin-bottom: 50px;
-}
-
 .radio-wrapper {
 	grid-area: radio;
+}
+
+input[type=radio] {
+	width: 10px;
 }
 
 .alert-icon-small {

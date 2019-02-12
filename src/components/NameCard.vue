@@ -38,7 +38,7 @@
 		</section>
 		<section id="cardFooter" v-if="student.firstName !== ''">
 			<AbbreviationCircle v-if="notes.length !== 0 && type !== 'simple'" v-for="(note, index) in latestNotes" :key="index" :behavior="note.behavior" :size="conserveSpace ? 'extra-small' : 'small'" :color="note.type === 'positive' ? 'yellow' : 'red'" />
-			<button v-if="studentID !== undefined" class="simple-button more-button" @click="viewStudentProfile"><img src="@/assets/more.svg" alt="more icon"></button>
+			<button v-if="studentID !== undefined" class="simple-button more-button" @click="viewStudentProfile"><img src="@/assets/more.svg" alt="more icon" class="more-icon"></button>
 			<button v-else class="simple-button more-button" @click="$router.push(`/student/${student._id}`)"><img src="@/assets/more.svg" alt="more icon" :class="[conserveSpace ? 'more-icon-smaller' : 'more-icon']"></button>
 		</section>
 	</div>

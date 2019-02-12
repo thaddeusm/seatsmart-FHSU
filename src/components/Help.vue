@@ -5,25 +5,30 @@
 		<section v-if="progress.length == 0">
 			<h4>Getting Started</h4>
 			<p>
-				Seatsmart helps you track student participation in your classes.
-				Throughout the semester, you can record notes about each student.
-				The application will use these notes to help you calculate participation
-				grades and can even help students themselves understand how they
-				can better contribute to the learning environment.  You can learn more about the
+				Seatsmart helps track student participation throughout the semester.
+			</p>
+			<p>
+				You record notes about each student.
+				The application uses these notes to help you calculate participation
+				grades and even helps students themselves understand how they
+				can contribute to the learning environment.
+			</p>
+			<p>
+				Learn more about the
 				ideas that inform Seatsmart in the
 				<button class="inner-link" @click="$emit('change-content', 'about')">About</button> section.
 			</p>
 			<p>
 				To begin, add the positive and negative behaviors you wish to track in the
 				<button class="inner-link" @click="$emit('change-content', 'behaviors')">
-				Behaviors</button> section.  Then, you can consider how you would like
-				Seatsmart to figure and display student participation trends in the
+				Behaviors</button> section.  Then, consider how you would like
+				Seatsmart to display student participation trends in the
 				<button class="inner-link" @click="$emit('change-content', 'calculation')">
 				Calculation</button> section.
 			</p>
 			<p>
-				After considering these initial settings, you can save your preferences and create your first
-				class chart.  You can return to edit your settings at any time.
+				After reviewing these initial settings, you can save your preferences and create your first
+				class chart.  Return to edit these settings at any time.
 			</p>
 		</section>
 		<!-- Show help about chart UI -->
