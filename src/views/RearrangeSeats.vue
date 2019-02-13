@@ -412,7 +412,7 @@ button {
 }
 
 .drop-card > h4 {
-	margin: 10% 0 2% 0;
+	margin: 14% 0 4% 0;
 }
 
 .delete-button {
