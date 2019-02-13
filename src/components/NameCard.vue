@@ -16,6 +16,31 @@
 			<h6 v-if="trend === 0">(no change)</h6>
 		</section>
 	</div>
+	<div v-else-if="type === 'demo'" id="cardContainer">
+		<section id="leftHeader">
+			<span class="tooltip top">total number of student absences</span>
+			<span id="absences">3</span>
+		</section>
+		<section id="centerHeader">
+			<span class="tooltip top">add a new note</span>
+			<button id="addNoteButton" class="simple-button">+</button>
+		</section>
+		<section id="rightHeader">
+			<span class="tooltip top">flag a student</span>
+			<button v-if="!student.selected" class="simple-button" @click="toggleSelected"><img class="star" src="@/assets/graystar.svg"></button>
+			<button v-else class="simple-button" @click="toggleSelected"><img class="star" src="@/assets/yellowstar.svg"></button>
+		</section>
+		<section id="cardBody">
+			<h4 class="student-name">
+				Tommy L.
+			</h4>
+		</section>
+		<section id="cardFooter">
+			<span class="tooltip top">recent note indicator and see all student notes</span>
+			<AbbreviationCircle id="demoCircle" :behavior="{Abbreviation: 'C', Description: 'Using Cell Phone', Weight: 'strong'}" size="small" color="red" />
+			<button class="simple-button more-button"><img src="@/assets/more.svg" alt="more icon" class="more-icon"></button>
+		</section>
+	</div>
 	<div v-else id="cardContainer" :class="[chosen ? 'chosen' : '', 'gray', isAbsentToday ? 'absent' : '']">
 		<section id="leftHeader" v-if="student.firstName !== '' && type !== 'simple'">
 			<span id="absences">{{ numberOfAbsences }}</span>
@@ -420,5 +445,42 @@ export default {
 
 .absent {
 	opacity: .6;
+}
+
+#leftHeader:hover .tooltip {
+	visibility: visible;
+}
+
+#centerHeader:hover .tooltip {
+	visibility: visible;
+}
+
+#rightHeader:hover .tooltip {
+	visibility: visible;
+}
+
+#cardFooter:hover .tooltip {
+	visibility: visible;
+}
+
+
+.tooltip {
+	visibility: hidden;
+	position: absolute;
+	background: var(--yellow);
+	font-family: "ArchivoNarrow";
+	font-size: 16px;
+}
+
+.top {
+	width: 300px;
+	padding: 5px;
+	bottom: 195px;
+	left: 59.5%;
+	text-align: center;
+	z-index: 1000;
+	margin-left: -155px;
+	margin-bottom: 20px;
+	border-radius: 5px;
 }
 </style>

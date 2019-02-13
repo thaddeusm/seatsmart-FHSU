@@ -49,23 +49,23 @@
 	    			<div class="modal-body">
 	    				<div class="step">
 	    					<drag class="drag" :effect-allowed="['link']"><span v-if="!testDropComplete">Tina</span></drag>
-	    					<h2>Click and drag a student name into the chart</h2>
-	    					<h2>1</h2>
+	    					<h5>Click and drag a student name into the chart</h5>
+	    					<h5>1</h5>
 	    				</div>
 	    				<div class="step">
 	    					<drop class="drop-card border" @drop="handleTestDrop">
-								<h2 v-if="testDropComplete">Tina</h2>
+								<h4 v-if="testDropComplete">Tina</h4>
 							</drop>
-	    					<h2>Drop the name into an empty seat</h2>
-	    					<h2>2</h2>
+	    					<h5>Drop the name into an empty seat</h5>
+	    					<h5>2</h5>
 	    				</div>
 	    				<div class="step">
 							<div class="drop-card border">
-								<h2>{{exampleText}}</h2>
+								<h4>{{exampleText}}</h4>
 								<button class="delete-button" @click="testDropComplete = false">x</button>
 							</div>
-	    					<h2>Click the 'x' to undo the seat assignment</h2>
-	    					<h2>3</h2>
+	    					<h5>Click the 'x' to undo the seat assignment</h5>
+	    					<h5>3</h5>
 	    				</div>
 	    			</div>
 	    			<div class="modal-footer">
@@ -449,7 +449,7 @@ button {
 	vertical-align: middle;
 }
 
-.step > h2 {
+.step > h5 {
 	margin: 35px 0;
 }
 
@@ -498,8 +498,6 @@ button {
 	font-size: 18px;
 	margin: 0 15%;
 }
-
-
 
 .fade-enter-active, .fade-leave-active {
     transition: opacity .2s;

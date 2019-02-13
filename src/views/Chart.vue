@@ -360,8 +360,8 @@ export default {
 		}
 	},
 	mounted() {
+		let scope = this
 		if (this.$store.state.preferences.progress.indexOf('rearranged seats') === -1) {
-			let scope = this
 
 			setTimeout(function() {
 				scope.alert.isAlert = true
@@ -369,7 +369,9 @@ export default {
 				scope.alert.action = scope.rearrangeSeats
 			}, 3000, scope)
 		} else if (this.$store.state.preferences.progress.indexOf('viewed class chart') === -1) {
-			this.modalOpen = true
+			setTimeout(function() {
+				scope.modalOpen = true
+			}, 5000, scope)
 		}
 	},
 	created() {

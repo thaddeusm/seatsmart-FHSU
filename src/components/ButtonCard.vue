@@ -88,6 +88,10 @@ h4 {
 	margin: 10px 0;
 }
 
+h6 {
+	margin: 10px 0;
+}
+
 .button-h4 {
 	margin: 0 0 5px 0;
 }

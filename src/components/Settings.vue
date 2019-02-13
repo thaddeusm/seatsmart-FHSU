@@ -128,16 +128,46 @@
 			<section v-if="content == 'about'">
 				<h1>About</h1>
 				<p>
-					Seatsmart is being developed by Thaddeus McCleary as a convenient way to implement classroom
+					Seatsmart is being developed as a convenient way to implement classroom
 					participation guidance by the Department of English at Fort Hays State University for
 					courses conducted at campuses in China.
 				</p>
 				<p>
-					Participation is considered an essential part of student performance and can impact final course grades.
-					A student begins the semester at the level of a 'C' letter grade for participation.  The instructor
-					regularly adjusts the grade throughout the semester, making it visible on Blackboard.  This is intended
-					to motivate students to make positive contributions during class sessions.  A course syllabus should define
-					how the instructor calculates the score, spelling out what behaviors are encouraged and discouraged.
+					Participation is considered an essential part of student performance and can impact final
+					course grades. A student begins the semester at the level of a 'C' letter grade for participation.
+					The instructor regularly adjusts the grade throughout the semester, making it visible on Blackboard.
+					This is intended to motivate students to make positive contributions during class sessions.  A
+					course syllabus should define how the instructor calculates the score, spelling out what behaviors
+					are encouraged and discouraged.
+				</p>
+				<p>
+					FHSU policies related to technology use and information security were carefully considered in the
+					development of Seatsmart.  The application does not require Internet access and does not communicate
+					with any remote servers.  All data is stored locally on your computer.  This data is intended to remain
+					on your local hard drive and not transfered to any cloud storage system.  This helps ensure that data
+					related to students remains confidential.  Records in Seatsmart may relate to a student's academic
+					performance and therefore should be protected just as any other grades.
+				</p>
+				<h3>MIT License</h3>
+				<p>
+					Copyright 2019 Thaddeus McCleary
+				</p>
+				<p>
+					Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+					documentation files (the "Software"), to deal in the Software without restriction, including without limitation
+					the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+					and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+				</p>
+				<p>
+					The above copyright notice and this permission notice shall be included in all copies or substantial portions
+					of the Software.
+				</p>
+				<p>
+					THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+					TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+					THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+					CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+					IN THE SOFTWARE.
 				</p>
 			</section>
 		</section>
