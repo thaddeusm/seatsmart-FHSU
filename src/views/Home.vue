@@ -266,7 +266,7 @@ export default {
 
             // check for update
             let request = new XMLHttpRequest()
-            let url = 'https://seatsmart-updater-vudnfrmqkg.now.sh/' + scope.version
+            let url = 'https://seatsmart-updater.now.sh/' + scope.version
 
             request.onloadend = function() {
                 let response = (JSON.parse(request.response))
