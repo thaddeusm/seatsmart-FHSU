@@ -12,7 +12,8 @@ export default new Vuex.Store({
         lastView: null,
         earliestDateNoted: null,
         allStudents: null,
-        allClasses: null
+        allClasses: null,
+        version: null
     },
     mutations: {
         getPreferences(state, preferences) {
@@ -36,6 +37,9 @@ export default new Vuex.Store({
         },
         setAllClasses(state, allClasses) {
             state.allClasses = allClasses
+        },
+        setVersion(state, version) {
+            state.version = version
         }
     },
     actions: {
@@ -80,6 +84,9 @@ export default new Vuex.Store({
 
                     context.commit('setAllClasses', obj)
                 })
+        },
+        setVersion(context, version) {
+            context.commit('setVersion', version)
         }
     }
 })

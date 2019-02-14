@@ -25,6 +25,8 @@ global.notes = new Datastore({
   autoload: true
 })
 
+global.version = '0.2'
+
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
@@ -40,7 +42,8 @@ function createWindow () {
   win = new BrowserWindow({
     'frame': false,
     'backgroundColor': '#000000',
-    'show': false
+    'show': false,
+    webPreferences: { webSecurity: false }
   })
 
   win.maximize()

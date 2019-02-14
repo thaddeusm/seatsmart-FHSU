@@ -150,7 +150,7 @@
 				</p>
 				<h3>MIT License</h3>
 				<p>
-					Seatsmart (beta) v.0.1 | Copyright 2019 Thaddeus McCleary
+					Seatsmart (beta) v.{{ version }} | Copyright 2019 Thaddeus McCleary
 				</p>
 				<p>
 					Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
@@ -207,6 +207,11 @@ export default {
 				}
 			]
 		}
+	},
+	computed: {
+		version() {
+            return this.$store.state.version
+        }
 	},
 	mounted() {
 		this.calculation = this.$store.state.preferences.calculation
