@@ -424,8 +424,7 @@ export default {
 <style scoped>
 #studentContainer {
     background: var(--black);
-    width: 100vw;
-    min-height: 100vh;
+    width: 100%;
     height: 100%;
     display: grid;
     grid-template-columns: 25% 1fr;

@@ -164,8 +164,7 @@ export default {
 <style scoped>
 #searchContainer {
     background: var(--black);
-    width: 100vw;
-    min-height: 100vh;
+    width: 100%;
     height: 100%;
     z-index: 1;
     display: grid;

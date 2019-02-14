@@ -226,9 +226,9 @@ export default {
 			let heightAdjusted
 
 			if (size == 'small') {
-				heightAdjusted = totalHeight * .80
+				heightAdjusted = totalHeight * .76
 			} else {
-				heightAdjusted = totalHeight * .88
+				heightAdjusted = totalHeight * .84
 			}
 
 			let totalCardWidth = totalWidth / this.classInfo.columns
@@ -418,30 +418,35 @@ export default {
 </script>
 
 <style scoped>
+body {
+	background: var(--black);
+}
+
 #chartContainer {
 	background: var(--black);
-	width: 100vw;
-	min-height: 100vh;
+	width: 100%;
 	height: 100%;
-	display: grid;
+	/* display: grid;
 	grid-template-rows: auto 1fr auto;
 	grid-template-areas:
 		"header"
 		"main"
-		"footer";
+		"footer"; */
 }
 
 #chartHeader {
-	grid-area: header;
+	/* grid-area: header; */
 }
 
 #chartMain {
-	grid-area: main;
-	overflow: auto;
+	/* grid-area: main;
+	overflow: auto; */
 }
 
 #chartFooter {
-	grid-area: footer;
+	/* grid-area: footer; */
+	position: fixed;
+	bottom: 0;
 }
 
 .row {

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
   	<WindowFrame />
-    <router-view/>
+    <router-view />
   </div>
 </template>
 

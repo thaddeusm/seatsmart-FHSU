@@ -14,7 +14,7 @@
 		</section>
 		<section id="chartForm">
 			<section class="error-area">
-				<h4><img v-if="alertMessage.length > 0" src="@/assets/alert.svg" alt="alert icon" class="alert-icon-small"> {{ alertMessage }}</h4>
+				<h6><img v-if="alertMessage.length > 0" src="@/assets/alert.svg" alt="alert icon" class="alert-icon-small"> {{ alertMessage }}</h6>
 			</section>
 			<section id="formOne" v-if="progress == 1">
 				<Tabs :sections="[{label: 'columns', color: 'yellow'}, {label: 'rows', color: 'gray'}]">
@@ -608,8 +608,6 @@ export default {
 #container {
 	background: var(--light-gray);
 	width: 100%;
-	min-width: 100vw;
-	min-height: 100vh;
 	height: 100%;
 	display: grid;
 	grid-template-rows: 20vh 65vh 10vh;
@@ -649,7 +647,7 @@ h1 {
 	text-align: center;
 }
 
-.error-area > h4 {
+.error-area > h6 {
 	color: var(--red);
 }
 

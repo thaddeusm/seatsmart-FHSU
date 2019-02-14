@@ -168,7 +168,7 @@ export default {
 			let totalHeight = remote.getGlobal('screenHeight')
 			let heightAdjusted
 
-			heightAdjusted = totalHeight * .80
+			heightAdjusted = totalHeight * .76
 
 			let totalCardWidth = totalWidth / this.classChart.columns
 			let totalCardHeight = heightAdjusted / this.classChart.rows
@@ -336,28 +336,29 @@ export default {
 <style scoped>
 #container {
 	background: var(--black);
-	width: 100vw;
-	min-height: 100vh;
+	width: 100%;
 	height: 100%;
-	display: grid;
+	/* display: grid;
 	grid-template-rows: auto 1fr auto;
 	grid-template-areas:
 		"header"
 		"main"
-		"footer";
+		"footer"; */
 }
 
 header {
-	grid-area: header;
+	/* grid-area: header; */
 }
 
 main {
-	grid-area: main;
-	overflow: auto;
+	/* grid-area: main;
+	overflow: auto; */
 }
 
 footer {
-	grid-area: footer;
+	/* grid-area: footer; */
+	position: fixed;
+	bottom: 0;
 }
 
 button {

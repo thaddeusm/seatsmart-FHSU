@@ -6,9 +6,9 @@
 			<h6 class="student-name" v-if="conserveSpace">
 				{{ student.firstName }} {{ student.lastName[0] }}.
 			</h6>
-			<h4 class="student-name" v-else>
+			<h5 class="student-name" v-else>
 				{{ student.firstName }} {{ student.lastName[0] }}.
-			</h4>
+			</h5>
 		</section>
 		<section id="cardFooter" v-if="student.firstName !== ''">
 			<h6 v-if="trend > 0">{{ '+' + trend + '' }}</h6>
@@ -31,9 +31,9 @@
 			<button v-else class="simple-button" @click="toggleSelected"><img class="star" src="@/assets/yellowstar.svg"></button>
 		</section>
 		<section id="cardBody">
-			<h4 class="student-name">
+			<h5 class="student-name">
 				Tommy L.
-			</h4>
+			</h5>
 		</section>
 		<section id="cardFooter">
 			<span class="tooltip top">recent note indicator and see all student notes</span>
@@ -57,9 +57,9 @@
 			<h6 class="student-name" v-if="conserveSpace">
 				{{ student.firstName }} {{ student.lastName[0] }}.
 			</h6>
-			<h4 class="student-name" v-else>
+			<h5 class="student-name" v-else>
 				{{ student.firstName }} {{ student.lastName[0] }}.
-			</h4>
+			</h5>
 		</section>
 		<section id="cardFooter" v-if="student.firstName !== ''">
 			<AbbreviationCircle v-if="notes.length !== 0 && type !== 'simple'" v-for="(note, index) in latestNotes" :key="index" :behavior="note.behavior" :size="conserveSpace ? 'extra-small' : 'small'" :color="note.type === 'positive' ? 'yellow' : 'red'" />
@@ -475,7 +475,7 @@ export default {
 .top {
 	width: 300px;
 	padding: 5px;
-	bottom: 195px;
+	bottom: 189px;
 	left: 59.5%;
 	text-align: center;
 	z-index: 1000;

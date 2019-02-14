@@ -375,7 +375,7 @@ img {
 
 li {
 	padding: 5px 22px;
-	margin: 50px 0;
+	margin: 40px 0;
 }
 
 ul {
@@ -395,7 +395,7 @@ h3 {
 }
 
 #navigationFooter {
-	margin-top: 90px;
+	margin-top: 70px;
 	text-align: center;
 }
 
