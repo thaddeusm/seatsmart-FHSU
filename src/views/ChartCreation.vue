@@ -610,18 +610,20 @@ export default {
 	width: 100%;
 	height: 100%;
 	display: grid;
-	grid-template-rows: 20vh 65vh 10vh;
+	grid-template-rows: 20vh 65vh 15vh;
 	grid-template-columns: 50% 50%;
 	grid-template-areas:
 	'head head'
 	'diagram chartForm'
-	'progressNodes progressNodes';
+	'. .';
 }
 
 header {
 	grid-area: head;
 	text-align: center;
 	align-self: center;
+	margin-top: 70px;
+	margin-bottom: 40px;
 }
 
 h1 {
@@ -636,10 +638,14 @@ h1 {
 #chartForm {
 	grid-area: chartForm;
 	justify-self: center;
+	margin: 0 auto;
 }
 
 #progressNodes {
-	grid-area: progressNodes;
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	background: var(--light-gray);
 }
 
 .error-area {
@@ -649,6 +655,7 @@ h1 {
 
 .error-area > h6 {
 	color: var(--red);
+	display: inline-block;
 }
 
 .number-button {
@@ -697,6 +704,8 @@ progress-button:disabled {
 #formOne {
 	width: 300px;
 	margin-top: 20px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 #formTwo {
