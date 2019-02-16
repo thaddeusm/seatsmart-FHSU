@@ -1,6 +1,10 @@
 # Seatsmart
+Seatsmart is being developed as a convenient way to implement classroom
+participation guidance by the Department of English at Fort Hays State University for
+courses conducted at campuses in China.
 
-## Project setup
+## Scripts
+### Project setup
 ```
 npm install
 ```
