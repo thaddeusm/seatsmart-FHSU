@@ -11,8 +11,7 @@
 				<li class="inactive" ref="about"><button class="button-link" @click="changeContent('about')">About</button></li>
 			</ul>
 			<div id="navigationFooter">
-				<button v-if="!updated" @click="$emit('trigger-modal-close')">Close</button>
-				<button v-else @click="saveChanges">Save</button>
+				<button @click="saveChanges">Close</button>
 			</div>
 		</aside>
 		<section id="settingsContent">
@@ -100,7 +99,7 @@
 					<span class="radio-label">Balanced</span>
 					<img class="radio-icon" src="@/assets/balance.svg" alt="balanced calculation">
 					<div class="radio-wrapper">
-						<input type="radio" id="optionOne" value="balanced" v-model="calculation" @click="updated = true">
+						<input type="radio" id="optionOne" value="balanced" v-model="calculation">
 					</div>
 				</section>
 				<p class="radio-description">
@@ -114,7 +113,7 @@
 					<span class="radio-label">No News is Good News</span>
 					<img class="radio-icon" src="@/assets/nonews.svg" alt="no news is good news calculation">
 					<div class="radio-wrapper">
-						<input type="radio" id="optionTwo" value="nonews" v-model="calculation" @click="updated = true">
+						<input type="radio" id="optionTwo" value="nonews" v-model="calculation">
 					</div>
 				</section>
 				<p class="radio-description">
@@ -189,7 +188,6 @@ export default {
 	data() {
 		return {
 			content: 'help',
-			updated: false,
 			alertMessage: '',
 			calculation: 'balanced',
 			positiveBehaviors: [
@@ -289,7 +287,6 @@ export default {
 			let formToEdit = this.selectForm(form)
 
 			formToEdit.push(obj)
-			this.updated = true
 
 		},
 		removeFormGroup(form, index) {
@@ -300,7 +297,6 @@ export default {
 			if (this.selectForm(form)[index].Description !== 'Absent') {
 				formToEdit.splice(index, 1)
 
-				this.updated = true
 			} else {
 				this.alertMessage = 'Sorry, absences cannot be removed as a category.'
 			}
