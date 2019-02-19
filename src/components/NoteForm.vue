@@ -161,7 +161,7 @@ export default {
 }
 
 #noteStepOne {
-	height: 420px;
+	height: 415px;
 	overflow: auto;
 }
 
