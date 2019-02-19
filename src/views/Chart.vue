@@ -268,9 +268,21 @@ export default {
     	},
     	selectRandom() {
 			// check to ensure selected student is not absent today
-			if (this.absentStudents.indexOf(this.students[this.randomStudent]._id) !== -1) {
-				this.randomStudent++
+			let matchFound = false
+
+			while (!matchFound) {
+				if (this.absentStudents.indexOf(this.students[this.randomStudent]._id) !== -1) {
+					this.randomStudent++
+
+					if (this.randomStudent == this.students.length) {
+		    			this.randomStudent = 0
+		    		}
+				} else {
+					matchFound = true
+				}
 			}
+
+
 			let student = this.students[this.randomStudent]
 
     		this.chosenSeat.row = student.seat.row
@@ -387,6 +399,7 @@ export default {
 				db.readSomething('students', {class: this.id})
 					.then((students) => {
 						this.students = this.shuffle(students)
+
 						for (let i=0; i<this.students.length; i++) {
 							if (this.students[i].seat.row == null) {
 								console.log('found')
