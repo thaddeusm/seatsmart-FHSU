@@ -638,6 +638,7 @@ h1 {
 #chartForm {
 	grid-area: chartForm;
 	justify-self: center;
+	align-self: center;
 	margin: 0 auto;
 }
 
@@ -680,7 +681,7 @@ h1 {
 
 .progress-button-area {
 	text-align: center;
-	padding: 30px 0;
+	padding: 20px 0 0 0;
 }
 
 .progress-button {
@@ -713,8 +714,6 @@ progress-button:disabled {
 }
 
 .form-container {
-	margin-top: 40px;
-	margin-bottom: 30px;
 	background: var(--yellow);
 	border-radius: 10px;
 	padding: 10px;
