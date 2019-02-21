@@ -25,7 +25,7 @@ global.notes = new Datastore({
   autoload: true
 })
 
-global.version = '0.5'
+global.version = '0.6'
 
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
