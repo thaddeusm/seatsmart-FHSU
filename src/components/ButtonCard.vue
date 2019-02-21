@@ -1,8 +1,8 @@
 <template>
 	<button v-if="button && display" class="button-card" @click="onClick(param)">
-		<h4 class="button-h4">
+		<h5>
 			{{ name }}
-		</h4>
+		</h5>
 		<div id="checkmarkArea">
 			<img v-if="selected" src="@/assets/checkhexagon.svg" alt="checkmark" class="checkmark">
 		</div>
@@ -54,18 +54,20 @@ export default {
 <style scoped>
 .button-card {
 	background: var(--light-gray);
-	padding: 7px 20px 17px 20px;
+	padding: 10px 20px;
 	color: var(--black);
 	border-radius: 10px;
 	outline: none;
 	border: 3px solid var(--light-gray);
 	cursor: pointer;
-	display: inline-block;
+	display: inline-grid;
 	text-decoration: none;
 	transition: .05s border ease;
-	height: 70px;
-	width: 125px;
+	height: 65px;
+	width: 110px;
 	vertical-align: middle;
+	justify-self: center;
+	align-self: center;
 }
 
 .button-card:hover {
@@ -73,26 +75,31 @@ export default {
 }
 
 #checkmarkArea {
-	height: 20px;
+	align-self: flex-end;
+	height: 16px;
 }
 
 .checkmark {
-	height: 18px;
+	height: 16px;
 }
 
 h1 {
-	margin-bottom: 5px;
+	/* margin-bottom: 5px; */
+	align-self: flex-start;
 }
 
 h4 {
-	margin: 10px 0;
+	/* margin-bottom: 3px; */
+	align-self: center;
 }
 
 h6 {
-	margin: 10px 0;
+	/* margin: 10px 0; */
+	align-self: center;
 }
 
-.button-h4 {
-	margin: 0 0 5px 0;
+h5 {
+	align-self: center;
+	margin-bottom: 2px;
 }
 </style>

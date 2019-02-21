@@ -12,7 +12,7 @@
             </section>
         </header>
         <main>
-            <div class="result" v-for="(classChart, index) in results">
+            <div class="result" v-for="(classChart, index) in results" v-if="classChart.length > 0">
                 <TitleBar v-if="classChart.length > 0" :classID="allClasses[index]" />
                 <div class="name-card-wrapper" v-for="(student, subIndex) in classChart">
                     <NameCard
@@ -117,6 +117,7 @@ export default {
                     }
                 }
             }
+
 
             this.checkForNoResults()
 

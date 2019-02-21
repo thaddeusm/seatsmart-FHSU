@@ -366,11 +366,11 @@ export default {
 	grid-area: leftHeader;
 	text-align: left;
 	padding-top: 10%;
-	padding-left: 15%;
+	padding-left: 25%;
 }
 
 #absences {
-	font-size: 16px;
+	font-size: 14px;
 	color: var(--red);
 }
 
@@ -382,7 +382,7 @@ export default {
 	grid-area: rightHeader;
 	text-align: right;
 	padding-top: 13%;
-	padding-right: 7%;
+	padding-right: 18%;
 }
 
 .simple-button {
@@ -393,7 +393,7 @@ export default {
 }
 
 .star {
-	width: 65%;
+	width: 12px;
 }
 
 #cardBody {
@@ -406,8 +406,7 @@ export default {
 }
 
 #addNoteButton {
-	font-size: 18px;
-	padding-top: 3px;
+	font-size: 17px;
 }
 
 .more-button {

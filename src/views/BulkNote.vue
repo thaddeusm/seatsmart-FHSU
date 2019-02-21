@@ -135,14 +135,13 @@ export default {
 }
 
 #formArea {
-    width: 75%;
-    height: 100%;
-    min-width: 700px;
+    height: 550px;
+	width: 925px;
     margin: 0 auto;
 }
 
 #buttonCardArea {
-    margin: 5% auto;
+    margin: 8% auto 3% auto;
     text-align: center;
 }
 
@@ -171,8 +170,8 @@ export default {
 	display: inline-block;
 	text-decoration: none;
 	transition: .05s border ease;
-	height: 70px;
-	width: 125px;
+	height: 65px;
+	width: 110px;
 	vertical-align: middle;
 }
 

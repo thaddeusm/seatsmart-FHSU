@@ -6,10 +6,10 @@
 		<main>
 			<div class="row" v-for="(row, index) in grid" :key="`row${index}`" :style="rowMargins">
 				<drop class="drop-card" v-for="(column, subIndex) in row" :key="`column${subIndex}`" @drop="handleDrop(index, subIndex, ...arguments)" :style="cardStyle">
-					<h3 v-if="classChart.columns < 7 && column.student.firstName.indexOf('(') !== -1">{{ column.student.firstName.split('(')[1].split(')')[0].split(' ')[0] }}</h3>
-					<h3 v-else-if="classChart.columns < 7">{{ column.student.firstName.split(' ')[0] }}</h3>
-					<h4 v-if="classChart.columns >= 7 && column.student.firstName.indexOf('(') !== -1">{{ column.student.firstName.split('(')[1].split(')')[0].split(' ')[0] }}</h4>
-					<h4 v-else-if="classChart.columns >= 7">{{ column.student.firstName.split(' ')[0] }}</h4>
+					<h4 v-if="classChart.columns < 7 && column.student.firstName.indexOf('(') !== -1">{{ column.student.firstName.split('(')[1].split(')')[0].split(' ')[0] }}</h4>
+					<h4 v-else-if="classChart.columns < 7">{{ column.student.firstName.split(' ')[0] }}</h4>
+					<h6 v-if="classChart.columns >= 7 && column.student.firstName.indexOf('(') !== -1">{{ column.student.firstName.split('(')[1].split(')')[0].split(' ')[0] }}</h6>
+					<h6 v-else-if="classChart.columns >= 7">{{ column.student.firstName.split(' ')[0] }}</h6>
 					<button v-if="column.student.firstName !== ''" @click="clearSeat(index, subIndex)" class="delete-button">x</button>
 				</drop>
 			</div>
@@ -403,22 +403,26 @@ button {
 
 .drop-card {
 	background: var(--light-gray);
-	display: inline-block;
+	display: inline-grid;
 	vertical-align: middle;
 	border-radius: 10px;
-}
-
-.drop-card > h3 {
-	margin: 12% 0 6% 0;
+	align-items: center;
 }
 
 .drop-card > h4 {
-	margin: 14% 0 4% 0;
+	/* margin: 10% 0 5% 0; */
+	align-self: flex-end;
+}
+
+.drop-card > h6 {
+	/* margin: 6% 0 2% 0; */
+	align-self: flex-end;
 }
 
 .delete-button {
 	color: var(--red);
 	font-size: 18px;
+	align-self: flex-start;
 }
 
 .modal-header {

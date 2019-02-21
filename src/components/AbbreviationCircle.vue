@@ -32,10 +32,10 @@ export default {
 .extra-small {
 	font-size: 10px;
 	display: inline-block;
-	width: 14px;
-	height: 13px;
-	padding-top: 1px;
-	border-radius: 14px;
+	width: 12px;
+	height: 11.7px;
+	padding-top: .3px;
+	border-radius: 12px;
 	margin: 0 3%;
 }
 
