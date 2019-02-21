@@ -17,7 +17,7 @@
                 <div class="name-card-wrapper" v-for="(student, subIndex) in classChart">
                     <NameCard
                         :key="`${student}${subIndex}`"
-                        type="complex"
+                        type="simple"
                         :studentID="student"
                         v-on:open-note-modal="openNoteModal"
                         class="name-card"

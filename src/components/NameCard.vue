@@ -1,5 +1,5 @@
 <template>
-	<div v-if="type === 'trends'" id="cardContainer"
+	<div v-if="type === 'trends'" id="trendCardContainer"
 	:class="[trend === 0 ? 'gray' : '', trend < 0 ? 'red' : '', trend > 0 ? 'yellow' : '']">
 		<section id="cardBody" v-if="student.firstName !== ''">
 			<!-- <h3 v-if="name !== ''">{{ name.split('(')[1].split(')')[0] }}</h3> -->
@@ -362,6 +362,19 @@ export default {
 	border-radius: 10px;
 }
 
+#trendCardContainer {
+	align-items: center;
+	width: 100%;
+	height: 100%;
+	display: grid;
+	grid-template-areas:
+		"cardBody"
+		"cardFooter";
+	grid-template-rows: 50% 50%;
+	grid-template-columns: auto;
+	border-radius: 10px;
+}
+
 #leftHeader {
 	grid-area: leftHeader;
 	text-align: left;
@@ -461,7 +474,6 @@ export default {
 #cardFooter:hover .tooltip {
 	visibility: visible;
 }
-
 
 .tooltip {
 	visibility: hidden;
