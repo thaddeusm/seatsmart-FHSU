@@ -196,9 +196,14 @@ export default {
 		},
 		handleDrop(row, column, data, event) {
 			event.preventDefault()
-			this.studentsToPlace.splice(data.index, 1)
-			this.grid[row][column].student = data.student
-			this.placedStudents.push({student: data.student, currentIndex: data.index})
+
+			// check to ensure the space is not already occupied
+			if (this.grid[row][column].student._id === "") {
+				this.studentsToPlace.splice(data.index, 1)
+				this.grid[row][column].student = data.student
+				this.placedStudents.push({student: data.student, currentIndex: data.index})
+			}
+
 		},
 		handleTestDrop() {
 			this.testDropComplete = true
