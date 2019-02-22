@@ -53,7 +53,7 @@
 	    					<h5>1</h5>
 	    				</div>
 	    				<div class="step">
-	    					<drop class="drop-card border" @drop="handleTestDrop">
+	    					<drop class="demo-drop-card border" @drop="handleTestDrop">
 								<h4 v-if="testDropComplete">Tina</h4>
 							</drop>
 	    					<h5>Drop the name into an empty seat</h5>
@@ -414,9 +414,22 @@ button {
 	align-items: center;
 }
 
+.demo-drop-card {
+	background: var(--light-gray);
+	display: inline-grid;
+	vertical-align: middle;
+	border-radius: 10px;
+	align-items: center;
+}
+
 .drop-card > h4 {
 	/* margin: 10% 0 5% 0; */
 	align-self: flex-end;
+}
+
+.demo-drop-card > h4 {
+	/* margin: 10% 0 5% 0; */
+	align-self: center;
 }
 
 .drop-card > h6 {
