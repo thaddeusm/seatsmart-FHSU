@@ -5,32 +5,31 @@
 		</header>
 		<main>
 			<div class="row" v-for="(row, index) in grid" :key="`row${index}`" :style="rowMargins">
-				<drop class="drop-card" v-for="(column, subIndex) in row" :key="`column${subIndex}`" @drop="handleDrop(index, subIndex, ...arguments)" :style="cardStyle">
-					<h4 v-if="column.student.firstName !== '' && classChart.columns < 7 && column.student.firstName.indexOf('(') !== -1">{{ column.student.firstName.split('(')[1].split(')')[0].split(' ')[0] }} {{ column.student.lastName[0] }}.</h4>
-					<h4 v-else-if="column.student.firstName !== '' && classChart.columns < 7">{{ column.student.firstName.split(' ')[0] }} {{ column.student.lastName[0] }}.</h4>
-					<h6 v-if="column.student.firstName !== '' && classChart.columns >= 7 && column.student.firstName.indexOf('(') !== -1">{{ column.student.firstName.split('(')[1].split(')')[0].split(' ')[0] }} {{ column.student.lastName[0] }}.</h6>
-					<h6 v-else-if="column.student.firstName !== '' && classChart.columns >= 7">{{ column.student.firstName.split(' ')[0] }} {{ column.student.lastName[0] }}.</h6>
-					<button v-if="column.student.firstName !== ''" @click="clearSeat(index, subIndex)" class="delete-button">x</button>
+				<drop class="drop-card" v-for="(column, subIndex) in row" :key="`${index},${subIndex}`" :ref="`${index}And${subIndex}`" @drop="handleDrop(index, subIndex, ...arguments)" :style="[cardStyle, {background: column.student.highlight}]">
+					<h4 v-if="classChart.columns < 7 && column.student.firstName.indexOf('(') !== -1">{{ column.student.firstName.split('(')[1].split(')')[0].split(' ')[0] }}</h4>
+					<h4 v-else-if="classChart.columns < 7">{{ column.student.firstName.split(' ')[0] }}</h4>
+					<h6 v-if="classChart.columns >= 7 && column.student.firstName.indexOf('(') !== -1">{{ column.student.firstName.split('(')[1].split(')')[0].split(' ')[0] }}</h6>
+					<h6 v-else-if="classChart.columns >= 7">{{ column.student.firstName.split(' ')[0] }}</h6>
 				</drop>
 			</div>
 		</main>
 		<footer>
 			<ActionBar background="var(--gray)" :hamburger="false" :collapsed="false" :nowrap="true">
 				<template slot="left">
-					<button class="action-button" @click="saveSeats" :disabled="studentsToPlace.length !== 0">
+					<button class="action-button" @click="saveChanges">
 						<img src="@/assets/checkmark.svg" alt="save">
 					</button>
 				</template>
 				<template slot="center">
-					<div class="drag-area" v-if="studentsToPlace.length > 0">
-						<drag :effect-allowed="['link']" v-for="(student, index) in studentsToPlace" :transfer-data="{student: student, index: index}" :key="`student${index}`" class="drag">
-							<span v-if="student.firstName.indexOf('(') !== -1">{{ student.firstName.split('(')[1].split(')')[0].split(' ')[0] }} {{ student.lastName[0] }}.</span>
-							<span v-else>{{ student.firstName.split(' ')[0] }} {{ student.lastName[0] }}.</span>
+					<div class="drag-area">
+						<drag
+                            :effect-allowed="['link']"
+                            v-for="(color, index) in colors"
+                            :transfer-data="{highlight: color}"
+                            :key="`color${index}`"
+                            class="drag"
+                            :style="{background: color}">
 						</drag>
-					</div>
-					<div class="button-labels" v-else>
-						<span class="button-label"><---- save changes</span>
-						<span class="button-label">discard changes ----></span>
 					</div>
 				</template>
 				<template slot="right">
@@ -40,53 +39,6 @@
 				</template>
 			</ActionBar>
 		</footer>
-		<transition name="fade">
-			<Modal v-if="introModalOpen" size="large" :dismissable="true" v-on:trigger-close="closeIntroModal">
-				<template slot="content">
-					<div class="modal-header">
-	    				<h1>How to Change Student Seating</h1>
-	    			</div>
-	    			<div class="modal-body">
-	    				<div class="step">
-	    					<drag class="drag" :effect-allowed="['link']"><span v-if="!testDropComplete">Tina</span></drag>
-	    					<h5>Click and drag a student name into the chart</h5>
-	    					<h5>1</h5>
-	    				</div>
-	    				<div class="step">
-	    					<drop class="demo-drop-card border" @drop="handleTestDrop">
-								<h4 v-if="testDropComplete">Tina</h4>
-							</drop>
-	    					<h5>Drop the name into an empty seat</h5>
-	    					<h5>2</h5>
-	    				</div>
-	    				<div class="step">
-							<div class="drop-card border">
-								<h4>{{exampleText}}</h4>
-								<button class="delete-button" @click="testDropComplete = false">x</button>
-							</div>
-	    					<h5>Click the 'x' to undo the seat assignment</h5>
-	    					<h5>3</h5>
-	    				</div>
-	    			</div>
-	    			<div class="modal-footer">
-	    				<button class="modal-footer-button" @click="closeIntroModal">Got it</button>
-	    			</div>
-				</template>
-			</Modal>
-		</transition>
-		<transition name="fade">
-			<Modal v-if="choiceModalOpen" :dismissable="false" size="small">
-	    		<template slot="content">
-	    			<div class="choice-modal-body">
-	    				<h4>Do you want to start with a blank chart or students' current seats?</h4>
-	    			</div>
-	    			<div class="choice-modal-footer">
-	    				<button class="modal-footer-button yellow" @click="setChoice('blank')">Blank</button>
-	    				<button class="modal-footer-button" @click="setChoice('current')">Current</button>
-	    			</div>
-	    		</template>
-	    	</Modal>
-		</transition>
 		<TouchBar :show="!choiceModalOpen && !introModalOpen" :bar="[
 			{type: 'spacer', size: 'flexible'},
 			{type: 'button', label: 'save changes', method: function() {saveSeats()}},
@@ -106,7 +58,7 @@ import Modal from '@/components/Modal.vue'
 import TouchBar from '@/components/TouchBar.vue'
 
 export default {
-	name: 'RearrangeSeats',
+	name: 'Highlighter',
 	props: ['id'],
 	components: {
 		TitleBar,
@@ -124,20 +76,37 @@ export default {
 				year: null,
 				name: ''
 			},
-			studentsToPlace: [
+			studentsToHighlight: [
 				{
 					_id: '',
 					firstName: '',
 					lastName: '',
 					class: '',
 					seleted: false,
+                    highlight: '',
 					seat: {
 						row: 0,
 						column: 0
 					}
 				}
 			],
-			placedStudents: [],
+            colors: [
+                '#04fcbb',
+                '#0445fc',
+                '#04c1fc',
+                '#73006c',
+                '#bb04fc',
+                '#ff3af2',
+                '#c1fc04',
+                '#04fc3f',
+                '#00a10b',
+                '#fc7d04',
+                '#fc0445',
+                '#b10230',
+                '#878379',
+                '#FFFFFF',
+                '#E5E5E5'
+            ],
 			introModalOpen: false,
 			choiceModalOpen: true,
 			grid: [],
@@ -197,42 +166,11 @@ export default {
 		handleDrop(row, column, data, event) {
 			event.preventDefault()
 
-			// check to ensure the space is not already occupied
-			if (this.grid[row][column].student._id === "") {
-				this.studentsToPlace.splice(data.index, 1)
-				this.grid[row][column].student = data.student
-				this.placedStudents.push({student: data.student, currentIndex: data.index})
-			}
+            if (this.grid[row][column].student.firstName !== '') {
+                this.$refs[`${row}And${column}`][0].$el.style.background = data.highlight
+                this.$set(this.grid[row][column].student, 'highlight', data.highlight)
+            }
 
-		},
-		handleTestDrop() {
-			this.testDropComplete = true
-		},
-		clearSeat(row, column) {
-			let student = this.grid[row][column].student
-			let currentIndex
-			for (let i=0; i<this.placedStudents.length; i++) {
-				if (this.placedStudents[i].student._id === student._id) {
-					currentIndex = this.placedStudents[i].currentIndex
-					this.placedStudents.splice(i, 1)
-					break
-				}
-			}
-
-			let blankStudentObj = {
-				_id: '',
-				firstName: '',
-				lastName: '',
-				class: '',
-				selected: '',
-				seat: {
-					row: 0,
-					column: 0
-				}
-			}
-
-			this.studentsToPlace.splice(currentIndex, 0, student)
-			this.grid[row][column].student = blankStudentObj
 		},
 		closeIntroModal() {
 			this.introModalOpen = false
@@ -248,12 +186,15 @@ export default {
 		},
 		placeInCurrentSeats() {
 			let remainingStudents = []
-			for (let i=0; i<this.studentsToPlace.length; i++) {
-				let thisStudent = this.studentsToPlace[i]
+			for (let i=0; i<this.studentsToHighlight.length; i++) {
+				let thisStudent = this.studentsToHighlight[i]
 				if (thisStudent.seat.row !== null) {
 					let row = thisStudent.seat.row - 1
 					let column = thisStudent.seat.column - 1
-					this.placedStudents.push({student: thisStudent, currentIndex: i})
+
+                    if (thisStudent.highlight == undefined) {
+                        thisStudent.highlight = '#E5E5E5'
+                    }
 					this.grid[row][column].student = thisStudent
 				} else {
 					remainingStudents.push(thisStudent)
@@ -261,33 +202,24 @@ export default {
 			}
 
 			if (remainingStudents.length > 0) {
-				this.studentsToPlace = remainingStudents
+				this.studentsToHighlight = remainingStudents
 			} else {
-				this.studentsToPlace = []
+				this.studentsToHighlight = []
 			}
 
 		},
-		saveSeats() {
-			if (this.studentsToPlace.length == 0) {
+		saveChanges() {
+			if (this.studentsToHighlight.length == 0) {
 				for (let i=0; i<this.grid.length; i++) {
 					for (let k=0; k<this.grid[i].length; k++) {
 						let studentToUpdate = this.grid[i][k].student
+                        console.log(studentToUpdate)
 						if (studentToUpdate._id !== '') {
-							studentToUpdate.seat = this.grid[i][k].newSeat
-
-							db.updateSomething('students', {_id: this.grid[i][k].student._id}, studentToUpdate)
+							db.updateSomething('students', {_id: this.grid[i][k].student._id}, {$set: {highlight: studentToUpdate.highlight}})
 						}
 					}
 				}
 
-				if (this.progress.indexOf('rearranged seats') === -1) {
-					this.$store.dispatch('setPreferences', {
-						progress: ['created class', 'rearranged seats'],
-						calculation: this.$store.state.preferences.calculation,
-						positiveBehaviors: this.$store.state.preferences.positiveBehaviors,
-						negativeBehaviors: this.$store.state.preferences.negativeBehaviors
-					})
-				}
 
 				this.$router.push(`/chart/${this.id}`)
 			}
@@ -309,6 +241,7 @@ export default {
 								lastName: '',
 								class: '',
 								selected: '',
+                                highlight: '#E5E5E5',
 								seat: {
 									row: 0,
 									column: 0
@@ -326,12 +259,9 @@ export default {
 
 				db.readSomething('students', {class: this.id})
 					.then(results => {
-						this.studentsToPlace = results
+						this.studentsToHighlight = results
 
-						if (this.progress.indexOf('rearranged seats') === -1) {
-							this.introModalOpen = true
-							this.choiceModalOpen = false
-						}
+						this.placeInCurrentSeats()
 					})
 			})
 	}
@@ -385,21 +315,13 @@ button {
 
 .drag-area {
 	width: auto;
-	background: var(--light-gray);
 }
 
 .drag {
 	display: inline-block;
-	background: var(--light-gray);
 	padding: 22.5px 20px;
-	margin: 0 10px;
-}
-
-.drag > span {
-	font-size: 22px;
-	cursor: move;
-	vertical-align: middle;
-	color: var(--black);
+	margin: 0 20px;
+    cursor: move;
 }
 
 .row {
@@ -407,11 +329,9 @@ button {
 }
 
 .drop-card {
-	background: var(--light-gray);
 	display: inline-grid;
 	vertical-align: middle;
 	border-radius: 10px;
-	grid-template-rows: 45% 55%;
 	align-items: center;
 }
 
@@ -440,7 +360,7 @@ button {
 
 .delete-button {
 	color: var(--red);
-	font-size: 16px;
+	font-size: 18px;
 	align-self: flex-start;
 }
 

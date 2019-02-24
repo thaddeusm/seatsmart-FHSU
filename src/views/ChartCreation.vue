@@ -19,7 +19,7 @@
 			<section id="formOne" v-if="progress == 1">
 				<Tabs :sections="[{label: 'columns', color: 'yellow'}, {label: 'rows', color: 'gray'}]">
 					<template slot="columns">
-						<button v-for="(columnsButton, index) of 9" :class="[classChart.columns == index + 1 ? 'selected' : '', 'number-button']" :ref="`columnsButton${index + 1}`" @click="selectNumber('columns', index)">{{ index + 1 }}</button>
+						<button v-for="(columnsButton, index) of 11" :class="[classChart.columns == index + 1 ? 'selected' : '', 'number-button']" :ref="`columnsButton${index + 1}`" @click="selectNumber('columns', index)">{{ index + 1 }}</button>
 					</template>
 					<template slot="rows">
 						<button v-for="(rowsButton, index) of 9" :class="[classChart.rows == index + 1 ? 'selected' : '', 'number-button']" :ref="`rowsButton${index + 1}`" @click="selectNumber('rows', index)">{{ index + 1 }}</button>
@@ -201,6 +201,7 @@ export default {
 					tigerID: null,
 					selected: false,
 					class: null,
+					highlight: '',
 					seat: {
 						column: null,
 						row: null
@@ -306,6 +307,7 @@ export default {
 				lastName: null,
 				tigerID: null,
 				selected: false,
+				highlight: '',
 				class: this.classChart._id,
 				seat: {
 					row: null,
@@ -385,6 +387,7 @@ export default {
 					lastName: lastName,
 					tigerID: '' + students[i].id + '',
 					selected: false,
+					highlight: '',
 					class: this.classChart._id,
 					seat: {
 						row: null,
@@ -409,6 +412,7 @@ export default {
 				lastName: null,
 				tigerID: null,
 				selected: false,
+				highlight: '',
 				class: null,
 				seat: {
 					row: null,
@@ -652,6 +656,7 @@ h1 {
 .error-area {
 	height: 15px;
 	text-align: center;
+	margin-bottom: 8px;
 }
 
 .error-area > h6 {

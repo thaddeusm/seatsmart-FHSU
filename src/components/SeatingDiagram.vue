@@ -29,7 +29,7 @@ export default {
 }
 
 .small-container {
-	grid-gap: 5px;
+	grid-gap: 3px;
 }
 
 .chair-row {
@@ -48,7 +48,7 @@ export default {
 }
 
 .small {
-	height: 27px;
-	margin: 0 5px;
+	height: 20px;
+	margin: 0 2px;
 }
 </style>

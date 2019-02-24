@@ -48,6 +48,10 @@
 						<img src="@/assets/rearrange.svg" alt="rearrange icon">
 						<span class="tooltip">change student seating</span>
 					</button>
+					<button @click="highlightStudents" class="action-button">
+						<img src="@/assets/highlight.svg" alt="highlight icon">
+						<span class="tooltip">highlight students</span>
+					</button>
 		        	<button @dblclick="clearRandom" @click="selectRandom" class="action-button">
 						<img src="@/assets/random.svg" alt="select random student icon">
 						<span class="tooltip">select a random student</span>
@@ -326,6 +330,9 @@ export default {
 		},
 		rearrangeSeats() {
 			this.$router.push(`/chart/rearrange/${this.id}`)
+		},
+		highlightStudents() {
+			this.$router.push(`/chart/highlight/${this.id}`)
 		},
 		createBulkNote() {
 			this.$router.push(`/chart/bulknote/${this.id}`)

@@ -8,6 +8,10 @@
             </div>
             <TitleBar v-if="loaded" :title="classInfo.name" :compact="true" />
             <SeatingDiagram :compact="true" :inverted="true" :rows="classInfo.rows" :columns="classInfo.columns" :selected="`${this.student.seat.row},${this.student.seat.column}`" />
+            <div id="highlightArea">
+                <h6>highlight:</h6>
+                <div :style="{background: student.highlight}"></div>
+            </div>
         </aside>
         <main>
             <header>
@@ -114,6 +118,7 @@ export default {
                 firstName: '',
                 lastName: '',
                 selected: false,
+                highlight: '',
                 class: '',
                 seat: {
                     row: 0,
@@ -522,6 +527,22 @@ main {
     width: 24px;
     vertical-align: middle;
     margin-right: 10px;
+}
+
+#highlightArea {
+    margin-top: 50px;
+}
+
+#highlightArea > h6 {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+#highlightArea > div {
+    width: 17px;
+    height: 17px;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 #addNoteArea {

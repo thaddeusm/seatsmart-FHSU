@@ -2,9 +2,8 @@
 	<header id="titleBarContainer">
 		<div :class="[compact ? 'small-line' : 'line']"></div>
 		<h3 v-if="classID !== undefined">{{ returnedTitle }}</h3>
-		<h6 v-else-if="compact && title.length > 15">{{ title.slice(0, 11) + '...' }}</h6>
-		<h6 v-else-if="compact">{{ title }}</h6>
-		<h2 v-else-if="!compact">{{ title }}</h2>
+		<h6 v-else-if="compact">{{ shortenedTitle }}</h6>
+		<h2 v-else-if="!compact">{{ shortenedTitle }}</h2>
 		<div :class="[compact ? 'small-line' : 'line']"></div>
 	</header>
 </template>
@@ -18,6 +17,13 @@ export default {
 	computed: {
 		returnedTitle() {
 			return this.$store.state.allClasses[this.classID]
+		},
+		shortenedTitle() {
+			if (this.title && this.title.length > 15) {
+				return this.title.slice(0, 11) + '...'
+			} else {
+				return this.title
+			}
 		}
 	}
 }

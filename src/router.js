@@ -5,6 +5,7 @@ import ChartCreation from './views/ChartCreation.vue'
 import Chart from './views/Chart.vue'
 import BulkNote from './views/BulkNote.vue'
 import RearrangeSeats from './views/RearrangeSeats.vue'
+import Highlighter from './views/Highlighter.vue'
 import Student from './views/Student.vue'
 import Search from './views/Search.vue'
 
@@ -39,6 +40,11 @@ export default new Router({
         path: '/chart/rearrange/:id',
         props: true,
         component: RearrangeSeats
+    },
+    {
+        path: '/chart/highlight/:id',
+        props: true,
+        component: Highlighter
     },
     {
         path: '/student/:id',
