@@ -8,7 +8,7 @@
             </div>
             <TitleBar v-if="loaded" :title="classInfo.name" :compact="true" />
             <SeatingDiagram :compact="true" :inverted="true" :rows="classInfo.rows" :columns="classInfo.columns" :selected="`${this.student.seat.row},${this.student.seat.column}`" />
-            <div id="highlightArea">
+            <div v-if="student.highlight && student.highlight !== ''" id="highlightArea">
                 <h6>highlight:</h6>
                 <div :style="{background: student.highlight}"></div>
             </div>

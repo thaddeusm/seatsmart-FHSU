@@ -320,7 +320,7 @@ button {
 .drag {
 	display: inline-block;
 	padding: 22.5px 20px;
-	margin: 0 20px;
+	margin: 0 12px;
     cursor: move;
 }
 

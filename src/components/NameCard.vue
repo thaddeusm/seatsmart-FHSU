@@ -41,7 +41,7 @@
 			<button class="simple-button more-button"><img src="@/assets/more.svg" alt="more icon" class="more-icon"></button>
 		</section>
 	</div>
-	<div v-else id="cardContainer" :class="[chosen ? 'chosen' : '', 'gray', isAbsentToday ? 'absent' : '']" :style="[student.firstName !== '' ? {boxShadow: `inset 0 0 20px 3px ${student.highlight}`} : {}]">
+	<div v-else id="cardContainer" :class="[chosen ? 'chosen' : '', 'gray', isAbsentToday ? 'absent' : '']" :style="[student.firstName !== '' ? {boxShadow: `inset 0 0 20px 7px ${student.highlight}`} : {}]">
 		<section id="leftHeader" v-if="student.firstName !== '' && type !== 'simple'">
 			<span id="absences">{{ numberOfAbsences }}</span>
 		</section>
