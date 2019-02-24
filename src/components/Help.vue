@@ -69,6 +69,14 @@
 							</p>
 						</li>
 						<li>
+							<img src="@/assets/highlight.svg" alt="highlight icon">
+							<h5>Highlight Students</h5>
+							<p>
+								Drag and drop a color from 15 options to add another way to distinguish students.
+								This is especially useful when organizing teams.
+							</p>
+						</li>
+						<li>
 							<img src="@/assets/random.svg" alt="select random student icon">
 							<h5>**Random Student Selector</h5>
 							<p>
