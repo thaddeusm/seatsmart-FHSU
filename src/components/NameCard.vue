@@ -6,9 +6,9 @@
 			<h6 class="student-name" v-if="conserveSpace">
 				{{ student.firstName }} {{ student.lastName[0] }}.
 			</h6>
-			<h5 class="student-name" v-else>
+			<h4 class="student-name" v-else>
 				{{ student.firstName }} {{ student.lastName[0] }}.
-			</h5>
+			</h4>
 		</section>
 		<section id="cardFooter" v-if="student.firstName !== ''">
 			<h6 v-if="trend > 0">{{ '+' + trend + '' }}</h6>

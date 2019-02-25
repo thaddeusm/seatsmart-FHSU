@@ -318,10 +318,12 @@ export default {
     	},
 		invertChart() {
 			this.inverted = !this.inverted
-			if (this.inverted) {
-				this.cardType = 'simple'
-			} else {
-				this.cardType = 'complex'
+			if (this.cardType !== 'trends') {
+				if (this.inverted) {
+					this.cardType = 'simple'
+				} else {
+					this.cardType = 'complex'
+				}
 			}
 
 		},
