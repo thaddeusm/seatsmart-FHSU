@@ -57,9 +57,9 @@
 			<h6 class="student-name" v-if="conserveSpace">
 				{{ student.firstName }} {{ student.lastName[0] }}.
 			</h6>
-			<h5 class="student-name" v-else>
+			<h4 class="student-name" v-else>
 				{{ student.firstName }} {{ student.lastName[0] }}.
-			</h5>
+			</h4>
 		</section>
 		<section id="cardFooter" v-if="student.firstName !== ''">
 			<AbbreviationCircle v-if="notes.length !== 0 && type !== 'simple'" v-for="(note, index) in latestNotes" :key="index" :behavior="note.behavior" :size="conserveSpace ? 'extra-small' : 'small'" :color="note.type === 'positive' ? 'yellow' : 'red'" />

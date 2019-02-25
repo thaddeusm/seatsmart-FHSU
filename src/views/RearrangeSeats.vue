@@ -425,7 +425,7 @@ button {
 
 .drop-card > h4 {
 	/* margin: 10% 0 5% 0; */
-	align-self: center;
+	align-self: flex-end;
 }
 
 .demo-drop-card > h4 {
