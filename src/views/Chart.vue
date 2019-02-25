@@ -489,7 +489,7 @@ button {
 }
 
 .action-button {
-	margin: 0 5%;
+	margin: 0 4%;
 	position: relative;
 }
 

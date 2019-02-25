@@ -392,7 +392,6 @@ button {
 	display: inline-block;
 	background: var(--light-gray);
 	padding: 22.5px 20px;
-	margin: 0 10px;
 }
 
 .drag > span {
