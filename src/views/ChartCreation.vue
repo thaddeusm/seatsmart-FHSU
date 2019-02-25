@@ -19,7 +19,7 @@
 			<section id="formOne" v-if="progress == 1">
 				<Tabs :sections="[{label: 'columns', color: 'yellow'}, {label: 'rows', color: 'gray'}]">
 					<template slot="columns">
-						<button v-for="(columnsButton, index) of 11" :class="[classChart.columns == index + 1 ? 'selected' : '', 'number-button']" :ref="`columnsButton${index + 1}`" @click="selectNumber('columns', index)">{{ index + 1 }}</button>
+						<button v-for="(columnsButton, index) of 14" :class="[classChart.columns == index + 1 ? 'selected' : '', 'number-button']" :ref="`columnsButton${index + 1}`" @click="selectNumber('columns', index)">{{ index + 1 }}</button>
 					</template>
 					<template slot="rows">
 						<button v-for="(rowsButton, index) of 9" :class="[classChart.rows == index + 1 ? 'selected' : '', 'number-button']" :ref="`rowsButton${index + 1}`" @click="selectNumber('rows', index)">{{ index + 1 }}</button>
@@ -667,11 +667,11 @@ h1 {
 .number-button {
 	background: var(--gray);
 	color: var(--white);
-	width: 80px;
-	height: 80px;
+	width: 57px;
+	height: 57px;
 	margin: 5px;
 	border-radius: 10px;
-	font-size: 54px;
+	font-size: 36px;
 	cursor: pointer;
 	outline: none;
 }
