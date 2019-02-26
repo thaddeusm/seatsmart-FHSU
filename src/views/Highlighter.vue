@@ -5,7 +5,7 @@
 		</header>
 		<main>
 			<div class="row" v-for="(row, index) in grid" :key="`row${index}`" :style="rowMargins">
-				<drop class="drop-card" v-for="(column, subIndex) in row" :key="`${index},${subIndex}`" :ref="`${index}And${subIndex}`" @drop="handleDrop(index, subIndex, ...arguments)" :style="[cardStyle, {background: column.student.highlight}]">
+				<drop class="drop-card" v-for="(column, subIndex) in row" :key="`${index},${subIndex}`" :ref="`${index}And${subIndex}`" @drop="handleDrop(index, subIndex, ...arguments)" :style="[cardStyle, column.student.highlight == '' ? {background: '#E5E5E5'} : {background: column.student.highlight}]">
 					<h4 v-if="classChart.columns < 7 && column.student.firstName.indexOf('(') !== -1">{{ column.student.firstName.split('(')[1].split(')')[0].split(' ')[0] }}</h4>
 					<h4 v-else-if="classChart.columns < 7">{{ column.student.firstName.split(' ')[0] }}</h4>
 					<h6 v-if="classChart.columns >= 7 && column.student.firstName.indexOf('(') !== -1">{{ column.student.firstName.split('(')[1].split(')')[0].split(' ')[0] }}</h6>
