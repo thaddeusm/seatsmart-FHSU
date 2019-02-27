@@ -107,8 +107,7 @@ export default {
 					_id: '',
                     comment: null
 				}
-			],
-			sentNotes: false
+			]
 		}
 	},
 	computed: {
@@ -260,13 +259,6 @@ export default {
 										this.$emit('absence', this.student._id)
 									}
 
-									if (notes.length !== 0) {
-										if (!this.sentNotes) {
-											this.$emit('notes-found', notes)
-											this.sentNotes = true
-										}
-									}
-
 								})
 						}
 					})
@@ -290,13 +282,6 @@ export default {
 										this.$emit('absence', this.studentID)
 									}
 
-									if (notes.length !== 0) {
-										if (!this.sentNotes) {
-											this.$emit('notes-found', notes)
-											this.sentNotes = true
-										}
-									}
-
 								})
 						}
 					})
@@ -310,36 +295,7 @@ export default {
 				})
 		},
 		viewStudentProfile() {
-			// get all notes from student's class and sort
-			let classStudents = []
-			let classNotes = []
-
-			db.readSomething('students', {class: this.student.class})
-				.then(foundStudents => {
-					classStudents = foundStudents
-
-					for (let i=0; i<classStudents.length; i++) {
-						db.readSomething('notes', {student: classStudents[i]._id})
-							.then(foundNotes => {
-								for (let k=0; k<foundNotes.length; k++) {
-									classNotes.push(foundNotes[k])
-								}
-
-								let sortedNotes = classNotes.sort((a, b) => {
-									let dateA = a.dateNoted._d
-									let dateB = b.dateNoted._d
-
-									return dateA < dateB ? -1 : 1
-								})
-
-								if (sortedNotes.length > 0) {
-									this.$store.dispatch('setEarliestDateNoted', sortedNotes[0].dateNoted)
-								}
-
-								this.$router.push(`/student/${this.studentID}`)
-							})
-					}
-				})
+			this.$router.push(`/student/${this.studentID}`)
 		}
 	},
 	mounted() {

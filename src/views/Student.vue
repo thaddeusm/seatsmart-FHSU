@@ -156,7 +156,7 @@ export default {
     },
     computed: {
         earliestDateNoted() {
-            return this.$store.state.earliestDateNoted
+            return this.$store.state.earliestDateNoted[this.student.class]
         },
         calculationPreference() {
             return this.$store.state.preferences.calculation
