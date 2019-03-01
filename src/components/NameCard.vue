@@ -64,7 +64,7 @@
 		<section id="cardFooter" v-if="student.firstName !== ''">
 			<AbbreviationCircle v-if="notes.length !== 0 && type !== 'simple'" v-for="(note, index) in latestNotes" :key="index" :behavior="note.behavior" :size="conserveSpace ? 'extra-small' : 'small'" :color="note.type === 'positive' ? 'yellow' : 'red'" />
 			<button v-if="studentID !== undefined" class="simple-button more-button" @click="viewStudentProfile"><img src="@/assets/more.svg" alt="more icon" class="more-icon"></button>
-			<button v-else class="simple-button more-button" @click="$router.push(`/student/${student._id}`)"><img src="@/assets/more.svg" alt="more icon" :class="[conserveSpace ? 'more-icon-smaller' : 'more-icon']"></button>
+			<button v-else class="simple-button more-button" @click="viewStudentProfile"><img src="@/assets/more.svg" alt="more icon" :class="[conserveSpace ? 'more-icon-smaller' : 'more-icon']"></button>
 		</section>
 	</div>
 </template>
@@ -295,7 +295,49 @@ export default {
 				})
 		},
 		viewStudentProfile() {
-			this.$router.push(`/student/${this.studentID}`)
+			if (this.$store.state.earliestDatesNoted[this.student.class] == undefined) {
+	            // find earliestDatesNoted
+
+	            let earliestDateNoted = {}
+
+	            // get all notes from student's class and sort
+	            let classStudents = []
+	            let classNotes = []
+
+	            db.readSomething('students', {class: this.student.class})
+	                .then(foundStudents => {
+	                    classStudents = foundStudents
+						let promises = []
+	                    for (let i=0; i<classStudents.length; i++) {
+	                        promises.push(db.readSomething('notes', {student: classStudents[i]._id})
+	                            .then(foundNotes => {
+	                                for (let k=0; k<foundNotes.length; k++) {
+	                                    classNotes.push(foundNotes[k])
+	                                }
+
+	                            }))
+	                    }
+
+						Promise.all(promises).then(() => {
+							let sortedNotes = classNotes.sort((a, b) => {
+								let dateA = a.dateNoted._d
+								let dateB = b.dateNoted._d
+
+								return dateA < dateB ? -1 : 1
+							})
+
+							if (sortedNotes.length > 0) {
+								earliestDateNoted = sortedNotes[0].dateNoted
+								this.$store.dispatch('getEarliestDatesNoted', {earliestDateNoted: earliestDateNoted, class: this.student.class})
+							}
+							this.$router.push(`/student/${this.student._id}`)
+						})
+	                })
+
+	        } else {
+				this.$router.push(`/student/${this.student._id}`)
+			}
+
 		}
 	},
 	mounted() {

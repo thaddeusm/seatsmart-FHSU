@@ -156,7 +156,12 @@ export default {
     },
     computed: {
         earliestDateNoted() {
-            return this.$store.state.earliestDateNoted[this.student.class]
+            if (this.$store.state.earliestDatesNoted[this.student.class] !== undefined) {
+                return this.$store.state.earliestDatesNoted[this.student.class]
+            } else {
+                return ''
+            }
+
         },
         calculationPreference() {
             return this.$store.state.preferences.calculation
@@ -404,6 +409,7 @@ export default {
         }
     },
     created() {
+
         db.readSomething('students', {_id: this.id})
             .then((results) => {
                 this.student = results[0]

@@ -258,52 +258,6 @@ export default {
 
         let scope = this
 
-        // on first load, find earliest dates noted for each class to support trend calculations
-        setTimeout(function() {
-            if (scope.$store.state.earliestDatesNoted == null) {
-                // find earliestDatesNoted
-                let classIDs = Object.keys(scope.$store.state.allClasses)
-
-                let earliestDatesNoted = {}
-
-                for (let i=0; i<classIDs.length; i++) {
-                    // get all notes from student's class and sort
-                    let classStudents = []
-                    let classNotes = []
-
-                    db.readSomething('students', {class: classIDs[i]})
-                        .then(foundStudents => {
-                            classStudents = foundStudents
-
-                            for (let i=0; i<classStudents.length; i++) {
-                                db.readSomething('notes', {student: classStudents[i]._id})
-                                    .then(foundNotes => {
-                                        for (let k=0; k<foundNotes.length; k++) {
-                                            classNotes.push(foundNotes[k])
-                                        }
-
-                                        let sortedNotes = classNotes.sort((a, b) => {
-                                            let dateA = a.dateNoted._d
-                                            let dateB = b.dateNoted._d
-
-                                            return dateA < dateB ? -1 : 1
-                                        })
-
-                                        if (sortedNotes.length > 0) {
-                                            earliestDatesNoted[classIDs[i]] = sortedNotes[0].dateNoted
-                                            console.log(earliestDatesNoted)
-                                            scope.$store.dispatch('getEarliestDatesNoted', earliestDatesNoted)
-                                        }
-
-                                    })
-                            }
-                        })
-                }
-
-            }
-
-        }, 1500);
-
         setTimeout(function() {
             if (scope.$store.state.preferences.progress.indexOf('created class') === -1) {
                 scope.modalOpen = true

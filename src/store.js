@@ -10,7 +10,7 @@ export default new Vuex.Store({
         preferences: null,
         lastUpdatedStudent: null,
         lastView: null,
-        earliestDatesNoted: null,
+        earliestDatesNoted: {},
         allStudents: null,
         allClasses: null,
         version: null
@@ -29,8 +29,8 @@ export default new Vuex.Store({
         setLastView(state, lastView) {
             state.lastView = lastView
         },
-        setEarliestDatesNoted(state, earliestDatesNoted) {
-            state.earliestDatesNoted = earliestDatesNoted
+        setEarliestDatesNoted(state, payload) {
+            state.earliestDatesNoted[payload.class] = payload.earliestDateNoted
         },
         setAllStudents(state, allStudents) {
             state.allStudents = allStudents
@@ -58,8 +58,8 @@ export default new Vuex.Store({
         setLastView(context, lastView) {
             context.commit('setLastView', lastView)
         },
-        getEarliestDatesNoted(context, earliestDatesNoted) {
-            context.commit('setEarliestDatesNoted', earliestDatesNoted)
+        getEarliestDatesNoted(context, payload) {
+            context.commit('setEarliestDatesNoted', payload)
         },
         getAllStudents(context) {
             db.readSomething('students', {})
