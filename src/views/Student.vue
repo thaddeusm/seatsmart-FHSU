@@ -232,52 +232,11 @@ export default {
             // start with average participation score
             let trendArr = [70]
 
-            if (this.calculationPreference === 'balanced') {
-                // construct trend arr
-                for (let i=0; i<notesThisMonth.length; i++) {
-                    let start = trendArr[i]
+            // construct trend arr
+            for (let i=0; i<notesThisMonth.length; i++) {
+                let start = trendArr[i]
 
-                    trendArr.push(this.findNextTrendValue(start, notesThisMonth[i]))
-                }
-            } else {
-                // find start and end weeks
-                let earliestWeek = moment(this.earliestDateNoted._d).week()
-                let firstWeekOfMonth = moment(moment().startOf('month')).week()
-                let endWeek = moment().week() + 1
-
-                // determine ideal starting week
-                let startWeek
-                if (earliestWeek < firstWeekOfMonth) {
-                    startWeek = firstWeekOfMonth
-                } else if (earliestWeek == firstWeekOfMonth) {
-                    startWeek = firstWeekOfMonth
-                } else {
-                    startWeek = earliestWeek
-                }
-
-                // loop through weeks
-                for (let i=startWeek; i<endWeek; i++) {
-                    // search for notes in a given week
-                    let notesThisWeek = []
-                    for (let j=0; j<this.notes.length; j++) {
-                        if (moment(this.notes[j].dateNoted._d).week() == i) {
-                            notesThisWeek.push(this.notes[j])
-                        }
-                    }
-
-                    let lastValue
-                    if (notesThisWeek.length === 0) {
-                        lastValue = trendArr[trendArr.length - 1]
-                        // if 'no news', add 4 to participation score
-                        trendArr.push(lastValue + 4)
-                    } else {
-                        for (let k=0; k<notesThisWeek.length; k++) {
-                            lastValue = trendArr[trendArr.length - 1]
-                            trendArr.push(this.findNextTrendValue(lastValue, notesThisWeek[k]))
-                        }
-                    }
-
-                }
+                trendArr.push(this.findNextTrendValue(start, notesThisMonth[i]))
             }
 
             return trendArr
