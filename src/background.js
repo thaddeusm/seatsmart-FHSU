@@ -46,15 +46,6 @@ function createWindow () {
     webPreferences: { webSecurity: false }
   })
 
-  win.maximize()
-  win.setResizable(false),
-  win.show()
-
-  let {width, height} = require('electron').screen.getPrimaryDisplay().size
-
-  global.screenWidth = width
-  global.screenHeight = height
-
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
@@ -63,6 +54,7 @@ function createWindow () {
     createProtocol('app')
     // Load the index.html when not in development
     win.loadURL('app://./index.html')
+
   }
 
   require('./toolbarmenu')
@@ -71,11 +63,16 @@ function createWindow () {
     win = null
   })
 
-  // production
-  // win.on('ready-to-show', function() {
-  //   win.show();
-  //   win.focus();
-  // });
+  win.on('ready-to-show', function() {
+      let {width, height} = require('electron').screen.getPrimaryDisplay().size
+
+      global.screenWidth = width
+      global.screenHeight = height
+      win.maximize()
+      win.setResizable(false)
+      win.show()
+      win.focus()
+  });
 }
 
 
