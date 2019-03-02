@@ -39,9 +39,9 @@
 				</template>
 			</ActionBar>
 		</footer>
-		<TouchBar :show="!choiceModalOpen && !introModalOpen" :bar="[
+		<TouchBar :show="true" :bar="[
 			{type: 'spacer', size: 'flexible'},
-			{type: 'button', label: 'save changes', method: function() {saveSeats()}},
+			{type: 'button', label: 'save changes', method: function() {saveChanges()}},
 			{type: 'button', label: 'discard changes', method: function() {$router.push(`/chart/${id}`)}},
 			{type: 'spacer', size: 'flexible'}
 	    ]"/>

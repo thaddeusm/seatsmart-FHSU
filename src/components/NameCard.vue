@@ -51,10 +51,7 @@
 			</h4>
 		</section>
 		<section id="editCardBody" v-else>
-			<button class="simple-button add-student-button" v-if="conserveSpace" @click="$emit('open-new-student-modal', column, row)">
-				<h6>+</h6>
-			</button>
-			<button class="simple-button add-student-button" v-else @click="$emit('open-new-student-modal', column, row)">
+			<button class="simple-button add-student-button" @click="$emit('open-new-student-modal', column, row)">
 				<h4>+</h4>
 			</button>
 		</section>
