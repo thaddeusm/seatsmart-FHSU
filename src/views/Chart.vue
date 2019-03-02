@@ -20,7 +20,7 @@
 						v-on:open-new-student-modal="openNewStudentModal"
 						v-on:open-edit-student-modal="openEditStudentModal"
 						v-on:absence="addAbsence"
-						:key="newStudent.firstName + index"
+						:key="students[students.length - 1]._id + index"
 						:chosen="chosenSeat.row == index + 1 && chosenSeat.column == subIndex + 1"
 					/>
 				</div>
@@ -37,7 +37,7 @@
 						v-on:open-new-student-modal="openNewStudentModal"
 						v-on:open-edit-student-modal="openEditStudentModal"
 						v-on:absence="addAbsence"
-						:key="newStudent.firstName + index"
+						:key="students[students.length - 1]._id + index"
 						:chosen="chosenSeat.row == index + 1 && chosenSeat.column == subIndex + 1" />
 				</div>
 			</section>
@@ -460,6 +460,7 @@ export default {
 					}
 				}).then(() => {
 					this.editStudentModalOpen = false
+					this.shuffle(this.students)
 					this.studentToEdit = {
 						_id: null,
 						seat: {
@@ -472,7 +473,6 @@ export default {
 						firstName: null,
 						lastName: null
 					}
-					this.newStudent.firstName = ''
 				})
 			} else {
 				this.studentFormAlertMessage = 'Please enter at least a first and last name.'
@@ -487,6 +487,7 @@ export default {
 							console.log(`${numNotesDeleted} notes were deleted`)
 						})
 					this.editStudentModalOpen = false
+					this.shuffle(this.students)
 					this.promptStudentDelete = false
 					this.studentToEdit = {
 						_id: null,
@@ -500,7 +501,6 @@ export default {
 						firstName: null,
 						lastName: null
 					}
-					this.newStudent.firstName = ''
 				})
 		},
 		resetNewStudent() {
