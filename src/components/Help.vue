@@ -54,11 +54,11 @@
 					<ul>
 						<li>
 							<img src="@/assets/editwhite.svg" alt="edit icon">
-							<h5>Edit Class Information</h5>
+							<h5>Edit Mode</h5>
 							<p>
-								This allows you to edit details about the number and position of seats in the room,
-								the name of the class, as well as the student roster.  When students are deleted
-								from the roster, all of their records as also deleted.
+								You can can add, edit, or delete students directly from the chart.  If you want to
+								edit class information (name, rows, columns, etc.), you can click the pencil icon
+								that appears on the right side of the class name.
 							</p>
 						</li>
 						<li>
