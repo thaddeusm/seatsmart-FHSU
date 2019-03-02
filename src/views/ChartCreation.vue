@@ -523,7 +523,7 @@ export default {
 							let index = i + 1
 							let newStudent = this.classStudents[this.classStudents.length - index]
 
-							if (newStudent.firstName == null || newStudent.lastName == null || newStudent.tigerID == null) {
+							if (newStudent.firstName == null || newStudent.lastName == null) {
 								this.incompleteInformation = true
 								break
 							}

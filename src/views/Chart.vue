@@ -7,7 +7,7 @@
 				:title="classInfo.name"
 			/>
 		</header>
-		<main id="chartMain">
+		<main id="chartMain" ref="chartMain">
 			<section v-if="!inverted" class="row" v-for="(row, index) in classInfo.rows" :style="rowMargins" :key="`row${index}`">
 				<div v-for="(column, subIndex) in classInfo.columns" class="column" :style="cardStyle">
 					<NameCard
@@ -20,6 +20,7 @@
 						v-on:open-new-student-modal="openNewStudentModal"
 						v-on:open-edit-student-modal="openEditStudentModal"
 						v-on:absence="addAbsence"
+						:key="newStudent.firstName + index"
 						:chosen="chosenSeat.row == index + 1 && chosenSeat.column == subIndex + 1"
 					/>
 				</div>
@@ -36,6 +37,7 @@
 						v-on:open-new-student-modal="openNewStudentModal"
 						v-on:open-edit-student-modal="openEditStudentModal"
 						v-on:absence="addAbsence"
+						:key="newStudent.firstName + index"
 						:chosen="chosenSeat.row == index + 1 && chosenSeat.column == subIndex + 1" />
 				</div>
 			</section>
@@ -104,16 +106,59 @@
       		</Modal>
     	</transition>
 		<transition name="fade">
-      		<Modal v-if="newStudentModalOpen" v-on:trigger-close="newStudentModalOpen = false" :dismissable="true" size="large">
+      		<Modal v-if="newStudentModalOpen" v-on:trigger-close="resetNewStudent" :dismissable="false" size="small">
         		<template slot="content">
-          			New Student
+					<div class="student-modal">
+						<section class="student-modal-header">
+							<h3>Add a New Student</h3>
+						</section>
+						<section class="student-form">
+							<div>
+								<div class="form-group">
+									<div class="alert-area"><span class="student-alert">{{ studentFormAlertMessage }}</span></div>
+									<input class="small-input" type="text" name="firstName" v-model="newStudent.firstName" placeholder="first name">
+									<input class="small-input" type="text" name="lastName" v-model="newStudent.lastName" placeholder="last name">
+									<input class="small-input" type="text" name="tigerID" v-model="newStudent.tigerID" placeholder="Tiger ID">
+								</div>
+							</div>
+						</section>
+						<section class="student-modal-footer">
+							<button class="student-footer-button yellow" @click="saveNewStudent">Save</button>
+							<button class="student-footer-button" @click="resetNewStudent">Cancel</button>
+						</section>
+					</div>
         		</template>
       		</Modal>
     	</transition>
 		<transition name="fade">
-      		<Modal v-if="editStudentModalOpen" v-on:trigger-close="editStudentModalOpen = false" :dismissable="true" size="large">
+      		<Modal v-if="editStudentModalOpen" v-on:trigger-close="resetStudentToEdit" :dismissable="false" size="small">
         		<template slot="content">
-          			Edit Student
+					<div class="student-modal">
+						<section class="student-modal-header">
+							<h3>Edit {{ studentToEdit.firstName }} {{ studentToEdit.lastName[0] }}.</h3>
+						</section>
+						<section class="student-form">
+							<div v-if="!promptStudentDelete">
+								<div class="form-group">
+									<div class="alert-area"><span class="student-alert">{{ studentFormAlertMessage }}</span></div>
+									<input class="small-input" type="text" name="firstName" v-model="studentToEdit.firstName" placeholder="first name">
+									<input class="small-input" type="text" name="lastName" v-model="studentToEdit.lastName" placeholder="last name">
+									<input class="small-input" type="text" name="tigerID" v-model="studentToEdit.tigerID" placeholder="Tiger ID">
+								</div>
+							</div>
+							<div v-else>
+								<h4>
+									Are you sure you want to permanently delete {{ studentToEdit.firstName }}?
+								</h4>
+							</div>
+						</section>
+						<section class="student-modal-footer">
+							<button class="student-footer-button red" v-if="promptStudentDelete" @click="deleteStudent">Delete {{ studentToEdit.firstName }}</button>
+							<button class="student-footer-button yellow" @click="saveEditedStudent" v-if="!promptStudentDelete">Save</button>
+							<button class="student-footer-button" @click="resetStudentToEdit">Cancel</button>
+							<button class="student-footer-button red" @click="promptStudentDelete = true" v-if="!promptStudentDelete">Delete Student</button>
+						</section>
+					</div>
         		</template>
       		</Modal>
     	</transition>
@@ -241,7 +286,30 @@ export default {
 				isAlert: false,
 				alertMessage: '',
 				action: null
-			}
+			},
+			newStudent: {
+				firstName: '',
+				lastName: '',
+				tigerID: '',
+				seat: {
+					row: null,
+					column: null
+				}
+			},
+			studentToEdit: {
+				_id: null,
+				seat: {
+					row: null,
+					column: null
+				},
+				class: null,
+				selected: null,
+				tigerID: null,
+				firstName: null,
+				lastName: null
+			},
+			studentFormAlertMessage: '',
+			promptStudentDelete: false
 		}
 	},
 	computed: {
@@ -294,12 +362,12 @@ export default {
     		this.newNoteStudent = student
     	},
 		openNewStudentModal(column, row) {
-			console.log(`column: ${column}`)
-			console.log(`row: ${row}`)
+			this.newStudent.seat.row = row
+			this.newStudent.seat.column = column
 			this.newStudentModalOpen = true
 		},
 		openEditStudentModal(student) {
-			console.log(`student: ${student.firstName}`)
+			this.studentToEdit = student
 			this.editStudentModalOpen = true
 		},
     	setLastView(lastView) {
@@ -349,6 +417,120 @@ export default {
 			} else {
 				this.cardType = 'edit'
 			}
+		},
+		saveNewStudent() {
+			if (this.newStudent.firstName !== '' && this.newStudent.lastName !== '') {
+				db.createSomething('students', {
+					firstName: this.newStudent.firstName,
+					lastName: this.newStudent.lastName,
+					tigerID: this.newStudent.tigerID,
+					selected: false,
+					class: this.classInfo._id,
+					highlight: '',
+					seat: {
+						column: this.newStudent.seat.column,
+						row: this.newStudent.seat.row
+					}
+				}).then((savedStudent) => {
+					this.students.push(savedStudent)
+					this.shuffle(this.students)
+					this.newStudentModalOpen = false
+					this.newStudent = {
+						firstName: '',
+						lastName: '',
+						tigerID: '',
+						seat: {
+							row: null,
+							column: null
+						}
+					}
+				})
+			} else {
+				this.studentFormAlertMessage = 'Please enter at least a first and last name.'
+			}
+		},
+		saveEditedStudent() {
+			if (this.studentToEdit.firstName !== '' && this.studentToEdit.lastName !== '') {
+				this.newStudent.firstName = this.studentToEdit.firstName
+				db.updateSomething('students', {_id: this.studentToEdit._id}, {
+					$set: {
+						firstName: this.studentToEdit.firstName,
+						lastName: this.studentToEdit.lastName,
+						tigerID: this.studentToEdit.tigerID,
+					}
+				}).then(() => {
+					this.editStudentModalOpen = false
+					this.studentToEdit = {
+						_id: null,
+						seat: {
+							row: null,
+							column: null
+						},
+						class: null,
+						selected: null,
+						tigerID: null,
+						firstName: null,
+						lastName: null
+					}
+					this.newStudent.firstName = ''
+				})
+			} else {
+				this.studentFormAlertMessage = 'Please enter at least a first and last name.'
+			}
+		},
+		deleteStudent() {
+			this.newStudent.firstName = this.studentToEdit.firstName
+			db.deleteSomething('students', {_id: this.studentToEdit._id})
+				.then(() => {
+					db.deleteSomething('notes', {student: this.studentToEdit._id})
+						.then((numNotesDeleted) => {
+							console.log(`${numNotesDeleted} notes were deleted`)
+						})
+					this.editStudentModalOpen = false
+					this.studentToEdit = {
+						_id: null,
+						seat: {
+							row: null,
+							column: null
+						},
+						class: null,
+						selected: null,
+						tigerID: null,
+						firstName: null,
+						lastName: null
+					}
+					this.newStudent.firstName = ''
+				})
+		},
+		resetNewStudent() {
+			this.newStudentModalOpen = false
+			this.newStudent = {
+				firstName: '',
+				lastName: '',
+				tigerID: '',
+				seat: {
+					row: null,
+					column: null
+				}
+			}
+			this.studentFormAlertMessage = ''
+		},
+		resetStudentToEdit() {
+			this.editStudentModalOpen = false
+			this.promptStudentDelete = false
+			this.studentToEdit = {
+				_id: null,
+				seat: {
+					row: null,
+					column: null
+				},
+				class: null,
+				selected: null,
+				tigerID: null,
+				firstName: null,
+				lastName: null
+			}
+			this.studentFormAlertMessage = ''
 		},
     	showTrends() {
     		this.showingTrends = !this.showingTrends
@@ -545,7 +727,12 @@ button {
 }
 
 .yellow {
-	background: var(--yellow);
+	background: var(--yellow)!important;
+}
+
+.red {
+	background: var(--red)!important;
+	color: var(--white)!important;
 }
 
 .alert-modal-body {
@@ -577,6 +764,73 @@ button {
 	margin-top: 20px;
   	margin-left: 10px;
   	margin-right: 10px;
+}
+
+.student-modal {
+	display: grid;
+	height: 100%;
+	width: 100%;
+	grid-template-rows: auto 1fr auto;
+	grid-template-areas:
+		"studentHeader"
+		"studentBody"
+		"studentFooter";
+	align-items: center;
+}
+
+.student-modal-header {
+	padding: 20px 0;
+	border-bottom: 1px solid var(--dark-gray);
+	text-align: center;
+	grid-area: studentHeader;
+}
+
+.student-modal-footer {
+	grid-area: studentFooter;
+	background: var(--gray);
+	text-align: center;
+	height: 70px;
+}
+
+.student-footer-button {
+	padding: 5px 10px;
+	background: var(--light-gray);
+	color: var(--black);
+	font-size: 18px;
+	border-radius: 5px;
+	cursor: pointer;
+	outline: none;
+	margin-top: 20px;
+  	margin-left: 10px;
+  	margin-right: 10px;
+}
+
+.student-form {
+	grid-area: studentBody;
+	width: 80%;
+	margin: 0 auto;
+	text-align: center;
+}
+
+.alert-area {
+	height: 22px;
+}
+
+.student-alert {
+	font-size: 15px;
+	color: var(--red);
+}
+
+.small-input {
+	border-radius: 4px;
+	font-size: 18px;
+	padding: 10px 15px 12px 15px;
+	display: block;
+	margin: 10px auto;
+	width: 300px;
+	color: var(--black);
+	border: 1px solid var(--light-gray);
+	outline: none;
 }
 
 .fade-enter-active, .fade-leave-active {
