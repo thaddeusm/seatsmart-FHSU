@@ -487,6 +487,7 @@ export default {
 							console.log(`${numNotesDeleted} notes were deleted`)
 						})
 					this.editStudentModalOpen = false
+					this.promptStudentDelete = false
 					this.studentToEdit = {
 						_id: null,
 						seat: {
