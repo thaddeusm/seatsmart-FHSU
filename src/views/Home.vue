@@ -1,78 +1,76 @@
 <template>
-    <transition name="fade">
-        <div id="container" ref="container">
-            <header>
-                <section id="searchArea">
-                    <SearchBox v-on:start-search="search" placeholder="student name" />
-                </section>
-                <section id="logoArea">
-                    <img id="logo" src="@/assets/logo.svg" alt="seatsmart logo">
-                </section>
-            </header>
-            <main>
-                <div class="class-button-area" v-for="(classToDisplay, index) in classesToDisplay">
-                    <ButtonCard :button="false" :icon="classToDisplay.name" :text="classToDisplay.semester + ' ' + classToDisplay.year" :to="`/chart/${classToDisplay._id}`" :key="index"/>
-                    <div class="modify-button-area">
-                        <button @click="editClass(classToDisplay._id)" class="modify-class-button"><img src="@/assets/edit.svg" alt="edit icon"></button>
-                        <button @click="promptDeleteClass(classToDisplay._id, classToDisplay.name)" class="modify-class-button"><img src="@/assets/delete.svg" alt="delete icon"></button>
-                    </div>
+    <div id="container" ref="container">
+        <header>
+            <section id="searchArea">
+                <SearchBox v-on:start-search="search" placeholder="student name" />
+            </section>
+            <section id="logoArea">
+                <img id="logo" src="@/assets/logo.svg" alt="seatsmart logo">
+            </section>
+        </header>
+        <main>
+            <div class="class-button-area" v-for="(classToDisplay, index) in classesToDisplay">
+                <ButtonCard :button="false" :icon="classToDisplay.name" :text="classToDisplay.semester + ' ' + classToDisplay.year" :to="`/chart/${classToDisplay._id}`" :key="index"/>
+                <div class="modify-button-area">
+                    <button @click="editClass(classToDisplay._id)" class="modify-class-button"><img src="@/assets/edit.svg" alt="edit icon"></button>
+                    <button @click="promptDeleteClass(classToDisplay._id, classToDisplay.name)" class="modify-class-button"><img src="@/assets/delete.svg" alt="delete icon"></button>
                 </div>
-                <br><br><br><br>
-                <ButtonCard icon="+" text="seating chart" to="/charts/new"/>
-            </main>
-            <footer>
-                <ActionBar background="var(--black)" :hamburger="false">
-                    <template slot="left">
-                        <h6>v {{ version }}</h6>
-                    </template>
-                    <template slot="right">
-                        <button @click="openModal"><img src="@/assets/cog.svg" alt="settings icon"></button>
-                    </template>
-                </ActionBar>
-            </footer>
-            <transition name="fade">
-                <Modal v-if="modalOpen" v-on:trigger-close="modalOpen = false" :dismissable="false" size="large">
-                    <template slot="content">
-                        <Settings v-on:trigger-modal-close="modalOpen = false"/>
-                    </template>
-                </Modal>
-            </transition>
-            <transition name="fade">
-                <Modal v-if="alertModalOpen" v-on:trigger-close="alertModalOpen = false" :dismissable="true" size="small">
-                    <template slot="content">
-                        <img src="@/assets/alert.svg" alt="alert icon" class="alert-icon-large">
-                        <div class="modal-body">
-                            <h4>Are you sure you want to permanently delete {{ alertModalClass }}?</h4>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="modal-footer-button yellow" @click="deleteClass(alertModalClassID)">Yes</button>
-                            <button class="modal-footer-button" @click="alertModalOpen = false">Cancel</button>
-                        </div>
-                    </template>
-                </Modal>
-            </transition>
-            <transition name="fade">
-                <Modal v-if="updateAvailable" v-on:trigger-close="updateAvailable = false" :dismissable="true" size="small">
-                    <template slot="content">
-                        <img src="@/assets/update.svg" alt="update icon" class="update-icon">
-                        <div class="modal-body">
-                            <h4>A new version of Seatsmart ({{ newestVersion }}) is available.</h4>
-                            <h6>**Updating will not affect your class data or settings.</h6>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="modal-footer-button yellow" @click="getUpdate">Review Update</button>
-                            <button class="modal-footer-button" @click="updateAvailable = false">Later</button>
-                        </div>
-                    </template>
-                </Modal>
-            </transition>
-            <TouchBar :show="!modalOpen && !alertModalOpen" :bar="[
-            {type: 'button', label: 'New Chart', method: function() {$router.push('/charts/new')}},
-            {type: 'spacer', size: 'flexible'},
-            {type: 'button', label: 'Settings', method: openModal}
-            ]"/>
-        </div>
-    </transition>
+            </div>
+            <br><br><br><br>
+            <ButtonCard icon="+" text="seating chart" to="/charts/new"/>
+        </main>
+        <footer>
+            <ActionBar background="var(--black)" :hamburger="false">
+                <template slot="left">
+                    <h6>v {{ version }}</h6>
+                </template>
+                <template slot="right">
+                    <button @click="openModal"><img src="@/assets/cog.svg" alt="settings icon"></button>
+                </template>
+            </ActionBar>
+        </footer>
+        <transition name="fade">
+            <Modal v-if="modalOpen" v-on:trigger-close="modalOpen = false" :dismissable="false" size="large">
+                <template slot="content">
+                    <Settings v-on:trigger-modal-close="modalOpen = false"/>
+                </template>
+            </Modal>
+        </transition>
+        <transition name="fade">
+            <Modal v-if="alertModalOpen" v-on:trigger-close="alertModalOpen = false" :dismissable="true" size="small">
+                <template slot="content">
+                    <img src="@/assets/alert.svg" alt="alert icon" class="alert-icon-large">
+                    <div class="modal-body">
+                        <h4>Are you sure you want to permanently delete {{ alertModalClass }}?</h4>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="modal-footer-button yellow" @click="deleteClass(alertModalClassID)">Yes</button>
+                        <button class="modal-footer-button" @click="alertModalOpen = false">Cancel</button>
+                    </div>
+                </template>
+            </Modal>
+        </transition>
+        <transition name="fade">
+            <Modal v-if="updateAvailable" v-on:trigger-close="updateAvailable = false" :dismissable="true" size="small">
+                <template slot="content">
+                    <img src="@/assets/update.svg" alt="update icon" class="update-icon">
+                    <div class="modal-body">
+                        <h4>A new version of Seatsmart ({{ newestVersion }}) is available.</h4>
+                        <h6>**Updating will not affect your class data or settings.</h6>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="modal-footer-button yellow" @click="getUpdate">Review Update</button>
+                        <button class="modal-footer-button" @click="updateAvailable = false">Later</button>
+                    </div>
+                </template>
+            </Modal>
+        </transition>
+        <TouchBar :show="!modalOpen && !alertModalOpen" :bar="[
+        {type: 'button', label: 'New Chart', method: function() {$router.push('/charts/new')}},
+        {type: 'spacer', size: 'flexible'},
+        {type: 'button', label: 'Settings', method: openModal}
+        ]"/>
+    </div>
 </template>
 
 <script>
@@ -123,6 +121,9 @@ export default {
     computed: {
         version() {
             return this.$store.state.version
+        },
+        initalized() {
+            return this.$store.state.initalized
         }
     },
     methods: {
@@ -237,10 +238,16 @@ export default {
                 }
 
                 this.classesToDisplay = firstPriority.concat(secondPriority, remainder)
-                let scope = this
-                setTimeout(function() {
-                    scope.$refs.container.style.opacity = "1"
-                }, 700, scope)
+
+                if (!this.initalized) {
+                    let scope = this
+                    setTimeout(function() {
+                        scope.$refs.container.style.opacity = "1"
+                        scope.$store.dispatch('setInit')
+                    }, 700, scope)
+                } else {
+                    this.$refs.container.style.opacity = "1"
+                }
             })
         },
         search(term) {

@@ -13,7 +13,8 @@ export default new Vuex.Store({
         earliestDatesNoted: {},
         allStudents: null,
         allClasses: null,
-        version: null
+        version: null,
+        initalized: false
     },
     mutations: {
         getPreferences(state, preferences) {
@@ -40,6 +41,9 @@ export default new Vuex.Store({
         },
         setVersion(state, version) {
             state.version = version
+        },
+        setInit(state) {
+            state.initalized = true
         }
     },
     actions: {
@@ -87,6 +91,9 @@ export default new Vuex.Store({
         },
         setVersion(context, version) {
             context.commit('setVersion', version)
+        },
+        setInit(context) {
+            context.commit('setInit')
         }
     }
 })
