@@ -152,7 +152,7 @@ export default {
 }
 
 .row > * {
-    margin: 15px 10px;
+    margin: 15px 3px;
 }
 
 .card-wrapper {
@@ -171,7 +171,7 @@ export default {
 	text-decoration: none;
 	transition: .05s border ease;
 	height: 65px;
-	width: 10px;
+	width: 95px;
 	vertical-align: middle;
 }
 

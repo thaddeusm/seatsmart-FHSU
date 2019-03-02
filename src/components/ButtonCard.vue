@@ -12,7 +12,7 @@
 			{{ icon }}
 		</h1>
 		<h4 v-else-if="icon !== undefined">
-			{{ icon.length > 10 ? `${icon.slice(0, 10)}...` : icon }}
+			{{ icon.length > 10 ? `${icon.slice(0, 6)}...` : icon }}
 		</h4>
 		<h6>
 			{{ text }}
@@ -64,7 +64,7 @@ export default {
 	text-decoration: none;
 	transition: .05s border ease;
 	height: 65px;
-	width: 100px;
+	width: 95px;
 	vertical-align: middle;
 	justify-self: center;
 	align-self: center;
