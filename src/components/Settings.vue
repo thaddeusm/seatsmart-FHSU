@@ -25,7 +25,7 @@
 					<p>
 						Each student's name card can tally and display one behavior on the upper left corner.
 						This allows you to track student progress in an area you consider vital to your course.
-						By default, Seatsmart tallies and displays absences.  You can choose an alternative
+						By default, Seatsmart absences.  You can choose an alternative
 						behavior to tally and display below:
 					</p>
 					<section class="select-wrapper-large">
