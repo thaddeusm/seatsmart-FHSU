@@ -1,7 +1,11 @@
 <template>
 	<div id="chartContainer">
 		<header id="chartHeader">
-			<TitleBar :title="classInfo.name" />
+			<TitleBar
+				:edit="cardType == 'edit'"
+				v-on:edit-info="setLastView(`/chart/${id}`)"
+				:title="classInfo.name"
+			/>
 		</header>
 		<main id="chartMain">
 			<section v-if="!inverted" class="row" v-for="(row, index) in classInfo.rows" :style="rowMargins" :key="`row${index}`">
@@ -13,6 +17,8 @@
 						:column="subIndex + 1"
 						:classId="classInfo._id"
 						v-on:open-note-modal="openNoteModal"
+						v-on:open-new-student-modal="openNewStudentModal"
+						v-on:open-edit-student-modal="openEditStudentModal"
 						v-on:absence="addAbsence"
 						:chosen="chosenSeat.row == index + 1 && chosenSeat.column == subIndex + 1"
 					/>
@@ -27,6 +33,8 @@
 						:column="classInfo.columns - subIndex"
 						:classId="classInfo._id"
 						v-on:open-note-modal="openNoteModal"
+						v-on:open-new-student-modal="openNewStudentModal"
+						v-on:open-edit-student-modal="openEditStudentModal"
 						v-on:absence="addAbsence"
 						:chosen="chosenSeat.row == index + 1 && chosenSeat.column == subIndex + 1" />
 				</div>
@@ -38,9 +46,14 @@
 		        	<router-link to="/"><img src="@/assets/home.svg" alt="home icon"></router-link>
 		        </template>
 		        <template slot="center">
-		        	<button @click="setLastView(`/chart/${id}`)" class="action-button">
+		        	<!-- <button @click="setLastView(`/chart/${id}`)" class="action-button">
 						<img src="@/assets/editwhite.svg" alt="edit icon">
 						<span class="tooltip">edit class information</span>
+					</button> -->
+					<button @click="toggleEditMode" class="action-button">
+						<img v-if="cardType !== 'edit'" src="@/assets/editwhite.svg" alt="edit icon">
+						<img v-else src="@/assets/edit.svg" alt="edit icon">
+						<span class="tooltip">toggle edit mode</span>
 					</button>
 		        	<button @click="rearrangeSeats" class="action-button">
 						<img src="@/assets/rearrange.svg" alt="rearrange icon">
@@ -87,6 +100,20 @@
 						v-on:trigger-modal-close="noteModalOpen = false"
 						v-on:absence="addAbsence"
 					/>
+        		</template>
+      		</Modal>
+    	</transition>
+		<transition name="fade">
+      		<Modal v-if="newStudentModalOpen" v-on:trigger-close="newStudentModalOpen = false" :dismissable="true" size="large">
+        		<template slot="content">
+          			New Student
+        		</template>
+      		</Modal>
+    	</transition>
+		<transition name="fade">
+      		<Modal v-if="editStudentModalOpen" v-on:trigger-close="editStudentModalOpen = false" :dismissable="true" size="large">
+        		<template slot="content">
+          			Edit Student
         		</template>
       		</Modal>
     	</transition>
@@ -171,6 +198,8 @@ export default {
 			},
 			modalOpen: false,
 			noteModalOpen: false,
+			newStudentModalOpen: false,
+			editStudentModalOpen: false,
 			newNoteStudent: {
 				firstName: null,
 				lastName: null,
@@ -263,6 +292,15 @@ export default {
     		this.noteModalOpen = true
     		this.newNoteStudent = student
     	},
+		openNewStudentModal(column, row) {
+			console.log(`column: ${column}`)
+			console.log(`row: ${row}`)
+			this.newStudentModalOpen = true
+		},
+		openEditStudentModal(student) {
+			console.log(`student: ${student.firstName}`)
+			this.editStudentModalOpen = true
+		},
     	setLastView(lastView) {
     		this.$store.dispatch('setLastView', lastView)
     		this.$router.push(`/chart/edit/${this.id}`)
@@ -304,6 +342,13 @@ export default {
     			this.cardType = 'complex'
     		}
     	},
+		toggleEditMode() {
+			if (this.cardType === 'edit') {
+				this.cardType = 'complex'
+			} else {
+				this.cardType = 'edit'
+			}
+		},
     	showTrends() {
     		this.showingTrends = !this.showingTrends
 

@@ -41,7 +41,33 @@
 			<button class="simple-button more-button"><img src="@/assets/more.svg" alt="more icon" class="more-icon"></button>
 		</section>
 	</div>
-	<div v-else id="cardContainer" :class="[chosen ? 'chosen' : '', 'gray', isAbsentToday ? 'absent' : '']" :style="[student.highlight !== '' ? {boxShadow: `inset 0 0 20px 7px ${student.highlight}`} : {boxShadow: `none`}]">
+	<div v-else-if="type === 'edit'" id="editCardContainer">
+		<section id="editCardBody" v-if="student.firstName !== ''">
+			<h6 class="student-name" v-if="conserveSpace">
+				{{ student.firstName }} {{ student.lastName[0] }}.
+			</h6>
+			<h4 class="student-name" v-else>
+				{{ student.firstName }} {{ student.lastName[0] }}.
+			</h4>
+		</section>
+		<section id="editCardBody" v-else>
+			<button class="simple-button add-student-button" v-if="conserveSpace" @click="$emit('open-new-student-modal', column, row)">
+				<h6>+</h6>
+			</button>
+			<button class="simple-button add-student-button" v-else @click="$emit('open-new-student-modal', column, row)">
+				<h4>+</h4>
+			</button>
+		</section>
+		<section id="editCardFooter" v-if="student.firstName !== ''">
+			<button class="simple-button edit-student-button-small" v-if="conserveSpace" @click="$emit('open-edit-student-modal', student)">
+				<img src="@/assets/editblack.svg" alt="edit icon">
+			</button>
+			<button class="simple-button edit-student-button-large" v-else @click="$emit('open-edit-student-modal', student)">
+				<img src="@/assets/editblack.svg" alt="edit icon">
+			</button>
+		</section>
+	</div>
+	<div v-else id="cardContainer" :class="[chosen ? 'chosen' : '', 'gray', isAbsentToday ? 'absent' : '']" :style="[student.highlight !== '' ? {boxShadow: `inset 0 0 20px 7px ${student.highlight}`} : {boxShadow: `inset 0 0 20px 7px #E5E5E5`}]">
 		<section id="leftHeader" v-if="student.firstName !== '' && type !== 'simple'">
 			<span id="absences">{{ numberOfAbsences }}</span>
 		</section>
@@ -372,6 +398,40 @@ export default {
 	grid-template-rows: 50% 50%;
 	grid-template-columns: auto;
 	border-radius: 10px;
+}
+
+#editCardContainer {
+	align-items: center;
+	width: 100%;
+	height: 100%;
+	display: grid;
+	grid-template-areas:
+		"editCardBody"
+		"editCardFooter";
+	grid-template-rows: 50% 50%;
+	grid-template-columns: auto;
+	border-radius: 10px;
+	background: var(--light-gray);
+}
+
+#editCardBody {
+	grid-area: editCardBody;
+}
+
+.add-student-button {
+
+}
+
+#editCardFooter {
+	grid-area: editCardFooter;
+}
+
+.edit-student-button-small > img {
+	width: 20px;
+}
+
+.edit-student-button-large {
+	width: 30px;
 }
 
 #leftHeader {

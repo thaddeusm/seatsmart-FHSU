@@ -4,6 +4,7 @@
 		<h3 v-if="classID !== undefined">{{ returnedTitle }}</h3>
 		<h6 v-else-if="compact">{{ shortenedTitle }}</h6>
 		<h2 v-else-if="!compact">{{ shortenedTitle }}</h2>
+		<button v-if="edit" @click="$emit('edit-info')"><img src="@/assets/edit.svg" alt="edit icon"></button>
 		<div :class="[compact ? 'small-line' : 'line']"></div>
 	</header>
 </template>
@@ -13,7 +14,7 @@ import db from '@/db'
 
 export default {
 	name: 'TitleBar',
-	props: ['title', 'compact', 'classID'],
+	props: ['title', 'compact', 'classID', 'edit'],
 	computed: {
 		returnedTitle() {
 			return this.$store.state.allClasses[this.classID]
@@ -45,6 +46,18 @@ h2 {
 
 h4 {
 	color: var(--white);
+}
+
+button {
+	background: none;
+	outline: none;
+	border: none;
+	cursor: pointer;
+	margin-left: 10px;
+}
+
+img {
+	width: 15px;
 }
 
 .line {
