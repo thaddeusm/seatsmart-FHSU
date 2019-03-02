@@ -41,7 +41,8 @@ export default {
 									Description: 'Distracted by Cellphone',
 									Weight: 'medium'
 								}
-							]
+							],
+							behaviorToTally: '(-) Absent'
 						}
 
 						this.setPreferences(obj)

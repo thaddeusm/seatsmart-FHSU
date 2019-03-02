@@ -66,7 +66,7 @@
 	</div>
 	<div v-else id="cardContainer" :class="[chosen ? 'chosen' : '', 'gray', isAbsentToday ? 'absent' : '']" :style="[student.highlight !== '' ? {boxShadow: `inset 0 0 20px 7px ${student.highlight}`} : {boxShadow: `inset 0 0 20px 7px #E5E5E5`}]">
 		<section id="leftHeader" v-if="student.firstName !== '' && type !== 'simple'">
-			<span id="absences">{{ numberOfAbsences }}</span>
+			<span id="absences" :class="[behaviorToTallyType == 'positive' ? 'yellow-text' : 'red-text']">{{ tally }}</span>
 		</section>
 		<section id="centerHeader" v-if="student.firstName !== ''">
 			<button id="addNoteButton" class="simple-button" @click="$emit('open-note-modal', student)">+</button>
@@ -212,19 +212,29 @@ export default {
 				}
 			}
 		},
-		numberOfAbsences() {
+		behaviorToTally() {
+			return this.$store.state.preferences.behaviorToTally.split(') ')[1]
+		},
+		behaviorToTallyType() {
+			if (this.$store.state.preferences.behaviorToTally[1] == '+') {
+				return 'positive'
+			} else {
+				return 'negative'
+			}
+		},
+		tally() {
 			if (this.notes.length === 0) {
 				return 0
 			} else {
-				let numberOfAbsences = 0
+				let number = 0
 
 				for (let i=0; i<this.notes.length; i++) {
-					if (this.notes[i].type === 'negative' && this.notes[i].behavior.Abbreviation === 'A') {
-						numberOfAbsences++
+					if (this.notes[i].type === this.behaviorToTallyType && this.notes[i].behavior.Description === this.behaviorToTally) {
+						number++
 					}
 				}
 
-				return numberOfAbsences
+				return number
 			}
 		},
 		isAbsentToday() {
@@ -440,7 +450,14 @@ export default {
 
 #absences {
 	font-size: 14px;
+}
+
+.red-text {
 	color: var(--red);
+}
+
+.yellow-text {
+	color: #896502;
 }
 
 #centerHeader {

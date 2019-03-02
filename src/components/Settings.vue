@@ -20,6 +20,19 @@
 			</section>
 			<section v-if="content == 'behaviors'">
 				<h1>Behaviors</h1>
+				<div id="tallyChoiceArea">
+					<h3>Tally</h3>
+					<p>
+						Each student's name card can tally and display one behavior on the upper left corner.
+						This allows you to track student progress in an area you consider vital to your course.
+						By default, Seatsmart tallies and displays absences.  You can choose an alternative
+						behavior to tally and display below:
+					</p>
+					<section class="select-wrapper-large">
+						<v-select v-model="behaviorToTally" :options="allBehaviors"></v-select>
+					</section>
+				</div>
+				<h3>Add Your Own</h3>
 				<p>
 					What does participation mean to you?  Add positive and negative behaviors
 					you would like to track with Seatsmart below.  Set different weights
@@ -203,18 +216,40 @@ export default {
 					Description: null,
 					Weight: null
 				}
-			]
+			],
+			behaviorToTally: null
 		}
 	},
 	computed: {
 		version() {
             return this.$store.state.version
-        }
+        },
+		allBehaviors() {
+			let all = []
+
+			for (let i=0; i<this.positiveBehaviors.length; i++) {
+				let thisBehavior = this.positiveBehaviors[i]
+				all.push(`(+) ${thisBehavior.Description}`)
+			}
+
+			for (let i=0; i<this.negativeBehaviors.length; i++) {
+				let thisBehavior = this.negativeBehaviors[i]
+				all.push(`(-) ${thisBehavior.Description}`)
+			}
+
+			return all
+		}
 	},
 	mounted() {
 		this.calculation = this.$store.state.preferences.calculation
 		this.positiveBehaviors = this.$store.state.preferences.positiveBehaviors
 		this.negativeBehaviors = this.$store.state.preferences.negativeBehaviors
+		if (this.$store.state.preferences.behaviorToTally !== null) {
+			this.behaviorToTally = this.$store.state.preferences.behaviorToTally
+		} else {
+			this.behaviorToTally = '(-) Absent'
+		}
+
 	},
 	methods: {
 		changeContent(area) {
@@ -307,7 +342,8 @@ export default {
 					progress: this.$store.state.preferences.progress,
 					calculation: this.calculation,
 					positiveBehaviors: this.positiveBehaviors,
-					negativeBehaviors: this.negativeBehaviors
+					negativeBehaviors: this.negativeBehaviors,
+					behaviorToTally: this.behaviorToTally
 				})
 
 				let scope = this
@@ -415,6 +451,15 @@ h3 {
 	border-radius: 4px;
 	margin: 10px 10px;
 	width: 160px;
+	color: var(--black);
+	font-family: "ArchivoNarrow";
+}
+
+.select-wrapper-large {
+	background: var(--white);
+	border-radius: 4px;
+	margin: 20px auto 70px auto;
+	width: 300px;
 	color: var(--black);
 	font-family: "ArchivoNarrow";
 }
