@@ -171,7 +171,7 @@ export default {
 	text-decoration: none;
 	transition: .05s border ease;
 	height: 65px;
-	width: 110px;
+	width: 10px;
 	vertical-align: middle;
 }
 

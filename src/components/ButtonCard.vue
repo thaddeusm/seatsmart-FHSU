@@ -64,7 +64,7 @@ export default {
 	text-decoration: none;
 	transition: .05s border ease;
 	height: 65px;
-	width: 110px;
+	width: 100px;
 	vertical-align: middle;
 	justify-self: center;
 	align-self: center;

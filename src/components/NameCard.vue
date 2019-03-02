@@ -427,7 +427,7 @@ export default {
 }
 
 .edit-student-button-small > img {
-	width: 20px;
+	width: 15px;
 }
 
 .edit-student-button-large {
