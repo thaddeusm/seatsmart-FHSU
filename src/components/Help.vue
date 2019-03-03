@@ -194,7 +194,7 @@ li > img {
 }
 
 .inner-link {
-	font-size: 20px;
+	font-size: 18px;
 	border-bottom: 2px solid var(--yellow);
 }
 

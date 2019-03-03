@@ -363,7 +363,8 @@ export default {
                 progress: ['created class', 'rearranged seats', 'viewed class chart', 'viewed a student page'],
                 calculation: this.$store.state.preferences.calculation,
                 positiveBehaviors: this.$store.state.preferences.positiveBehaviors,
-                negativeBehaviors: this.$store.state.preferences.negativeBehaviors
+                negativeBehaviors: this.$store.state.preferences.negativeBehaviors,
+                behaviorToTally: this.$store.state.preferences.behaviorToTally
             })
         }
     },

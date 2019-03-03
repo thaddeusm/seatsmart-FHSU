@@ -244,12 +244,7 @@ export default {
 		this.calculation = this.$store.state.preferences.calculation
 		this.positiveBehaviors = this.$store.state.preferences.positiveBehaviors
 		this.negativeBehaviors = this.$store.state.preferences.negativeBehaviors
-		if (this.$store.state.preferences.behaviorToTally !== null) {
-			this.behaviorToTally = this.$store.state.preferences.behaviorToTally
-		} else {
-			this.behaviorToTally = '(-) Absent'
-		}
-
+		this.behaviorToTally = this.$store.state.preferences.behaviorToTally
 	},
 	methods: {
 		changeContent(area) {

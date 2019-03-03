@@ -41,40 +41,6 @@
 			</ActionBar>
 		</footer>
 		<transition name="fade">
-			<Modal v-if="introModalOpen" size="large" :dismissable="true" v-on:trigger-close="closeIntroModal">
-				<template slot="content">
-					<div class="modal-header">
-	    				<h1>How to Change Student Seating</h1>
-	    			</div>
-	    			<div class="modal-body">
-	    				<div class="step">
-	    					<drag class="drag" :effect-allowed="['link']"><span v-if="!testDropComplete">Tina</span></drag>
-	    					<h5>Click and drag a student name into the chart</h5>
-	    					<h5>1</h5>
-	    				</div>
-	    				<div class="step">
-	    					<drop class="demo-drop-card border" @drop="handleTestDrop">
-								<h4 v-if="testDropComplete">Tina</h4>
-							</drop>
-	    					<h5>Drop the name into an empty seat</h5>
-	    					<h5>2</h5>
-	    				</div>
-	    				<div class="step">
-							<div class="drop-card border">
-								<h4>{{exampleText}}</h4>
-								<button class="delete-button" @click="testDropComplete = false">x</button>
-							</div>
-	    					<h5>Click the 'x' to undo the seat assignment</h5>
-	    					<h5>3</h5>
-	    				</div>
-	    			</div>
-	    			<div class="modal-footer">
-	    				<button class="modal-footer-button" @click="closeIntroModal">Got it</button>
-	    			</div>
-				</template>
-			</Modal>
-		</transition>
-		<transition name="fade">
 			<Modal v-if="choiceModalOpen" :dismissable="false" size="small">
 	    		<template slot="content">
 	    			<div class="choice-modal-body">
@@ -87,7 +53,7 @@
 	    		</template>
 	    	</Modal>
 		</transition>
-		<TouchBar :show="!choiceModalOpen && !introModalOpen" :bar="[
+		<TouchBar :show="!choiceModalOpen" :bar="[
 			{type: 'spacer', size: 'flexible'},
 			{type: 'button', label: 'save changes', method: function() {saveSeats()}},
 			{type: 'button', label: 'discard changes', method: function() {$router.push(`/chart/${id}`)}},
@@ -138,7 +104,6 @@ export default {
 				}
 			],
 			placedStudents: [],
-			introModalOpen: false,
 			choiceModalOpen: true,
 			grid: [],
 			cardStyle: {
@@ -234,10 +199,6 @@ export default {
 			this.studentsToPlace.splice(currentIndex, 0, student)
 			this.grid[row][column].student = blankStudentObj
 		},
-		closeIntroModal() {
-			this.introModalOpen = false
-			this.choiceModalOpen = true
-		},
 		setChoice(choice) {
 			this.choice = choice
 			this.choiceModalOpen = false
@@ -285,7 +246,8 @@ export default {
 						progress: ['created class', 'rearranged seats'],
 						calculation: this.$store.state.preferences.calculation,
 						positiveBehaviors: this.$store.state.preferences.positiveBehaviors,
-						negativeBehaviors: this.$store.state.preferences.negativeBehaviors
+						negativeBehaviors: this.$store.state.preferences.negativeBehaviors,
+						behaviorToTally: this.$store.state.preferences.behaviorToTally
 					})
 				}
 
@@ -327,11 +289,6 @@ export default {
 				db.readSomething('students', {class: this.id})
 					.then(results => {
 						this.studentsToPlace = results
-
-						if (this.progress.indexOf('rearranged seats') === -1) {
-							this.introModalOpen = true
-							this.choiceModalOpen = false
-						}
 					})
 			})
 	}

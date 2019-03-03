@@ -275,6 +275,19 @@ export default {
                 scope.modalOpen = true
             }
 
+            // check to ensure behaviorToTally is set
+            if (!scope.$store.state.preferences.hasOwnProperty('behaviorToTally')) {
+                scope.$store.dispatch('setPreferences', {
+                    progress: scope.$store.state.preferences.progress,
+                    calculation: scope.$store.state.preferences.calculation,
+                    positiveBehaviors: scope.$store.state.preferences.positiveBehaviors,
+                    negativeBehaviors: scope.$store.state.preferences.negativeBehaviors,
+                    behaviorToTally: '(-) Absent'
+                })
+
+                scope.$store.dispatch('getPreferences')
+    		}
+
             // check for update
             let request = new XMLHttpRequest()
             let url = 'https://seatsmart-updater.now.sh/' + scope.version
