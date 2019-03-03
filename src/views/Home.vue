@@ -251,7 +251,9 @@ export default {
             })
         },
         search(term) {
-            this.$router.push(`/search/${term}`)
+            if (term !== '') {
+                this.$router.push(`/search/${term}`)
+            }
         },
         getUpdate() {
             shell.openExternal('https://seatsmart.now.sh/')
