@@ -393,8 +393,30 @@ export default {
 
 			let student = this.students[this.randomStudent]
 
-    		this.chosenSeat.row = student.seat.row
-    		this.chosenSeat.column = student.seat.column
+
+
+			if (this.inverted) {
+				let rows = []
+				let columns = []
+
+				for (let i=0; i<this.classInfo.rows; i++) {
+					rows.push(i + 1)
+				}
+
+				for (let i=0; i<this.classInfo.columns; i++) {
+					columns.push(i + 1)
+				}
+				rows.reverse()
+				columns.reverse()
+
+				this.chosenSeat = {row: rows.indexOf(student.seat.row) + 1, column: columns.indexOf(student.seat.column) + 1}
+				console.log(this.chosenSeat)
+			} else {
+				this.chosenSeat.row = student.seat.row
+				this.chosenSeat.column = student.seat.column
+			}
+
+
     		this.randomStudent++
     		if (this.randomStudent == this.students.length) {
     			this.randomStudent = 0
@@ -544,6 +566,7 @@ export default {
     	},
 		invertChart() {
 			this.inverted = !this.inverted
+			this.clearRandom()
 			if (this.cardType !== 'trends') {
 				if (this.inverted) {
 					this.cardType = 'simple'
