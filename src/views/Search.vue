@@ -45,7 +45,9 @@
       		</Modal>
     	</transition>
         <TouchBar :show="!noteModalOpen" :bar="[
-			{type: 'button', label: '🏠', method: routeHome}
+			{type: 'button', label: '🏠', method: routeHome},
+            {type: 'spacer', size: 'flexible'},
+            {type: 'button', label: '🎫', method: function() {toggleCardStyle()}},
 	    ]"/>
     </div>
 </template>
