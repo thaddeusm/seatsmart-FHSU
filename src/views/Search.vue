@@ -1,8 +1,11 @@
 <template>
     <div id="searchContainer">
-        <header>
+        <header id="searchHeader">
             <section id="backArea">
                 <button id="backButton" @click="$router.push('/')"><img src="@/assets/backarrowwhite.svg" alt="back arrow"> <img src="@/assets/home.svg" alt="home icon"></button>
+            </section>
+            <section id="toggleArea">
+                <button @click="toggleCardStyle"><img src="@/assets/changecard.svg" alt="card toggle icon"></button>
             </section>
             <section id="searchArea">
                 <SearchBox
@@ -17,7 +20,7 @@
                 <div class="name-card-wrapper" v-for="(student, subIndex) in classChart">
                     <NameCard
                         :key="`${student}${subIndex}`"
-                        type="simple"
+                        :type="cardStyle"
                         :studentID="student"
                         v-on:open-note-modal="openNoteModal"
                         class="name-card"
@@ -76,7 +79,8 @@ export default {
             newNoteStudent: '',
             loaded: false,
             placeholder: '',
-            noResults: false
+            noResults: false,
+            cardStyle: 'simple'
         }
     },
     computed: {
@@ -154,6 +158,13 @@ export default {
         },
         routeHome() {
             this.$router.push('/')
+        },
+        toggleCardStyle() {
+            if (this.cardStyle == 'simple') {
+                this.cardStyle = 'complex'
+            } else {
+                this.cardStyle = 'simple'
+            }
         }
     },
     mounted() {
@@ -164,6 +175,56 @@ export default {
 
 <style scoped>
 #searchContainer {
+    width: 100%;
+    height: 100%;
+}
+
+#searchHeader {
+    position: fixed;
+    top: 0;
+    height: 150px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 13px 1fr 30%;
+    grid-template-areas:
+        ". ."
+        "back search"
+        ". toggle";
+    align-items: center;
+    background: var(--black);
+}
+
+#backArea {
+    grid-area: back;
+    margin-left: 30px;
+}
+
+button > img {
+    vertical-align: middle;
+    margin: 0 5px;
+}
+
+#toggleArea {
+    grid-area: toggle;
+    text-align: right;
+    margin-right: 45px;
+    align-self: flex-start;
+}
+
+#searchArea {
+    grid-area: search;
+    text-align: right;
+    margin-right: 26px;
+}
+
+main {
+    color: var(--white);
+    text-align: center;
+    margin-top: 200px;
+}
+
+/* #searchContainer {
     background: var(--black);
     width: 100%;
     height: 100%;
@@ -199,18 +260,11 @@ header > section {
     margin-top: 20px;
 }
 
-button {
-    background: none;
-    outline: none;
-    border: none;
-    cursor: pointer;
-}
-
 main {
     color: var(--white);
     grid-area: main;
     text-align: center;
-}
+} */
 
 .result {
     margin-bottom: 10%;
@@ -231,10 +285,6 @@ main {
     display: inline-block;
 }
 
-#noResults {
-
-}
-
 #searchSplash {
     height: 200px;
     width: 200px;
@@ -243,6 +293,13 @@ main {
 
 #noResults > h2 {
     margin-bottom: 10px;
+}
+
+button {
+    background: none;
+    outline: none;
+    border: none;
+    cursor: pointer;
 }
 
 .fade-enter-active, .fade-leave-active {
