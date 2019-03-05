@@ -105,18 +105,18 @@
 					<div class="modal-body">
 						<div class="step">
 							<img src="@/assets/tiger.png" alt="FHSU tiger">
-							<h5>Teaching > Course Rosters on Tiger Central</h5>
-							<h5>1</h5>
+							<h4>Teaching > Course Rosters on Tiger Central</h4>
+							<h4>1</h4>
 						</div>
 						<div class="step">
 							<img src="@/assets/excel.svg" alt="Excel file icon">
-							<h5>Click on the Excel icon next to a course</h5>
-							<h5>2</h5>
+							<h4>Click on the Excel icon next to a course</h4>
+							<h4>2</h4>
 						</div>
 						<div class="step">
 							<img src="@/assets/import.svg" alt="import icon">
-							<h5>import or drag the Excel file into Seatsmart</h5>
-							<h5>3</h5>
+							<h4>import or drag the Excel file into Seatsmart</h4>
+							<h4>3</h4>
 						</div>
 					</div>
 					<div class="modal-footer">
@@ -874,7 +874,7 @@ progress-button:disabled {
 	border: none;
 	cursor: pointer;
 	vertical-align: text-top;
-	font-size: 16px;
+	font-size: 14px;
 }
 
 .modal-header {
@@ -895,7 +895,7 @@ progress-button:disabled {
 
 .step {
 	display: inline-block;
-	margin-top: 105px;
+	margin-top: 90px;
 	margin-left: 40px;
 	margin-right: 40px;
 	width: 215px;
@@ -906,7 +906,7 @@ progress-button:disabled {
 	vertical-align: middle;
 }
 
-.step > h5 {
+.step > h4 {
 	margin: 35px 0;
 }
 
