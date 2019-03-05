@@ -33,7 +33,7 @@
                 <h4>Be sure to search using students' "English" names.</h4>
             </div>
         </main>
-        <transition name="fade">
+        <!-- <transition name="fade"> -->
       		<Modal v-if="noteModalOpen" v-on:trigger-close="closeNoteModal" :dismissable="true" size="large">
         		<template slot="content">
           			<NoteForm
@@ -43,7 +43,7 @@
 					/>
         		</template>
       		</Modal>
-    	</transition>
+    	<!-- </transition> -->
         <TouchBar :show="!noteModalOpen" :bar="[
 			{type: 'button', label: '🏠', method: routeHome},
             {type: 'spacer', size: 'flexible'},
