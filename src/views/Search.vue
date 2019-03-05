@@ -187,6 +187,7 @@ export default {
     height: 150px;
     width: 100%;
     display: grid;
+    z-index: 10;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 13px 1fr 30%;
     grid-template-areas:
