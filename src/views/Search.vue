@@ -16,7 +16,7 @@
         </header>
         <main>
             <div class="result" v-for="(classChart, index) in results" v-if="classChart.length > 0">
-                <TitleBar v-if="classChart.length > 0" :classID="allClasses[index]" />
+                <TitleBar v-if="classChart.length > 0" :classID="allClasses[index]" :link="true" />
                 <div class="name-card-wrapper" v-for="(student, subIndex) in classChart">
                     <NameCard
                         :key="`${student}${subIndex}`"

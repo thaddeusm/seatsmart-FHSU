@@ -1,9 +1,10 @@
 <template>
 	<header id="titleBarContainer">
 		<div :class="[compact ? 'small-line' : 'line']"></div>
-		<h3 v-if="classID !== undefined">{{ returnedTitle }}</h3>
-		<h6 v-else-if="compact">{{ shortenedTitle }}</h6>
-		<h2 v-else-if="!compact">{{ shortenedTitle }}</h2>
+		<h3 v-if="classID !== undefined && !link">{{ returnedTitle }}</h3>
+		<h6 v-else-if="compact && !link">{{ shortenedTitle }}</h6>
+		<h2 v-else-if="!compact && !link">{{ shortenedTitle }}</h2>
+		<router-link v-else-if="link" :to="`/chart/${classID}`">{{ returnedTitle }}</router-link>
 		<button v-if="edit" @click="$emit('edit-info')"><img src="@/assets/edit.svg" alt="edit icon"></button>
 		<div :class="[compact ? 'small-line' : 'line']"></div>
 	</header>
@@ -14,7 +15,7 @@ import db from '@/db'
 
 export default {
 	name: 'TitleBar',
-	props: ['title', 'compact', 'classID', 'edit'],
+	props: ['title', 'compact', 'classID', 'edit', 'link'],
 	computed: {
 		returnedTitle() {
 			return this.$store.state.allClasses[this.classID]
@@ -46,6 +47,13 @@ h2 {
 
 h4 {
 	color: var(--white);
+}
+
+a {
+	color: var(--white);
+	font-size: 26px;
+	text-decoration: none;
+	font-weight: 500;
 }
 
 button {
