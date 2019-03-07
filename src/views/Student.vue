@@ -6,7 +6,7 @@
                 <img src="@/assets/tiger.png" id="tigerLogo" alt="FHSU tiger logo">
                 <h5>{{ student.tigerID }}</h5>
             </div>
-            <TitleBar v-if="loaded" :title="classInfo.name" :compact="true" />
+            <TitleBar v-if="loaded" :classID="classInfo._id" :compact="true" :link="true" />
             <SeatingDiagram :compact="true" :inverted="true" :rows="classInfo.rows" :columns="classInfo.columns" :selected="`${this.student.seat.row},${this.student.seat.column}`" />
             <div v-if="student.highlight && student.highlight !== ''" id="highlightArea">
                 <h6>highlight:</h6>

@@ -4,7 +4,8 @@
 		<h3 v-if="classID !== undefined && !link">{{ returnedTitle }}</h3>
 		<h6 v-else-if="compact && !link">{{ shortenedTitle }}</h6>
 		<h2 v-else-if="!compact && !link">{{ shortenedTitle }}</h2>
-		<router-link v-else-if="link" :to="`/chart/${classID}`">{{ returnedTitle }}</router-link>
+		<router-link v-else-if="link && !compact" class="large-link" :to="`/chart/${classID}`">{{ returnedTitle }}</router-link>
+		<router-link v-else-if="link && compact" class="small-link" :to="`/chart/${classID}`">{{ returnedTitle }}</router-link>
 		<button v-if="edit" @click="$emit('edit-info')"><img src="@/assets/edit.svg" alt="edit icon"></button>
 		<div :class="[compact ? 'small-line' : 'line']"></div>
 	</header>
@@ -51,9 +52,17 @@ h4 {
 
 a {
 	color: var(--white);
-	font-size: 26px;
 	text-decoration: none;
+}
+
+.large-link {
 	font-weight: 500;
+	font-size: 26px;
+}
+
+.small-link {
+	font-weight: 400;
+	font-size: 14px;
 }
 
 button {
