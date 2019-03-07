@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<input v-model="term" :placeholder="placeholder" type="text" @keyup.enter="$emit('start-search', term.toLowerCase())">
+		<input ref="input" v-model="term" :placeholder="placeholder" type="text" @keyup.enter="$emit('start-search', term.toLowerCase())">
 		<button @click="$emit('start-search', term.toLowerCase())"><img src="@/assets/search.svg" alt="search icon"></button>
 	</div>
 </template>
@@ -13,6 +13,9 @@ export default {
 		return {
 			term: ''
 		}
+	},
+	mounted() {
+		this.$refs.input.focus()
 	}
 }
 </script>
