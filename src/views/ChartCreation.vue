@@ -459,7 +459,7 @@ export default {
 		viewSavedChart() {
 			// filter empty form groups
 			let studentsToSave = this.classStudents.filter((student) => {
-				return student.firstName !== null && student.lastName !== null && student.tigerID !== null
+				return student.firstName !== null && student.lastName !== null
 			})
 
 			// ensure there are enough seats for listed students
@@ -492,7 +492,8 @@ export default {
 							progress: ['created class'],
 							calculation: this.$store.state.preferences.calculation,
 							positiveBehaviors: this.$store.state.preferences.positiveBehaviors,
-							negativeBehaviors: this.$store.state.preferences.negativeBehaviors
+							negativeBehaviors: this.$store.state.preferences.negativeBehaviors,
+							behaviorToTally: this.$store.state.preferences.behaviorToTally
 						})
 					}
 
