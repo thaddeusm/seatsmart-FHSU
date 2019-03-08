@@ -25,8 +25,7 @@
 					<p>
 						Each student's name card can tally and display one behavior on the upper left corner.
 						This allows you to track student progress in an area you consider vital to your course.
-						By default, Seatsmart absences.  You can choose an alternative
-						behavior to tally and display below:
+						By default, Seatsmart displays absences.  You can choose an alternative behavior below:
 					</p>
 					<section class="select-wrapper-large">
 						<v-select v-model="behaviorToTally" :options="allBehaviors"></v-select>
