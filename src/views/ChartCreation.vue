@@ -40,12 +40,14 @@
 					<div class="input-wrapper">
 						<div class="label-row">
 							<h5 class="select-label">Semester</h5>
-							<h5 class="select-label">Year</h5>
 						</div>
 						<div class="select-wrapper">
 							<v-select v-model="classChart.semester" :options="[
 							'Fall', 'Spring', 'Summer'
 							]"></v-select>
+						</div>
+						<div class="label-row">
+							<h5 class="select-label">Year</h5>
 						</div>
 						<div class="select-wrapper">
 							<v-select v-model="classChart.year" :options="years"></v-select>
@@ -62,7 +64,7 @@
 					<h3 v-if="mode === 'new'">Import or Create Class Roster</h3>
 					<h3 v-else>Edit Class Roster</h3>
 					<div class="input-area">
-						<drop class="drop-area" @drop="handleDrop" v-if="mode === 'new' && !importSuccess">
+						<drop :class="[over ? 'drop-bold-outline' : 'drop-light-outline', 'drop-area']" @drop="handleDrop" @dragover="over = true" @dragleave="over = false" v-if="mode === 'new' && !importSuccess">
 							<button class="drop-area-button" @click="handleOpen">import roster</button>
 							<span>or drag and drop here</span>
 						</drop>
@@ -182,6 +184,7 @@ export default {
 			alertMessage: '',
 			modalOpen: false,
 			alertModalOpen: false,
+			over: false,
 			progress: 1,
 			steps: 3,
 			years: [],
@@ -403,10 +406,12 @@ export default {
 			} else {
 				this.alertMessage = ''
 				this.importSuccess = true
+				this.over = false
 			}
 		},
 		resetImport() {
 			this.importSuccess = false
+			this.over = false
 			this.classStudents = [{
 				firstName: null,
 				lastName: null,
@@ -777,15 +782,10 @@ progress-button:disabled {
 .select-wrapper {
 	background: var(--white);
 	border-radius: 4px;
-	margin: 10px 0 10px 0;
-	width: 160px;
+	margin: 0 0 20px 0;
 	color: var(--black);
 	font-family: "ArchivoNarrow";
-	display: inline-block;
-}
-
-.select-wrapper:nth-child(3) {
-	margin-left: 7px;
+	display: block;
 }
 
 .select-label {
@@ -793,12 +793,9 @@ progress-button:disabled {
 	margin: 0;
 }
 
-.select-label:nth-child(2) {
-	margin-left: 90px;
-}
-
 .label-row {
-	padding-left: 5px;
+	padding-bottom: 5px;
+	padding-left: 2px;
 }
 
 .label-row > span {
@@ -850,7 +847,14 @@ progress-button:disabled {
 	margin: 10px 0 20px 0;
 	background: var(--gray);
 	border-radius: 10px;
+}
+
+.drop-light-outline {
 	border: 2px dashed var(--black);
+}
+
+.drop-bold-outline {
+	border: 2px solid var(--white);
 }
 
 .drop-area-button {

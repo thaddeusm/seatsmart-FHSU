@@ -7,6 +7,7 @@
 			<ul id="navigationList">
 				<li class="active" ref="help"><button class="button-link" @click="changeContent('help')">Help</button></li>
 				<li class="inactive" ref="behaviors"><button class="button-link" @click="changeContent('behaviors')">Behaviors</button></li>
+				<li class="inactive" ref="tally"><button class="button-link" @click="changeContent('tally')">Tally</button></li>
 				<li class="inactive" ref="calculation"><button class="button-link" @click="changeContent('calculation')">Calculation</button></li>
 				<li class="inactive" ref="about"><button class="button-link" @click="changeContent('about')">About</button></li>
 			</ul>
@@ -20,18 +21,6 @@
 			</section>
 			<section v-if="content == 'behaviors'">
 				<h1>Behaviors</h1>
-				<div id="tallyChoiceArea">
-					<h3>Tally</h3>
-					<p>
-						Each student's name card can tally and display one behavior on the upper left corner.
-						This allows you to track student progress in an area you consider vital to your course.
-						By default, Seatsmart displays absences.  You can choose an alternative behavior below:
-					</p>
-					<section class="select-wrapper-large">
-						<v-select v-model="behaviorToTally" :options="allBehaviors"></v-select>
-					</section>
-				</div>
-				<h3>Add Your Own</h3>
 				<p>
 					What does participation mean to you?  Add positive and negative behaviors
 					you would like to track with Seatsmart below.  Set different weights
@@ -135,6 +124,19 @@
 					assumes that a student is participating well if no notes are recorded pertaining to
 					them in a given week.
 				</p>
+			</section>
+			<section v-if="content == 'tally'">
+				<h1>Tally</h1>
+				<div id="tallyChoiceArea">
+					<p>
+						Each student's name card can tally and display one behavior on the upper left corner.
+						This allows you to track student progress in an area you consider vital to your course.
+						By default, Seatsmart displays absences.  You can choose an alternative behavior below:
+					</p>
+					<section class="select-wrapper-large">
+						<v-select v-model="behaviorToTally" :options="allBehaviors"></v-select>
+					</section>
+				</div>
 			</section>
 			<section v-if="content == 'about'">
 				<h1>About</h1>
@@ -249,7 +251,7 @@ export default {
 		changeContent(area) {
 			this.content = area
 
-			let areas = ['help', 'behaviors', 'calculation', 'about']
+			let areas = ['help', 'behaviors', 'calculation', 'about', 'tally']
 
 			areas.forEach((a) => {
 				if (a !== area) {
@@ -406,7 +408,7 @@ img {
 
 li {
 	padding: 5px 22px;
-	margin: 40px 0;
+	margin: 25px 0;
 }
 
 ul {
