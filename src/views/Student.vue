@@ -80,11 +80,11 @@
             </Modal>
         </transition>
         <TouchBar :show="!modalOpen && !alertModalOpen" :bar="[
-            {type: 'button', label: 'Back', method: function() {$router.push(`/chart/${classInfo._id}`)}},
+            {type: 'button', label: 'Back', method: function() {routeBack()}},
             {type: 'spacer', size: 'flexible'},
 			{type: 'button', label: 'Toggle Trends', method: function() {toggleTrendScope()}},
             {type: 'spacer', size: 'flexible'},
-			{type: 'button', label: '➕', method: function() {modalOpen = true}}
+			{type: 'button', label: '📝', method: function() {modalOpen = true}}
 	    ]"/>
     </div>
 </template>
