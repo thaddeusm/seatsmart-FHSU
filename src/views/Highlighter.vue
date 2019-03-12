@@ -31,6 +31,9 @@
                             :style="{background: color}">
 						</drag>
 					</div>
+					<button id="clearHighlightsButton" @click="clearAllHighlights">
+						<span class="tooltip">clear all</span>
+					</button>
 				</template>
 				<template slot="right">
 					<button class="action-button" @click="$router.push(`/chart/${id}`)">
@@ -208,6 +211,17 @@ export default {
 			}
 
 		},
+		clearAllHighlights() {
+			for (let i=0; i<this.grid.length; i++) {
+				for (let j=0; j<this.grid[i].length; j++) {
+					if (this.grid[i][j].student.firstName !== '') {
+		                this.$refs[`${i}And${j}`][0].$el.style.background = '#E5E5E5'
+		                this.$set(this.grid[i][j].student, 'highlight', '#E5E5E5')
+		            }
+				}
+			}
+
+		},
 		saveChanges() {
 			if (this.studentsToHighlight.length == 0) {
 				for (let i=0; i<this.grid.length; i++) {
@@ -315,6 +329,8 @@ button {
 
 .drag-area {
 	width: auto;
+	display: inline-block;
+	vertical-align: middle;
 }
 
 .drag {
@@ -323,6 +339,47 @@ button {
 	margin: 0 12px;
     cursor: move;
 }
+
+#clearHighlightsButton {
+	display: inline-block;
+	margin: 0 12px;
+	cursor: pointer;
+	vertical-align: middle;
+	height: 45px;
+	width: 40px;
+	border: 2px dotted var(--yellow);
+}
+
+#clearHighlightsButton:hover .tooltip {
+	visibility: visible;
+}
+
+.tooltip {
+	visibility: hidden;
+	position: absolute;
+	background: var(--yellow);
+	padding: 5px;
+	text-align: center;
+	width: 50px;
+	z-index: 100;
+	border-radius: 5px;
+	font-family: "ArchivoNarrow";
+	font-size: 14px;
+	bottom: 100%;
+	margin-left: -30px;
+}
+
+.tooltip::after {
+	content: " ";
+	position: absolute;
+	top: 100%; /* At the bottom of the tooltip */
+	left: 50%;
+	margin-left: -5px;
+	border-width: 5px;
+	border-style: solid;
+	border-color: var(--yellow) transparent transparent transparent;
+}
+
 
 .row {
 	text-align: center;
