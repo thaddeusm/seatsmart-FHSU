@@ -7,6 +7,10 @@
             <section id="formArea">
                 <NoteForm :students="studentIDs" type="multiple" :to="`/chart/${id}`" />
             </section>
+            <section id="quickSelectButtons">
+                <button v-if="allSelected" @click="toggleSelectAll">Deselect All</button>
+                <button v-else @click="toggleSelectAll">Select All</button>
+            </section>
             <section id="buttonCardArea" v-if="loaded">
                 <div class="row" v-for="(row, index) in grid" :key="`row${index}`">
                     <div v-for="(student, subIndex) in row" class="card-wrapper">
@@ -25,9 +29,9 @@
             </section>
         </main>
         <TouchBar :show="true" :bar="[
-			{type: 'spacer', size: 'flexible'},
 			{type: 'button', label: 'Cancel', method: function() {$router.push(`/chart/${id}`)}},
 			{type: 'spacer', size: 'flexible'},
+            {type: 'button', label: 'Select / Deselect All', method: function() {toggleSelectAll()}},
 	    ]"/>
     </div>
 </template>
@@ -71,7 +75,19 @@ export default {
                     column: 0
                 }
             }]],
-            loaded: false
+            classStudents: [{
+                _id: 'blank',
+                firstName: '',
+                lastName: '',
+                class: '',
+                selected: '',
+                seat: {
+                    row: 0,
+                    column: 0
+                }
+            }],
+            loaded: false,
+            allSelected: false
         }
 	},
 	methods: {
@@ -84,6 +100,17 @@ export default {
             } else {
                 this.studentIDs.splice(idIndexCheck, 1)
             }
+        },
+        toggleSelectAll() {
+            if (this.allSelected) {
+                this.studentIDs = []
+            } else {
+                for (var i=0; i<this.classStudents.length; i++) {
+                    this.addStudent(this.classStudents[i]._id)
+                }
+            }
+
+            this.allSelected = !this.allSelected
         }
 	},
     created() {
@@ -111,7 +138,7 @@ export default {
 
                 db.readSomething('students', {class: this.id})
                     .then((results) => {
-
+                        this.classStudents = results
                         for (let i=0; i<results.length; i++) {
                             let thisStudent = results[i]
                             let thisRow = thisStudent.seat.row
@@ -140,8 +167,26 @@ export default {
     margin: 0 auto;
 }
 
+#quickSelectButtons {
+    margin: 100px auto 25px auto;
+    text-align: center;
+}
+
+#quickSelectButtons > button {
+    padding: 5px 10px;
+	font-size: 14px;
+	border-radius: 5px;
+	cursor: pointer;
+    background: var(--yellow);
+	border: 1px solid var(--gray);
+	margin-top: 20px;
+  	margin-left: 10px;
+  	margin-right: 10px;
+  	outline: none;
+}
+
 #buttonCardArea {
-    margin: 8% auto 3% auto;
+    margin: 0 auto 50px auto;
     text-align: center;
 }
 
