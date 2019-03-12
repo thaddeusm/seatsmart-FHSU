@@ -306,7 +306,7 @@ export default {
             return start + adjustment
         },
         toggleTrendScope() {
-            if (this.trendScope === 'all') {
+            if (this.trendScope === 'all' && this.monthTrend.length > 1) {
                 this.trendScope = 'month'
             } else {
                 this.trendScope = 'all'
