@@ -336,13 +336,13 @@ button {
 .drag {
 	display: inline-block;
 	padding: 22.5px 20px;
-	margin: 0 12px;
+	margin: 0 8px;
     cursor: move;
 }
 
 #clearHighlightsButton {
 	display: inline-block;
-	margin: 0 12px;
+	margin: 0 8px;
 	cursor: pointer;
 	vertical-align: middle;
 	height: 45px;
