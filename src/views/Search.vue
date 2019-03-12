@@ -95,7 +95,7 @@ export default {
     },
     methods: {
         search(term) {
-            console.log(term)
+            document.body.scrollTop = document.documentElement.scrollTop = 0;
             this.placeholder = term
             this.results = []
             this.allClasses.forEach(id => {
