@@ -583,6 +583,7 @@ main {
     float: left;
     margin-left: 10px;
     margin-top: 2px;
+    filter: drop-shadow(1px 1px 0px var(--gray));
 }
 
 .edit-button > img {
