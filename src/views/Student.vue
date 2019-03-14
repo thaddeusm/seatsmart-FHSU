@@ -49,6 +49,7 @@
                         <span class="date-text">on {{ note.dateNoted.formatted }}</span>
                         <p v-if="note.comment == '' || note.comment == null" class="center">- no comment -</p>
                         <p v-else>{{ note.comment }}</p>
+                        <button @click="startEdit(note)" class="edit-button"><img src="@/assets/edit.svg" alt="edit icon"></button>
                         <button @click="promptDelete(note._id)" class="delete-button"><img src="@/assets/delete.svg" alt="delete icon"></button>
                     </section>
                 </div>
@@ -60,6 +61,8 @@
           			<NoteForm
 						type="single"
 						:student="student"
+                        :noteToEdit="noteToEdit"
+                        v-on:cancel-edit="closeModal('note')"
 						v-on:trigger-modal-close="closeModal('note')"
 					/>
         		</template>
@@ -151,7 +154,8 @@ export default {
             loaded: false,
             modalOpen: false,
             alertModalOpen: false,
-            noteToDelete: null
+            noteToDelete: null,
+            noteToEdit: null
         }
     },
     computed: {
@@ -266,6 +270,7 @@ export default {
         closeModal(type) {
             if (type == 'note') {
                 this.modalOpen = false
+                this.noteToEdit = null
             } else {
                 this.alertModalOpen = false
             }
@@ -333,6 +338,11 @@ export default {
 
                     this.loaded = true
                 })
+        },
+        startEdit(note) {
+            this.noteToEdit = note
+
+            this.openModal('note')
         },
         promptDelete(noteID) {
             this.openModal('alert')
@@ -565,6 +575,17 @@ main {
 }
 
 .delete-button > img {
+    height: 19px;
+    vertical-align: middle;
+}
+
+.edit-button {
+    float: left;
+    margin-left: 10px;
+    margin-top: 2px;
+}
+
+.edit-button > img {
     height: 19px;
     vertical-align: middle;
 }

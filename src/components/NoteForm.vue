@@ -1,16 +1,17 @@
 <template>
 	<div id="noteFormContainer" :class="[type !== 'single' ? 'contain-self' : '']">
 		<section id="noteFormHeader">
-			<h1 v-if="type === 'single'">New Note about {{student.firstName}}</h1>
-			<h1 v-else>New Bulk Note</h1>
+			<h1 v-if="type === 'single' && noteToEdit == undefined">New Note about {{student.firstName}}</h1>
+			<h1 v-if="type === 'single' && noteToEdit !== undefined">Edit Note about {{student.firstName}}</h1>
+			<h1 v-if="type !== 'single'">New Bulk Note</h1>
 		</section>
 		<section id="noteFormBody">
 			<section id="noteStepOne" v-if="step == 1">
 				<div class="behaviors">
-					<button class="positive" v-for="(behavior, index) in positiveBehaviors" :key="index" @click="setBehavior('positive', index)" :class="[note.behavior.Description === behavior.Description ? 'selected' : '']">{{ behavior.Description }}</button>
+					<button class="positive" v-for="(behavior, index) in positiveBehaviors" :key="index" :ref="`positive,${index}`" @click="setBehavior('positive', index)" :class="[note.behavior.Description === behavior.Description ? 'selected' : '']">{{ behavior.Description }}</button>
 				</div>
 				<div class="behaviors">
-					<button class="negative" v-for="(behavior, index) in negativeBehaviors" :key="index" @click="setBehavior('negative', index)" :class="[note.behavior.Description === behavior.Description ? 'selected' : '']">{{ behavior.Description }}</button>
+					<button class="negative" v-for="(behavior, index) in negativeBehaviors" :key="index" :ref="`negative,${index}`" @click="setBehavior('negative', index)" :class="[note.behavior.Description === behavior.Description ? 'selected' : '']">{{ behavior.Description }}</button>
 				</div>
 			</section>
 			<section id="noteStepTwo" v-if="step == 2">
@@ -19,7 +20,7 @@
 			</section>
 		</section>
 		<section id="noteFormFooter">
-			<button class="footer-button white" v-if="type == 'single'" @click="$emit('trigger-modal-close')">Cancel</button>
+			<button class="footer-button white" v-if="type == 'single'" @click="closeModal">Cancel</button>
 			<router-link class="footer-button white" v-else :to="to">Cancel</router-link>
 			<button v-if="step == 1" @click="step = 2" class="footer-button positive" ref="nextButton" :disabled="note.behavior.Abbreviation == null">Next</button>
 			<button v-else-if="step == 2 && type !== 'single'" @click="saveNote" class="footer-button positive" :disabled="type !== 'single' && students.length == 0">Save</button>
@@ -36,7 +37,7 @@ import AbbreviationCircle from '@/components/AbbreviationCircle.vue'
 
 export default {
 	name: 'NoteForm',
-	props: ['type', 'student', 'students', 'to'],
+	props: ['type', 'student', 'students', 'to', 'noteToEdit'],
 	components: {
 		AbbreviationCircle
 	},
@@ -74,24 +75,53 @@ export default {
 	},
 	methods: {
 		setBehavior(type, index) {
+			for (let i=0; i<this.positiveBehaviors.length; i++) {
+				if (this.$refs[`positive,${i}`][0].classList.contains('selected')) {
+					this.$refs[`positive,${i}`][0].classList.remove('selected')
+				}
+			}
+
+			for (let i=0; i<this.negativeBehaviors.length; i++) {
+				if (this.$refs[`negative,${i}`][0].classList.contains('selected')) {
+					this.$refs[`negative,${i}`][0].classList.remove('selected')
+				}
+			}
+
 			this.note.behavior = this[`${type}Behaviors`][index]
+			this.$refs[`${type},${index}`][0].classList.add('selected')
 			this.note.type = type
 		},
 		saveNote() {
 			this.note.dateNoted = moment()
 
 			if (this.type == 'single') {
-				if (this.note.type === 'negative' && this.note.behavior.Abbreviation === 'A') {
-					if (moment(this.note.dateNoted._d).dayOfYear() === moment().dayOfYear()) {
-						this.$emit('absence', this.note.student)
+				if (this.noteToEdit == undefined) {
+					if (this.note.type === 'negative' && this.note.behavior.Abbreviation === 'A') {
+						if (moment(this.note.dateNoted._d).dayOfYear() === moment().dayOfYear()) {
+							this.$emit('absence', this.note.student)
+						}
 					}
-				}
 
-				db.createSomething('notes', this.note)
-					.then(() => {
-						this.$store.dispatch('setLastUpdatedStudent', this.student._id)
-						this.$emit('trigger-modal-close')
+					db.createSomething('notes', this.note)
+						.then(() => {
+							this.$store.dispatch('setLastUpdatedStudent', this.student._id)
+							this.$emit('trigger-modal-close')
+						})
+				} else {
+					console.log(this.note)
+					db.updateSomething('notes', {_id: this.note._id}, {
+						$set: {
+							behavior: this.note.behavior,
+							comment: this.note.comment,
+							type: this.note.type
+						}
 					})
+						.then((numUpdated) => {
+							this.clearNote()
+							this.$store.dispatch('setLastUpdatedStudent', this.student._id)
+							this.$emit('trigger-modal-close')
+						})
+				}
 			} else {
 				let studentIndex = 0
 
@@ -113,11 +143,38 @@ export default {
 
 				this.$router.push(this.to)
 			}
+		},
+		closeModal() {
+			this.$emit('trigger-modal-close')
+
+			if (this.noteToEdit !== undefined) {
+				this.$emit('cancel-edit')
+				this.clearNote()
+			}
+		},
+		clearNote() {
+			this.note = {
+				behavior: {
+					Abbreviation: null,
+					Description: null,
+					Weight: null
+				},
+				student: null,
+				dateNoted: {},
+				comment: null,
+				type: null,
+				comment: null
+			}
 		}
 	},
 	mounted() {
 		if (this.type == 'single') {
-			this.note.student = this.student._id
+			if (this.noteToEdit !== undefined) {
+				this.note = this.noteToEdit
+			} else {
+				this.note.student = this.student._id
+			}
+
 		}
 	}
 }

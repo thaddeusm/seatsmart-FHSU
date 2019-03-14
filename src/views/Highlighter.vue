@@ -347,6 +347,7 @@ button {
 	vertical-align: middle;
 	height: 45px;
 	width: 40px;
+	margin-bottom: 2px;
 	border: 2px dotted var(--yellow);
 }
 
