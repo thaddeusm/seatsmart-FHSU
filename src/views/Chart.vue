@@ -480,7 +480,6 @@ export default {
 			}
 		},
 		deleteStudent() {
-			// this.newStudent.firstName = this.studentToEdit.firstName
 			db.deleteSomething('students', {_id: this.studentToEdit._id})
 				.then(() => {
 					db.deleteSomething('notes', {student: this.studentToEdit._id})
@@ -490,6 +489,7 @@ export default {
 
 					this.shuffle(this.students)
 					this.resetStudentToEdit()
+					this.resetNewStudent()
 				})
 		},
 		resetNewStudent() {
