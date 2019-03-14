@@ -456,16 +456,7 @@ export default {
 				}).then((savedStudent) => {
 					this.students.push(savedStudent)
 					this.shuffle(this.students)
-					this.newStudentModalOpen = false
-					this.newStudent = {
-						firstName: '',
-						lastName: '',
-						tigerID: '',
-						seat: {
-							row: null,
-							column: null
-						}
-					}
+					this.resetNewStudent()
 				})
 			} else {
 				this.studentFormAlertMessage = 'Please enter at least a first and last name.'
@@ -481,48 +472,24 @@ export default {
 						tigerID: this.studentToEdit.tigerID,
 					}
 				}).then(() => {
-					this.editStudentModalOpen = false
 					this.shuffle(this.students)
-					this.studentToEdit = {
-						_id: null,
-						seat: {
-							row: null,
-							column: null
-						},
-						class: null,
-						selected: null,
-						tigerID: null,
-						firstName: null,
-						lastName: null
-					}
+					this.resetStudentToEdit()
 				})
 			} else {
 				this.studentFormAlertMessage = 'Please enter at least a first and last name.'
 			}
 		},
 		deleteStudent() {
-			this.newStudent.firstName = this.studentToEdit.firstName
+			// this.newStudent.firstName = this.studentToEdit.firstName
 			db.deleteSomething('students', {_id: this.studentToEdit._id})
 				.then(() => {
 					db.deleteSomething('notes', {student: this.studentToEdit._id})
 						.then((numNotesDeleted) => {
 							console.log(`${numNotesDeleted} notes were deleted`)
 						})
-					this.editStudentModalOpen = false
+
 					this.shuffle(this.students)
-					this.promptStudentDelete = false
-					this.studentToEdit = {
-						_id: null,
-						seat: {
-							row: null,
-							column: null
-						},
-						class: null,
-						selected: null,
-						tigerID: null,
-						firstName: null,
-						lastName: null
-					}
+					this.resetStudentToEdit()
 				})
 		},
 		resetNewStudent() {
