@@ -8,7 +8,7 @@
 			/>
 		</header>
 		<main id="chartMain" ref="chartMain">
-			<section v-if="!inverted" class="row" v-for="(row, index) in classInfo.rows" :style="rowMargins" :key="`row${index}`">
+			<section v-if="!inverted" class="row" v-for="(row, index) in classInfo.rows" :style="rowMargins" :key="`row${index},${students.length}`">
 				<div v-for="(column, subIndex) in classInfo.columns" class="column" :style="cardStyle">
 					<NameCard
 						:type="cardType"
@@ -25,7 +25,7 @@
 					/>
 				</div>
 			</section>
-			<section v-if="inverted" class="row" v-for="(row, index) in classInfo.rows" :style="rowMargins" :key="`invertedRow${index}`">
+			<section v-if="inverted" class="row" v-for="(row, index) in classInfo.rows" :style="rowMargins" :key="`invertedRow${index},${students.length}`">
 				<div v-for="(column, subIndex) in classInfo.columns" class="column" :style="cardStyle">
 					<NameCard
 						:type="cardType"
