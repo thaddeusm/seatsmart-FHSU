@@ -155,7 +155,7 @@ export default {
             modalOpen: false,
             alertModalOpen: false,
             noteToDelete: null,
-            noteToEdit: null
+            noteToEdit: undefined
         }
     },
     computed: {
@@ -270,7 +270,7 @@ export default {
         closeModal(type) {
             if (type == 'note') {
                 this.modalOpen = false
-                this.noteToEdit = null
+                this.noteToEdit = undefined
             } else {
                 this.alertModalOpen = false
             }
