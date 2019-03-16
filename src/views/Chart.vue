@@ -487,6 +487,13 @@ export default {
 							console.log(`${numNotesDeleted} notes were deleted`)
 						})
 
+					for (let i=0; i<this.students.length; i++) {
+						if (this.students[i]._id == this.studentToEdit._id) {
+							this.students.splice(i, 1)
+							break;
+						}
+					}
+
 					this.shuffle(this.students)
 					this.resetStudentToEdit()
 					this.resetNewStudent()
