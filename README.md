@@ -54,9 +54,7 @@ this could be refactored in forked projects for other institutional settings.
 Seatsmart is currently in beta, being used by faculty members across several departments.  
 Features are being added in consultation with these early users in hopes of providing 
 a fully functional application to faculty at large at the beginning of the 2019-2020 
-academic year.
-
-At that point, the project may be forked to provide a version of Seatsmart without FHSU 
+academic year.  At that point, the project may be forked to provide a version of Seatsmart without FHSU 
 branding elements and/or with documentation for easier use in other contexts.
 
 ## Design Concepts and Inspiration
