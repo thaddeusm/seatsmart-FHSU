@@ -76,7 +76,7 @@ of red as a standard alert indicator.
 ```
 $ npm electron:serve
 ```
-- or -
+or
 ```
 $ yarn electron:serve
 ```
@@ -85,7 +85,7 @@ $ yarn electron:serve
 ```
 $ npm electron:build
 ```
-- or -
+or
 ```
 $ yarn electron:build
 ```
