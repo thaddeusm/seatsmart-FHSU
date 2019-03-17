@@ -33,17 +33,15 @@
                 <h4>Be sure to search using students' "English" names.</h4>
             </div>
         </main>
-        <!-- <transition name="fade"> -->
-      		<Modal v-if="noteModalOpen" v-on:trigger-close="closeNoteModal" :dismissable="true" size="large">
-        		<template slot="content">
-          			<NoteForm
-						type="single"
-						:student="newNoteStudent"
-						v-on:trigger-modal-close="closeNoteModal"
-					/>
-        		</template>
-      		</Modal>
-    	<!-- </transition> -->
+  		<Modal v-if="noteModalOpen" v-on:trigger-close="closeNoteModal" :dismissable="true" size="large">
+    		<template slot="content">
+      			<NoteForm
+					type="single"
+					:student="newNoteStudent"
+					v-on:trigger-modal-close="closeNoteModal"
+				/>
+    		</template>
+  		</Modal>
         <TouchBar :show="!noteModalOpen" :bar="[
 			{type: 'button', label: '🏠', method: routeHome},
             {type: 'spacer', size: 'flexible'},
@@ -119,7 +117,6 @@ export default {
                                 this.results[j].push(this.allStudents[i]._id)
                             }
                         }
-                        // this.results.push({student: this.allStudents[i]._id, class: this.allStudents[i].class})
                     }
                 }
             }
@@ -170,6 +167,7 @@ export default {
         }
     },
     mounted() {
+        // start search on load for smooth transtiion from home view
         this.search(this.term)
     }
 }
@@ -226,48 +224,6 @@ main {
     text-align: center;
     margin-top: 200px;
 }
-
-/* #searchContainer {
-    background: var(--black);
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    display: grid;
-    grid-template-rows: 15vh 1fr;
-    grid-template-areas:
-        "header"
-        "main";
-}
-
-header {
-    grid-area: header;
-}
-
-header > section {
-    display: inline-block;
-}
-
-#backArea {
-    float: left;
-    margin-top: 55px;
-    margin-left: 35px;
-}
-
-#backArea > button > img {
-    vertical-align: middle;
-    margin: 0 5px;
-}
-
-#searchArea {
-    float: right;
-    margin-top: 20px;
-}
-
-main {
-    color: var(--white);
-    grid-area: main;
-    text-align: center;
-} */
 
 .result {
     margin-bottom: 10%;

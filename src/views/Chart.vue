@@ -394,7 +394,7 @@ export default {
 			let student = this.students[this.randomStudent]
 
 
-
+			// ensure that random selections are also inverted
 			if (this.inverted) {
 				let rows = []
 				let columns = []
@@ -416,7 +416,7 @@ export default {
 				this.chosenSeat.column = student.seat.column
 			}
 
-
+			// increment or reset
     		this.randomStudent++
     		if (this.randomStudent == this.students.length) {
     			this.randomStudent = 0
@@ -590,7 +590,7 @@ export default {
 	mounted() {
 		let scope = this
 		if (this.$store.state.preferences.progress.indexOf('rearranged seats') === -1) {
-
+			// display tutorial info
 			setTimeout(function() {
 				scope.alert.isAlert = true
 				scope.alert.alertMessage = 'Students have been sorted into random seats.<br><br>Try editing seat assignments now.'
@@ -618,11 +618,11 @@ export default {
 
 						for (let i=0; i<this.students.length; i++) {
 							if (this.students[i].seat.row == null) {
-								console.log('found')
 								this.unplacedStudents.push(this.students[i])
 							}
 						}
 
+						// check if students have been added to the roster (and not yet seated)
 						if (this.unplacedStudents.length === 1) {
 							this.alert.isAlert = true
 							this.alert.alertMessage = "A student you have added does not have a seat.<br><br>Let's assign them one now."
@@ -648,25 +648,17 @@ body {
 	background: var(--black);
 	width: 100%;
 	height: 100%;
-	/* display: grid;
-	grid-template-rows: auto 1fr auto;
-	grid-template-areas:
-		"header"
-		"main"
-		"footer"; */
 }
 
 #chartHeader {
-	/* grid-area: header; */
+	
 }
 
 #chartMain {
-	/* grid-area: main;
-	overflow: auto; */
+	
 }
 
 #chartFooter {
-	/* grid-area: footer; */
 	position: fixed;
 	bottom: 0;
 }
@@ -682,10 +674,10 @@ body {
 }
 
 button {
-  background: none;
-  outline: none;
-  border: none;
-  cursor: pointer;
+	background: none;
+	outline: none;
+	border: none;
+	cursor: pointer;
 }
 
 .action-button {
@@ -735,15 +727,15 @@ button {
 }
 
 .alert-modal-body {
-  height: 180px;
-  padding-top: 120px;
-  text-align: center;
+	height: 180px;
+	padding-top: 120px;
+	text-align: center;
 }
 
 .alert-modal-footer {
-  background: var(--gray);
-  text-align: center;
-  height: 75px;
+	background: var(--gray);
+	text-align: center;
+	height: 75px;
 }
 
 .modal-footer {

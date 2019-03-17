@@ -299,35 +299,27 @@ export default {
 #container {
 	background: var(--black);
 	width: 100%;
-	height: 100%;
-	/* display: grid;
-	grid-template-rows: auto 1fr auto;
-	grid-template-areas:
-		"header"
-		"main"
-		"footer"; */
+	height: 100%;	
 }
 
 header {
-	/* grid-area: header; */
+	
 }
 
 main {
-	/* grid-area: main;
-	overflow: auto; */
+	
 }
 
 footer {
-	/* grid-area: footer; */
 	position: fixed;
 	bottom: 0;
 }
 
 button {
-  background: none;
-  outline: none;
-  border: none;
-  cursor: pointer;
+	background: none;
+	outline: none;
+	border: none;
+	cursor: pointer;
 }
 
 .action-button {
@@ -380,17 +372,14 @@ button {
 }
 
 .drop-card > h4 {
-	/* margin: 10% 0 5% 0; */
 	align-self: flex-end;
 }
 
 .demo-drop-card > h4 {
-	/* margin: 10% 0 5% 0; */
 	align-self: center;
 }
 
 .drop-card > h6 {
-	/* margin: 6% 0 2% 0; */
 	align-self: center;
 }
 

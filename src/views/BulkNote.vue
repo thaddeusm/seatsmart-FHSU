@@ -147,6 +147,7 @@ export default {
                             this.grid[thisRow - 1][thisColumn - 1] = thisStudent
                         }
 
+                        // delay load until promises return data
                         this.loaded = true
                     })
             })

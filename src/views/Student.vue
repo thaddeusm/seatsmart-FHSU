@@ -165,7 +165,6 @@ export default {
             } else {
                 return ''
             }
-
         },
         calculationPreference() {
             return this.$store.state.preferences.calculation
@@ -274,7 +273,9 @@ export default {
             } else {
                 this.alertModalOpen = false
             }
+
             document.body.style.overflow = 'auto'
+
             let scope = this
             setTimeout(function() {
                 scope.getNotes()
@@ -316,6 +317,7 @@ export default {
             } else {
                 this.trendScope = 'all'
             }
+            // ensure trend line is redrawn on toggle
             this.$forceUpdate()
         },
         getNotes() {
@@ -328,6 +330,7 @@ export default {
                         return dateA < dateB ? -1 : 1
                     })
 
+                    // convert raw date object to human readable format
                     for (let i=0; i<this.notes.length; i++) {
                         let thisDate = this.notes[i].dateNoted._d
 
@@ -336,6 +339,7 @@ export default {
                         this.notes[i].dateNoted.formatted = newDate
                     }
 
+                    // show page after all student data loaded
                     this.loaded = true
                 })
         },
@@ -352,7 +356,6 @@ export default {
         deleteNote() {
             db.deleteSomething('notes', {_id: this.noteToDelete})
                 .then(() => {
-
                     this.closeModal('alert')
                 })
         },
@@ -379,11 +382,12 @@ export default {
         }
     },
     created() {
-
+        // grab student information from DB
         db.readSomething('students', {_id: this.id})
             .then((results) => {
                 this.student = results[0]
 
+                // check for English name to display
                 if (this.student.firstName.indexOf('(') !== -1) {
                     this.student.firstName = this.student.firstName.split('(')[1].split(')')[0].split(' ')[0]
                 } else {

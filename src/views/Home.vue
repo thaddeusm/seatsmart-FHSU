@@ -163,6 +163,7 @@ export default {
                 })
         },
         populateClasses() {
+            // retrieve classes and organize, prioritizing current semester
             db.readSomething('classes', {})
             .then((d) => {
                 let unordered = d
@@ -251,11 +252,13 @@ export default {
             })
         },
         search(term) {
+            // ensure a search term is provided before changing views
             if (term !== '') {
                 this.$router.push(`/search/${term}`)
             }
         },
         getUpdate() {
+            // allows default browser to open application homepage
             shell.openExternal('https://seatsmart.now.sh/')
         }
     },

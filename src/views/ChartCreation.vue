@@ -150,9 +150,9 @@
 			</Modal>
 		</transition>
 		<TouchBar :show="true" :bar="[
-		{type: 'spacer', size: 'flexible'},
-		{type: 'button', label: 'Back', method: routeBack},
-		{type: 'spacer', size: 'flexible'},
+			{type: 'spacer', size: 'flexible'},
+			{type: 'button', label: 'Back', method: routeBack},
+			{type: 'spacer', size: 'flexible'},
 		]"/>
 	</div>
 </template>
@@ -231,13 +231,8 @@ export default {
 					name: this.classChart.name,
 					semester: this.classChart.semester,
 					year: this.classChart.year
-				}).then((err, numUpdated) => {
-					if (err) {
-						console.log(err)
-					} else {
-						console.log(numUpdated)
-						this.$refs.pageHeader.innerHTML += ' (' + this.classChart.name + ')'
-					}
+				}).then((numUpdated) => {
+					this.$refs.pageHeader.innerHTML += ' (' + this.classChart.name + ')'
 				})
 			} else {
 				db.createSomething('classes', {
@@ -262,6 +257,7 @@ export default {
 			this.alertMessage = ''
 			let error = false
 
+			// handle error checks for each form step
 			switch (step) {
 				case 2:
 				if (this.classChart.columns == 1) {
@@ -292,6 +288,7 @@ export default {
 			return error
 		},
 		changeProgress(num) {
+			// adjust ProgressNode prop
 			if (!this.errorExists(num)) {
 				this.progress = num
 
@@ -319,7 +316,6 @@ export default {
 			}
 			if (this.mode === 'edit') {
 				this.numberOfStudentsAdded++
-				console.log(this.unusedSeats)
 			}
 
 			this.classStudents.push(obj)
@@ -351,6 +347,7 @@ export default {
 		processXLSX(path) {
 			var workbook = XLSX.readFile(path)
 
+			// FHSU-specific processing
 			var worksheet = workbook.Sheets['Course Roster']
 
 			var keys = Object.keys(worksheet)

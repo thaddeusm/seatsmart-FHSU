@@ -153,7 +153,6 @@ export default {
 				totalCardHeight = totalCardWidth * .835
 			}
 
-
 			let totalPossibleVerticalSpace = totalCardHeight * this.classChart.rows
 			let totalUsedVerticalSpace = totalPossibleVerticalSpace * .77
 			let remainingVerticalSpace = heightAdjusted - totalUsedVerticalSpace
@@ -175,19 +174,7 @@ export default {
             }
 
 		},
-		closeIntroModal() {
-			this.introModalOpen = false
-			this.choiceModalOpen = true
-		},
-		setChoice(choice) {
-			this.choice = choice
-			this.choiceModalOpen = false
-
-			if (choice === 'current') {
-				this.placeInCurrentSeats()
-			}
-		},
-		placeInCurrentSeats() {
+		placeStudentsInSeats() {
 			let remainingStudents = []
 			for (let i=0; i<this.studentsToHighlight.length; i++) {
 				let thisStudent = this.studentsToHighlight[i]
@@ -260,10 +247,6 @@ export default {
 									row: 0,
 									column: 0
 								}
-							},
-							newSeat: {
-								row: i + 1,
-								column: k + 1
 							}
 						})
 					}
@@ -275,7 +258,7 @@ export default {
 					.then(results => {
 						this.studentsToHighlight = results
 
-						this.placeInCurrentSeats()
+						this.placeStudentsInSeats()
 					})
 			})
 	}
@@ -287,34 +270,26 @@ export default {
 	background: var(--black);
 	width: 100%;
 	height: 100%;
-	/* display: grid;
-	grid-template-rows: auto 1fr auto;
-	grid-template-areas:
-		"header"
-		"main"
-		"footer"; */
 }
 
 header {
-	/* grid-area: header; */
+	
 }
 
 main {
-	/* grid-area: main;
-	overflow: auto; */
+	
 }
 
 footer {
-	/* grid-area: footer; */
 	position: fixed;
 	bottom: 0;
 }
 
 button {
-  background: none;
-  outline: none;
-  border: none;
-  cursor: pointer;
+	background: none;
+	outline: none;
+	border: none;
+	cursor: pointer;
 }
 
 .action-button {
