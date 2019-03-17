@@ -70,3 +70,22 @@ difficult to implement in analog (e.g. trend calculations, randomization, etc.).
 New York City Metro signs were of particular inspiration, which feature circular icons 
 with solid colors.  The color palette is based upon FHSU branding colors, with the choice 
 of red as a standard alert indicator.  
+
+## Running / Building on a Local Machine
+### To serve the application during development
+```
+$ npm electron:serve
+```
+- or -
+```
+$ yarn electron:serve
+```
+
+### To build the application on your platform (PC/Mac)
+```
+$ npm electron:build
+```
+- or -
+```
+$ yarn electron:build
+```
