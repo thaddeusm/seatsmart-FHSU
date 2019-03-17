@@ -17,6 +17,8 @@ function getDB(name) {
 }
 
 /*
+data structures
+
 classes:
 {
 	columns: Integer,
@@ -31,7 +33,8 @@ students:
 	firstName: String,
 	lastName: String,
 	tigerID: String,
-	class: String
+	class: String,
+	selected: Boolean
 	seat: {
 		row: Integer,
 		column: Integer
@@ -41,13 +44,14 @@ students:
 notes:
 {
 	behavior: {
-		Abbreviation: null,
-		Description: null,
-		Weight: null
+		Abbreviation: String,
+		Description: String,
+		Weight: String
 	},
-	student: null,
+	student: String,
 	dateNoted: {},
-	comment: null
+	comment: String,
+	type: String
 }
 */
 

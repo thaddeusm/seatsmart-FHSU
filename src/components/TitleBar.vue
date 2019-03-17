@@ -16,7 +16,13 @@ import db from '@/db'
 
 export default {
 	name: 'TitleBar',
-	props: ['title', 'compact', 'classID', 'edit', 'link'],
+	props: {
+		title: String, 
+		compact: Boolean, 
+		classID: String, 
+		edit: Boolean, 
+		link: Boolean
+	},
 	computed: {
 		returnedTitle() {
 			return this.$store.state.allClasses[this.classID]

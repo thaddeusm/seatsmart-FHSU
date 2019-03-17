@@ -20,7 +20,12 @@
 <script>
 export default {
 	name: 'ActionBar',
-	props: ['background', 'hamburger', 'collapsed', 'nowrap'],
+	props: {
+		background: String, 
+		hamburger: Boolean, 
+		collapsed: Boolean, 
+		nowrap: Boolean
+	},
 	data() {
 		return {
 			display: true
@@ -28,6 +33,7 @@ export default {
 	},
 	watch: {
 		collapsed() {
+			// this watcher was the only way to ensure reliable action
 			if (this.collapsed !== null) {
 				if (this.collapsed == true) {
 					this.toggleDisplay()
@@ -36,6 +42,7 @@ export default {
 		}
 	},
 	methods: {
+		// power show/hide UI
 		toggleDisplay() {
 			this.display = !this.display
 			if (this.display) {
@@ -46,6 +53,7 @@ export default {
 		}
 	},
 	mounted() {
+		// check for starting UI state and set
 		if (this.collapsed !== null) {
 			if (this.collapsed == true) {
 				this.toggleDisplay()

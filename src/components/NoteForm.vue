@@ -37,7 +37,13 @@ import AbbreviationCircle from '@/components/AbbreviationCircle.vue'
 
 export default {
 	name: 'NoteForm',
-	props: ['type', 'student', 'students', 'to', 'noteToEdit'],
+	props: {
+		type: String, 
+		student: Object, 
+		students: Array, 
+		to: String, 
+		noteToEdit: Object
+	},
 	components: {
 		AbbreviationCircle
 	},
@@ -66,15 +72,9 @@ export default {
 			return this.$store.state.preferences.negativeBehaviors
 		}
 	},
-	watch: {
-		students: function() {
-			// if (this.students.length > 0) {
-			// 	this.$refs.saveButton.disabled = false
-			// }
-		}
-	},
 	methods: {
 		setBehavior(type, index) {
+			// power UI response to indicate behavior selectrion
 			for (let i=0; i<this.positiveBehaviors.length; i++) {
 				if (this.$refs[`positive,${i}`][0].classList.contains('selected')) {
 					this.$refs[`positive,${i}`][0].classList.remove('selected')
@@ -94,6 +94,7 @@ export default {
 		saveNote() {
 			this.note.dateNoted = moment()
 
+			// handle single/bulk note DB saves in one function
 			if (this.type == 'single') {
 				if (this.noteToEdit == undefined) {
 					if (this.note.type === 'negative' && this.note.behavior.Abbreviation === 'A') {
@@ -108,7 +109,6 @@ export default {
 							this.$emit('trigger-modal-close')
 						})
 				} else {
-					console.log(this.note)
 					db.updateSomething('notes', {_id: this.note._id}, {
 						$set: {
 							behavior: this.note.behavior,
@@ -141,6 +141,7 @@ export default {
 					studentIndex++
 				}
 
+				// return to chart when in bulk note view
 				this.$router.push(this.to)
 			}
 		},
@@ -169,6 +170,7 @@ export default {
 	},
 	mounted() {
 		if (this.type == 'single') {
+			// if editing, copy to local property in case changes are discarded
 			if (this.noteToEdit !== undefined) {
 				this.note = this.noteToEdit
 			} else {

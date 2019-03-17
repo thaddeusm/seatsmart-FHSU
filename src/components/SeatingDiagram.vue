@@ -14,7 +14,13 @@
 
 export default {
 	name: 'SeatingDiagram',
-	props: ['columns', 'rows', 'selected', 'inverted', 'compact']
+	props: {
+		columns: Number, 
+		rows: Number, 
+		selected: String, 
+		inverted: Boolean, 
+		compact: Boolean
+	}
 }
 </script>
 

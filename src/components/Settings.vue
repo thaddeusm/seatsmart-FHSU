@@ -242,6 +242,7 @@ export default {
 		}
 	},
 	mounted() {
+		// grab existing user settings from store and set as local props for editing
 		this.calculation = this.$store.state.preferences.calculation
 		this.positiveBehaviors = this.$store.state.preferences.positiveBehaviors
 		this.negativeBehaviors = this.$store.state.preferences.negativeBehaviors
@@ -249,6 +250,7 @@ export default {
 	},
 	methods: {
 		changeContent(area) {
+			// handle component navigation
 			this.content = area
 
 			let areas = ['help', 'behaviors', 'calculation', 'about', 'tally']
@@ -262,6 +264,7 @@ export default {
 			this.$refs[`${area}`].classList = 'active'
 		},
 		selectForm(form) {
+			// return behavior list for error checking
 			if (form == 'positive') {
 				return this.positiveBehaviors
 			} else {
@@ -300,6 +303,7 @@ export default {
 				}
 			}
 
+			// in case current view is elsewhere, place back on behaviors if error for easy correction
 			if (error) {
 				this.changeContent('behaviors')
 			}

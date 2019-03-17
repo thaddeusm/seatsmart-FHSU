@@ -11,7 +11,10 @@
 <script>
 export default {
 	name: 'Modal',
-	props: ['dismissable', 'size']
+	props: {
+		dismissable: Boolean, 
+		size: String
+	}
 }
 </script>
 

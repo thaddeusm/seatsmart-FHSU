@@ -9,6 +9,7 @@ export default {
 	getPreferences() {
 		return new Promise((resolve, reject) => {
 				fs.readFile(preferencesFile, 'utf8', (err, data) => {
+					// if preferences file does not exist, init with defaults
 					if (data === 'undefined' || err) {
 						let obj = {
 							progress: [],
@@ -55,7 +56,7 @@ export default {
 	},
 	setPreferences(newPreferences) {
 		let jsonObj = JSON.stringify(newPreferences)
-
+		// update existing preferences document
 		return new Promise((resolve, reject) => {
 			fs.writeFile(preferencesFile, jsonObj, 'utf8', this.getPreferences)
 		})

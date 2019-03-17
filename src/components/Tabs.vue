@@ -14,7 +14,7 @@
 
 export default {
 	name: 'Tabs',
-	props: ['sections'],
+	props: {sections: Array},
 	data() {
 		return {
 			visible: null
@@ -26,6 +26,7 @@ export default {
 		}
 	},
 	mounted() {
+		// place first tab in view by default
 		this.visible = this.sections[0].label
 	}
 }

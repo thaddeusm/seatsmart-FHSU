@@ -8,13 +8,17 @@
 <script>
 export default {
 	name: 'SearchBox',
-	props: ['placeholder', 'startTerm'],
+	props: {
+		placeholder: String, 
+		startTerm: String
+	},
 	data() {
 		return {
 			term: ''
 		}
 	},
 	mounted() {
+		// place focus on search input on start
 		this.$refs.input.focus()
 	}
 }

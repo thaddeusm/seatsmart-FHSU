@@ -9,7 +9,10 @@ const {TouchBarLabel, TouchBarButton, TouchBarSpacer} = TouchBar
 
 export default {
 	name: 'TouchBar',
-	props: ['bar', 'show'],
+	props: {
+		bar: Array, 
+		show: Boolean
+	},
 	watch: {
 		show: function() {
 			let window = remote.getCurrentWindow()

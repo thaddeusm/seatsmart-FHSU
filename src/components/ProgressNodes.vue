@@ -7,7 +7,10 @@
 <script>
 export default {
 	name: 'ProgressNodes',
-	props: ['steps', 'progress']
+	props: {
+		steps: Number, 
+		progress: Number
+	}
 }
 </script>
 

@@ -1,4 +1,5 @@
 <template>
+	<!-- component handles trend, edit, simple, and complex styles -->
 	<div v-if="type === 'trends'" id="trendCardContainer"
 	:class="[trend === 0 ? 'gray' : '', trend < 0 ? 'red' : '', trend > 0 ? 'yellow' : '']">
 		<section id="cardBody" v-if="student.firstName !== ''">
@@ -99,7 +100,15 @@ import AbbreviationCircle from '@/components/AbbreviationCircle.vue'
 
 export default {
 	name: 'NameCard',
-	props: ['type', 'column', 'row', 'classId', 'chosen', 'conserveSpace', 'studentID'],
+	props: {
+		type: String, 
+		column: Number, 
+		row: Number, 
+		classId: String, 
+		chosen: Boolean, 
+		conserveSpace: Boolean, 
+		studentID: String
+	},
 	components: {
 		AbbreviationCircle
 	},
@@ -138,6 +147,7 @@ export default {
 			return this.$store.state.lastUpdatedStudent
 		},
 		latestNotes() {
+			// sort and grab three latest notes
 			if (this.notes.length > 1) {
 				let sorted = this.notes.sort((a,b) => {
 					let dateA = a.dateNoted._d
@@ -159,6 +169,7 @@ export default {
 			return this.$store.state.preferences.calculation
 		},
 		trend() {
+			// calculation for trend display
 			if (this.notes.length === 0) {
 				// if calculation preference is 'no news is good news'
 				// compensate by recommending an increase of 4 points
@@ -168,6 +179,7 @@ export default {
 					return 0
 				}
 			} else {
+				// base calculation on this week's notes only
 				let thisWeek = moment().week()
 				let thisWeeksNotes = []
 
@@ -177,10 +189,14 @@ export default {
 					}
 				}
 
+				// handle case no new notes this week
 				if (thisWeeksNotes.length === 0 && this.calculationPreference == 'nonews') {
 					return 4
 				} else {
+					
+					// determine point values based on weight and sum 'trendNumber'
 					let trendNumber = 0
+
 					for (let i=0; i<thisWeeksNotes.length; i++) {
 						if (thisWeeksNotes[i].type === 'positive') {
 							switch (thisWeeksNotes[i].behavior.Weight) {
@@ -223,6 +239,7 @@ export default {
 			}
 		},
 		tally() {
+			// calculate and display behavior tally
 			if (this.notes.length === 0) {
 				return 0
 			} else {
@@ -238,6 +255,7 @@ export default {
 			}
 		},
 		isAbsentToday() {
+			// determine whether student is absent from DB
 			if (this.notes.length === 0) {
 				return false
 			} else {
@@ -262,16 +280,19 @@ export default {
 	watch: {
 		lastUpdatedStudent(newValue, oldValue) {
 			if (newValue === this.student._id) {
+				// ensure info is updated when changes are made to student from parent
 				this.getStudent()
 			}
 		}
 	},
 	methods: {
 		toggleSelected() {
+			// handles random selection UI style
 			this.student.selected = !this.student.selected
 			this.updateStudent()
 		},
 		getStudent() {
+			// find student with row/column and class info
 			if (!this.studentID) {
 				db.readSomething('students', {seat: {row: this.row, column: this.column}, class: this.classId})
 					.then((result) => {
@@ -296,6 +317,7 @@ export default {
 						}
 					})
 			} else {
+				// find student with ID
 				db.readSomething('students', {_id: this.studentID })
 					.then((result) => {
 						if (result.length !== 0) {
@@ -322,15 +344,15 @@ export default {
 
 		},
 		updateStudent() {
+			// grab fresh data from DB and update card
 			db.updateSomething('students', {_id: this.student._id}, this.student)
 				.then((numUpdated) => {
 					this.getStudent()
 				})
 		},
 		viewStudentProfile() {
+			// find and set earliest date noted for the class if unavailable in store
 			if (this.$store.state.earliestDatesNoted[this.student.class] == undefined) {
-	            // find earliestDatesNoted
-
 	            let earliestDateNoted = {}
 
 	            // get all notes from student's class and sort
@@ -340,7 +362,10 @@ export default {
 	            db.readSomething('students', {class: this.student.class})
 	                .then(foundStudents => {
 	                    classStudents = foundStudents
+
+	                    // grab DB query promises
 						let promises = []
+
 	                    for (let i=0; i<classStudents.length; i++) {
 	                        promises.push(db.readSomething('notes', {student: classStudents[i]._id})
 	                            .then(foundNotes => {
@@ -351,6 +376,7 @@ export default {
 	                            }))
 	                    }
 
+	                    // ensure promises are complete before determining earliest note for class
 						Promise.all(promises).then(() => {
 							let sortedNotes = classNotes.sort((a, b) => {
 								let dateA = a.dateNoted._d
@@ -363,6 +389,8 @@ export default {
 								earliestDateNoted = sortedNotes[0].dateNoted
 								this.$store.dispatch('getEarliestDatesNoted', {earliestDateNoted: earliestDateNoted, class: this.student.class})
 							}
+
+							// once found and set, route to student profile
 							this.$router.push(`/student/${this.student._id}`)
 						})
 	                })
@@ -374,6 +402,7 @@ export default {
 		}
 	},
 	mounted() {
+		// grab student info from the DB
 		this.getStudent()
 	}
 }

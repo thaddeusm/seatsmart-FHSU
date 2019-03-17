@@ -9,13 +9,18 @@
 <script>
 export default {
 	name: 'AbbreviationCircle',
-	props: ['behavior', 'size', 'color'],
+	props: {
+		behavior: Object, 
+		size: String, 
+		color: String
+	},
 	data() {
 		return {
 			loaded: false
 		}
 	},
 	mounted() {
+		// create more subtle loading effect on name cards
 		if (this.size == 'small') {
 			let scope = this
 			setTimeout(function() {
@@ -82,6 +87,7 @@ export default {
 .fade-enter-active, .fade-leave-active {
 	transition: opacity .4s;
 }
+
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
 	opacity: 0;
 }

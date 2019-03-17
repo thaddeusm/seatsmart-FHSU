@@ -1,15 +1,19 @@
 'use strict'
-
+// Electron JS modules
 import { app, protocol, BrowserWindow } from 'electron'
+
+// Vue JS modules
 import {
   createProtocol,
   installVueDevtools
 } from 'vue-cli-plugin-electron-builder/lib'
+
+// modules to support persistence
 import path from 'path'
 import Datastore from 'nedb'
-const userDocs = app.getPath('documents');
+const userDocs = app.getPath('documents')
 
-// initialize datastores
+// initialize datastores from local file system
 global.classes = new Datastore({
   filename: `${userDocs}/Seatsmart/classes.db`,
   autoload: true
@@ -25,20 +29,20 @@ global.notes = new Datastore({
   autoload: true
 })
 
+// provides build version information for use in UI
 global.version = '0.14'
 
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
+// global reference to BrowserWindow instance
 let win
 
 // Standard scheme must be registered before the app is ready
 protocol.registerStandardSchemes(['app'], { secure: true })
 function createWindow () {
 
-  // Create the window using the state information
+  // Create the frameless window but hide until load
   win = new BrowserWindow({
     'frame': false,
     'backgroundColor': '#000000',
@@ -57,12 +61,14 @@ function createWindow () {
 
   }
 
+  // supports native-like menu toolbar
   require('./toolbarmenu')
 
   win.on('closed', () => {
     win = null
   })
 
+  // force BrowserWindow instance to fill screen before showing
   win.on('ready-to-show', function() {
       let {width, height} = require('electron').screen.getPrimaryDisplay().size
 
@@ -74,8 +80,6 @@ function createWindow () {
       win.focus()
   });
 }
-
-
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {

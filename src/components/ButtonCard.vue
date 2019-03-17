@@ -23,7 +23,15 @@
 <script>
 export default {
 	name: 'ButtonCard',
-	props: ['icon', 'text', 'to', 'button', 'onClick', 'param', 'selected'],
+	props: {
+		icon: String, 
+		text: String, 
+		to: String, 
+		button: Boolean, 
+		onClick: Function, 
+		param: String, 
+		selected: Boolean
+	},
 	data() {
 		return {
 			display: false
@@ -31,6 +39,7 @@ export default {
 	},
 	computed: {
 		name() {
+			// text manipulation to handle student English names
 			if (this.text == undefined) {
 				return ''
 			} else {
@@ -44,6 +53,7 @@ export default {
 		}
 	},
 	mounted() {
+		// catch unassigned props
 		if (this.button && this.text !== undefined) {
 			this.display = true
 		}
