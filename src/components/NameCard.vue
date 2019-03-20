@@ -27,7 +27,7 @@
 			<button id="addNoteButton" class="simple-button">+</button>
 		</section>
 		<section id="rightHeader">
-			<span class="tooltip top">flag a student</span>
+			<span class="tooltip top">select a student</span>
 			<button v-if="!student.selected" class="simple-button" @click="toggleSelected"><img class="star" src="@/assets/graystar.svg"></button>
 			<button v-else class="simple-button" @click="toggleSelected"><img class="star" src="@/assets/yellowstar.svg"></button>
 		</section>
@@ -106,7 +106,8 @@ export default {
 		classId: String, 
 		chosen: Boolean, 
 		conserveSpace: Boolean, 
-		studentID: String
+		studentID: String,
+		deselect: Boolean
 	},
 	components: {
 		AbbreviationCircle
@@ -281,6 +282,12 @@ export default {
 			if (newValue === this.student._id) {
 				// ensure info is updated when changes are made to student from parent
 				this.getStudent()
+			}
+		},
+		deselect(newValue, oldValue) {
+			if (newValue === true) {
+				this.student.selected = false
+				this.updateStudent()
 			}
 		}
 	},

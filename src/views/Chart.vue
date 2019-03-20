@@ -16,6 +16,7 @@
 						:row="index + 1"
 						:column="subIndex + 1"
 						:classId="classInfo._id"
+						:deselect="deselect"
 						v-on:open-note-modal="openNoteModal"
 						v-on:open-new-student-modal="openNewStudentModal"
 						v-on:open-edit-student-modal="openEditStudentModal"
@@ -37,6 +38,7 @@
 						v-on:open-new-student-modal="openNewStudentModal"
 						v-on:open-edit-student-modal="openEditStudentModal"
 						v-on:absence="addAbsence"
+						:deselect="deselect"
 						:key="students[students.length - 1]._id + index"
 						:chosen="chosenSeat.row == index + 1 && chosenSeat.column == subIndex + 1" 
 					/>
@@ -310,7 +312,7 @@ export default {
 				lastName: null
 			},
 			studentFormAlertMessage: '',
-			promptStudentDelete: false
+			deselect: false
 		}
 	},
 	computed: {
@@ -588,7 +590,12 @@ export default {
 			}
 		},
 		deselectStudents() {
-			
+			this.deselect = true
+
+			let scope = this
+			setTimeout(function() {
+				scope.deselect = false
+			}, 1000, scope)
 		}
 	},
 	mounted() {
