@@ -9,13 +9,15 @@
             </section>
         </header>
         <main>
-            <div class="class-button-area" v-for="(classToDisplay, index) in classesToDisplay">
-                <ButtonCard :button="false" :icon="classToDisplay.name" :text="classToDisplay.semester + ' ' + classToDisplay.year" :to="`/chart/${classToDisplay._id}`" :key="index"/>
-                <div class="modify-button-area">
-                    <button @click="editClass(classToDisplay._id)" class="modify-class-button"><img src="@/assets/edit.svg" alt="edit icon"></button>
-                    <button @click="promptDeleteClass(classToDisplay._id, classToDisplay.name)" class="modify-class-button"><img src="@/assets/delete.svg" alt="delete icon"></button>
+            <sequential-entrance fromTop delay="20">
+                <div class="class-button-area" v-for="(classToDisplay, index) in classesToDisplay">
+                    <ButtonCard :button="false" :icon="classToDisplay.name" :text="classToDisplay.semester + ' ' + classToDisplay.year" :to="`/chart/${classToDisplay._id}`" :key="index"/>
+                    <div class="modify-button-area">
+                        <button @click="editClass(classToDisplay._id)" class="modify-class-button"><img src="@/assets/edit.svg" alt="edit icon"></button>
+                        <button @click="promptDeleteClass(classToDisplay._id, classToDisplay.name)" class="modify-class-button"><img src="@/assets/delete.svg" alt="delete icon"></button>
+                    </div>
                 </div>
-            </div>
+            </sequential-entrance>
             <br><br><br><br>
             <ButtonCard icon="+" text="seating chart" to="/charts/new"/>
         </main>
@@ -66,9 +68,9 @@
             </Modal>
         </transition>
         <TouchBar :show="!modalOpen && !alertModalOpen" :bar="[
-        {type: 'button', label: 'New Chart', method: function() {$router.push('/charts/new')}},
-        {type: 'spacer', size: 'flexible'},
-        {type: 'button', label: 'Settings', method: openModal}
+            {type: 'button', label: 'New Chart', method: function() {$router.push('/charts/new')}},
+            {type: 'spacer', size: 'flexible'},
+            {type: 'button', label: 'Settings', method: openModal}
         ]"/>
     </div>
 </template>

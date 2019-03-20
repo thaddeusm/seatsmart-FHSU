@@ -77,7 +77,6 @@
 			<button v-else class="simple-button" @click="toggleSelected"><img class="star" src="@/assets/yellowstar.svg"></button>
 		</section>
 		<section id="cardBody" v-if="student.firstName !== ''">
-			<!-- <h3 v-if="name !== ''">{{ name.split('(')[1].split(')')[0] }}</h3> -->
 			<h6 class="student-name" v-if="conserveSpace">
 				{{ student.firstName }} {{ student.lastName[0] }}.
 			</h6>

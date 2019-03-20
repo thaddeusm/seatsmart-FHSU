@@ -11,7 +11,7 @@ import WindowFrame from '@/components/WindowFrame.vue'
 export default {
 	name: 'App',
 	components: {
-		WindowFrame
+		WindowFrame,
 	}
 }
 </script>

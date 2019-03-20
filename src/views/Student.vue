@@ -40,19 +40,21 @@
                 <div id="addNoteArea">
                     <button @click="openModal('note')" id="addNoteButton">+</button>
                 </div>
-                <div v-for="(note, index) in invertedNotes" :key="`note${index}`" :class="[note.type === 'positive' ? 'yellow-card' : 'red-card', 'note-card']">
-                    <section class="note-header">
-                        <AbbreviationCircle :behavior="note.behavior" size="medium" :color="note.type === 'positive' ? 'yellow' : 'red'"/>
-                    </section>
-                    <section class="note-body">
-                        <h5>{{ note.behavior.Description }}</h5>
-                        <span class="date-text">on {{ note.dateNoted.formatted }}</span>
-                        <p v-if="note.comment == '' || note.comment == null" class="center">- no comment -</p>
-                        <p v-else>{{ note.comment }}</p>
-                        <button @click="startEdit(note)" class="edit-button"><img src="@/assets/edit.svg" alt="edit icon"></button>
-                        <button @click="promptDelete(note._id)" class="delete-button"><img src="@/assets/delete.svg" alt="delete icon"></button>
-                    </section>
-                </div>
+                <sequential-entrance fromTop delay="20">
+                    <div v-for="(note, index) in invertedNotes" :key="`note${index}`" :class="[note.type === 'positive' ? 'yellow-card' : 'red-card', 'note-card']">
+                        <section class="note-header">
+                            <AbbreviationCircle :behavior="note.behavior" size="medium" :color="note.type === 'positive' ? 'yellow' : 'red'"/>
+                        </section>
+                        <section class="note-body">
+                            <h5>{{ note.behavior.Description }}</h5>
+                            <span class="date-text">on {{ note.dateNoted.formatted }}</span>
+                            <p v-if="note.comment == '' || note.comment == null" class="center">- no comment -</p>
+                            <p v-else>{{ note.comment }}</p>
+                            <button @click="startEdit(note)" class="edit-button"><img src="@/assets/edit.svg" alt="edit icon"></button>
+                            <button @click="promptDelete(note._id)" class="delete-button"><img src="@/assets/delete.svg" alt="delete icon"></button>
+                        </section>
+                    </div>
+                </sequential-entrance>
             </section>
         </main>
         <transition name="fade">

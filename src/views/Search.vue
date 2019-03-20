@@ -15,17 +15,19 @@
             </section>
         </header>
         <main>
-            <div class="result" v-for="(classChart, index) in results" v-if="classChart.length > 0">
-                <TitleBar v-if="classChart.length > 0" :classID="allClasses[index]" :link="true" />
-                <div class="name-card-wrapper" v-for="(student, subIndex) in classChart">
-                    <NameCard
-                        :key="`${student}${subIndex}`"
-                        :type="cardStyle"
-                        :studentID="student"
-                        v-on:open-note-modal="openNoteModal"
-                        class="name-card"
-                    />
-                </div>
+            <div class="result" v-for="(classChart, index) in results" v-if="classChart.length > 0" :key="index">
+                <sequential-entrance fromTop delay="20">
+                    <TitleBar v-if="classChart.length > 0" :classID="allClasses[index]" :link="true" />  
+                    <div class="name-card-wrapper" v-for="(student, subIndex) in classChart">
+                        <NameCard
+                            :key="`${student}${subIndex}`"
+                            :type="cardStyle"
+                            :studentID="student"
+                            v-on:open-note-modal="openNoteModal"
+                            class="name-card"
+                        />
+                    </div>
+                </sequential-entrance>
             </div>
             <div v-if="noResults" id="noResults">
                 <img id="searchSplash" src="@/assets/searchimage.svg" alt="search illustration">

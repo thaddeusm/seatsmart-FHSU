@@ -26,7 +26,7 @@
 				</div>
 			</section>
 			<section v-if="inverted" class="row" v-for="(row, index) in classInfo.rows" :style="rowMargins" :key="`invertedRow${index},${students.length}`">
-				<div v-for="(column, subIndex) in classInfo.columns" class="column" :style="cardStyle">
+				<div v-for="(column, subIndex) in classInfo.columns" class="column" :style="cardStyle">			
 					<NameCard
 						:type="cardType"
 						:conserveSpace="isHuge"
@@ -38,7 +38,8 @@
 						v-on:open-edit-student-modal="openEditStudentModal"
 						v-on:absence="addAbsence"
 						:key="students[students.length - 1]._id + index"
-						:chosen="chosenSeat.row == index + 1 && chosenSeat.column == subIndex + 1" />
+						:chosen="chosenSeat.row == index + 1 && chosenSeat.column == subIndex + 1" 
+					/>
 				</div>
 			</section>
 		</main>
@@ -48,10 +49,6 @@
 		        	<router-link to="/"><img src="@/assets/home.svg" alt="home icon"></router-link>
 		        </template>
 		        <template slot="center">
-		        	<!-- <button @click="setLastView(`/chart/${id}`)" class="action-button">
-						<img src="@/assets/editwhite.svg" alt="edit icon">
-						<span class="tooltip">edit class information</span>
-					</button> -->
 					<button @click="toggleEditMode" class="action-button">
 						<img v-if="cardType !== 'edit'" src="@/assets/editwhite.svg" alt="edit icon">
 						<img v-else src="@/assets/edit.svg" alt="edit icon">
@@ -86,6 +83,10 @@
 		        	<button @click="createBulkNote" class="action-button">
 						<img src="@/assets/groupnote.svg" alt="group note icon">
 						<span class="tooltip">note for multiple students</span>
+					</button>
+					<button @click="deselectStudents" class="action-button">
+						<img src="@/assets/star-deselect.svg" alt="deselect all students icon">
+						<span class="tooltip">deselect all students</span>
 					</button>
 		        </template>
 		        <template slot="right">
@@ -585,6 +586,9 @@ export default {
 					behaviorToTally: this.$store.state.preferences.behaviorToTally
 				})
 			}
+		},
+		deselectStudents() {
+			
 		}
 	},
 	mounted() {
@@ -681,7 +685,7 @@ button {
 }
 
 .action-button {
-	margin: 0 4%;
+	margin: 0 3.5%;
 	position: relative;
 }
 
