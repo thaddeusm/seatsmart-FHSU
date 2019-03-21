@@ -234,7 +234,8 @@ export default {
 				semester: null,
 				year: null,
 				columns: null,
-				rows: null
+				rows: null,
+                archived: null
 			},
 			cardStyle: {
 				width: '',

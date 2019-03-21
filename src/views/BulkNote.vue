@@ -62,7 +62,8 @@ export default {
                 rows: null,
                 _id: null,
                 semester: null,
-                year: null
+                year: null,
+                archived: null
             },
             studentIDs: [],
             grid: [[{

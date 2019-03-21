@@ -77,7 +77,8 @@ export default {
 				columns: 0,
 				semester: '',
 				year: null,
-				name: ''
+				name: '',
+                archived: null
 			},
 			studentsToHighlight: [
 				{

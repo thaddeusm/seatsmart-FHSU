@@ -193,7 +193,8 @@ export default {
 				name: null,
 				semester: null,
 				year: null,
-				_id: null
+				_id: null,
+                archived: null
 			},
 			classStudents: [
 				{
@@ -228,7 +229,8 @@ export default {
 					rows: this.classChart.rows,
 					name: this.classChart.name,
 					semester: this.classChart.semester,
-					year: this.classChart.year
+					year: this.classChart.year,
+ 					archived: this.classChart.archived
 				}).then((numUpdated) => {
 					this.$refs.pageHeader.innerHTML += ' (' + this.classChart.name + ')'
 				})
@@ -238,7 +240,8 @@ export default {
 					rows: this.classChart.rows,
 					name: this.classChart.name,
 					semester: this.classChart.semester,
-					year: this.classChart.year
+					year: this.classChart.year,
+                	archived: false
 				}).then((classChart) => {
 					this.classChart._id = classChart._id
 					this.$refs.pageHeader.innerHTML += ' (' + this.classChart.name + ')'
