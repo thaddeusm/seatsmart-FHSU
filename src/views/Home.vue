@@ -10,14 +10,24 @@
         </header>
         <main>
             <div class="class-button-area" v-for="(classToDisplay, index) in classesToDisplay">
-                <ButtonCard :button="false" :icon="classToDisplay.name" :text="classToDisplay.semester + ' ' + classToDisplay.year" :to="`/chart/${classToDisplay._id}`" :key="index"/>
-                <div class="modify-button-area">
+                <ButtonCard :button="false" :icon="classToDisplay.name" :text="classToDisplay.semester + ' ' + classToDisplay.year" :to="`/chart/${classToDisplay._id}`" :key="index" v-if="classToDisplay.archived !== true"/>
+                <div class="modify-button-area" v-if="classToDisplay.archived !== true">
                     <button @click="editClass(classToDisplay._id)" class="modify-class-button"><img src="@/assets/edit.svg" alt="edit icon"></button>
+                    <button @click="archiveClass(classToDisplay._id)" class="archive-class-button"><img src="@/assets/archive.svg" alt="archive icon"></button>
                     <button @click="promptDeleteClass(classToDisplay._id, classToDisplay.name)" class="modify-class-button"><img src="@/assets/delete.svg" alt="delete icon"></button>
                 </div>
             </div>
             <br><br><br><br>
             <ButtonCard icon="+" text="seating chart" to="/charts/new"/>
+            <br>
+            <div class="class-button-area archived" v-for="(classToDisplay, index) in classesToDisplay">
+                <ButtonCard :button="false" :icon="classToDisplay.name" :text="classToDisplay.semester + ' ' + classToDisplay.year" :to="`/chart/${classToDisplay._id}`" :key="index" v-if="classToDisplay.archived == true"/>
+                <div class="modify-button-area" v-if="classToDisplay.archived == true">
+                    <button @click="editClass(classToDisplay._id)" class="modify-class-button"><img src="@/assets/edit.svg" alt="edit icon"></button>
+                    <button @click="unarchiveClass(classToDisplay._id)" class="archive-class-button"><img src="@/assets/unarchive.svg" alt="archive icon"></button>
+                    <button @click="promptDeleteClass(classToDisplay._id, classToDisplay.name)" class="modify-class-button"><img src="@/assets/delete.svg" alt="delete icon"></button>
+                </div>
+            </div>
         </main>
         <footer>
             <ActionBar background="var(--black)" :hamburger="false">
@@ -112,7 +122,8 @@ export default {
                     year: null,
                     _id: null,
                     columns: null,
-                    rows: null
+                    rows: null,
+                    archived: false
                 }
             ],
             updateAvailable: false,
@@ -134,6 +145,24 @@ export default {
         editClass(id) {
             this.$store.dispatch('setLastView', '/')
             this.$router.push(`/chart/edit/${id}`)
+        },
+        archiveClass(id) {
+            db.updateSomething('classes', {_id: id}, {
+                $set: {
+                    "archived": true 
+                }
+            }).then(() => {
+                this.populateClasses()
+            })
+        },
+        unarchiveClass(id) {
+            db.updateSomething('classes', {_id: id}, {
+                $set: {
+                    "archived": false 
+                }
+            }).then(() => {
+                this.populateClasses()
+            })
         },
         promptDeleteClass(id, name) {
             this.alertModalClass = name
@@ -367,6 +396,11 @@ footer {
     margin: 0 30px;
 }
 
+.archived {
+    margin-top: 70px;
+    opacity: .7;
+}
+
 .modal-button {
     background: none;
     outline: none;
@@ -439,6 +473,10 @@ h6 {
 
 .modify-class-button:first-child {
     color: var(--yellow);
+}
+
+.archive-class-button > img {
+    width: 20px;
 }
 
 .fade-enter-active, .fade-leave-active {
