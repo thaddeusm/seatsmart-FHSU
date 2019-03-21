@@ -3,7 +3,6 @@
 	<div v-if="type === 'trends'" id="trendCardContainer"
 	:class="[trend === 0 ? 'gray' : '', trend < 0 ? 'red' : '', trend > 0 ? 'yellow' : '']">
 		<section id="cardBody" v-if="student.firstName !== ''">
-			<!-- <h3 v-if="name !== ''">{{ name.split('(')[1].split(')')[0] }}</h3> -->
 			<h6 class="student-name" v-if="conserveSpace">
 				{{ student.firstName }} {{ student.lastName[0] }}.
 			</h6>
