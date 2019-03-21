@@ -43,11 +43,11 @@
 			</ActionBar>
 		</footer>
 		<TouchBar :show="true" :bar="[
-			{type: 'spacer', size: 'flexible'},
-			{type: 'button', label: 'save changes', method: function() {saveChanges()}},
-			{type: 'button', label: 'discard changes', method: function() {$router.push(`/chart/${id}`)}},
-			{type: 'spacer', size: 'flexible'}
-	    ]"/>
+				{type: 'spacer', size: 'flexible'},
+				{type: 'button', label: 'discard changes', method: function() {$router.push(`/chart/${id}`)}}
+	    	]" 
+	    	:escapeItem="{type: 'button', label: 'save changes', method: function() {saveChanges()}}"
+	    />
 	</div>
 </template>
 

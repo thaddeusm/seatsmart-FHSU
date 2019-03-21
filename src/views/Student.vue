@@ -85,12 +85,13 @@
             </Modal>
         </transition>
         <TouchBar :show="!modalOpen && !alertModalOpen" :bar="[
-            {type: 'button', label: 'Back', method: function() {routeBack()}},
             {type: 'spacer', size: 'flexible'},
 			{type: 'button', label: 'Toggle Trends', method: function() {toggleTrendScope()}},
             {type: 'spacer', size: 'flexible'},
 			{type: 'button', label: '📝', method: function() {modalOpen = true}}
-	    ]"/>
+	       ]" 
+           :escapeItem="{type: 'button', label: 'Back', method: function() {routeBack()}}"
+        />
     </div>
 </template>
 

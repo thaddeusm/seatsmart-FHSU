@@ -29,10 +29,11 @@
             </section>
         </main>
         <TouchBar :show="true" :bar="[
-			{type: 'button', label: 'Cancel', method: function() {$router.push(`/chart/${id}`)}},
-			{type: 'spacer', size: 'flexible'},
+            {type: 'spacer', size: 'flexible'},
             {type: 'button', label: 'Select / Deselect All', method: function() {toggleSelectAll()}},
-	    ]"/>
+	       ]" 
+           :escapeItem="{type: 'button', label: 'Cancel', method: function() {$router.push(`/chart/${id}`)}}"
+        />
     </div>
 </template>
 

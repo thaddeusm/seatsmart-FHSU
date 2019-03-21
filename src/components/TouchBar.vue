@@ -11,7 +11,8 @@ export default {
 	name: 'TouchBar',
 	props: {
 		bar: Array, 
-		show: Boolean
+		show: Boolean,
+		escapeItem: Object
 	},
 	watch: {
 		show: function() {
@@ -23,8 +24,16 @@ export default {
 					touchbarItems.push(this.buildItem(item))
 				})
 
+				let newEscapeItem
+
+				if (this.escapeItem !== undefined) {
+					newEscapeItem = this.buildItem(this.escapeItem)
+				} else {
+					newEscapeItem = null
+				}
+
 				// passes array into a new touchbar
-				let touchbar = new TouchBar(touchbarItems)
+				let touchbar = new TouchBar({items: touchbarItems, escapeItem: newEscapeItem})
 
 				// display touchbar
 				window.setTouchBar(touchbar)
@@ -66,8 +75,16 @@ export default {
 			touchbarItems.push(this.buildItem(item))
 		})
 
+		let newEscapeItem
+
+		if (this.escapeItem !== undefined) {
+			newEscapeItem = this.buildItem(this.escapeItem)
+		} else {
+			newEscapeItem = null
+		}
+
 		// passes array into a new touchbar
-		let touchbar = new TouchBar(touchbarItems)
+		let touchbar = new TouchBar({items: touchbarItems, escapeItem: newEscapeItem})
 
 		// display touchbar
 		if (this.show) {

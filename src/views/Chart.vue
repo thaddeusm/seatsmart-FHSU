@@ -185,18 +185,19 @@
 				</template>
 			</Modal>
 		</transition>
-		<TouchBar :show="!modalOpen" :bar="[
-			{type: 'spacer', size: 'flexible'},
-			{type: 'button', label: '✏️', method: function() {toggleEditMode()}},
-			{type: 'button', label: '🔀', method: function() {rearrangeSeats()}},
-			{type: 'button', label: '🌈', method: function() {highlightStudents()}},
-			{type: 'button', label: '🎲', method: function() {selectRandom()}},
-			{type: 'button', label: '🎫', method: function() {toggleCardStyle()}},
-			{type: 'button', label: '📈', method: function() {showTrends()}},
-			{type: 'button', label: '📺', method: function() {invertChart()}},
-			{type: 'button', label: '📝', method: function() {createBulkNote()}},
-			{type: 'spacer', size: 'flexible'}
-	    ]"/>
+		<TouchBar :show="!modalOpen" 
+			:bar="[
+				{type: 'button', label: '🔀', method: function() {rearrangeSeats()}},
+				{type: 'button', label: '🌈', method: function() {highlightStudents()}},
+				{type: 'button', label: '🎲', method: function() {selectRandom()}},
+				{type: 'button', label: '🎫', method: function() {toggleCardStyle()}},
+				{type: 'button', label: '📈', method: function() {showTrends()}},
+				{type: 'button', label: '📺', method: function() {invertChart()}},
+				{type: 'button', label: '📝', method: function() {createBulkNote()}},
+				{type: 'button', label: '🌠', method: function() {deselectStudents()}}
+	    	]" 
+	    	:escapeItem="{type: 'button', label: '✏️', method: function() {toggleEditMode()}}"
+	    />
 	</div>
 </template>
 

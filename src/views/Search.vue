@@ -45,10 +45,11 @@
     		</template>
   		</Modal>
         <TouchBar :show="!noteModalOpen" :bar="[
-			{type: 'button', label: '🏠', method: routeHome},
             {type: 'spacer', size: 'flexible'},
             {type: 'button', label: '🎫', method: function() {toggleCardStyle()}},
-	    ]"/>
+	       ]" 
+           :escapeItem="{type: 'button', label: '🏠', method: routeHome}"
+        />
     </div>
 </template>
 
@@ -201,6 +202,7 @@ export default {
 #backArea {
     grid-area: back;
     margin-left: 30px;
+    margin-top: 10px;
 }
 
 button > img {
