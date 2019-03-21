@@ -9,15 +9,13 @@
             </section>
         </header>
         <main>
-            <sequential-entrance fromTop delay="20">
-                <div class="class-button-area" v-for="(classToDisplay, index) in classesToDisplay">
-                    <ButtonCard :button="false" :icon="classToDisplay.name" :text="classToDisplay.semester + ' ' + classToDisplay.year" :to="`/chart/${classToDisplay._id}`" :key="index"/>
-                    <div class="modify-button-area">
-                        <button @click="editClass(classToDisplay._id)" class="modify-class-button"><img src="@/assets/edit.svg" alt="edit icon"></button>
-                        <button @click="promptDeleteClass(classToDisplay._id, classToDisplay.name)" class="modify-class-button"><img src="@/assets/delete.svg" alt="delete icon"></button>
-                    </div>
+            <div class="class-button-area" v-for="(classToDisplay, index) in classesToDisplay">
+                <ButtonCard :button="false" :icon="classToDisplay.name" :text="classToDisplay.semester + ' ' + classToDisplay.year" :to="`/chart/${classToDisplay._id}`" :key="index"/>
+                <div class="modify-button-area">
+                    <button @click="editClass(classToDisplay._id)" class="modify-class-button"><img src="@/assets/edit.svg" alt="edit icon"></button>
+                    <button @click="promptDeleteClass(classToDisplay._id, classToDisplay.name)" class="modify-class-button"><img src="@/assets/delete.svg" alt="delete icon"></button>
                 </div>
-            </sequential-entrance>
+            </div>
             <br><br><br><br>
             <ButtonCard icon="+" text="seating chart" to="/charts/new"/>
         </main>
