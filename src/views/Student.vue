@@ -12,6 +12,10 @@
                 <h6>highlight:</h6>
                 <div :style="{background: student.highlight}"></div>
             </div>
+            <div id="selectArea">
+                <button @click="toggleSelected" v-if="student.selected"><img src="@/assets/yellowstar.svg" alt="select icon"></button>
+                <button @click="toggleSelected" v-else><img src="@/assets/graystar.svg" alt="select icon"></button>
+            </div>
         </aside>
         <main>
             <header>
@@ -371,6 +375,18 @@ export default {
             let lastView = this.$store.state.lastView
 
             this.$router.push(lastView)
+        },
+        toggleSelected() {
+            db.updateSomething('students', {_id: this.id}, {
+                $set: {
+                    "selected": !this.student.selected
+                }
+            }).then(() => {
+                db.readSomething('students', {_id: this.id})
+                    .then((results) => {
+                        this.student = results[0]
+                    })
+            })
         }
     },
     mounted() {
@@ -526,6 +542,14 @@ main {
     height: 17px;
     display: inline-block;
     vertical-align: middle;
+}
+
+#selectArea {
+    margin-top: 40px;
+}
+
+#selectArea > button > img {
+    width: 30px;
 }
 
 #addNoteArea {
