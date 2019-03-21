@@ -268,9 +268,10 @@ export default {
         this.$store.dispatch('getAllStudents')
         this.$store.dispatch('getAllClasses')
         this.$store.dispatch('setVersion', remote.getGlobal('version'))
+
+        this.populateClasses()
     },
     mounted() {
-        this.populateClasses()
 
         this.$store.dispatch('setLastView', '/')
 
