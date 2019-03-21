@@ -25,7 +25,8 @@ classes:
 	rows: Integer,
 	name: String,
 	semester: String,
-	year: Integer
+	year: Integer,
+	archived: Boolean
 }
 
 students:
