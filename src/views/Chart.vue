@@ -314,6 +314,7 @@ export default {
 				lastName: null
 			},
 			studentFormAlertMessage: '',
+			promptStudentDelete: false,
 			deselect: false
 		}
 	},
