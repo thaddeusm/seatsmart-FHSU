@@ -69,7 +69,9 @@ difficult to implement in analog (e.g. trend calculations, randomization, etc.).
 
 New York City Metro signs were of particular inspiration, which feature circular icons 
 with solid colors.  The color palette is based upon FHSU branding colors, with the choice 
-of red as a standard alert indicator.  
+of red as a standard alert indicator.
+
+Seatsmart strives to be [Humane by Design](https://humanebydesign.com).
 
 ## Running / Building on a Local Machine
 ### To serve the application during development
