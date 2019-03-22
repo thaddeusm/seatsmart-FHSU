@@ -21,7 +21,7 @@
 					</button>
 				</template>
 				<template slot="center">
-					<div class="drag-area">
+					<div class="drag-area" v-if="mode == 'drag'">
 						<drag
                             :effect-allowed="['link']"
                             v-for="(color, index) in colors"
