@@ -120,6 +120,14 @@
 								wanting to quickly note which students are late when the class bell rings.
 							</p>
 						</li>
+						<li>
+							<img src="@/assets/star-deselect.svg" alt="deselect students icon">
+							<h5>Deselect All Students</h5>
+							<p>
+								Get rid of all of the stars in one click!  That sounds a little depressing, but 
+								it really is convenient sometimes.
+							</p>
+						</li>
 					</ul>
 				</template>
 			</Tabs>
