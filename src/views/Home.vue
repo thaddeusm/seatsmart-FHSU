@@ -279,6 +279,8 @@ export default {
                 } else {
                     this.$refs.container.style.opacity = "1"
                 }
+
+                this.$store.dispatch('getAllClasses')
             })
         },
         search(term) {
@@ -295,7 +297,6 @@ export default {
     created() {
         this.$store.dispatch('getPreferences')
         this.$store.dispatch('getAllStudents')
-        this.$store.dispatch('getAllClasses')
         this.$store.dispatch('setVersion', remote.getGlobal('version'))
 
         this.populateClasses()

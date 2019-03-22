@@ -83,7 +83,14 @@ export default new Vuex.Store({
                     let obj = {}
 
                     for (let i=0; i<allClasses.length; i++) {
-                        obj[allClasses[i]._id] = allClasses[i].name
+                        obj[allClasses[i]._id] = {
+                            name: allClasses[i].name,
+                            semester: allClasses[i].semester,
+                            year: allClasses[i].year,
+                            archived: allClasses[i].archived,
+                            rows: allClasses[i].rows,
+                            columns: allClasses[i].columns
+                        }
                     }
 
                     context.commit('setAllClasses', obj)

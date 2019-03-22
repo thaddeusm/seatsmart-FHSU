@@ -232,7 +232,8 @@ export default {
 					year: this.classChart.year,
  					archived: this.classChart.archived
 				}).then((numUpdated) => {
-					this.$refs.pageHeader.innerHTML += ' (' + this.classChart.name + ')'
+					this.$store.dispatch('getAllClasses')
+					this.$router.push(`/chart/${this.classChart._id}`)
 				})
 			} else {
 				db.createSomething('classes', {
@@ -573,8 +574,6 @@ export default {
 						}
 
 						this.saveClassChart()
-
-						this.$router.push(`/chart/${this.classChart._id}`)
 					}
 				}
 
