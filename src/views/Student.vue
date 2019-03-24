@@ -181,7 +181,7 @@ export default {
             // start with average participation score
             let trendArr = [70]
 
-            if (this.calculationPreference === 'balanced') {
+            if (this.calculationPreference === 'balanced' || this.classInfo.archived == true) {
                 // construct trend arr
                 for (let i=0; i<this.notes.length; i++) {
                     let start = trendArr[i]
