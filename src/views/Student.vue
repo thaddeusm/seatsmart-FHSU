@@ -23,7 +23,7 @@
         			<button class="back-button" @click="routeBack"><img class="back-arrow" src="@/assets/backarrow.svg" alt="back arrow"> back</button>
         		</section>
                 <trend
-                    v-if="loaded"
+                    v-if="trendLoaded"
                     :data="trendScope === 'all' ? trend : monthTrend"
                     :gradient="['var(--red)', 'orange', 'var(--yellow)']"
                     class="trend"
@@ -33,7 +33,8 @@
                     :key="trendScope"
                 >
                 </trend>
-                <section id="trendAdjustArea">
+                <section id="trendLoading" v-else></section>
+                <section id="trendAdjustArea" v-if="trendLoaded">
                     <button :class="[trendScope === 'all' ? 'selected' : '', 'trend-adjust']" @click="toggleTrendScope">all time</button>
                     <button v-if="monthTrend.length > 1" :class="[trendScope === 'month' ? 'selected' : '', 'trend-adjust']" @click="toggleTrendScope">this month</button>
                 </section>
@@ -160,6 +161,7 @@ export default {
             ],
             trendScope: 'all',
             loaded: false,
+            trendLoaded: false,
             modalOpen: false,
             alertModalOpen: false,
             noteToDelete: null,
@@ -223,7 +225,7 @@ export default {
                 }
 
             }
-
+            
             return trendArr
         },
         monthTrend() {
@@ -320,11 +322,15 @@ export default {
             return start + adjustment
         },
         toggleTrendScope() {
+            this.trendLoaded = false
+
             if (this.trendScope === 'all' && this.monthTrend.length > 1) {
                 this.trendScope = 'month'
             } else {
                 this.trendScope = 'all'
             }
+
+            this.trendLoaded = true
             // ensure trend line is redrawn on toggle
             this.$forceUpdate()
         },
@@ -347,8 +353,11 @@ export default {
                         this.notes[i].dateNoted.formatted = newDate
                     }
 
-                    // show page after all student data loaded
                     this.loaded = true
+
+
+                    // show page after all student data loaded
+                    this.getEarliestDateNoted()
                 })
         },
         startEdit(note) {
@@ -388,6 +397,56 @@ export default {
                         this.student = results[0]
                     })
             })
+        },
+        getEarliestDateNoted() {
+            // find and set earliest date noted for the class if unavailable in store
+            if (this.$store.state.earliestDatesNoted[this.student.class] == undefined) {
+                let earliestDateNoted = {}
+
+                // get all notes from student's class and sort
+                let classStudents = []
+                let classNotes = []
+
+                db.readSomething('students', {class: this.student.class})
+                    .then(foundStudents => {
+                        classStudents = foundStudents
+
+                        // grab DB query promises
+                        let promises = []
+
+                        for (let i=0; i<classStudents.length; i++) {
+                            promises.push(db.readSomething('notes', {student: classStudents[i]._id})
+                                .then(foundNotes => {
+                                    for (let k=0; k<foundNotes.length; k++) {
+                                        classNotes.push(foundNotes[k])
+                                    }
+
+                                }))
+                        }
+
+                        // ensure promises are complete before determining earliest note for class
+                        Promise.all(promises).then(() => {
+                            let sortedNotes = classNotes.sort((a, b) => {
+                                let dateA = a.dateNoted._d
+                                let dateB = b.dateNoted._d
+
+                                return dateA < dateB ? -1 : 1
+                            })
+
+                            if (sortedNotes.length > 0) {
+                                earliestDateNoted = sortedNotes[0].dateNoted
+                                this.$store.dispatch('getEarliestDatesNoted', {earliestDateNoted: earliestDateNoted, class: this.student.class})
+                            }
+
+                            // once found and set, show trend line
+                            this.trendLoaded = true
+                        })
+                    })
+
+            } else {
+                this.trendLoaded = true
+            }
+
         }
     },
     mounted() {
@@ -427,6 +486,16 @@ export default {
 </script>
 
 <style scoped>
+@keyframes flash {
+    from {background: var(--light-gray);}
+    to {background: var(--gray);}
+}
+
+@keyframes spin {
+    from {transform: rotate(0);}
+    to {transform: rotate(360deg);}
+}
+
 #studentContainer {
     background: var(--black);
     width: 100%;
@@ -489,6 +558,28 @@ main {
     border-bottom: 2px solid var(--black);
     margin: 0 auto;
     display: block;
+}
+
+#trendLoading {
+   /* height: 220px;
+    border-radius: 5px;
+    animation-name: flash;
+    animation-duration: .5s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;*/
+
+    height: 230px;
+    width: 230px;
+    margin: 0 auto;
+    border-radius: 230px;
+    border-top: 5px solid var(--light-gray);
+    border-right: 5px solid var(--gray);
+    border-bottom: 5px solid var(--gray);
+    border-left: 5px solid var(--gray);
+    animation-name: spin;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
 }
 
 #trendAdjustArea {
@@ -570,7 +661,7 @@ main {
 .note-card {
     display: inline-block;
     width: 320px;
-    height: 180px;
+    height: 200px;
     margin: 40px 5%;
     border-radius: 10px;
     box-shadow: 1px 2px 1px 2px var(--gray);
@@ -593,10 +684,10 @@ main {
     font-weight: 100;
     background: var(--white);
     padding: 5px 12px;
-    border-radius: 5px;
-    height: 50px;
+    border-radius: 3px;
+    height: 70px;
     overflow: auto;
-    margin: 10px 0 7px 0;
+    margin: 15px 0 10px 0;
     text-align: left;
 }
 
@@ -690,6 +781,7 @@ main {
 .fade-enter-active, .fade-leave-active {
 	transition: opacity .2s;
 }
+
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
 	opacity: 0;
 }

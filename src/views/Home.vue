@@ -302,7 +302,6 @@ export default {
         this.populateClasses()
     },
     mounted() {
-
         this.$store.dispatch('setLastView', '/')
 
         let scope = this
