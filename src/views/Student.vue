@@ -93,7 +93,7 @@
             {type: 'spacer', size: 'flexible'},
 			{type: 'button', label: 'Toggle Trends', method: function() {toggleTrendScope()}},
             {type: 'spacer', size: 'flexible'},
-			{type: 'button', label: '📝', method: function() {modalOpen = true}}
+			{type: 'button', label: '📝', method: function() {openModal('note')}}
 	       ]" 
            :escapeItem="{type: 'button', label: 'Back', method: function() {routeBack()}}"
         />
