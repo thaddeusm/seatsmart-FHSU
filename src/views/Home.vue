@@ -463,7 +463,8 @@ h6 {
 }
 
 .red {
-    background: var(--red);
+    background: var(--red)!important;
+    color: var(--white)!important;
 }
 
 .modify-class-button {

@@ -758,7 +758,8 @@ main {
 }
 
 .red {
-    background: var(--red);
+    background: var(--red)!important;
+    color: var(--white)!important;
 }
 
 .alert-icon-large {
