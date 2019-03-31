@@ -83,7 +83,7 @@
                         <h4>Are you sure you want to permanently delete this note?</h4>
                     </div>
                     <div class="modal-footer">
-                        <button class="modal-footer-button yellow" @click="deleteNote">Yes</button>
+                        <button class="modal-footer-button red" @click="deleteNote">Delete Note</button>
                         <button class="modal-footer-button" @click="stopDeletion">Cancel</button>
                     </div>
                 </template>
@@ -755,6 +755,10 @@ main {
 
 .yellow {
     background: var(--yellow);
+}
+
+.red {
+    background: var(--red);
 }
 
 .alert-icon-large {

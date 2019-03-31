@@ -54,7 +54,7 @@
                         <h4>Are you sure you want to permanently delete {{ alertModalClass }}?</h4>
                     </div>
                     <div class="modal-footer">
-                        <button class="modal-footer-button yellow" @click="deleteClass(alertModalClassID)">Yes</button>
+                        <button class="modal-footer-button red" @click="deleteClass(alertModalClassID)">Delete {{ alertModalClass }}</button>
                         <button class="modal-footer-button" @click="alertModalOpen = false">Cancel</button>
                     </div>
                 </template>
@@ -460,6 +460,10 @@ h6 {
 
 .yellow {
     background: var(--yellow);
+}
+
+.red {
+    background: var(--red);
 }
 
 .modify-class-button {
