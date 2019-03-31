@@ -20,9 +20,11 @@ export default {
 			if (this.show) {
 				let touchbarItems = []
 
-				this.bar.forEach((item) => {
-					touchbarItems.push(this.buildItem(item))
-				})
+				if (this.bar !== undefined) {
+					this.bar.forEach((item) => {
+						touchbarItems.push(this.buildItem(item))
+					})
+				}
 
 				let newEscapeItem
 
@@ -71,9 +73,13 @@ export default {
 		// built touchbar elements stored in an array
 		let touchbarItems = []
 
-		this.bar.forEach((item) => {
-			touchbarItems.push(this.buildItem(item))
-		})
+		if (this.bar !== undefined) {
+			this.bar.forEach((item) => {
+				touchbarItems.push(this.buildItem(item))
+			})
+		} else {
+
+		}
 
 		let newEscapeItem
 

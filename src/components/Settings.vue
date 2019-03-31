@@ -190,14 +190,12 @@
 <script>
 import Tabs from '@/components/Tabs.vue'
 import Help from '@/components/Help.vue'
-import TouchBar from '@/components/TouchBar.vue'
 
 export default {
 	name: 'Settings',
 	components: {
 		Tabs,
-		Help,
-		TouchBar
+		Help
 	},
 	data() {
 		return {
