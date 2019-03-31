@@ -356,53 +356,6 @@ export default {
 				})
 		},
 		viewStudentProfile() {
-			// // find and set earliest date noted for the class if unavailable in store
-			// if (this.$store.state.earliestDatesNoted[this.student.class] == undefined) {
-	  //           let earliestDateNoted = {}
-
-	  //           // get all notes from student's class and sort
-	  //           let classStudents = []
-	  //           let classNotes = []
-
-	  //           db.readSomething('students', {class: this.student.class})
-	  //               .then(foundStudents => {
-	  //                   classStudents = foundStudents
-
-	  //                   // grab DB query promises
-			// 			let promises = []
-
-	  //                   for (let i=0; i<classStudents.length; i++) {
-	  //                       promises.push(db.readSomething('notes', {student: classStudents[i]._id})
-	  //                           .then(foundNotes => {
-	  //                               for (let k=0; k<foundNotes.length; k++) {
-	  //                                   classNotes.push(foundNotes[k])
-	  //                               }
-
-	  //                           }))
-	  //                   }
-
-	  //                   // ensure promises are complete before determining earliest note for class
-			// 			Promise.all(promises).then(() => {
-			// 				let sortedNotes = classNotes.sort((a, b) => {
-			// 					let dateA = a.dateNoted._d
-			// 					let dateB = b.dateNoted._d
-
-			// 					return dateA < dateB ? -1 : 1
-			// 				})
-
-			// 				if (sortedNotes.length > 0) {
-			// 					earliestDateNoted = sortedNotes[0].dateNoted
-			// 					this.$store.dispatch('getEarliestDatesNoted', {earliestDateNoted: earliestDateNoted, class: this.student.class})
-			// 				}
-
-			// 				// once found and set, route to student profile
-			// 				this.$router.push(`/student/${this.student._id}`)
-			// 			})
-	  //               })
-
-	  //       } else {
-			// 	this.$router.push(`/student/${this.student._id}`)
-			// }
 			this.$router.push(`/student/${this.student._id}`)
 		}
 	},

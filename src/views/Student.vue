@@ -486,11 +486,6 @@ export default {
 </script>
 
 <style scoped>
-@keyframes flash {
-    from {background: var(--light-gray);}
-    to {background: var(--gray);}
-}
-
 @keyframes spin {
     from {transform: rotate(0);}
     to {transform: rotate(360deg);}
@@ -561,21 +556,14 @@ main {
 }
 
 #trendLoading {
-   /* height: 220px;
-    border-radius: 5px;
-    animation-name: flash;
-    animation-duration: .5s;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;*/
-
     height: 230px;
     width: 230px;
     margin: 0 auto;
     border-radius: 230px;
-    border-top: 5px solid var(--light-gray);
-    border-right: 5px solid var(--gray);
-    border-bottom: 5px solid var(--gray);
-    border-left: 5px solid var(--gray);
+    border-top: 5px solid var(--yellow);
+    border-right: 5px solid var(--light-gray);
+    border-bottom: 5px solid var(--light-gray);
+    border-left: 5px solid var(--light-gray);
     animation-name: spin;
     animation-duration: 1s;
     animation-iteration-count: infinite;
