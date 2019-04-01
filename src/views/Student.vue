@@ -43,7 +43,9 @@
                 <h2 v-if="this.notes.length == 0">Add a Note</h2>
                 <h2 v-else>Notes</h2>
                 <div id="addNoteArea">
-                    <button @click="openModal('note')" id="addNoteButton">+</button>
+                    <transition name="fade">
+                        <button @click="openModal('note')" id="addNoteButton" v-if="trendLoaded">+</button>
+                    </transition>
                 </div>
                 <sequential-entrance fromTop delay="20">
                     <div v-for="(note, index) in invertedNotes" :key="`note${index}`" :class="[note.type === 'positive' ? 'yellow-card' : 'red-card', 'note-card']">
@@ -55,8 +57,12 @@
                             <span class="date-text">on {{ note.dateNoted.formatted }}</span>
                             <p v-if="note.comment == '' || note.comment == null" class="center">- no comment -</p>
                             <p v-else>{{ note.comment }}</p>
-                            <button @click="startEdit(note)" class="edit-button"><img src="@/assets/edit.svg" alt="edit icon"></button>
-                            <button @click="promptDelete(note._id)" class="delete-button"><img src="@/assets/delete.svg" alt="delete icon"></button>
+                            <transition name="fade">
+                                <button @click="startEdit(note)" class="edit-button" v-if="trendLoaded"><img src="@/assets/edit.svg" alt="edit icon"></button>
+                            </transition>
+                            <transition name="fade">
+                                <button @click="promptDelete(note._id)" class="delete-button" v-if="trendLoaded"><img src="@/assets/delete.svg" alt="delete icon"></button>
+                            </transition>
                         </section>
                     </div>
                 </sequential-entrance>
