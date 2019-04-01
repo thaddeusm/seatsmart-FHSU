@@ -13,7 +13,7 @@
                 <div :style="{background: student.highlight}"></div>
             </div>
             <div id="selectArea">
-                <button @click="toggleSelected" v-if="student.selected"><img src="@/assets/yellowstar.svg" alt="select icon"></button>
+                <button @click="toggleSelected" v-if="selected"><img src="@/assets/yellowstar.svg" alt="select icon"></button>
                 <button @click="toggleSelected" v-else><img src="@/assets/graystar.svg" alt="select icon"></button>
             </div>
         </aside>
@@ -171,7 +171,8 @@ export default {
             modalOpen: false,
             alertModalOpen: false,
             noteToDelete: null,
-            noteToEdit: undefined
+            noteToEdit: undefined,
+            selected: false
         }
     },
     computed: {
@@ -400,7 +401,7 @@ export default {
             }).then(() => {
                 db.readSomething('students', {_id: this.id})
                     .then((results) => {
-                        this.student.selected = !this.student.selected
+                        this.selected = !this.selected
                     })
             })
         },
@@ -471,7 +472,7 @@ export default {
         db.readSomething('students', {_id: this.id})
             .then((results) => {
                 this.student = results[0]
-
+                this.selected = results[0].selected
                 // check for English name to display
                 if (this.student.firstName.indexOf('(') !== -1) {
                     this.student.firstName = this.student.firstName.split('(')[1].split(')')[0].split(' ')[0]
