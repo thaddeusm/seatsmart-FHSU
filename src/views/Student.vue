@@ -400,7 +400,7 @@ export default {
             }).then(() => {
                 db.readSomething('students', {_id: this.id})
                     .then((results) => {
-                        this.student = results[0]
+                        this.student.selected = !this.student.selected
                     })
             })
         },
