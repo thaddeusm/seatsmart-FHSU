@@ -47,10 +47,6 @@ button {
 	margin-left: -50px;
 }
 
-::selection {
-	background: var(--yellow);
-}
-
 input:focus {
 	outline: none;
 }
