@@ -554,10 +554,10 @@ main {
 }
 
 #trendLoading {
-    height: 230px;
-    width: 230px;
+    height: 210px;
+    width: 210px;
     margin: 0 auto;
-    border-radius: 230px;
+    border-radius: 210px;
     border-top: 5px solid var(--yellow);
     border-right: 5px solid var(--light-gray);
     border-bottom: 5px solid var(--light-gray);
@@ -631,7 +631,7 @@ main {
 }
 
 #addNoteArea {
-    margin: 10px 0 30px 0;
+    height: 80px;
 }
 
 #addNoteButton {
