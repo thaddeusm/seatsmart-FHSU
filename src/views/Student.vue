@@ -54,7 +54,7 @@
                         </section>
                         <section class="note-body">
                             <h5>{{ note.behavior.Description }}</h5>
-                            <span class="date-text">on {{ note.dateNoted.formatted }}</span>
+                            <span class="date-text">on {{ makePrettyDate(note.dateNoted._d) }}</span>
                             <p v-if="note.comment == '' || note.comment == null" class="center">- no comment -</p>
                             <p v-else>{{ note.comment }}</p>
                             <transition name="fade">
@@ -351,15 +351,6 @@ export default {
                         return dateA < dateB ? -1 : 1
                     })
 
-                    // convert raw date object to human readable format
-                    for (let i=0; i<this.notes.length; i++) {
-                        let thisDate = this.notes[i].dateNoted._d
-
-                        let newDate = moment(thisDate).format('dddd, MMM D')
-
-                        this.notes[i].dateNoted.formatted = newDate
-                    }
-
                     this.loaded = true
 
 
@@ -399,11 +390,11 @@ export default {
                     "selected": !this.student.selected
                 }
             }).then(() => {
-                db.readSomething('students', {_id: this.id})
-                    .then((results) => {
-                        this.selected = !this.selected
-                    })
+                this.selected = !this.selected
             })
+        },
+        makePrettyDate(dateObj) {
+            return moment(dateObj).format('dddd, MMM D')
         },
         getEarliestDateNoted() {
             // find and set earliest date noted for the class if unavailable in store
