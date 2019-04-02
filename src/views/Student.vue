@@ -554,10 +554,10 @@ main {
 }
 
 #trendLoading {
-    height: 210px;
-    width: 210px;
+    height: 220px;
+    width: 220px;
     margin: 0 auto;
-    border-radius: 210px;
+    border-radius: 220px;
     border-top: 5px solid var(--yellow);
     border-right: 5px solid var(--light-gray);
     border-bottom: 5px solid var(--light-gray);
