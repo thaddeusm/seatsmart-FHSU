@@ -78,7 +78,16 @@ function createWindow () {
       win.setResizable(false)
       win.show()
       win.focus()
-  });
+  })
+
+  // trying to improve UX when connecting to a projector or secondary display
+  win.on('restore', () => {
+    let {width, height} = require('electron').screen.getPrimaryDisplay().size
+
+      global.screenWidth = width
+      global.screenHeight = height
+      win.maximize()
+  })
 }
 
 // Quit when all windows are closed.
