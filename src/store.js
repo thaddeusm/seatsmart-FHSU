@@ -54,7 +54,17 @@ export default new Vuex.Store({
             })
         },
         setPreferences(context, newPreferences) {
-            context.commit('setPreferences', newPreferences)
+            let currentPreferences = context.state.preferences
+
+            // set new values dynamically
+            let keys = Object.keys(newPreferences)
+            let vals = Object.values(newPreferences)
+
+            for (let i=0; i<keys.length; i++) {
+                currentPreferences[keys[i]] = vals[i]
+            }
+
+            context.commit('setPreferences', currentPreferences)
         },
         setLastUpdatedStudent(context, studentID) {
             context.commit('setLastUpdatedStudent', studentID)

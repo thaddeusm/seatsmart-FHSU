@@ -147,7 +147,7 @@ export default {
 	},
 	computed: {
 		progress() {
-			return this.$store.state.preferences.progress;
+			return this.$store.state.preferences.progress
 		}
 	}
 }

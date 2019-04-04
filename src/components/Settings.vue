@@ -337,7 +337,6 @@ export default {
 		saveChanges() {
 			if (!this.errorExists('positive') && !this.errorExists('negative')) {
 				this.$store.dispatch('setPreferences', {
-					progress: this.$store.state.preferences.progress,
 					calculation: this.calculation,
 					positiveBehaviors: this.positiveBehaviors,
 					negativeBehaviors: this.negativeBehaviors,

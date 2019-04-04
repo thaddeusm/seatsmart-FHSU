@@ -314,10 +314,6 @@ export default {
             // check to ensure behaviorToTally is set
             if (!scope.$store.state.preferences.hasOwnProperty('behaviorToTally')) {
                 scope.$store.dispatch('setPreferences', {
-                    progress: scope.$store.state.preferences.progress,
-                    calculation: scope.$store.state.preferences.calculation,
-                    positiveBehaviors: scope.$store.state.preferences.positiveBehaviors,
-                    negativeBehaviors: scope.$store.state.preferences.negativeBehaviors,
                     behaviorToTally: '(-) Absent'
                 })
 

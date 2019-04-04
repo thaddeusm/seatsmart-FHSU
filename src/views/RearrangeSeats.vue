@@ -244,11 +244,7 @@ export default {
 
 				if (this.progress.indexOf('rearranged seats') === -1) {
 					this.$store.dispatch('setPreferences', {
-						progress: ['created class', 'rearranged seats'],
-						calculation: this.$store.state.preferences.calculation,
-						positiveBehaviors: this.$store.state.preferences.positiveBehaviors,
-						negativeBehaviors: this.$store.state.preferences.negativeBehaviors,
-						behaviorToTally: this.$store.state.preferences.behaviorToTally
+						progress: ['created class', 'rearranged seats']
 					})
 				}
 

@@ -600,11 +600,7 @@ export default {
 
 			if (this.$store.state.preferences.progress.indexOf('viewed class chart') === -1) {
 				this.$store.dispatch('setPreferences', {
-					progress: ['created class', 'rearranged seats', 'viewed class chart'],
-					calculation: this.$store.state.preferences.calculation,
-					positiveBehaviors: this.$store.state.preferences.positiveBehaviors,
-					negativeBehaviors: this.$store.state.preferences.negativeBehaviors,
-					behaviorToTally: this.$store.state.preferences.behaviorToTally
+					progress: ['created class', 'rearranged seats', 'viewed class chart']
 				})
 			}
 		},
