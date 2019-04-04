@@ -560,7 +560,7 @@ export default {
 		invertChart() {
 			// check for need to recalculate card sizes
 			this.calculateCardSize()
-			
+
 			this.inverted = !this.inverted
 			this.clearRandom()
 			if (this.cardType !== 'trends') {
@@ -636,6 +636,10 @@ export default {
 				scope.modalOpen = true
 			}, 5000, scope)
 		}
+
+		EventBus.$on('stretch', () => {
+			this.calculateCardSize()
+		})
 	},
 	created() {
 		db.readSomething('classes', {_id: this.id})

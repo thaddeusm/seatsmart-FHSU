@@ -18,6 +18,8 @@ Vue.component('v-select', vSelect)
 
 Vue.config.productionTip = false
 
+window.EventBus = new Vue();
+
 new Vue({
   router,
   store,
