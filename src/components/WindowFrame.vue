@@ -1,9 +1,9 @@
 <template>
-	<aside>
+	<aside @dblclick="maximizeWindow">
 		<button @click="closeWindow"><img src="@/assets/close.svg" alt="close icon"></button>
 		<button @click="minimizeWindow"><img src="@/assets/minimize.svg" alt="minimize icon"></button>
 		<button v-if="maximized" @click="restoreWindow"><img src="@/assets/restore.svg" alt="restore icon"></button>
-		<button v-else @click="maximizeWindow"><img src="@/assets/maximize.svg" alt="maximize icon"></button>
+		<button v-else @click="setFullScreen"><img src="@/assets/maximize.svg" alt="maximize icon"></button>
 	</aside>
 </template>
 
@@ -27,7 +27,11 @@ export default {
 			let window = remote.getCurrentWindow()
 			window.minimize()
 		},
-		maximizeWindow() {
+		minimizeWindow() {
+			let window = remote.getCurrentWindow()
+			window.maximize()
+		},
+		setFullScreen() {
 			let window = remote.getCurrentWindow()
 			window.setFullScreen(true)
 			this.maximized = true
