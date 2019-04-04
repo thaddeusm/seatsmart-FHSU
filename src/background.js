@@ -85,6 +85,7 @@ function createWindow () {
 
       global.screenWidth = width
       global.screenHeight = height
+      win.setSize(width, height)
       win.maximize()
       win.setResizable(false)
       win.show()
