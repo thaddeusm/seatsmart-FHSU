@@ -56,6 +56,7 @@ export default {
 		    window.setSize(width, height)
 		    window.maximize()
 
+		    // this helps reset dynamically calculated component sizes
 		    setTimeout(function() {
 		    	EventBus.$emit('stretch')
 		    }, 800)
