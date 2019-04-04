@@ -1,6 +1,6 @@
 'use strict'
 // Electron JS modules
-import { app, protocol, BrowserWindow } from 'electron'
+const { app, protocol, BrowserWindow, ipcMain: ipc, contents } = require('electron')
 
 // Vue JS modules
 import {
@@ -31,7 +31,6 @@ global.notes = new Datastore({
 
 // provides build version information for use in UI
 global.version = '0.15'
-
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
@@ -68,6 +67,18 @@ function createWindow () {
     win = null
   })
 
+  // trying to improve UX when connecting to a projector or secondary display
+  win.on('restore', () => {
+    let {width, height} = require('electron').screen.getPrimaryDisplay().size
+
+    global.screenWidth = width
+    global.screenHeight = height
+    
+    win.setSize(width, height)
+
+    win.maximize()
+  })
+
   // force BrowserWindow instance to fill screen before showing
   win.on('ready-to-show', function() {
       let {width, height} = require('electron').screen.getPrimaryDisplay().size
@@ -78,15 +89,6 @@ function createWindow () {
       win.setResizable(false)
       win.show()
       win.focus()
-  })
-
-  // trying to improve UX when connecting to a projector or secondary display
-  win.on('restore', () => {
-    let {width, height} = require('electron').screen.getPrimaryDisplay().size
-
-      global.screenWidth = width
-      global.screenHeight = height
-      win.maximize()
   })
 }
 

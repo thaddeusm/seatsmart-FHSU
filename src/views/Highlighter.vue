@@ -139,8 +139,8 @@ export default {
 	methods: {
 		calculateCardSize() {
 			// determine ideal card dimensions
-			let totalWidth = remote.getGlobal('screenWidth')
-			let totalHeight = remote.getGlobal('screenHeight')
+			let totalWidth = window.innerWidth
+			let totalHeight = window.innerHeight
 			let heightAdjusted
 
 			heightAdjusted = totalHeight * .76

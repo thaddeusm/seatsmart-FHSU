@@ -46,7 +46,7 @@
 			</section>
 		</main>
 		<footer id="chartFooter">
-			<ActionBar background="var(--gray)" :hamburger="true" v-on:expand="calculateCardSize('large')" v-on:contract="calculateCardSize('small')" :collapsed="false">
+			<ActionBar background="var(--gray)" :hamburger="true" v-on:expand="toggleExpand(true)" v-on:contract="toggleExpand(false)" :collapsed="false">
 		        <template slot="left">
 		        	<router-link to="/"><img src="@/assets/home.svg" alt="home icon"></router-link>
 		        </template>
@@ -315,7 +315,8 @@ export default {
 			},
 			studentFormAlertMessage: '',
 			promptStudentDelete: false,
-			deselect: false
+			deselect: false,
+			expanded: false
 		}
 	},
 	computed: {
@@ -324,13 +325,13 @@ export default {
 		}
 	},
 	methods: {
-		calculateCardSize(size) {
+		calculateCardSize() {
 			// determine ideal card dimensions
-			let totalWidth = remote.getGlobal('screenWidth')
-			let totalHeight = remote.getGlobal('screenHeight')
+			let totalWidth = window.innerWidth
+			let totalHeight = window.innerHeight
 			let heightAdjusted
 
-			if (size == 'small') {
+			if (!this.expanded) {
 				heightAdjusted = totalHeight * .76
 			} else {
 				heightAdjusted = totalHeight * .84
@@ -381,6 +382,9 @@ export default {
     		this.$router.push(`/chart/edit/${this.id}`)
     	},
     	selectRandom() {
+			// check for need to recalculate card sizes
+			this.calculateCardSize()
+
 			// check to ensure selected student is not absent today
 			let matchFound = false
 
@@ -433,6 +437,9 @@ export default {
     		this.chosenSeat.column = null
     	},
     	toggleCardStyle() {
+    		// check for need to recalculate card sizes
+			this.calculateCardSize()
+
     		if (this.cardType === 'complex') {
     			this.cardType = 'simple'
     		} else {
@@ -440,6 +447,9 @@ export default {
     		}
     	},
 		toggleEditMode() {
+			// check for need to recalculate card sizes
+			this.calculateCardSize()
+
 			if (this.cardType === 'edit') {
 				this.cardType = 'complex'
 			} else {
@@ -536,6 +546,9 @@ export default {
 			this.studentFormAlertMessage = ''
 		},
     	showTrends() {
+    		// check for need to recalculate card sizes
+			this.calculateCardSize()
+
     		this.showingTrends = !this.showingTrends
 
     		if (this.showingTrends) {
@@ -545,6 +558,9 @@ export default {
     		}
     	},
 		invertChart() {
+			// check for need to recalculate card sizes
+			this.calculateCardSize()
+			
 			this.inverted = !this.inverted
 			this.clearRandom()
 			if (this.cardType !== 'trends') {
@@ -599,6 +615,11 @@ export default {
 			setTimeout(function() {
 				scope.deselect = false
 			}, 1000, scope)
+		},
+		toggleExpand(value) {
+			this.expanded = value
+
+			this.calculateCardSize()
 		}
 	},
 	mounted() {
@@ -624,7 +645,7 @@ export default {
 				// update last view in $store
 				this.$store.dispatch('setLastView', `/chart/${this.classInfo._id}`)
 
-				this.calculateCardSize('small')
+				this.calculateCardSize()
 
 				db.readSomething('students', {class: this.id})
 					.then((students) => {
