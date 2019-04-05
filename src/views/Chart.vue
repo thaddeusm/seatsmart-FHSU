@@ -633,6 +633,7 @@ export default {
 			}, 5000, scope)
 		}
 
+		// listen for user attempts to correct sizing after screen resolution change
 		EventBus.$on('stretch', () => {
 			this.calculateCardSize()
 		})

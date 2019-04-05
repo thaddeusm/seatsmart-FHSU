@@ -264,6 +264,12 @@ export default {
 						this.placeStudentsInSeats()
 					})
 			})
+	},
+	mounted() {
+		// listen for user attempts to correct sizing after screen resolution change
+		EventBus.$on('stretch', () => {
+			this.calculateCardSize()
+		})
 	}
 }
 </script>
