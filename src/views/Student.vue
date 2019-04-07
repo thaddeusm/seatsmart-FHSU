@@ -2,7 +2,7 @@
     <div id="studentContainer" :class="[modalOpen ? 'no-overflow' : '']">
         <aside id="leftPanel">
             <h1>{{ student.firstName }} {{ student.lastName }}</h1>
-            <div id="tigerArea">
+            <div id="tigerArea" v-if="student.tigerID !== null">
                 <img src="@/assets/tiger.png" id="tigerLogo" alt="FHSU tiger logo">
                 <h5>{{ student.tigerID }}</h5>
             </div>

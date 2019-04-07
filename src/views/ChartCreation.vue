@@ -497,6 +497,8 @@ export default {
 						})
 					}
 
+					this.$store.dispatch('getAllClasses')
+
 					this.$router.push(`/chart/${this.classChart._id}`)
 				} else {
 					// check for deleted students
