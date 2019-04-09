@@ -126,8 +126,8 @@
 							</div>
 						</section>
 						<section class="student-modal-footer">
-							<button class="student-footer-button yellow" @click="saveNewStudent">Save</button>
 							<button class="student-footer-button" @click="resetNewStudent">Cancel</button>
+							<button class="student-footer-button yellow" @click="saveNewStudent">Save</button>
 						</section>
 					</div>
         		</template>
@@ -156,9 +156,9 @@
 							</div>
 						</section>
 						<section class="student-modal-footer">
-							<button class="student-footer-button red" v-if="promptStudentDelete" @click="deleteStudent">Delete {{ studentToEdit.firstName }}</button>
 							<button class="student-footer-button red" @click="promptStudentDelete = true" v-if="!promptStudentDelete">Delete Student</button>
 							<button class="student-footer-button" @click="resetStudentToEdit">Cancel</button>
+							<button class="student-footer-button red" v-if="promptStudentDelete" @click="deleteStudent">Delete {{ studentToEdit.firstName }}</button>
 							<button class="student-footer-button yellow" @click="saveEditedStudent" v-if="!promptStudentDelete">Save</button>
 						</section>
 					</div>
