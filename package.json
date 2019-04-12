@@ -7,8 +7,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "publish": "electron:build -wm",
-    "electron:build": "vue-cli-service electron:build",
+    "publish": "electron:build",
+    "electron:build": "vue-cli-service electron:build -p onTagOrDraft",
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps"
   },
