@@ -89,6 +89,7 @@ import db from '@/db'
 import moment from 'moment'
 const { remote } = require('electron')
 const shell = require('electron').shell
+const { autoUpdater } = require("electron-updater")
 
 import SearchBox from '@/components/SearchBox.vue'
 import ButtonCard from '@/components/ButtonCard.vue'
@@ -321,20 +322,22 @@ export default {
     		}
 
             // check for update
-            let request = new XMLHttpRequest()
-            let url = 'https://seatsmart-updater.now.sh/' + scope.version
+            // let request = new XMLHttpRequest()
+            // let url = 'https://seatsmart-updater.now.sh/' + scope.version
 
-            request.onloadend = function() {
-                let response = (JSON.parse(request.response))
+            // request.onloadend = function() {
+            //     let response = (JSON.parse(request.response))
 
-                if (response.updateAvailable) {
-                    scope.updateAvailable = true
-                    scope.newestVersion = response.newestVersion
-                }
-            }
+            //     if (response.updateAvailable) {
+            //         scope.updateAvailable = true
+            //         scope.newestVersion = response.newestVersion
+            //     }
+            // }
 
-            request.open('GET', url)
-            request.send()
+            // request.open('GET', url)
+            // request.send()
+
+            autoUpdater.checkForUpdatesAndNotify()
         }, 3000, scope)
     }
 }
