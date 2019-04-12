@@ -1,6 +1,7 @@
 'use strict'
 // Electron JS modules
 const { app, protocol, BrowserWindow, ipcMain: ipc, contents } = require('electron')
+const { autoUpdater } = require("electron-updater")
 
 // Vue JS modules
 import {
@@ -90,6 +91,8 @@ function createWindow () {
       win.setResizable(false)
       win.show()
       win.focus()
+
+      autoUpdater.checkForUpdatesAndNotify()
   })
 }
 

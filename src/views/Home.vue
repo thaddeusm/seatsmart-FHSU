@@ -89,7 +89,6 @@ import db from '@/db'
 import moment from 'moment'
 const { remote } = require('electron')
 const shell = require('electron').shell
-const { autoUpdater } = require("electron-updater")
 
 import SearchBox from '@/components/SearchBox.vue'
 import ButtonCard from '@/components/ButtonCard.vue'
@@ -337,7 +336,6 @@ export default {
             // request.open('GET', url)
             // request.send()
 
-            autoUpdater.checkForUpdatesAndNotify()
         }, 3000, scope)
     }
 }
