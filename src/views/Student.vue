@@ -400,7 +400,7 @@ export default {
         },
         getEarliestDateNoted() {
             // find and set earliest date noted for the class if unavailable in store
-            if (this.$store.state.earliestDatesNoted[this.student.class] == undefined) {
+            if (this.$store.state.earliestDatesNoted[this.student.class] == undefined && this.calculationPreference === 'nonews') {
                 let earliestDateNoted = {}
 
                 // get all notes from student's class and sort
