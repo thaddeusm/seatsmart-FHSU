@@ -320,22 +320,6 @@ export default {
                 scope.$store.dispatch('getPreferences')
     		}
 
-            // check for update
-            // let request = new XMLHttpRequest()
-            // let url = 'https://seatsmart-updater.now.sh/' + scope.version
-
-            // request.onloadend = function() {
-            //     let response = (JSON.parse(request.response))
-
-            //     if (response.updateAvailable) {
-            //         scope.updateAvailable = true
-            //         scope.newestVersion = response.newestVersion
-            //     }
-            // }
-
-            // request.open('GET', url)
-            // request.send()
-
         }, 3000, scope)
     }
 }
