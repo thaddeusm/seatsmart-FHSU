@@ -1,15 +1,14 @@
 {
   "name": "Seatsmart",
-  "version": "0.15.1",
+  "version": "0.15.2",
   "author": "Thaddeus McCleary",
   "description": "a classroom participation tracking application",
-  "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "publish": "electron:build",
-    "electron:build": "vue-cli-service electron:build -p onTagOrDraft",
+    "electron:build": "vue-cli-service electron:build",
     "electron:serve": "vue-cli-service electron:serve",
+    "publish": "electron:build -p onTagOrDraft",
     "postinstall": "electron-builder install-app-deps"
   },
   "repository": {
@@ -35,6 +34,9 @@
     "electron": "^3.0.0",
     "vue-cli-plugin-electron-builder": "^1.0.0-rc.10",
     "vue-template-compiler": "^2.5.17"
+  },
+  "build": {
+    "publish": ["github"]
   },
   "postcss": {
     "plugins": {
