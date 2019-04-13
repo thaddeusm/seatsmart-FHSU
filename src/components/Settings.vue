@@ -141,7 +141,7 @@
 			<section v-if="content == 'about'">
 				<h1>About</h1>
 				<p>
-					Seatsmart is being developed as a convenient way to implement classroom
+					<button @click="openHomePage('main')" class="inner-link">Seatsmart</button> is being developed as a convenient way to implement classroom
 					participation guidance by the Department of English at Fort Hays State University for
 					courses conducted at campuses in China.
 				</p>
@@ -163,7 +163,8 @@
 				</p>
 				<h3>Current Version</h3>
 				<p>
-					<button @click="openHomePage" class="inner-link">Seatsmart</button> (beta) v.{{ version }} | Copyright 2019 Thaddeus McCleary
+					<button @click="openHomePage('notes')" class="inner-link">v.{{ version }}</button> (beta) 
+					| Copyright 2019 Thaddeus McCleary
 				</p>
 				<h3>MIT License</h3>
 				<p>
@@ -348,8 +349,12 @@ export default {
 				this.$emit('trigger-modal-close')
 			}
 		},
-		openHomePage() {
-			shell.openExternal('https://seatsmart.now.sh/')
+		openHomePage(section) {
+			if (section == 'main') {	
+				shell.openExternal('https://seatsmart.now.sh/')
+			} else {
+				shell.openExternal('https://seatsmart.now.sh/#releaseNotes')
+			}
 		}
 	},
 	mounted() {
