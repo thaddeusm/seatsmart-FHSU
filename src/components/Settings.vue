@@ -161,10 +161,11 @@
 					related to students remains confidential.  Records in Seatsmart may relate to a student's academic
 					performance and therefore should be protected just as any other grades.
 				</p>
-				<h3>MIT License</h3>
+				<h3>Current Version</h3>
 				<p>
-					Seatsmart (beta) v.{{ version }} | Copyright 2019 Thaddeus McCleary
+					<button @click="openHomePage" class="inner-link">Seatsmart</button> (beta) v.{{ version }} | Copyright 2019 Thaddeus McCleary
 				</p>
+				<h3>MIT License</h3>
 				<p>
 					Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 					documentation files (the "Software"), to deal in the Software without restriction, including without limitation
@@ -188,6 +189,8 @@
 </template>
 
 <script>
+const shell = require('electron').shell
+
 import Tabs from '@/components/Tabs.vue'
 import Help from '@/components/Help.vue'
 
@@ -238,13 +241,6 @@ export default {
 
 			return all
 		}
-	},
-	mounted() {
-		// grab existing user settings from store and set as local props for editing
-		this.calculation = this.$store.state.preferences.calculation
-		this.positiveBehaviors = this.$store.state.preferences.positiveBehaviors
-		this.negativeBehaviors = this.$store.state.preferences.negativeBehaviors
-		this.behaviorToTally = this.$store.state.preferences.behaviorToTally
 	},
 	methods: {
 		changeContent(area) {
@@ -351,7 +347,17 @@ export default {
 
 				this.$emit('trigger-modal-close')
 			}
+		},
+		openHomePage() {
+			shell.openExternal('https://seatsmart.now.sh/')
 		}
+	},
+	mounted() {
+		// grab existing user settings from store and set as local props for editing
+		this.calculation = this.$store.state.preferences.calculation
+		this.positiveBehaviors = this.$store.state.preferences.positiveBehaviors
+		this.negativeBehaviors = this.$store.state.preferences.negativeBehaviors
+		this.behaviorToTally = this.$store.state.preferences.behaviorToTally
 	}
 }
 </script>
@@ -426,6 +432,15 @@ h1 {
 
 h3 {
 	margin-top: 30px;
+}
+
+.inner-link {
+	background: none;
+	border: none;
+	outline: none;
+	cursor: pointer;
+	font-size: 18px;
+	border-bottom: 2px solid var(--yellow);
 }
 
 #navigationFooter {

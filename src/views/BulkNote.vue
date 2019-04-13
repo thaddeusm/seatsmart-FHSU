@@ -31,6 +31,7 @@
         <TouchBar :show="true" :bar="[
             {type: 'spacer', size: 'flexible'},
             {type: 'button', label: 'Select / Deselect All', method: function() {toggleSelectAll()}},
+            {type: 'spacer', size: 'flexible'}
 	       ]" 
            :escapeItem="{type: 'button', label: 'Cancel', method: function() {$router.push(`/chart/${id}`)}}"
         />

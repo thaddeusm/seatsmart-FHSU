@@ -31,7 +31,7 @@ global.notes = new Datastore({
 })
 
 // provides build version information for use in UI
-global.version = '0.15'
+global.version = app.getVersion()
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 

@@ -60,26 +60,12 @@
                 </template>
             </Modal>
         </transition>
-        <transition name="fade">
-            <Modal v-if="updateAvailable" v-on:trigger-close="updateAvailable = false" :dismissable="true" size="small">
-                <template slot="content">
-                    <img src="@/assets/update.svg" alt="update icon" class="update-icon">
-                    <div class="modal-body">
-                        <h4>A new version of Seatsmart ({{ newestVersion }}) is available.</h4>
-                        <h6>**Updating will not affect your class data or settings.</h6>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="modal-footer-button yellow" @click="getUpdate">Review Update</button>
-                        <button class="modal-footer-button" @click="updateAvailable = false">Later</button>
-                    </div>
-                </template>
-            </Modal>
-        </transition>
         <TouchBar :show="!modalOpen && !alertModalOpen" :bar="[
                 {type: 'spacer', size: 'flexible'},
+                {type: 'button', label: 'New Chart', method: function() {$router.push('/charts/new')}},
+                {type: 'spacer', size: 'flexible'},
                 {type: 'button', label: 'Settings', method: openModal}
-            ]" 
-            :escapeItem="{type: 'button', label: 'New Chart', method: function() {$router.push('/charts/new')}}"
+            ]"
         />
     </div>
 </template>
@@ -88,7 +74,6 @@
 import db from '@/db'
 import moment from 'moment'
 const { remote } = require('electron')
-const shell = require('electron').shell
 
 import SearchBox from '@/components/SearchBox.vue'
 import ButtonCard from '@/components/ButtonCard.vue'
@@ -288,10 +273,6 @@ export default {
             if (term !== '') {
                 this.$router.push(`/search/${term}`)
             }
-        },
-        getUpdate() {
-            // allows default browser to open application homepage
-            shell.openExternal('https://seatsmart.now.sh/')
         }
     },
     created() {
