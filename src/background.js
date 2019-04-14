@@ -92,6 +92,11 @@ function createWindow () {
       win.show()
       win.focus()
 
+
+      autoUpdater.addEventListener('error', (msg) => {
+        console.log(msg)
+      })
+
       autoUpdater.checkForUpdatesAndNotify()
   })
 }
