@@ -93,9 +93,9 @@ function createWindow () {
       win.focus()
 
 
-      autoUpdater.addEventListener('error', (msg) => {
+      autoUpdater.error = (msg) => {
         console.log(msg)
-      })
+      }
 
       autoUpdater.checkForUpdatesAndNotify()
   })

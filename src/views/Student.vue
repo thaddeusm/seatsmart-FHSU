@@ -647,6 +647,7 @@ main {
     width: 320px;
     height: 200px;
     margin: 40px 5%;
+    padding-bottom: 10px;
     border-radius: 10px;
     box-shadow: 1px 2px 1px 2px var(--gray);
 }
