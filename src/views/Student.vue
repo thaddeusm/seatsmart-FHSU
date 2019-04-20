@@ -1,12 +1,16 @@
 <template>
     <div id="studentContainer" :class="[modalOpen ? 'no-overflow' : '']">
+        <transition name="fade">
         <aside id="leftPanel">
             <h1>{{ student.firstName }} {{ student.lastName }}</h1>
             <div id="tigerArea" v-if="student.tigerID !== null && student.tigerID !== ''">
                 <img src="@/assets/tiger.png" id="tigerLogo" alt="FHSU tiger logo">
                 <h5>{{ student.tigerID }}</h5>
             </div>
+            <transition name="fade">
             <TitleBar v-if="loaded" :classID="classInfo._id" :compact="true" :link="true" />
+        </transition>
+        <transition name="fade">
             <SeatingDiagram 
                 :compact="true" 
                 :inverted="true" 
@@ -14,8 +18,9 @@
                 :columns="classInfo.columns" 
                 :selected="`${this.student.seat.row},${this.student.seat.column}`" 
                 :classID="classInfo._id" 
-                v-on:change-route="pushRoute"
+                v-on:change-route="changeStudents"
             />
+        </transition>
             <div v-if="student.highlight && student.highlight !== ''" id="highlightArea">
                 <h6>highlight:</h6>
                 <div :style="{background: student.highlight}"></div>
@@ -25,6 +30,7 @@
                 <button @click="toggleSelected" v-else><img src="@/assets/graystar.svg" alt="select icon"></button>
             </div>
         </aside>
+        </transition>
         <main>
             <header>
                 <section id="backArea">
@@ -456,9 +462,12 @@ export default {
             }
 
         },
-        pushRoute(event) {
-            console.log(event)
-            this.$router.push(event)
+        changeStudents(nextStudent) {
+            // set new 'back' location
+            this.$store.dispatch('setLastView', `/student/${this.id}`)
+
+            // redirect to next student
+            this.$router.push(nextStudent)
         }
     },
     mounted() {
@@ -484,6 +493,12 @@ export default {
                 db.readSomething('classes', {_id: this.student.class})
                     .then((results) => {
                         this.classInfo = results[0]
+
+                        // set 'back' location to class chart if lastView is the same as current student
+                        if (this.$store.state.lastView == `/student/${this.id}`) {
+                            this.$store.dispatch('setLastView', `/chart/${this.classInfo._id}`)
+                        }
+                        
 
                         this.getNotes()
                     })

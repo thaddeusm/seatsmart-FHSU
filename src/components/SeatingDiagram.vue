@@ -2,7 +2,7 @@
 	<div id="diagramContainer" :class="[compact ? 'small-container' : 'large-container']">
 		<section class="chair-row" v-for="(row, index) in rows" :key="index">
 			<div class="chair-column" v-for="(column, imgIndex) in columns">
-				<button @click="pushRoute(row - 1, column -1)">
+				<button @click="changeRoute(row - 1, column -1)">
 				<img v-if="`${index + 1},${imgIndex + 1}` == selected" :class="[rows > 5 || columns > 5 ? 'small' : 'large', 'chair']" :key="imgIndex" alt="chair icon" src="@/assets/redchair.svg">
 				<img v-else-if="inverted" :class="[rows > 4 || columns > 4 ? 'small' : 'large', 'chair']"  :key="imgIndex" alt="chair icon" src="@/assets/whitechair.svg">
 				<img v-else-if="!inverted" :class="[rows > 4 || columns > 4 ? 'small' : 'large', 'chair']"  :key="imgIndex" alt="chair icon" src="@/assets/blackchair.svg">
@@ -63,9 +63,11 @@ export default {
                     })
             })
 		},
-		pushRoute(row, column) {
-			console.log(this.grid[row][column]._id)
-			this.$emit('change-route', `/student/${this.grid[row][column]._id}`)
+		changeRoute(row, column) {
+			// if the clicked seat is occupied, trigger redirection
+			if (this.grid.length > 0 && this.grid[row][column]._id !== '') {
+				this.$emit('change-route', `/student/${this.grid[row][column]._id}`)
+			}
 		}
 	},
 	mounted() {
@@ -110,5 +112,11 @@ export default {
 .small {
 	height: 20px;
 	margin: 0 2px;
+}
+
+button {
+    background: none;
+    outline: none;
+    border: none;
 }
 </style>
