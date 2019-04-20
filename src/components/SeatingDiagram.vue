@@ -2,15 +2,18 @@
 	<div id="diagramContainer" :class="[compact ? 'small-container' : 'large-container']">
 		<section class="chair-row" v-for="(row, index) in rows" :key="index">
 			<div class="chair-column" v-for="(column, imgIndex) in columns">
+				<button @click="pushRoute(row - 1, column -1)">
 				<img v-if="`${index + 1},${imgIndex + 1}` == selected" :class="[rows > 5 || columns > 5 ? 'small' : 'large', 'chair']" :key="imgIndex" alt="chair icon" src="@/assets/redchair.svg">
 				<img v-else-if="inverted" :class="[rows > 4 || columns > 4 ? 'small' : 'large', 'chair']"  :key="imgIndex" alt="chair icon" src="@/assets/whitechair.svg">
 				<img v-else-if="!inverted" :class="[rows > 4 || columns > 4 ? 'small' : 'large', 'chair']"  :key="imgIndex" alt="chair icon" src="@/assets/blackchair.svg">
+				</button>
 			</div>
 		</section>
 	</div>
 </template>
 
 <script>
+import db from '@/db.js'
 
 export default {
 	name: 'SeatingDiagram',
@@ -19,7 +22,54 @@ export default {
 		rows: Number, 
 		selected: String, 
 		inverted: Boolean, 
-		compact: Boolean
+		compact: Boolean,
+		classID: String
+	},
+	data() {
+		return {
+			grid: [[{_id: ''}]]
+		}
+	},
+	watch: {
+		classID: function(newID, oldID) {
+			this.buildGrid()
+		}
+	},
+	methods: {
+		buildGrid() {
+			db.readSomething('classes', {_id: this.classID})
+            .then((results) => {
+                this.grid.splice(0, 1)
+                for (let i=0; i<results[0].rows; i++) {
+					this.grid.push([])
+
+					for (let k=0; k<results[0].columns; k++) {
+						this.grid[i].push({
+                            _id: ''
+                        })
+					}
+				}
+
+                db.readSomething('students', {class: this.classID})
+                    .then((studentResults) => {
+                        for (let i=0; i<studentResults.length; i++) {
+                            let thisStudent = studentResults[i]
+                            let thisRow = thisStudent.seat.row
+                            let thisColumn = thisStudent.seat.column
+
+                            this.grid[thisRow - 1][thisColumn - 1] = {_id: thisStudent._id}
+                        }
+
+                    })
+            })
+		},
+		pushRoute(row, column) {
+			console.log(this.grid[row][column]._id)
+			this.$emit('change-route', `/student/${this.grid[row][column]._id}`)
+		}
+	},
+	mounted() {
+		this.buildGrid()
 	}
 }
 </script>
@@ -45,6 +95,10 @@ export default {
 }
 
 .chair-column {
+	display: inline-block;
+}
+
+.chair-container {
 	display: inline-block;
 }
 

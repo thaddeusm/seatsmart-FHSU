@@ -7,7 +7,15 @@
                 <h5>{{ student.tigerID }}</h5>
             </div>
             <TitleBar v-if="loaded" :classID="classInfo._id" :compact="true" :link="true" />
-            <SeatingDiagram :compact="true" :inverted="true" :rows="classInfo.rows" :columns="classInfo.columns" :selected="`${this.student.seat.row},${this.student.seat.column}`" />
+            <SeatingDiagram 
+                :compact="true" 
+                :inverted="true" 
+                :rows="classInfo.rows" 
+                :columns="classInfo.columns" 
+                :selected="`${this.student.seat.row},${this.student.seat.column}`" 
+                :classID="classInfo._id" 
+                v-on:change-route="pushRoute"
+            />
             <div v-if="student.highlight && student.highlight !== ''" id="highlightArea">
                 <h6>highlight:</h6>
                 <div :style="{background: student.highlight}"></div>
@@ -447,6 +455,10 @@ export default {
                 this.trendLoaded = true
             }
 
+        },
+        pushRoute(event) {
+            console.log(event)
+            this.$router.push(event)
         }
     },
     mounted() {
