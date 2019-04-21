@@ -1,7 +1,7 @@
 <template>
 	<aside @dblclick="stretchWindow">
 		<button @click="closeWindow"><img src="@/assets/close.svg" alt="close icon"></button>
-		<button @click="minimizeWindow"><img src="@/assets/minimize.svg" alt="minimize icon"></button>
+		<button @click="minimizeWindow" :class="[maximized ? 'faded' : '']"><img src="@/assets/minimize.svg" alt="minimize icon"></button>
 		<button v-if="maximized" @click="restoreWindow"><img src="@/assets/restore.svg" alt="restore icon"></button>
 		<button v-else @click="maximizeWindow"><img src="@/assets/maximize.svg" alt="maximize icon"></button>
 	</aside>
@@ -100,5 +100,9 @@ button {
 img {
 	width: 10px;
 	vertical-align: middle;
+}
+
+.faded {
+	opacity: .5;
 }
 </style>
