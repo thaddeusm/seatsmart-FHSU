@@ -141,7 +141,7 @@
 			<section v-if="content == 'about'">
 				<h1>About</h1>
 				<p>
-					<button @click="openHomePage('main')" class="inner-link">Seatsmart</button> is being developed as a convenient way to implement classroom
+					<button @click="openHomePage('main')" class="inner-link">Seatsmart</button>  offers a convenient way to implement classroom
 					participation guidance by the Department of English at Fort Hays State University for
 					courses conducted at campuses in China.
 				</p>
@@ -163,7 +163,7 @@
 				</p>
 				<h3>Current Version</h3>
 				<p>
-					<button @click="openHomePage('notes')" class="inner-link">v.{{ version }}</button> (beta) 
+					<button @click="openHomePage('notes')" class="inner-link">v.{{ version }}</button> 
 					| Copyright 2019 Thaddeus McCleary
 				</p>
 				<h3>MIT License</h3>
