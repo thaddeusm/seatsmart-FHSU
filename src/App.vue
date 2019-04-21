@@ -1,6 +1,7 @@
 <template>
   <div id="app">
   	<WindowFrame />
+  	<!-- force components to rerender with fresh data -->
     <router-view :key="$route.fullPath" />
   </div>
 </template>

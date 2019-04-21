@@ -287,6 +287,7 @@ export default {
             return arr
         },
         originRoute() {
+            // get the readable name of previous route to specify what 'back' means
             let previousRoute = this.$store.state.lastView
 
             let routeParts = previousRoute.split('/')
