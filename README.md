@@ -1,7 +1,7 @@
 ![Seatsmart Icon](https://seatsmart.now.sh/img/logo.b38f8b88.svg)
 
 # Seatsmart (FHSU)
-Seatsmart is being developed as a convenient way to implement classroom
+Seatsmart offers a convenient way to implement classroom
 participation guidance by the Department of English at Fort Hays State 
 University for courses conducted at campuses in China.  
 
@@ -51,11 +51,9 @@ Though its implementation in this repo is specific to the format of FHSU's roste
 this could be refactored in forked projects for other institutional settings.
 
 ## Development Timeline
-Seatsmart is currently in beta, being used by faculty members across several departments.  
-Features are being added in consultation with these early users in hopes of providing 
-a fully functional application to faculty at large at the beginning of the 2019-2020 
-academic year.  At that point, the project may be forked to provide a version of Seatsmart without FHSU 
-branding elements and/or with documentation for easier use in other contexts.
+Seatsmart is currently being used by faculty members across several departments.  
+The application is considered feature complete with the expectation that minor bugs 
+or small interface improvements will require future updates.  
 
 ## Design Concepts and Inspiration
 [mockups @Figma](https://www.figma.com/file/OxI3WKOFswThYuEfOR6UaV7V/Seatsmart)
