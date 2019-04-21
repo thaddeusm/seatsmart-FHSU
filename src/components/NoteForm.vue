@@ -16,13 +16,13 @@
 			</section>
 			<section id="noteStepTwo" v-if="step == 2">
 				<AbbreviationCircle size="large" :color="note.type === 'positive' ? 'yellow' : 'red'" :behavior="note.behavior" />
-				<textarea v-model="note.comment" placeholder="Your note (optional)..."></textarea>
+				<textarea ref="noteText" v-model="note.comment" placeholder="Your note (optional)..."></textarea>
 			</section>
 		</section>
 		<section id="noteFormFooter">
 			<button class="footer-button white" v-if="type == 'single'" @click="closeModal">Cancel</button>
 			<router-link class="footer-button white" v-else :to="to">Cancel</router-link>
-			<button v-if="step == 1" @click="step = 2" class="footer-button positive" ref="nextButton" :disabled="note.behavior.Abbreviation == null">Next</button>
+			<button v-if="step == 1" @click="changeStep(2)" class="footer-button positive" ref="nextButton" :disabled="note.behavior.Abbreviation == null">Next</button>
 			<button v-else-if="step == 2 && type !== 'single'" @click="saveNote" class="footer-button positive" :disabled="type !== 'single' && students.length == 0">Save</button>
 			<button v-else-if="step == 2 && type == 'single'" @click="saveNote" class="footer-button positive">Save</button>
 		</section>
@@ -165,6 +165,18 @@ export default {
 				comment: null,
 				type: null,
 				comment: null
+			}
+		},
+		changeStep(newStep) {
+			this.step = newStep
+
+			// move focus to textarea
+			if (newStep == 2) {
+				let scope = this
+
+				setTimeout(function() {
+					scope.$refs.noteText.focus()
+				}, 500, scope)
 			}
 		}
 	},
