@@ -3,7 +3,7 @@
 		<section class="chair-row" v-for="(row, index) in rows" :key="index">
 			<div class="chair-column" v-for="(column, imgIndex) in columns">
 				<button @click="changeRoute(row - 1, column -1)">
-				<img v-if="`${index + 1},${imgIndex + 1}` == selected" :class="[rows > 5 || columns > 5 ? 'small' : 'large', 'chair']" :key="imgIndex" alt="chair icon" src="@/assets/redchair.svg">
+				<img v-if="`${index + 1},${imgIndex + 1}` == selected" :class="[rows > 4 || columns > 4 ? 'small' : 'large', 'chair']" :key="imgIndex" alt="chair icon" src="@/assets/redchair.svg">
 				<img v-else-if="inverted" :class="[rows > 4 || columns > 4 ? 'small' : 'large', 'chair']"  :key="imgIndex" alt="chair icon" src="@/assets/whitechair.svg">
 				<img v-else-if="!inverted" :class="[rows > 4 || columns > 4 ? 'small' : 'large', 'chair']"  :key="imgIndex" alt="chair icon" src="@/assets/blackchair.svg">
 				</button>
