@@ -6,6 +6,10 @@
 				v-on:edit-info="setLastView(`/chart/${id}`)"
 				:title="classInfo.name"
 			/>
+			<RemoteController 
+				:passphrase="remotePassphrase"
+				v-on:open-remote-panel="openRemotePanel"
+			/>
 		</header>
 		<main id="chartMain" ref="chartMain">
 			<section v-if="!inverted" class="row" v-for="(row, index) in classInfo.rows" :style="rowMargins" :key="`row${index},${students.length}`">
@@ -185,6 +189,15 @@
 				</template>
 			</Modal>
 		</transition>
+		<transition name="fade">
+			<Modal v-if="remotePanelOpen" v-on:trigger-close="closeRemotePanel" :dismissable="true" size="small">
+				<template slot="content">
+					<RemoteInit 
+						v-on:set-passphrase="setPassphrase"
+					/>
+				</template>
+			</Modal>
+		</transition>
 		<TouchBar :show="!modalOpen" 
 			:bar="[
 				{type: 'button', label: '🔀', method: function() {rearrangeSeats()}},
@@ -207,6 +220,8 @@ import moment from 'moment'
 const { remote } = require('electron')
 
 import TitleBar from '@/components/TitleBar.vue'
+import RemoteController from '@/components/RemoteController.vue'
+import RemoteInit from '@/components/RemoteInit.vue'
 import NameCard from '@/components/NameCard.vue'
 import ActionBar from '@/components/ActionBar.vue'
 import Modal from '@/components/Modal.vue'
@@ -219,6 +234,8 @@ export default {
 	props: ['id'],
 	components: {
 		TitleBar,
+		RemoteController,
+		RemoteInit,
 		NameCard,
 		ActionBar,
 		Modal,
@@ -251,6 +268,8 @@ export default {
 			noteModalOpen: false,
 			newStudentModalOpen: false,
 			editStudentModalOpen: false,
+			remotePanelOpen: false,
+			remotePassphrase: '',
 			newNoteStudent: {
 				firstName: null,
 				lastName: null,
@@ -616,6 +635,15 @@ export default {
 			this.expanded = value
 
 			this.calculateCardSize()
+		},
+		openRemotePanel() {
+			this.remotePanelOpen = true
+		},
+		closeRemotePanel() {
+			this.remotePanelOpen = false
+		},
+		setPassphrase(passphrase) {
+			this.remotePassphrase = passphrase
 		}
 	},
 	mounted() {

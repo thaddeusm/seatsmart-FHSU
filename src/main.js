@@ -16,6 +16,9 @@ Vue.use(SequentialEntrance)
 import vSelect from 'vue-select'
 Vue.component('v-select', vSelect)
 
+import VueQriously from 'vue-qriously'
+Vue.use(VueQriously)
+
 Vue.config.productionTip = false
 
 window.EventBus = new Vue()
