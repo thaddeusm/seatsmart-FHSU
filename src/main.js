@@ -16,6 +16,14 @@ Vue.use(SequentialEntrance)
 import vSelect from 'vue-select'
 Vue.component('v-select', vSelect)
 
+import SocketIO from 'socket.io-client'
+import VueSocketIO from 'vue-socket.io'
+
+Vue.use(new VueSocketIO({
+    debug: true,
+    connection: SocketIO('http://localhost:4000')
+}))
+
 import VueQriously from 'vue-qriously'
 Vue.use(VueQriously)
 

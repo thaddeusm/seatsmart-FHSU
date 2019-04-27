@@ -7,7 +7,10 @@
 				:title="classInfo.name"
 			/>
 			<RemoteController 
-				:passphrase="remotePassphrase"
+				:passphrase="remoteInfo.passphrase"
+				:id="remoteInfo.id"
+				:host="remoteInfo.host"
+				:remote="remoteInfo.remote"
 				v-on:open-remote-panel="openRemotePanel"
 			/>
 		</header>
@@ -192,8 +195,10 @@
 		<transition name="fade">
 			<Modal v-if="remotePanelOpen" v-on:trigger-close="closeRemotePanel" :dismissable="true" size="small">
 				<template slot="content">
-					<RemoteInit 
+					<RemotePanel 
 						v-on:set-passphrase="setPassphrase"
+						v-on:remote-connected="connectRemote"
+						v-on:trigger-close="closeRemotePanel"
 					/>
 				</template>
 			</Modal>
@@ -221,7 +226,7 @@ const { remote } = require('electron')
 
 import TitleBar from '@/components/TitleBar.vue'
 import RemoteController from '@/components/RemoteController.vue'
-import RemoteInit from '@/components/RemoteInit.vue'
+import RemotePanel from '@/components/RemotePanel.vue'
 import NameCard from '@/components/NameCard.vue'
 import ActionBar from '@/components/ActionBar.vue'
 import Modal from '@/components/Modal.vue'
@@ -235,7 +240,7 @@ export default {
 	components: {
 		TitleBar,
 		RemoteController,
-		RemoteInit,
+		RemotePanel,
 		NameCard,
 		ActionBar,
 		Modal,
@@ -269,7 +274,12 @@ export default {
 			newStudentModalOpen: false,
 			editStudentModalOpen: false,
 			remotePanelOpen: false,
-			remotePassphrase: '',
+			remoteInfo: {
+				id: null,
+				host: null,
+				remote: null,
+				passphrase: null
+			},
 			newNoteStudent: {
 				firstName: null,
 				lastName: null,
@@ -644,6 +654,9 @@ export default {
 		},
 		setPassphrase(passphrase) {
 			this.remotePassphrase = passphrase
+		},
+		connectRemote(info) {
+			this.remoteInfo = info
 		}
 	},
 	mounted() {
