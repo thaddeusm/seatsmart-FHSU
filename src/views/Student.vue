@@ -8,19 +8,20 @@
                     <h5>{{ student.tigerID }}</h5>
                 </div>
                 <transition name="fade">
-                <TitleBar v-if="loaded" :classID="classInfo._id" :compact="true" :link="true" />
-            </transition>
-            <transition name="fade">
-                <SeatingDiagram 
-                    :compact="true" 
-                    :inverted="true" 
-                    :rows="classInfo.rows" 
-                    :columns="classInfo.columns" 
-                    :selected="`${this.student.seat.row},${this.student.seat.column}`" 
-                    :classID="classInfo._id" 
-                    v-on:change-route="changeStudents"
-                />
-            </transition>
+                    <TitleBar v-if="loaded" :classID="classInfo._id" :compact="true" :link="true" />
+                </transition>
+                <transition name="fade">
+                    <SeatingDiagram 
+                        :compact="true" 
+                        :inverted="true" 
+                        :rows="classInfo.rows" 
+                        :columns="classInfo.columns" 
+                        :selected="`${this.student.seat.row},${this.student.seat.column}`" 
+                        :classID="classInfo._id" 
+                        :title="classInfo.name"
+                        v-on:change-route="changeStudents"
+                    />
+                </transition>
                 <div v-if="student.highlight && student.highlight !== ''" id="highlightArea">
                     <h6>highlight:</h6>
                     <div :style="{background: student.highlight}"></div>
@@ -148,18 +149,18 @@ export default {
         return {
             student: {
                 _id: '',
-                firstName: '',
-                lastName: '',
+                firstName: 'Student',
+                lastName: 'T.',
                 selected: false,
-                highlight: '',
+                highlight: '#ffffff',
                 class: '',
                 seat: {
-                    row: 0,
-                    column: 0
+                    row: 1,
+                    column: 1
                 }
             },
             classInfo: {
-				name: null,
+				name: 'Class',
 				_id: null,
 				semester: null,
 				year: null,

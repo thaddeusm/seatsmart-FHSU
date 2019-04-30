@@ -229,7 +229,7 @@ export default {
 	data() {
 		return {
 			classInfo: {
-				name: null,
+				name: 'Class',
 				_id: null,
 				semester: null,
 				year: null,

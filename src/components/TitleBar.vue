@@ -31,7 +31,13 @@ export default {
 	},
 	computed: {
 		returnedTitle() {
-			let name = this.$store.state.allClasses[this.classID].name
+			let name
+
+			if (this.title == undefined) {
+				name = this.$store.state.allClasses[this.classID].name
+			} else {
+				name = this.title
+			}
 
 			// shorten long class names
 			if (name.length > 15) {
