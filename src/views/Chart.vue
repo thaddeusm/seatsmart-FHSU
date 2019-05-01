@@ -6,6 +6,11 @@
 				v-on:edit-info="setLastView(`/chart/${id}`)"
 				:title="classInfo.name"
 			/>
+			<RemoteAdapter 
+				v-on:open-remote-panel="openRemotePanel"
+				v-on:set-room-id="setRemoteRoomID"
+				v-on:remote-connected="remoteClientConnected = true"
+			/>
 		</header>
 		<main id="chartMain" ref="chartMain">
 			<section v-if="!inverted" class="row" v-for="(row, index) in classInfo.rows" :style="rowMargins" :key="`row${index},${students.length}`">
@@ -185,6 +190,20 @@
 				</template>
 			</Modal>
 		</transition>
+		<transition name="fade">
+			<Modal v-if="remotePanelOpen" v-on:trigger-close="closeRemotePanel" :dismissable="true" size="small">
+				<template slot="content">
+					<RemoteConfigPanel 
+						v-if="!remoteConfigured"
+						v-on:trigger-modal-close="closeRemotePanel"
+						v-on:set-passphrase="setRemotePassphrase"
+						v-on:end-config="remoteConfigured = true"
+						:roomID="remoteRoomID"
+						:remoteConnected="remoteClientConnected"
+					/>
+				</template>
+			</Modal>
+		</transition>
 		<TouchBar :show="!modalOpen" 
 			:bar="[
 				{type: 'button', label: '🔀', method: function() {rearrangeSeats()}},
@@ -214,6 +233,9 @@ import Settings from '@/components/Settings.vue'
 import NoteForm from '@/components/NoteForm.vue'
 import TouchBar from '@/components/TouchBar.vue'
 
+import RemoteAdapter from '@/components/RemoteAdapter.vue'
+import RemoteConfigPanel from '@/components/RemoteConfigPanel.vue'
+
 export default {
 	name: 'Chart',
 	props: ['id'],
@@ -224,7 +246,9 @@ export default {
 		Modal,
 		Settings,
 		NoteForm,
-		TouchBar
+		TouchBar,
+		RemoteAdapter,
+		RemoteConfigPanel
 	},
 	data() {
 		return {
@@ -323,7 +347,12 @@ export default {
 			studentFormAlertMessage: '',
 			promptStudentDelete: false,
 			deselect: false,
-			expanded: false
+			expanded: false,
+			remoteRoomID: '',
+			remotePassphrase: '',
+			remoteClientConnected: false,
+			remoteConfigured: false,
+			remotePanelOpen: false
 		}
 	},
 	computed: {
@@ -623,6 +652,18 @@ export default {
 			this.expanded = value
 
 			this.calculateCardSize()
+		},
+		openRemotePanel() {
+			this.remotePanelOpen = true
+		},
+		closeRemotePanel() {
+			this.remotePanelOpen = false
+		},
+		setRemotePassphrase(passphrase) {
+			this.remotePassphrase = passphrase
+		},
+		setRemoteRoomID(roomID) {
+			this.remoteRoomID = roomID
 		}
 	},
 	mounted() {
