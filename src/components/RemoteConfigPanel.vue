@@ -79,7 +79,7 @@ export default {
 				this.passphraseSet = true
 				this.configProgress++
 			} else {
-				this.$refs.passphraseInput.style.border = "2px solid var(--red)"
+				this.$refs.passphraseInput.style.border = "1px solid var(--red)"
 			}
 		}
 	}

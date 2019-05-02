@@ -9,8 +9,13 @@
 </template>
 
 <script>
+import sjcl from 'sjcl'
+
 export default {
 	name: 'RemoteAdapter',
+	props: {
+		passphrase: String
+	},
 	data() {
 		return {
 			enabled: false,
@@ -23,6 +28,15 @@ export default {
 			this.roomID = roomID
 			this.connected = true
 			this.$emit('set-room-id', this.roomID)
+		},
+		checkPassphrase(passphrase) {
+			if (passphrase == this.passphrase) {
+				console.log('send confirm to:', this.roomID)
+				this.$socket.emit('confirmPassphrase')
+			} else {
+				console.log('send reject to:', this.roomID)
+				this.$socket.emit('rejectPassphrase')
+			}
 		},
 		rejoinedRoom() {
 			this.connected = true
@@ -44,6 +58,12 @@ export default {
 			}
 
 			this.$emit('open-remote-panel')
+		},
+		encrypt(data) {
+			return sjcl.encrypt(this.passphrase, data)
+		},
+		decrypt(data) {
+			return sjcl.decrypt(this.passphrase, data)
 		}
 	}
 }

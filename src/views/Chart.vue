@@ -10,6 +10,7 @@
 				v-on:open-remote-panel="openRemotePanel"
 				v-on:set-room-id="setRemoteRoomID"
 				v-on:remote-connected="remoteClientConnected = true"
+				:passphrase="remotePassphrase"
 			/>
 		</header>
 		<main id="chartMain" ref="chartMain">
@@ -275,13 +276,6 @@ export default {
 			noteModalOpen: false,
 			newStudentModalOpen: false,
 			editStudentModalOpen: false,
-			remotePanelOpen: false,
-			remoteInfo: {
-				id: null,
-				host: null,
-				remote: null,
-				passphrase: null
-			},
 			newNoteStudent: {
 				firstName: null,
 				lastName: null,
