@@ -10,7 +10,11 @@
 				v-on:open-remote-panel="openRemotePanel"
 				v-on:set-room-id="setRemoteRoomID"
 				v-on:remote-connected="remoteClientConnected = true"
-				:passphrase="remotePassphrase"
+				v-on:connected="remoteConnected = true"
+				v-on:disconnected="remoteConnected = false"
+				:classInfo="classInfo"
+				:students="students"
+				:randomStudent="randomStudent"
 			/>
 		</header>
 		<main id="chartMain" ref="chartMain">
@@ -197,10 +201,10 @@
 					<RemoteConfigPanel 
 						v-if="!remoteConfigured"
 						v-on:trigger-modal-close="closeRemotePanel"
-						v-on:set-passphrase="setRemotePassphrase"
 						v-on:end-config="remoteConfigured = true"
 						:roomID="remoteRoomID"
-						:remoteConnected="remoteClientConnected"
+						:remoteClientConnected="remoteClientConnected"
+						:remoteConnected="remoteConnected"
 					/>
 				</template>
 			</Modal>
@@ -342,8 +346,8 @@ export default {
 			promptStudentDelete: false,
 			deselect: false,
 			expanded: false,
+			remoteConnected: false,
 			remoteRoomID: '',
-			remotePassphrase: '',
 			remoteClientConnected: false,
 			remoteConfigured: false,
 			remotePanelOpen: false
@@ -652,9 +656,6 @@ export default {
 		},
 		closeRemotePanel() {
 			this.remotePanelOpen = false
-		},
-		setRemotePassphrase(passphrase) {
-			this.remotePassphrase = passphrase
 		},
 		setRemoteRoomID(roomID) {
 			this.remoteRoomID = roomID

@@ -1,56 +1,46 @@
 <template>
 	<section id="panelContainer">
-		<section id="configPanel">
-			<h3 class="configHeader">
-				Configure Remote | <span>{{ instructions }}</span>
+		<section class="panel" v-if="remoteConnected">
+			<h3 class="panel-header">
+				Remote | <span>Scan to Connect</span>
 			</h3>
-			<section class="panel-body" id="configBody">
+			<section>
+				<qriously 
+					id="qr"
+					:value="`http://localhost:8080/?room=${roomID}`" 
+					:size="200" 
+				/>
+			</section>
+		</section>
+		<section v-else class="panel">
+			<h3 class="panel-header">
+				Disconnected
+			</h3>
+			<section class="panel-body">
 				<section class="left-panel">
-					<div v-if="configProgress == 1">
-						<input ref="passphraseInput" v-model="passphrase" @keyup.enter="setPassphrase" type="text" placeholder="type a passphrase" maxlength="15" />
-						<button @click="setPassphrase">set</button>
-					</div>
-					<div v-else-if="configProgress == 2">
-						<h4>
-							passphrase: <span>{{ passphrase }}</span>
-						</h4>
-					</div>
-					<div v-else-if="configProgress == 3">
-						<h4>
-							Connected!
-						</h4>
-					</div>
+					<h4>
+						Please check your Internet connection.
+					</h4>
 				</section>
 				<section class="right-panel">
-					<qriously 
-						id="qr" 
-						v-if="configProgress == 2" 
-						:value="`http://localhost:8081/?room=${roomID}`" 
-						:size="200" 
-					/>
-					<img v-else src="@/assets/remote.svg" id="illustration">
+					<img src="@/assets/remotedisconnect.svg" class="illustration">
 					
 				</section>
 			</section>
-			<ProgressNodes :steps="3" :progress="configProgress" id="configFooter" />
 		</section>
 	</section>
 </template>
 
 <script>
-import ProgressNodes from '@/components/ProgressNodes.vue'
-
 export default {
 	name: 'RemoteConfigPanel',
-	components: {
-		ProgressNodes
-	},
 	props: {
 		roomID: String,
-		remoteConnected: Boolean
+		remoteConnected: Boolean,
+		remoteClientConnected: Boolean
 	},
 	watch: {
-		remoteConnected(newValue, oldValue) {
+		remoteClientConnected(newValue, oldValue) {
 			if (newValue == true) {
 				this.configProgress = 3
 
@@ -66,22 +56,10 @@ export default {
 		return {
 			instructions: 'set a passphrase',
 			configProgress: 1,
-			passphrase: '',
-			passphraseSet: false
 		}
 	},
 	methods: {
-		setPassphrase() {
-			if (this.passphrase !== '') {
-				this.$emit('set-passphrase', this.passphrase)
-
-				this.instructions = 'connect your device'
-				this.passphraseSet = true
-				this.configProgress++
-			} else {
-				this.$refs.passphraseInput.style.border = "1px solid var(--red)"
-			}
-		}
+		
 	}
 }
 </script>
@@ -93,45 +71,45 @@ export default {
 	height: 100%;
 }
 
-#configPanel {
+.panel {
 	width: 100%;
 	height: 100%;
 	display: grid;
-	grid-template-rows: 20% 55% 25%;
+	grid-template-rows: 20% 80%;
 	grid-template-areas: 
-		"configHeader"
-		"configBody"
-		"configFooter";
+		"panelHeader"
+		"panelBody";
 }
 
-#configHeader {
-	grid-area: configHeader;
+.panel-header {
+	grid-area: panelHeader;
 }
 
-#configBody {
-	grid-area: configBody;
+.panel-body {
+	grid-area: panelBody;
 	height: 100%;
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	grid-template-areas: "left right";
 	align-items: center;
+	text-align: center;
 }
 
-#configFooter {
-	grid-area: configFooter;
+.panel-footer {
+	grid-area: panelFooter;
 	text-align: center;
 }
+
 .left-panel {
 	grid-area: left;
-	text-align: center;
+	padding: 10px;
 }
 
 .right-panel {
 	grid-area: right;
-	text-align: center;
 }
 
-#illustration {
+.illustration {
 	width: 150px;
 }
 
@@ -139,7 +117,7 @@ export default {
 	background: var(--white);
 	width: 200px;
 	height: 200px;
-	margin: 0 auto;
+	margin: 30px auto;
 	border-radius: 5px;
 	vertical-align: middle;
 }
@@ -161,28 +139,5 @@ h4 {
 
 h4 > span {
 	color: var(--yellow);
-}
-
-input {
-	border-radius: 4px;
-	font-size: 19px;
-	padding: 7px 10px 9px 10px;
-	margin: 10px 5px 10px 10px;
-	width: 140px;
-	color: var(--black);
-	border: 1px solid var(--light-gray);
-	outline: none;
-	vertical-align: middle;
-}
-
-button {
-	font-size: 19px;
-	padding: 8px 12px;
-	border-radius: 5px;
-	cursor: pointer;
-	box-shadow: 0px 0px 5px var(--light-gray);
-	outline: none;
-	background: var(--yellow);
-	vertical-align: middle;
 }
 </style>

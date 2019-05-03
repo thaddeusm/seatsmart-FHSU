@@ -14,7 +14,9 @@ import sjcl from 'sjcl'
 export default {
 	name: 'RemoteAdapter',
 	props: {
-		passphrase: String
+		classInfo: Object,
+		students: Array,
+		randomStudent: Number
 	},
 	data() {
 		return {
@@ -23,29 +25,44 @@ export default {
 			roomID: ''
 		}
 	},
+	computed: {
+		positiveBehaviors() {
+			return this.$store.state.preferences.positiveBehaviors
+		},
+		negativeBehaviors() {
+			return this.$store.state.preferences.negativeBehaviors
+		}
+	},
 	sockets: {
 		roomEstablished(roomID) {
 			this.roomID = roomID
 			this.connected = true
+			this.$emit('connected')
 			this.$emit('set-room-id', this.roomID)
-		},
-		checkPassphrase(passphrase) {
-			if (passphrase == this.passphrase) {
-				console.log('send confirm to:', this.roomID)
-				this.$socket.emit('confirmPassphrase')
-			} else {
-				console.log('send reject to:', this.roomID)
-				this.$socket.emit('rejectPassphrase')
-			}
 		},
 		rejoinedRoom() {
 			this.connected = true
+			this.$emit('connected')
 		},
 		remoteConnected() {
+			this.connected = true
 			this.$emit('remote-connected')
+		},
+		dataRequested() {
+			let rawData = {
+				classInfo: this.classInfo,
+				students: this.students,
+				randomStudent: this.randomStudent
+			}
+
+			this.$socket.emit('dataIncoming', this.encrypt(JSON.stringify(rawData)))
+		},
+		deviceDisconnection() {
+			this.connected = false
 		},
 		disconnect() {
 			this.connected = false
+			this.$emit('disconnected')
 			this.$socket.emit('rejoinRoom', this.roomID)
 		}
 	},
@@ -60,11 +77,11 @@ export default {
 			this.$emit('open-remote-panel')
 		},
 		encrypt(data) {
-			return sjcl.encrypt(this.passphrase, data)
-		},
-		decrypt(data) {
-			return sjcl.decrypt(this.passphrase, data)
-		}
+            return sjcl.encrypt(this.roomID, data)
+        },
+        decrypt(data) {
+            return sjcl.decrypt(this.roomID, data)
+        }
 	}
 }
 </script>
