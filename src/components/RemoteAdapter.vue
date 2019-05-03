@@ -52,7 +52,11 @@ export default {
 			let rawData = {
 				classInfo: this.classInfo,
 				students: this.students,
-				randomStudent: this.randomStudent
+				randomStudent: this.randomStudent,
+				behaviors: {
+					positive: this.positiveBehaviors,
+					negative: this.negativeBehaviors
+				}
 			}
 
 			this.$socket.emit('dataIncoming', this.encrypt(JSON.stringify(rawData)))
