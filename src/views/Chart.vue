@@ -714,6 +714,9 @@ export default {
 
 					})
 			})
+	},
+	beforeDestroy() {
+		this.$socket.emit('endSession')
 	}
 }
 </script>

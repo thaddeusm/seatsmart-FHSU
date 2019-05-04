@@ -7,7 +7,7 @@
 			<section>
 				<qriously 
 					id="qr"
-					:value="`http://localhost:8080/?room=${roomID}`" 
+					:value="`https://seatsmart-remote.now.sh/?room=${roomID}`" 
 					:size="200" 
 				/>
 			</section>

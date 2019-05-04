@@ -21,7 +21,7 @@ import VueSocketIO from 'vue-socket.io'
 
 Vue.use(new VueSocketIO({
     debug: true,
-    connection: SocketIO('http://localhost:4000')
+    connection: SocketIO('https://seatsmart-remote-server.now.sh')
 }))
 
 import VueQriously from 'vue-qriously'
