@@ -14,6 +14,7 @@
 				v-on:disconnected="remoteConnected = false"
 				:classInfo="classInfo"
 				:students="students"
+				:absentStudents="absentStudents"
 				:randomStudent="randomStudent"
 			/>
 		</header>
@@ -522,8 +523,12 @@ export default {
 						tigerID: this.studentToEdit.tigerID,
 					}
 				}).then(() => {
-					this.shuffle(this.students)
-					this.resetStudentToEdit()
+					db.readSomething('students', {class: this.classInfo._id})
+						.then((results) => {
+							this.students = results
+							this.shuffle(this.students)
+							this.resetStudentToEdit()
+						})
 				})
 			} else {
 				this.studentFormAlertMessage = 'Please enter at least a first and last name.'

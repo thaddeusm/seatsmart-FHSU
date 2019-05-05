@@ -40,6 +40,7 @@ export default {
 		remoteClientConnected: Boolean
 	},
 	watch: {
+		// close config panel when remote client connects(joins)
 		remoteClientConnected(newValue, oldValue) {
 			if (newValue == true) {
 				this.configProgress = 3
@@ -102,11 +103,12 @@ export default {
 
 .left-panel {
 	grid-area: left;
-	padding: 10px;
+	padding: 10px 10px 50px 10px;
 }
 
 .right-panel {
 	grid-area: right;
+	padding: 10px 10px 50px 10px;
 }
 
 .illustration {
