@@ -1,6 +1,6 @@
 <template>
 	<section id="panelContainer">
-		<section class="panel" v-if="remoteConnected">
+		<section class="panel" v-if="remoteConnected && !remoteClientConnected">
 			<h3 class="panel-header">
 				Remote | <span>Scan to Connect</span>
 			</h3>
@@ -12,7 +12,23 @@
 				/>
 			</section>
 		</section>
-		<section v-else class="panel">
+		<section class="panel" v-else-if="remoteConnected && remoteClientConnected">
+			<h3 class="panel-header">
+				Remote Connected
+			</h3>
+			<section class="panel-body">
+				<section class="left-panel">
+					<h4>
+						Your device is connected.
+					</h4>
+				</section>
+				<section class="right-panel">
+					<img src="@/assets/remoteconnect.svg" class="illustration">
+					
+				</section>
+			</section>
+		</section>
+		<section v-else-if="!remoteConnected" class="panel">
 			<h3 class="panel-header">
 				Disconnected
 			</h3>
@@ -43,7 +59,6 @@ export default {
 		// close config panel when remote client connects(joins)
 		remoteClientConnected(newValue, oldValue) {
 			if (newValue == true) {
-				this.configProgress = 3
 
 				let scope = this
 				setTimeout(function() {
@@ -55,8 +70,7 @@ export default {
 	},
 	data() {
 		return {
-			instructions: 'set a passphrase',
-			configProgress: 1,
+			instructions: 'set a passphrase'
 		}
 	},
 	methods: {
