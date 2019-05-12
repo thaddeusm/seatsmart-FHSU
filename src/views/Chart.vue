@@ -425,7 +425,7 @@ export default {
 			// check for need to recalculate card sizes
 			this.calculateCardSize()
 
-			if (this.students.length < this.absentStudents.length) {
+			if (this.absentStudents.length < this.students.length) {
 				// check to ensure selected student is not absent today
 				let matchFound = false
 
