@@ -425,52 +425,56 @@ export default {
 			// check for need to recalculate card sizes
 			this.calculateCardSize()
 
-			// check to ensure selected student is not absent today
-			let matchFound = false
+			if (this.students.length < this.absentStudents.length) {
+				// check to ensure selected student is not absent today
+				let matchFound = false
 
-			while (!matchFound) {
-				if (this.absentStudents.indexOf(this.students[this.randomStudent]._id) !== -1) {
-					this.randomStudent++
+				while (!matchFound) {
+					if (this.absentStudents.indexOf(this.students[this.randomStudent]._id) !== -1) {
+						this.randomStudent++
 
-					if (this.randomStudent == this.students.length) {
-		    			this.randomStudent = 0
-		    		}
+						if (this.randomStudent == this.students.length) {
+			    			this.randomStudent = 0
+			    		}
+					} else {
+						matchFound = true
+					}
+				}
+
+
+				let student = this.students[this.randomStudent]
+
+
+				// ensure that random selections are also inverted
+				if (this.inverted) {
+					let rows = []
+					let columns = []
+
+					for (let i=0; i<this.classInfo.rows; i++) {
+						rows.push(i + 1)
+					}
+
+					for (let i=0; i<this.classInfo.columns; i++) {
+						columns.push(i + 1)
+					}
+					rows.reverse()
+					columns.reverse()
+
+					this.chosenSeat = {row: rows.indexOf(student.seat.row) + 1, column: columns.indexOf(student.seat.column) + 1}
+					console.log(this.chosenSeat)
 				} else {
-					matchFound = true
-				}
-			}
-
-
-			let student = this.students[this.randomStudent]
-
-
-			// ensure that random selections are also inverted
-			if (this.inverted) {
-				let rows = []
-				let columns = []
-
-				for (let i=0; i<this.classInfo.rows; i++) {
-					rows.push(i + 1)
+					this.chosenSeat.row = student.seat.row
+					this.chosenSeat.column = student.seat.column
 				}
 
-				for (let i=0; i<this.classInfo.columns; i++) {
-					columns.push(i + 1)
-				}
-				rows.reverse()
-				columns.reverse()
-
-				this.chosenSeat = {row: rows.indexOf(student.seat.row) + 1, column: columns.indexOf(student.seat.column) + 1}
-				console.log(this.chosenSeat)
-			} else {
-				this.chosenSeat.row = student.seat.row
-				this.chosenSeat.column = student.seat.column
-			}
-
-			// increment or reset
-    		this.randomStudent++
-    		if (this.randomStudent == this.students.length) {
-    			this.randomStudent = 0
-    		}
+				// increment or reset
+	    		this.randomStudent++
+	    		if (this.randomStudent == this.students.length) {
+	    			this.randomStudent = 0
+	    		}
+	    	} else {
+	    		this.clearRandom()
+	    	}
     	},
     	clearRandom() {
     		this.chosenSeat.row = null
