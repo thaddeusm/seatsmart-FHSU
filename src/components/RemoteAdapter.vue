@@ -120,6 +120,9 @@ export default {
 
 			this.$socket.emit('dataIncoming', this.encrypt(rawData))
         },
+        initConfirm(id) {
+        	this.$socket.emit('initConfirm', this.encrypt(id))
+        },
         processActionRequest(request) {
         	console.log(request.id)
         	if (this.receivedActions.indexOf(request.id) == -1) {
@@ -142,7 +145,7 @@ export default {
 
         				db.createSomething('notes', newNote)
         					.then(() => {
-        						this.$socket.emit('initConfirm', this.encrypt(request.id))
+        						this.initConfirm(request.id)
         						this.$store.dispatch('setLastUpdatedStudent', request.action.data.student)
         						this.$emit('action-completed', 'Saved new note')
 
@@ -151,6 +154,14 @@ export default {
 								}
         					})
 
+	        			break
+	        		case 'choose random':
+	        			this.initConfirm(request.id)
+	        			this.$emit('select-random')
+	        			break
+	        		case 'disable random':
+	        			this.initConfirm(request.id)
+	        			this.$emit('clear-random')
 	        			break
 	        	}
         	}

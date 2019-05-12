@@ -14,6 +14,8 @@
 				v-on:disconnected="remoteConnected = false"
 				v-on:action-completed="addToActionLog"
 				v-on:absence="addAbsence"
+				v-on:select-random="selectRandom"
+				v-on:clear-random="clearRandom"
 				:classInfo="classInfo"
 				:students="students"
 				:absentStudents="absentStudents"
