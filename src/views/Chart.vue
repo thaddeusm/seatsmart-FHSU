@@ -12,6 +12,8 @@
 				v-on:remote-connected="remoteClientConnected = true"
 				v-on:connected="remoteConnected = true"
 				v-on:disconnected="remoteConnected = false"
+				v-on:action-completed="addToActionLog"
+				v-on:absence="addAbsence"
 				:classInfo="classInfo"
 				:students="students"
 				:absentStudents="absentStudents"
@@ -351,7 +353,8 @@ export default {
 			remoteRoomID: '',
 			remoteClientConnected: false,
 			remoteConfigured: false,
-			remotePanelOpen: false
+			remotePanelOpen: false,
+			remoteActionLog: []
 		}
 	},
 	computed: {
@@ -664,6 +667,9 @@ export default {
 		},
 		setRemoteRoomID(roomID) {
 			this.remoteRoomID = roomID
+		},
+		addToActionLog(action) {
+			this.remoteActionLog.push(action)
 		}
 	},
 	mounted() {

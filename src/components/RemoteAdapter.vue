@@ -10,6 +10,8 @@
 
 <script>
 import sjcl from 'sjcl'
+import db from '@/db.js'
+import moment from 'moment'
 
 export default {
 	name: 'RemoteAdapter',
@@ -23,7 +25,8 @@ export default {
 		return {
 			enabled: false,
 			connected: false,
-			roomID: ''
+			roomID: '',
+			receivedActions: []
 		}
 	},
 	computed: {
@@ -78,6 +81,9 @@ export default {
 
 			// attempt to rejoin automatically
 			this.$socket.emit('rejoinRoom', this.roomID)
+		},
+		requestAction(action) {
+			this.processActionRequest(this.decrypt(action))
 		}
 	},
 	methods: {
@@ -92,10 +98,12 @@ export default {
 			this.$emit('open-remote-panel')
 		},
 		encrypt(data) {
-            return sjcl.encrypt(this.roomID, data)
+            return sjcl.encrypt(this.roomID, JSON.stringify(data))
         },
         decrypt(data) {
-            return sjcl.decrypt(this.roomID, data)
+            let decrypted = sjcl.decrypt(this.roomID, data)
+
+            return JSON.parse(decrypted)
         },
         sendData() {
         	// format and send data to client
@@ -110,7 +118,42 @@ export default {
 				absentStudents: this.absentStudents
 			}
 
-			this.$socket.emit('dataIncoming', this.encrypt(JSON.stringify(rawData)))
+			this.$socket.emit('dataIncoming', this.encrypt(rawData))
+        },
+        processActionRequest(request) {
+        	console.log(request.id)
+        	if (this.receivedActions.indexOf(request.id) == -1) {
+        		this.receivedActions.push(request.id)
+
+	        	switch (request.action.name) {
+	        		
+	        		case 'save note':
+	        			let newNote = {}
+
+        				newNote.dateNoted = moment()
+        				newNote.behavior = {
+        					Abbreviation: request.action.data.behavior.Abbreviation,
+        					Description: request.action.data.behavior.Description,
+        					Weight: request.action.data.behavior.Weight
+        				}
+        				newNote.type = request.action.data.behavior.Type
+        				newNote.comment = request.action.data.note
+        				newNote.student = request.action.data.student
+
+        				db.createSomething('notes', newNote)
+        					.then(() => {
+        						this.$socket.emit('initConfirm', this.encrypt(request.id))
+        						this.$store.dispatch('setLastUpdatedStudent', request.action.data.student)
+        						this.$emit('action-completed', 'Saved new note')
+
+        						if (newNote.type === 'negative' && newNote.behavior.Abbreviation === 'A') {
+									this.$emit('absence', newNote.student)
+								}
+        					})
+
+	        			break
+	        	}
+        	}
         }
 	}
 }

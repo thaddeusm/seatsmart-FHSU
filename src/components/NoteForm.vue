@@ -58,8 +58,7 @@ export default {
 				student: null,
 				dateNoted: {},
 				comment: null,
-				type: null,
-				comment: null
+				type: null
 			},
 			step: 1
 		}
