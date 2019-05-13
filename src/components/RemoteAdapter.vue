@@ -66,13 +66,17 @@ export default {
 			// update UI after remote client connects(joins)
 			this.connected = true
 			this.$emit('remote-connected')
+			this.$emit('connected')
 		},
 		dataRequested() {
 			this.sendData()
+			this.$emit('remote-connected')
+			this.$emit('connected')
 		},
 		deviceDisconnection() {
 			// update UI on remote disconnection
 			this.connected = false
+			this.$emit('disconnected')
 		},
 		disconnect() {
 			// update UI on host disconnection
@@ -84,6 +88,7 @@ export default {
 		},
 		requestAction(action) {
 			this.processActionRequest(this.decrypt(action))
+			this.$emit('connected')
 		}
 	},
 	methods: {
@@ -121,16 +126,21 @@ export default {
 			this.$socket.emit('dataIncoming', this.encrypt(rawData))
         },
         initConfirm(id) {
+        	// send confirmation that the action was completed to remote client
         	this.$socket.emit('initConfirm', this.encrypt(id))
         },
         processActionRequest(request) {
-        	console.log(request.id)
+        	// switch to respond to action requests from remote client
+
+        	// first ensure that the action is not a duplicate request
         	if (this.receivedActions.indexOf(request.id) == -1) {
         		this.receivedActions.push(request.id)
 
+        		// use a string description as a switch
 	        	switch (request.action.name) {
 	        		
 	        		case 'save note':
+	        			// structure new note object according to db representation
 	        			let newNote = {}
 
         				newNote.dateNoted = moment()
@@ -145,10 +155,16 @@ export default {
 
         				db.createSomething('notes', newNote)
         					.then(() => {
+        						// send confirmation to remote client
         						this.initConfirm(request.id)
+
+        						// trigger store mutation to rerender name card component
         						this.$store.dispatch('setLastUpdatedStudent', request.action.data.student)
+
+        						// add action to log in parent component
         						this.$emit('action-completed', 'Saved new note')
 
+        						// if the note is an absence, trigger name card component update
         						if (newNote.type === 'negative' && newNote.behavior.Abbreviation === 'A') {
 									this.$emit('absence', newNote.student)
 								}
@@ -156,11 +172,17 @@ export default {
 
 	        			break
 	        		case 'choose random':
+	        			// send confirmation to remote client
 	        			this.initConfirm(request.id)
+	        			// trigger normal UI action in parent component
 	        			this.$emit('select-random')
+	        			// add action to log in parent component
+        				this.$emit('action-completed', 'Selected a random student')
 	        			break
 	        		case 'disable random':
+	        			// send confirmation to remote client
 	        			this.initConfirm(request.id)
+	        			// trigger normal UI action in parent component
 	        			this.$emit('clear-random')
 	        			break
 	        	}

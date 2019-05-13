@@ -211,6 +211,14 @@
 						:remoteClientConnected="remoteClientConnected"
 						:remoteConnected="remoteConnected"
 					/>
+					<RemoteStatusPanel 
+						v-else
+						v-on:trigger-modal-close="closeRemotePanel"
+						:roomID="remoteRoomID"
+						:remoteClientConnected="remoteClientConnected"
+						:remoteConnected="remoteConnected"
+						:log="remoteActionLog"
+					/>
 				</template>
 			</Modal>
 		</transition>
@@ -245,6 +253,7 @@ import TouchBar from '@/components/TouchBar.vue'
 
 import RemoteAdapter from '@/components/RemoteAdapter.vue'
 import RemoteConfigPanel from '@/components/RemoteConfigPanel.vue'
+import RemoteStatusPanel from '@/components/RemoteStatusPanel.vue'
 
 export default {
 	name: 'Chart',
@@ -258,7 +267,8 @@ export default {
 		NoteForm,
 		TouchBar,
 		RemoteAdapter,
-		RemoteConfigPanel
+		RemoteConfigPanel,
+		RemoteStatusPanel
 	},
 	data() {
 		return {

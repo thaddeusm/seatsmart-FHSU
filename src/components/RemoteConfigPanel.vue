@@ -24,7 +24,6 @@
 				</section>
 				<section class="right-panel">
 					<img src="@/assets/remoteconnect.svg" class="illustration">
-					
 				</section>
 			</section>
 		</section>
@@ -40,7 +39,6 @@
 				</section>
 				<section class="right-panel">
 					<img src="@/assets/remotedisconnect.svg" class="illustration">
-					
 				</section>
 			</section>
 		</section>
@@ -70,7 +68,7 @@ export default {
 	},
 	data() {
 		return {
-			instructions: 'set a passphrase'
+			
 		}
 	},
 	methods: {
@@ -107,11 +105,6 @@ export default {
 	grid-template-columns: 1fr 1fr;
 	grid-template-areas: "left right";
 	align-items: center;
-	text-align: center;
-}
-
-.panel-footer {
-	grid-area: panelFooter;
 	text-align: center;
 }
 
