@@ -62,7 +62,7 @@ export default {
 				setTimeout(function() {
 					scope.$emit('end-config')
 					scope.$emit('trigger-modal-close')
-				}, 3000)
+				}, 2000)
 			}
 		}
 	},

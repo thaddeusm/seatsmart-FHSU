@@ -1,20 +1,20 @@
 <template>
 	<section id="panelContainer">
 		<section class="panel">
-			<h3 class="panel-header" v-if="remoteConnected">
-				Remote Connected
-			</h3>
-			<h3 class="panel-header" v-else>
-				Reconnecting...
-			</h3>
+			<section class="panel-header" v-if="remoteConnected">
+				<img src="@/assets/remoteconnect.svg" class="illustration"> 
+				<h3>
+					Remote Connected
+				</h3>
+			</section>
+			<section class="panel-header" v-else>
+				<img src="@/assets/remotedisconnect.svg" class="illustration"> 
+				<h3>
+					Reconnecting...
+				</h3>
+			</section>
 			<section class="panel-body">
-				<section class="left-panel">
-					<div class="status" v-if="remoteConnected">
-						<img src="@/assets/remoteconnect.svg" class="illustration">
-					</div>
-					<div class="status" v-else>
-						<img src="@/assets/remotedisconnect.svg" class="illustration">
-					</div>					
+				<section class="left-panel">				
 					<qriously 
 						v-if="showQR"
 						id="qr"
@@ -24,6 +24,7 @@
 					<div id="qrGhost" v-else></div>
 					<button class="qr-toggle" v-if="showQR" @click="showQR = false">hide</button>
 					<button class="qr-toggle" v-else @click="showQR = true">show QR</button>
+					<button class="cancel-button" @click="closeConnection">Disconnect</button>
 				</section>
 				<section class="right-panel">
 					<h4>
@@ -60,7 +61,11 @@ export default {
 		}
 	},
 	methods: {
-		
+		closeConnection() {
+			this.$socket.emit('endSession')
+			this.$emit('disconnect')
+			this.$emit('trigger-modal-close')
+		}
 	}
 }
 </script>
@@ -84,6 +89,8 @@ export default {
 
 .panel-header {
 	grid-area: panelHeader;
+	text-align: center;
+	padding: 15px;
 }
 
 .panel-body {
@@ -106,8 +113,9 @@ export default {
 }
 
 .illustration {
-	width: 65px;
-	margin-bottom: 40px;
+	width: 30px;
+	vertical-align: middle;
+	margin-right: 20px;
 }
 
 #qr {
@@ -139,13 +147,10 @@ export default {
 }
 
 h3 {
-	padding: 20px 0;
 	text-align: center;
 	color: var(--white);
-}
-
-h3 > span {
-	color: var(--yellow);
+	vertical-align: middle;
+	display: inline-block;
 }
 
 h4 {
@@ -166,10 +171,9 @@ ul {
 }
 
 li {
-	padding: 15px;
+	padding: 10px;
 	background: var(--light-gray);
-	margin: 15px 20px;
-	box-shadow: 1px 1px 2px var(--black);
+	margin: 5px;
 	list-style: none;
 }
 </style>

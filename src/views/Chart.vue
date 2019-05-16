@@ -16,6 +16,7 @@
 				v-on:absence="addAbsence"
 				v-on:select-random="selectRandom"
 				v-on:clear-random="clearRandom"
+				v-on:end-config="remoteConfigured = true"
 				:classInfo="classInfo"
 				:students="students"
 				:absentStudents="absentStudents"
@@ -213,6 +214,7 @@
 					/>
 					<RemoteStatusPanel 
 						v-else
+						v-on:disconnect="closeRemoteConnection"
 						v-on:trigger-modal-close="closeRemotePanel"
 						:roomID="remoteRoomID"
 						:remoteClientConnected="remoteClientConnected"
@@ -686,6 +688,13 @@ export default {
 		},
 		addToActionLog(action) {
 			this.remoteActionLog.push(action)
+		},
+		closeRemoteConnection() {
+			this.remoteConnected = false
+			this.remoteClientConnected = false
+			this.remoteConfigured = false
+			this.remoteActionLog = []
+			this.clearRandom()
 		}
 	},
 	mounted() {

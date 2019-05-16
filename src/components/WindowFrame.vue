@@ -20,6 +20,9 @@ export default {
 	},
 	methods: {
 		closeWindow() {
+			// end remote session
+			this.$socket.emit('endSession')
+
 			let window = remote.getCurrentWindow()
 			window.close()
 		},

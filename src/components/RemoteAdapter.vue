@@ -67,6 +67,11 @@ export default {
 			this.connected = true
 			this.$emit('remote-connected')
 			this.$emit('connected')
+
+			let scope = this
+			setTimeout(function() {
+				scope.$emit('end-config')
+			}, 10000)
 		},
 		dataRequested() {
 			this.sendData()
@@ -89,6 +94,11 @@ export default {
 		requestAction(action) {
 			this.processActionRequest(this.decrypt(action))
 			this.$emit('connected')
+		},
+		sessionEnded() {
+			// reset config UI when host closes connection session
+			this.enabled = false
+			this.connected = false
 		}
 	},
 	methods: {
