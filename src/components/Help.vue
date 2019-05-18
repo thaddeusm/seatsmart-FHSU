@@ -163,7 +163,7 @@ export default {
 	},
 	data() {
 		return {
-			caption: 'Hover of parts of the example name card below to learn more.'
+			caption: 'Hover over parts of the example name card below to learn more.'
 		}
 	},
 	computed: {
