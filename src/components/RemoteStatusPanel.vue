@@ -180,7 +180,7 @@ ul {
 li {
 	padding: 10px;
 	background: var(--light-gray);
-	margin: 10px 5px;
+	margin: 15px 5px;
 	list-style: none;
 }
 </style>
