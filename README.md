@@ -8,11 +8,14 @@ University for courses conducted at campuses in China.
 ## Application Scope
 Internet connection stability is a serious concern for faculty.  In addition, 
 the application deals with student records related to participation, which 
-should be stored securely.  Seatsmart is designed to be fully functional 
-offline, with all data stored on the user's machine.  This storage is 
-transparently located in the default OS documents folder, which is separate 
-from application files.  This allows the user to update (replace) 
-the application without impacting partication records.
+should be stored securely.  Seatsmart is designed to be offline-first, with all 
+data stored on the user's machine.  This storage is transparently located in the 
+default OS documents folder, which is separate from application files.  This 
+allows the user to update (replace) the application without impacting partication records.
+
+When Internet access is available, instructors can use the Remote feature to 
+access basic features from a mobile device.  Data is encrypted during transport 
+and this information is not stored in any cloud database.
 
 Every attempt is made to ensure design and UX consistency for PC and Mac, the 
 operating systems currently used by faculty.  However, desktop (larger) screen 
@@ -52,8 +55,8 @@ this could be refactored in forked projects for other institutional settings.
 
 ## Development Timeline
 Seatsmart is currently being used by faculty members across several departments.  
-The application is considered feature complete with the expectation that minor bugs 
-or small interface improvements will require future updates.  
+Basic features are complete with remote/realtime features being planned for the upcoming 
+academic year (2019-2020).
 
 ## Design Concepts and Inspiration
 [mockups @Figma](https://www.figma.com/file/OxI3WKOFswThYuEfOR6UaV7V/Seatsmart)

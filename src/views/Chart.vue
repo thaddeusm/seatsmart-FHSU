@@ -687,7 +687,7 @@ export default {
 			this.remoteRoomID = roomID
 		},
 		addToActionLog(action) {
-			this.remoteActionLog.push(action)
+			this.remoteActionLog.unshift(action)
 		},
 		closeRemoteConnection() {
 			this.remoteConnected = false

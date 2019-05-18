@@ -34,7 +34,7 @@
 			<section class="panel-body">
 				<section class="left-panel">
 					<h4>
-						Please check your Internet connection.
+						Attempting to connect...
 					</h4>
 				</section>
 				<section class="right-panel">

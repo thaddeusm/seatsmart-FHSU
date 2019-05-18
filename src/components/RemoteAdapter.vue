@@ -171,8 +171,8 @@ export default {
         						// trigger store mutation to rerender name card component
         						this.$store.dispatch('setLastUpdatedStudent', request.action.data.student)
 
-        						// add action to log in parent component
-        						this.$emit('action-completed', 'Saved new note')
+        						// add action to log in parent component with student name
+        						this.$emit('action-completed', `Saved new note about ${request.action.data.studentName}`)
 
         						// if the note is an absence, trigger name card component update
         						if (newNote.type === 'negative' && newNote.behavior.Abbreviation === 'A') {

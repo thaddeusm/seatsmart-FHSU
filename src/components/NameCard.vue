@@ -18,27 +18,26 @@
 	</div>
 	<div v-else-if="type === 'demo'" id="cardContainer">
 		<section id="leftHeader">
-			<span class="tooltip top">total number of student absences</span>
-			<span id="absences">3</span>
+			<span id="absences" v-on:mouseover="$emit('show-caption', 'total number of absences')"
+			>3</span>
 		</section>
 		<section id="centerHeader">
-			<span class="tooltip top">add a new note</span>
-			<button id="addNoteButton" class="simple-button">+</button>
+			<button id="addNoteButton" class="simple-button" v-on:mouseover="$emit('show-caption', 'add a new note')">+</button>
 		</section>
 		<section id="rightHeader">
-			<span class="tooltip top">select a student</span>
-			<button v-if="!student.selected" class="simple-button" @click="toggleSelected"><img class="star" src="@/assets/graystar.svg"></button>
-			<button v-else class="simple-button" @click="toggleSelected"><img class="star" src="@/assets/yellowstar.svg"></button>
+			<button v-if="!student.selected" class="simple-button" @click="toggleSelected"><img class="star" src="@/assets/graystar.svg" v-on:mouseover="$emit('show-caption', 'select a student')"></button>
+			<button v-else class="simple-button" @click="toggleSelected"><img class="star" src="@/assets/yellowstar.svg" v-on:mouseover="$emit('show-caption', 'select a student')"></button>
 		</section>
 		<section id="cardBody">
-			<h5 class="student-name">
+			<h5 class="student-name" v-on:mouseover="$emit('show-caption', 'student name')">
 				Tommy L.
 			</h5>
 		</section>
 		<section id="cardFooter">
-			<span class="tooltip top">recent note indicator and see all student notes</span>
-			<AbbreviationCircle id="demoCircle" :behavior="{Abbreviation: 'C', Description: 'Using Cell Phone', Weight: 'strong'}" size="small" color="red" />
-			<button class="simple-button more-button"><img src="@/assets/more.svg" alt="more icon" class="more-icon"></button>
+			<span v-on:mouseover="$emit('show-caption', 'recent note indicator')">
+				<AbbreviationCircle id="demoCircle" :behavior="{Abbreviation: 'C', Description: 'Using Cell Phone', Weight: 'strong'}" size="small" color="red" />
+			</span>
+			<button class="simple-button more-button"><img src="@/assets/more.svg" alt="more icon" class="more-icon" v-on:mouseover="$emit('show-caption', 'link to view student profile')"></button>
 		</section>
 	</div>
 	<div v-else-if="type === 'edit'" id="editCardContainer">
@@ -517,41 +516,5 @@ export default {
 
 .absent {
 	opacity: .6;
-}
-
-#leftHeader:hover .tooltip {
-	visibility: visible;
-}
-
-#centerHeader:hover .tooltip {
-	visibility: visible;
-}
-
-#rightHeader:hover .tooltip {
-	visibility: visible;
-}
-
-#cardFooter:hover .tooltip {
-	visibility: visible;
-}
-
-.tooltip {
-	visibility: hidden;
-	position: absolute;
-	background: var(--yellow);
-	font-family: "ArchivoNarrow";
-	font-size: 16px;
-}
-
-.top {
-	width: 300px;
-	padding: 5px;
-	bottom: 189px;
-	left: 59.5%;
-	text-align: center;
-	z-index: 1000;
-	margin-left: -155px;
-	margin-bottom: 20px;
-	border-radius: 5px;
 }
 </style>

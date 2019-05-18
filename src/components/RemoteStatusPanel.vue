@@ -24,14 +24,14 @@
 					<div id="qrGhost" v-else></div>
 					<button class="qr-toggle" v-if="showQR" @click="showQR = false">hide</button>
 					<button class="qr-toggle" v-else @click="showQR = true">show QR</button>
-					<button class="cancel-button" @click="closeConnection">Disconnect</button>
+					<button class="cancel-button" @click="closeConnection">End Remote Connection</button>
 				</section>
 				<section class="right-panel">
 					<h4>
 						Activity
 					</h4>
 					<ul>
-						<li v-for="(item, index) in flippedLog" :key="index">
+						<li v-for="(item, index) in log" :key="index">
 							{{ item }}
 						</li>
 					</ul>
@@ -53,11 +53,6 @@ export default {
 	data() {
 		return {
 			showQR: false
-		}
-	},
-	computed: {
-		flippedLog() {
-			return this.log.reverse()
 		}
 	},
 	methods: {
@@ -122,7 +117,7 @@ export default {
 	background: var(--white);
 	width: 100px;
 	height: 100px;
-	margin: 5px auto;
+	margin: 15px auto 5px auto;
 	border-radius: 5px;
 	vertical-align: middle;
 }
@@ -138,11 +133,23 @@ export default {
 	margin: 10px;
 }
 
+.cancel-button {
+	padding: 3px 8px;
+	background: var(--red);
+	color: var(--white);
+	font-size: 15px;
+	border-radius: 5px;
+	cursor: pointer;
+	outline: none;
+	margin: 40px auto 20px auto;
+	display: block;
+}
+
 #qrGhost {
 	background: var(--light-gray);
 	width: 100px;
 	height: 100px;
-	margin: 5px auto;
+	margin: 15px auto 5px auto;
 	border-radius: 5px;
 }
 
@@ -173,7 +180,7 @@ ul {
 li {
 	padding: 10px;
 	background: var(--light-gray);
-	margin: 5px;
+	margin: 10px 5px;
 	list-style: none;
 }
 </style>

@@ -43,11 +43,13 @@
 			<br>
 			<Tabs :sections="[{label: 'Student Cards', color: 'gray'},  {label: 'Chart Tools', color: 'yellow'}]">
 				<template slot="Student Cards">
-					<p class="center">
-						Hover over the parts of the example name card below to learn more.
-					</p>
+					<p class="center">{{ caption }}</p>
 					<div class="demo-area">
-						<NameCard class="demo-card" type="demo" />
+						<NameCard 
+							class="demo-card" 
+							type="demo" 
+							v-on:show-caption="showCaption"
+						/>
 					</div>
 				</template>
 				<template slot="Chart Tools">
@@ -131,6 +133,20 @@
 					</ul>
 				</template>
 			</Tabs>
+			<br>
+			<br>
+			<h4>
+				Remote
+			</h4>
+			<p>
+				Seatsmart Remote is an experimental feature that allows you to take advantage of basic functions without being tied to a computer.  Actions currently supported include selecting a random student and adding a new note about a student/students.  This feature requires Internet access on both the computer and the mobile device (with or without a VPN).  
+			</p>
+			<p>
+				Realtime communication occurs over a secure server with data encrypted in transport (the server cannot decode the information).  The server does not store this information anywhere.  <strong>The QR code should be kept hidden from students</strong>.  You can begin and end a remote connection by clicking <img id="remoteIcon" src="@/assets/remote.svg" alt="remote icon"> at the top right corner of the chart.  This icon will turn yellow when the connection is active and red when it is attempting to restore a connection.
+			</p>
+			<p>
+				The remote connection is automatically broken when you leave the chart.  This helps to shorten the remote session, which decreases the likelihood of any security or device performance issues.
+			</p>
 		</section>
 	</div>
 </template>
@@ -145,9 +161,19 @@ export default {
 		Tabs,
 		NameCard
 	},
+	data() {
+		return {
+			caption: 'Hover of parts of the example name card below to learn more.'
+		}
+	},
 	computed: {
 		progress() {
 			return this.$store.state.preferences.progress
+		}
+	},
+	methods: {
+		showCaption(caption) {
+			this.caption = caption
 		}
 	}
 }
@@ -221,5 +247,13 @@ li > img {
 	background: var(--light-gray);
 	margin: 0 auto;
 	border: 2px solid var(--gray);
+}
+
+#remoteIcon {
+	padding: 3px;
+	background: var(--black);
+	height: 20px;
+	vertical-align: middle;
+	border-radius: 3px;
 }
 </style>
