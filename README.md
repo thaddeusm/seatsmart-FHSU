@@ -13,8 +13,8 @@ data stored on the user's machine.  This storage is transparently located in the
 default OS documents folder, which is separate from application files.  This 
 allows the user to update (replace) the application without impacting partication records.
 
-When Internet access is available, instructors can use the [Remote]
-(https://github.com/thaddeusm/seatsmart-remote) feature to 
+When Internet access is available, instructors can use the 
+[Remote](https://github.com/thaddeusm/seatsmart-remote) feature to 
 access basic features from a mobile device.  Data is encrypted during transport 
 and this information is not stored in any cloud database.  This is powered by a 
 [realtime server](https://github.com/thaddeusm/seatsmart-remote-server) on the backend.
