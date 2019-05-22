@@ -13,9 +13,11 @@ data stored on the user's machine.  This storage is transparently located in the
 default OS documents folder, which is separate from application files.  This 
 allows the user to update (replace) the application without impacting partication records.
 
-When Internet access is available, instructors can use the Remote feature to 
+When Internet access is available, instructors can use the [Remote]
+(https://github.com/thaddeusm/seatsmart-remote) feature to 
 access basic features from a mobile device.  Data is encrypted during transport 
-and this information is not stored in any cloud database.
+and this information is not stored in any cloud database.  This is powered by a 
+[realtime server](https://github.com/thaddeusm/seatsmart-remote-server) on the backend.
 
 Every attempt is made to ensure design and UX consistency for PC and Mac, the 
 operating systems currently used by faculty.  However, desktop (larger) screen 
@@ -75,7 +77,16 @@ of red as a standard alert indicator.
 Seatsmart strives to be [Humane by Design](https://humanebydesign.com).
 
 ## Running / Building on a Local Machine
-### To serve the application during development
+### to install dependencies
+```
+$ npm install
+```
+or
+```
+$ yarn
+```
+
+### to serve the application during development
 ```
 $ npm electron:serve
 ```
@@ -84,7 +95,7 @@ or
 $ yarn electron:serve
 ```
 
-### To build the application on your platform (PC/Mac)
+### to build the application on your platform (PC/Mac)
 ```
 $ npm electron:build
 ```
