@@ -145,20 +145,25 @@ export default {
 			return this.$store.state.lastUpdatedStudent
 		},
 		latestNotes() {
-			// sort and grab three latest notes
-			if (this.notes.length > 1) {
-				let sorted = this.notes.sort((a,b) => {
-					let dateA = a.dateNoted._d
-					let dateB = b.dateNoted._d
+			// sort and grab the three most recent notes (if any)
+			// if (this.notes.length > 1) {
+			// 	let sorted = this.notes.sort((a,b) => {
+			// 		let dateA = a.dateNoted._d
+			// 		let dateB = b.dateNoted._d
 
-					return dateA > dateB ? -1 : 1
-				})
+			// 		return dateA > dateB ? -1 : 1
+			// 	})
 
-				if (sorted.length > 3) {
-					return sorted.slice(0, 3)
-				} else {
-					return sorted
-				}
+			// 	if (sorted.length > 3) {
+			// 		return sorted.slice(0, 3)
+			// 	} else {
+			// 		return sorted
+			// 	}
+			// } else {
+			// 	return this.notes
+			// }
+			if (this.notes.length > 3) {
+				return this.notes.slice(0, 3)
 			} else {
 				return this.notes
 			}
@@ -309,7 +314,7 @@ export default {
 								this.student.firstName = this.student.firstName.split(' ')[0]
 							}
 
-							db.readSomething('notes', {student: this.student._id})
+							db.readSomething('notes', {student: this.student._id}, "dateNoted._d")
 								.then((notes) => {
 									this.notes = notes
 
@@ -333,7 +338,7 @@ export default {
 								this.student.firstName = this.student.firstName.split(' ')[0]
 							}
 
-							db.readSomething('notes', {student: this.studentID})
+							db.readSomething('notes', {student: this.studentID}, "dateNoted._d")
 								.then((notes) => {
 									this.notes = notes
 

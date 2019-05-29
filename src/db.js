@@ -71,18 +71,32 @@ export default {
 		    })
 	  })
 	},
-	readSomething(db, reference) {
-		return new Promise(function(resolve, reject) {
-			getDB(db).find(reference, function(error, foundDocs) {
-				if (error) {
-					console.log(error)
-					reject(error)
-				} else {
-					console.log(foundDocs)
-					resolve(foundDocs)
-				}
+	readSomething(db, reference, sortQuery) {
+		if (sortQuery) {
+			return new Promise(function(resolve, reject) {
+				getDB(db).find(reference).sort({sortQuery: -1}).exec(function(error, foundDocs) {
+					if (error) {
+						console.log(error)
+						reject(error)
+					} else {
+						console.log(foundDocs)
+						resolve(foundDocs)
+					}
+				})
 			})
-		})
+		} else {
+			return new Promise(function(resolve, reject) {
+				getDB(db).find(reference, function(error, foundDocs) {
+					if (error) {
+						console.log(error)
+						reject(error)
+					} else {
+						console.log(foundDocs)
+						resolve(foundDocs)
+					}
+				})
+			})
+		}
 	},
 	updateSomething(db, query, update) {
 		return new Promise(function(resolve, reject) {
