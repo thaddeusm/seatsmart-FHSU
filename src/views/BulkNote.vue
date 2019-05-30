@@ -18,7 +18,7 @@
                             v-if="student._id !== 'blank'"
                             :button="true"
                             :key="`column${subIndex}`"
-                            :text="student.firstName"
+                            :text="shortenName(student.firstName)"
                             :onClick="addStudent"
                             :param="student._id"
                             :selected="studentIDs.indexOf(student._id) !== -1"
@@ -100,12 +100,10 @@ export default {
 
             if (idIndexCheck == -1) {
                 this.studentIDs.push(id)
-            } else {
-                this.studentIDs.splice(idIndexCheck, 1)
             }
         },
         toggleSelectAll() {
-            if (this.allSelected) {
+            if (this.allSelected == true) {
                 this.studentIDs = []
             } else {
                 for (var i=0; i<this.classStudents.length; i++) {
@@ -114,7 +112,14 @@ export default {
             }
 
             this.allSelected = !this.allSelected
-        }
+        },
+        shortenName(name) {
+            if (name.length > 6) {
+                return name.slice(0, 5) + '...'
+            } else {
+                return name
+            }
+        } 
 	},
     created() {
         db.readSomething('classes', {_id: this.id})
