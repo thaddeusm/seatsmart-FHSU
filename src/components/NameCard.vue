@@ -147,17 +147,17 @@ export default {
 		latestNotes() {
 			// sort and grab the three most recent notes (if any)
 			if (this.notes.length > 1) {
-				let sorted = this.notes.sort((a,b) => {
+				this.notes.sort((a,b) => {
 					let dateA = a.dateNoted._d
 					let dateB = b.dateNoted._d
 
 					return dateA > dateB ? -1 : 1
 				})
 
-				if (sorted.length > 3) {
-					return sorted.slice(0, 3)
+				if (this.notes.length > 3) {
+					return this.notes.slice(0, 3)
 				} else {
-					return sorted
+					return this.notes
 				}
 			} else {
 				return this.notes
@@ -409,10 +409,6 @@ export default {
 
 #editCardBody {
 	grid-area: editCardBody;
-}
-
-.add-student-button {
-
 }
 
 #editCardFooter {
