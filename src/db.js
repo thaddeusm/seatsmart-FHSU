@@ -61,51 +61,31 @@ export default {
 	createSomething(db, data) {
 		return new Promise(function(resolve, reject) {
 		    getDB(db).insert(data, function(error, insertedDocument) {
-		      if (error) {
-		        console.log(error)
-		        reject(error)
-		      } else {
-		        console.log(insertedDocument)
-		        resolve(insertedDocument)
-		      }
+		    	if (error) {
+		      		reject(error)
+		    	} else {
+		      		resolve(insertedDocument)
+		    	}
 		    })
 	  })
 	},
-	readSomething(db, reference, sortQuery) {
-		if (sortQuery) {
-			return new Promise(function(resolve, reject) {
-				getDB(db).find(reference).sort({sortQuery: -1}).exec(function(error, foundDocs) {
-					if (error) {
-						console.log(error)
-						reject(error)
-					} else {
-						console.log(foundDocs)
-						resolve(foundDocs)
-					}
-				})
+	readSomething(db, reference) {
+		return new Promise(function(resolve, reject) {
+			getDB(db).find(reference, function(error, foundDocs) {
+				if (error) {
+					reject(error)
+				} else {
+					resolve(foundDocs)
+				}
 			})
-		} else {
-			return new Promise(function(resolve, reject) {
-				getDB(db).find(reference, function(error, foundDocs) {
-					if (error) {
-						console.log(error)
-						reject(error)
-					} else {
-						console.log(foundDocs)
-						resolve(foundDocs)
-					}
-				})
-			})
-		}
+		})
 	},
 	updateSomething(db, query, update) {
 		return new Promise(function(resolve, reject) {
 			getDB(db).update(query, update, {}, function(error, numReplaced) {
 				if (error) {
-					console.log(error)
 					reject(error)
 				} else {
-					console.log(numReplaced)
 					resolve(numReplaced)
 				}
 			})
@@ -115,10 +95,8 @@ export default {
 		return new Promise(function(resolve, reject) {
 			getDB(db).remove(reference, {}, function(error, numRemoved) {
 				if (error) {
-					console.log(error)
 					reject(error)
 				} else {
-					console.log(numRemoved)
 					resolve(numRemoved)
 				}
 			})
