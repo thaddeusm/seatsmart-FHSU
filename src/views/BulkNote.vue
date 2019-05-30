@@ -100,6 +100,8 @@ export default {
 
             if (idIndexCheck == -1) {
                 this.studentIDs.push(id)
+            } else {
+                this.studentIDs.splice(idIndexCheck, 1)
             }
         },
         toggleSelectAll() {
@@ -107,7 +109,9 @@ export default {
                 this.studentIDs = []
             } else {
                 for (var i=0; i<this.classStudents.length; i++) {
-                    this.addStudent(this.classStudents[i]._id)
+                    if (this.studentIDs.indexOf(this.classStudents[i]._id) == -1) {
+                        this.addStudent(this.classStudents[i]._id)
+                    }
                 }
             }
 
