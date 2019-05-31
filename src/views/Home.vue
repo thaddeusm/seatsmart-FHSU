@@ -301,6 +301,15 @@ export default {
                 scope.$store.dispatch('getPreferences')
     		}
 
+            // check to ensure calculationInterval is set
+            if (!scope.$store.state.preferences.hasOwnProperty('calculationInterval')) {
+                scope.$store.dispatch('setPreferences', {
+                    calculationInterval: 'weekly'
+                })
+
+                scope.$store.dispatch('getPreferences')
+            }
+
         }, 3000, scope)
     }
 }

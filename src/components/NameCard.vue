@@ -166,6 +166,9 @@ export default {
 		calculationPreference() {
 			return this.$store.state.preferences.calculation
 		},
+		calculationInterval() {
+			return this.$store.state.preferences.calculationInterval
+		},
 		trend() {
 			// calculation for trend display
 			if (this.notes.length === 0) {
@@ -178,26 +181,53 @@ export default {
 				}
 			} else {
 				// base calculation on this week's notes only
-				let thisWeek = moment().week()
-				let thisWeeksNotes = []
+				let thisInterval = this.calculationInterval
+				let intervalNotes = []
 
-				for (let i=0; i<this.notes.length; i++) {
-					if (moment(this.notes[i].dateNoted._d).week() === thisWeek) {
-						thisWeeksNotes.push(this.notes[i])
-					}
+				switch (thisInterval) {
+					case ('weekly'):
+						thisInterval = moment().week()
+
+						for (let i=0; i<this.notes.length; i++) {
+							if (moment(this.notes[i].dateNoted._d).week() === thisInterval) {
+								intervalNotes.push(this.notes[i])
+							}
+						}
+
+						break
+					case ('bi-weekly'):
+						thisInterval = [moment().week(), moment().week() - 1]
+
+						for (let i=0; i<this.notes.length; i++) {
+							if (moment(this.notes[i].dateNoted._d).week() === thisInterval[0] || moment(this.notes[i].dateNoted._d).week() === thisInterval[1]) {
+								intervalNotes.push(this.notes[i])
+							}
+						}
+
+						break
+					case ('monthly'):
+						thisInterval = moment().month()
+
+						for (let i=0; i<this.notes.length; i++) {
+							if (moment(this.notes[i].dateNoted._d).month() === thisInterval) {
+								intervalNotes.push(this.notes[i])
+							}
+						}
+
+						break
 				}
 
 				// handle case no new notes this week
-				if (thisWeeksNotes.length === 0 && this.calculationPreference == 'nonews') {
+				if (intervalNotes.length === 0 && this.calculationPreference == 'nonews') {
 					return 4
 				} else {
 					
 					// determine point values based on weight and sum 'trendNumber'
 					let trendNumber = 0
 
-					for (let i=0; i<thisWeeksNotes.length; i++) {
-						if (thisWeeksNotes[i].type === 'positive') {
-							switch (thisWeeksNotes[i].behavior.Weight) {
+					for (let i=0; i<intervalNotes.length; i++) {
+						if (intervalNotes[i].type === 'positive') {
+							switch (intervalNotes[i].behavior.Weight) {
 								case ('low'):
 									trendNumber += 2
 									break
@@ -209,7 +239,7 @@ export default {
 									break
 							}
 						} else {
-							switch (thisWeeksNotes[i].behavior.Weight) {
+							switch (intervalNotes[i].behavior.Weight) {
 								case ('low'):
 									trendNumber -= 2
 									break

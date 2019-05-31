@@ -7,7 +7,7 @@
 			<ul id="navigationList">
 				<li class="active" ref="help"><button class="button-link" @click="changeContent('help')">Help</button></li>
 				<li class="inactive" ref="behaviors"><button class="button-link" @click="changeContent('behaviors')">Behaviors</button></li>
-				<li class="inactive" ref="tally"><button class="button-link" @click="changeContent('tally')">Tally</button></li>
+				<li class="inactive" ref="cards"><button class="button-link" @click="changeContent('cards')">Name Cards</button></li>
 				<li class="inactive" ref="calculation"><button class="button-link" @click="changeContent('calculation')">Calculation</button></li>
 				<li class="inactive" ref="about"><button class="button-link" @click="changeContent('about')">About</button></li>
 			</ul>
@@ -125,9 +125,10 @@
 					them in a given week.
 				</p>
 			</section>
-			<section v-if="content == 'tally'">
-				<h1>Tally</h1>
-				<div id="tallyChoiceArea">
+			<section v-if="content == 'cards'">
+				<h1>Customize Name Cards</h1>
+				<div id="nameCardsArea">
+					<h4>Tally</h4>
 					<p>
 						Each student's name card can tally and display one behavior on the upper left corner.
 						This allows you to track student progress in an area you consider vital to your course.
@@ -135,6 +136,16 @@
 					</p>
 					<section class="select-wrapper-large">
 						<v-select v-model="behaviorToTally" :options="allBehaviors"></v-select>
+					</section>
+					<h4>Calculation Interval</h4>
+					<p>
+						By defaul, a Seatsmart chart provides the option to view participation trends for the current week.  This is meant to help you quickly adjust participation points on Blackboard to provide students regular feedback.  You can customize the interval being calculated by choosing either "bi-weekly" or "monthly" calculations as an alternative below.
+					</p>
+					<section class="select-wrapper-large">
+						<v-select
+						  :options="['weekly', 'bi-weekly', 'monthly']"
+						  v-model="calculationInterval"
+						></v-select>
 					</section>
 				</div>
 			</section>
@@ -205,6 +216,7 @@ export default {
 			content: 'help',
 			alertMessage: '',
 			calculation: 'balanced',
+			calculationInterval: 'weekly',
 			positiveBehaviors: [
 				{
 					Abbreviation: null,
@@ -247,7 +259,7 @@ export default {
 			// handle component navigation
 			this.content = area
 
-			let areas = ['help', 'behaviors', 'calculation', 'about', 'tally']
+			let areas = ['help', 'behaviors', 'calculation', 'about', 'cards']
 
 			areas.forEach((a) => {
 				if (a !== area) {
@@ -336,7 +348,8 @@ export default {
 					calculation: this.calculation,
 					positiveBehaviors: this.positiveBehaviors,
 					negativeBehaviors: this.negativeBehaviors,
-					behaviorToTally: this.behaviorToTally
+					behaviorToTally: this.behaviorToTally,
+					calculationInterval: this.calculationInterval
 				})
 
 				let scope = this
@@ -365,6 +378,7 @@ export default {
 		this.positiveBehaviors = this.$store.state.preferences.positiveBehaviors
 		this.negativeBehaviors = this.$store.state.preferences.negativeBehaviors
 		this.behaviorToTally = this.$store.state.preferences.behaviorToTally
+		this.calculationInterval = this.$store.state.preferences.calculationInterval
 	}
 }
 </script>
@@ -477,7 +491,7 @@ h3 {
 .select-wrapper-large {
 	background: var(--white);
 	border-radius: 4px;
-	margin: 20px auto 70px auto;
+	margin: 10px auto 20px auto;
 	width: 300px;
 	color: var(--black);
 	font-family: "ArchivoNarrow";
