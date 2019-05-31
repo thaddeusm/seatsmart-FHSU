@@ -139,7 +139,7 @@
 					</section>
 					<h4>Calculation Interval</h4>
 					<p>
-						By defaul, a Seatsmart chart provides the option to view participation trends for the current week.  This is meant to help you quickly adjust participation points on Blackboard to provide students regular feedback.  You can customize the interval being calculated by choosing either "bi-weekly" or "monthly" calculations as an alternative below.
+						By default, a Seatsmart chart provides the option to view participation trends for the current week.  This is meant to help you quickly adjust participation points on Blackboard to provide students regular feedback.  You can customize the interval being calculated by choosing either "bi-weekly" or "monthly" calculations as an alternative below.
 					</p>
 					<section class="select-wrapper-large">
 						<v-select
