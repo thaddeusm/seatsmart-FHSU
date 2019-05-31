@@ -98,11 +98,10 @@
 						</li>
 						<li>
 							<img src="@/assets/trendicon.svg" alt="show participation trends icon">
-							<h5>Week Participation Trends</h5>
+							<h5>Recent Participation Trends</h5>
 							<p>
-								Clicking this button displays each student's participation trend for the current week.
-								This is helpful when updating participation grades in Blackboard.  Remember to try out
-								both trend calculation strategies to see which works best for you.
+								Clicking this button displays each student's recent participation trend.
+								This is helpful when updating participation grades in Blackboard.  You can change the interval being considered in this calculation in the <button class="inner-link" @click="$emit('change-content', 'cards')">Name Cards</button> section settings.
 							</p>
 						</li>
 						<li>

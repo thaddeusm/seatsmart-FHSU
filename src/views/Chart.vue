@@ -91,7 +91,7 @@
 		        	<button @click="showTrends" class="action-button">
 		        		<img v-if="!showingTrends" src="@/assets/trendicon.svg" alt="show participation trends icon">
 		        		<img v-else src="@/assets/trendiconyellow.svg" alt="show participation trends icon">
-						<span class="tooltip">show/hide week trends</span>
+						<span class="tooltip">show/hide recent trends</span>
 		        	</button>
 					<button @click="invertChart" class="action-button">
 						<img src="@/assets/present.svg" alt="present icon" v-if="!inverted">
