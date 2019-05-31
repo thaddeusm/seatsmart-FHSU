@@ -43,7 +43,8 @@ export default {
 									Weight: 'medium'
 								}
 							],
-							behaviorToTally: '(-) Absent'
+							behaviorToTally: '(-) Absent',
+							calculationInterval: 'weekly'
 						}
 
 						this.setPreferences(obj)
