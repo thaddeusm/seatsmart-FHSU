@@ -138,7 +138,7 @@
 				Remote
 			</h4>
 			<p>
-				Seatsmart Remote is an experimental feature that allows you to take advantage of basic functions without being tied to a computer.  Actions currently supported include selecting a random student and adding a new note about a student/students.  This feature requires Internet access on both the computer and the mobile device (with or without a VPN).  
+				Seatsmart Remote is an optional feature that allows you to take advantage of basic functions without being tied to a computer.  Actions currently supported include selecting a random student and adding a new note about a student/students.  This feature requires Internet access on both the computer and the mobile device (with or without a VPN).  
 			</p>
 			<p>
 				Realtime communication occurs over a secure server with data encrypted in transport (the server cannot decode the information).  The server does not store this information anywhere.  <strong>The QR code should be kept hidden from students</strong>.  You can begin and end a remote connection by clicking <img id="remoteIcon" src="@/assets/remote.svg" alt="remote icon"> at the top right corner of the chart.  This icon will turn yellow when the connection is active and red when it is attempting to restore a connection.
