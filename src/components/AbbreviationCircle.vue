@@ -35,43 +35,51 @@ export default {
 
 <style scoped>
 .extra-small {
-	font-size: 10px;
-	display: inline-block;
-	width: 12px;
-	height: 11.7px;
-	padding-top: .3px;
-	border-radius: 12px;
+	display: inline-grid;
+	justify-content: center;
+	align-items: center;
+	width: 11px;
+	height: 11px;
+	font-size: 8px;
+	line-height: 8px;
+	border-radius: 11px;
 	margin: 0 3%;
 }
 
 .small {
-	font-size: 12px;
-	display: inline-block;
-	width: 18px;
+	display: inline-grid;
+	justify-content: center;
+	align-items: center;
+	width: 16px;
 	height: 16px;
-	padding-top: 2px;
-	border-radius: 18px;
+	font-size: 12px;
+	line-height: 12px;
+	border-radius: 16px;
 	margin: 0 3%;
 }
 
 .medium {
+	display: inline-grid;
+	justify-content: center;
+	align-items: center;
+	width: 35px;
+	height: 35px;
 	font-size: 22px;
-	display: inline-block;
-	width: 40px;
-	height: 31px;
-	padding-top: 9px;
-	border-radius: 40px;
+	line-height: 22px;
+	border-radius: 35px;
 	margin: 0 3%;
 }
 
 .large {
-	font-size: 2.5em;
-	display: block;
-	width: 2.5em;
-	height: 1.8em;
-	border-radius: 2.5em;
+	display: grid;
+	justify-content: center;
+	align-items: center;
+	width: 60px;
+	height: 60px;
+	font-size: 36px;
+	line-height: 36px;
+	border-radius: 60px;
 	margin: 0 auto;
-	padding-top: .7em;
 	border: 1px solid var(--gray);
 }
 
