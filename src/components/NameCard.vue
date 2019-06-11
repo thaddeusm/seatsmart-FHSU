@@ -227,7 +227,7 @@ export default {
 
 					for (let i=0; i<intervalNotes.length; i++) {
 						if (intervalNotes[i].type === 'positive') {
-							switch (intervalNotes[i].behavior.Weight) {
+							switch (this.determineBehaviorWeight('positive', intervalNotes[i].behavior.Description, intervalNotes[i].behavior.Weight)) {
 								case ('low'):
 									trendNumber += 2
 									break
@@ -239,7 +239,7 @@ export default {
 									break
 							}
 						} else {
-							switch (intervalNotes[i].behavior.Weight) {
+							switch (this.determineBehaviorWeight('negative', intervalNotes[i].behavior.Description, intervalNotes[i].behavior.Weight)) {
 								case ('low'):
 									trendNumber -= 2
 									break
@@ -386,6 +386,31 @@ export default {
 		},
 		viewStudentProfile() {
 			this.$router.push(`/student/${this.student._id}`)
+		},
+		determineBehaviorWeight(behaviorType, behaviorDescription, storedWeight) {
+			// get latest behavior weight preference
+			let weight = undefined
+			let behaviors
+
+			if (behaviorType == 'positive') {
+				behaviors = this.$store.state.preferences.positiveBehaviors
+			} else {
+				behaviors = this.$store.state.preferences.negativeBehaviors
+			}
+
+			for (let i=0; i<behaviors.length; i++) {
+				if (behaviors[i].Description == behaviorDescription) {
+					weight = behaviors[i].Weight
+					break
+				}
+			}
+
+			// if the behavior does not exist in the system, used stored info
+			if (weight == undefined) {
+				return storedWeight
+			} else {
+				return weight
+			}
 		}
 	},
 	mounted() {

@@ -326,7 +326,7 @@ export default {
         findNextTrendValue(start, note) {
             let adjustment
             if (note.type == 'positive') {
-                switch (note.behavior.Weight) {
+                switch (this.determineBehaviorWeight('positive', note.behavior.Description, note.behavior.Weight)) {
                     case ('low'):
                         adjustment = 2
                         break
@@ -338,7 +338,7 @@ export default {
                         break
                 }
             } else {
-                switch (note.behavior.Weight) {
+                switch (this.determineBehaviorWeight('negative', note.behavior.Description, note.behavior.Weight)) {
                     case ('low'):
                         adjustment = -2
                         break
@@ -474,6 +474,31 @@ export default {
         changeStudents(nextStudent) {
             // redirect to next student
             this.$router.push(nextStudent)
+        },
+        determineBehaviorWeight(behaviorType, behaviorDescription, storedWeight) {
+            // get latest behavior weight preference
+            let weight = undefined
+            let behaviors
+
+            if (behaviorType == 'positive') {
+                behaviors = this.$store.state.preferences.positiveBehaviors
+            } else {
+                behaviors = this.$store.state.preferences.negativeBehaviors
+            }
+
+            for (let i=0; i<behaviors.length; i++) {
+                if (behaviors[i].Description == behaviorDescription) {
+                    weight = behaviors[i].Weight
+                    break
+                }
+            }
+
+            // if the behavior does not exist in the system, used stored info
+            if (weight == undefined) {
+                return storedWeight
+            } else {
+                return weight
+            }
         }
     },
     mounted() {
