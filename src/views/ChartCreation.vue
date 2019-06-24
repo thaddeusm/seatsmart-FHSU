@@ -17,14 +17,27 @@
 				<h6><img v-if="alertMessage.length > 0" src="@/assets/alert.svg" alt="alert icon" class="alert-icon-small"> {{ alertMessage }}</h6>
 			</section>
 			<section id="formOne" v-if="progress == 1">
-				<Tabs :sections="[{label: 'columns', color: 'yellow'}, {label: 'rows', color: 'gray'}]">
-					<template slot="columns">
-						<button v-for="(columnsButton, index) of 14" :class="[classChart.columns == index + 1 ? 'selected' : '', 'number-button']" :ref="`columnsButton${index + 1}`" @click="selectNumber('columns', index)">{{ index + 1 }}</button>
-					</template>
-					<template slot="rows">
-						<button v-for="(rowsButton, index) of 9" :class="[classChart.rows == index + 1 ? 'selected' : '', 'number-button']" :ref="`rowsButton${index + 1}`" @click="selectNumber('rows', index)">{{ index + 1 }}</button>
-					</template>
-				</Tabs>
+				<div class="form-container">
+					<h3>Classroom Arrangement</h3>
+					<div class="input-wrapper">
+						<div class="label-row">
+							<h5 class="select-label">How many rows will you use?</h5>
+						</div>
+						<div class="select-wrapper">
+							<v-select v-model="classChart.rows" :options="[
+								1, 2, 3, 4, 5, 6, 7, 8, 9
+							]"></v-select>
+						</div>
+						<div class="label-row">
+							<h5 class="select-label">How many chairs are in each row?</h5>
+						</div>
+						<div class="select-wrapper">
+							<v-select v-model="classChart.columns" :options="[
+								1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
+							]"></v-select>
+						</div>
+					</div>
+				</div>
 				<section class="progress-button-area">
 					<button class="progress-button" @click="routeBack"><img class="back-icon" src="@/assets/backarrowwhite.svg" alt="back icon"></button>
 					<button class="progress-button" @click="changeProgress(2)">add class info</button>
@@ -188,8 +201,8 @@ export default {
 			years: [],
 			importSuccess: false,
 			classChart: {
-				columns: null,
-				rows: null,
+				columns: 2,
+				rows: 1,
 				name: null,
 				semester: null,
 				year: null,
