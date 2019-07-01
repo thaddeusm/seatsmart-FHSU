@@ -21,8 +21,10 @@
 						:value="`https://seatsmart-remote.now.sh/?room=${roomID}`" 
 						:size="100" 
 					/>
-					<div id="qrGhost" v-else></div>
-					<button class="qr-toggle" v-if="showQR" @click="showQR = false">hide</button>
+					<div id="qrGhost" v-else>
+						<h5>{{ roomID }}</h5>
+					</div>
+					<button class="qr-toggle" v-if="showQR" @click="showQR = false">hide QR</button>
 					<button class="qr-toggle" v-else @click="showQR = true">show QR</button>
 					<button class="cancel-button" @click="closeConnection">End Remote Connection</button>
 				</section>
@@ -151,6 +153,9 @@ export default {
 	height: 100px;
 	margin: 15px auto 5px auto;
 	border-radius: 5px;
+	display: grid;
+	align-items: center;
+	color: var(--black);
 }
 
 h3 {
