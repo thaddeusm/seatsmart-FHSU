@@ -19,9 +19,9 @@
             </section>
         </header>
         <main>
-            <div class="result" v-for="(classChart, index) in results" v-if="classChart.length > 0" :key="index">
+            <div class="result" v-for="(classChart, index) in Object.values(results)" v-if="classChart.length > 0" :key="index">
                 <sequential-entrance fromTop delay="20">
-                    <TitleBar v-if="classChart.length > 0" :classID="allClasses[index]" :link="true" />  
+                    <TitleBar v-if="classChart.length > 0" :classID="Object.keys(results)[index]" :link="true" />  
                     <div class="name-card-wrapper" v-for="(student, subIndex) in classChart">
                         <NameCard
                             :key="`${student}${subIndex}`"
@@ -97,22 +97,22 @@ export default {
     },
     computed: {
         allClasses() {
-            if (this.includeArchived) {
-                return Object.keys(this.$store.state.allClasses)
-            } else {
-                let unarchivedClasses = []
+            return Object.keys(this.$store.state.allClasses)
+        },
+        unarchivedClasses() {
+            let allClassesObj = this.$store.state.allClasses
+            let unarchived = []
 
-                let keys = Object.keys(this.$store.state.allClasses)
-                let values = Object.values(this.$store.state.allClasses)
+            let keys = Object.keys(allClassesObj)
+            let values = Object.values(allClassesObj)
 
-                for (let i=0; i<keys.length; i++) {
-                    if (!values[i].archived) {
-                        unarchivedClasses.push(keys[i])
-                    }
+            for (let i=0; i<keys.length; i++) {
+                if (allClassesObj[keys[i]].archived == false) {
+                    unarchived.push(keys[i])
                 }
-
-                return unarchivedClasses
             }
+
+            return unarchived
         },
         allStudents() {
             return this.$store.state.allStudents
@@ -123,31 +123,77 @@ export default {
             document.body.scrollTop = document.documentElement.scrollTop = 0;
             this.placeholder = term
             this.results = []
-            this.allClasses.forEach(id => {
-                this.results.push([])
-            })
 
-            for (let i=0; i<this.allStudents.length; i++) {
-                if (this.allStudents[i].firstName) {
-                    let firstName = this.allStudents[i].firstName.toLowerCase()
+            if (this.includeArchived) {
+                this.allClasses.forEach(id => {
+                    this.results[id] = []
+                })
 
-                    // reduce to simple (English) first name
-                    if (firstName.indexOf('(') !== -1) {
-                        firstName = firstName.split('(')[1].split(')')[0].split(' ')[0]
-                    } else {
-                        firstName = firstName.split(' ')[0]
+                for (let i=0; i<this.allStudents.length; i++) {
+                    if (this.allStudents[i].firstName) {
+                        let firstName = this.allStudents[i].firstName.toLowerCase()
+
+                        // reduce to simple (English) first name
+                        if (firstName.indexOf('(') !== -1) {
+                            firstName = firstName.split('(')[1].split(')')[0].split(' ')[0]
+                        } else {
+                            firstName = firstName.split(' ')[0]
+                        }
+
+                        if (firstName.includes(term)) {
+                            this.results[this.allStudents[i].class].push(this.allStudents[i]._id)
+                        }
                     }
+                }
+            } else {
+                this.unarchivedClasses.forEach(id => {
+                    this.results[id] = []
+                })
 
-                    if (firstName.includes(term)) {
-                        for (let j=0; j<this.results.length; j++) {
-                            if (this.allStudents[i].class == this.allClasses[j]) {
-                                this.results[j].push(this.allStudents[i]._id)
+                for (let i=0; i<this.allStudents.length; i++) {
+                    if (this.unarchivedClasses.includes(this.allStudents[i].class)) {
+                        if (this.allStudents[i].firstName) {
+                            let firstName = this.allStudents[i].firstName.toLowerCase()
+
+                            // reduce to simple (English) first name
+                            if (firstName.indexOf('(') !== -1) {
+                                firstName = firstName.split('(')[1].split(')')[0].split(' ')[0]
+                            } else {
+                                firstName = firstName.split(' ')[0]
+                            }
+
+                            if (firstName.includes(term)) {
+                                this.results[this.allStudents[i].class].push(this.allStudents[i]._id)
                             }
                         }
                     }
                 }
-            }
 
+                // for (let i=0; i<this.unarchivedClasses.length; i++) {
+                //     let resultsThisClass = []
+
+                //     for (let j=0; j<this.allStudents.length; j++) {
+                //         if (this.allStudents[j].class == this.unarchivedClasses[i] && this.allStudents[j].firstName) {
+                //             let firstName = this.allStudents[j].firstName.toLowerCase()
+
+                //             // reduce to simple (English) first name
+                //             if (firstName.indexOf('(') !== -1) {
+                //                 firstName = firstName.split('(')[1].split(')')[0].split(' ')[0]
+                //             } else {
+                //                 firstName = firstName.split(' ')[0]
+                //             }
+
+                //             if (firstName.includes(term)) {
+                //                 resultsThisClass.push(this.allStudents[j]._id)
+                //             }
+                //         }
+                //     }
+
+                //     if (resultsThisClass.length > 0) {
+                //         this.results[this.unarchivedClasses[i]] = resultsThisClass
+                //     }
+                // }
+            }
 
             this.checkForNoResults()
 
@@ -158,13 +204,15 @@ export default {
         checkForNoResults() {
             let test = 0
 
-            for (let i=0; i<this.results.length; i++) {
-                if (this.results[i].length === 0) {
+            let keys = Object.keys(this.results)
+
+            for (let i=0; i<keys.length; i++) {
+                if (this.results[keys[i]].length == 0) {
                     test++
                 }
             }
 
-            if (test === this.allClasses.length) {
+            if (keys.length == test) {
                 this.noResults = true
             } else {
                 this.noResults = false
@@ -194,7 +242,7 @@ export default {
         },
         toggleIncludeArchived() {
             this.includeArchived = !this.includeArchived
-            this.search(this.term)
+            this.search(this.placeholder)
         }
     },
     mounted() {
