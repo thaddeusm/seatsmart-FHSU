@@ -5,6 +5,10 @@
                 <button id="backButton" @click="$router.push('/')"><img src="@/assets/backarrowwhite.svg" alt="back arrow"> <img src="@/assets/home.svg" alt="home icon"></button>
             </section>
             <section id="toggleArea">
+                <button @click="toggleIncludeArchived">
+                    <img v-if="includeArchived" class="archive-icon" src="@/assets/archivewhitedisabled.svg" alt="disable archive icon">
+                    <img v-else class="archive-icon" src="@/assets/archivewhite.svg" alt="enable archive icon">
+                </button>
                 <button @click="toggleCardStyle"><img src="@/assets/changecard.svg" alt="card toggle icon"></button>
             </section>
             <section id="searchArea">
@@ -33,6 +37,10 @@
                 <img id="searchSplash" src="@/assets/searchimage.svg" alt="search illustration">
                 <h2>No students were found.</h2>
                 <h4>Be sure to search using students' "English" names.</h4>
+                <h4 v-if="!includeArchived">
+                    Also, you can click the 
+                    <img class="archive-icon" src="@/assets/archivewhite.svg" alt="enable archive icon"> icon above to include students from archived classes.
+                </h4>
             </div>
         </main>
   		<Modal v-if="noteModalOpen" v-on:trigger-close="closeNoteModal" :dismissable="true" size="large">
@@ -83,12 +91,28 @@ export default {
             loaded: false,
             placeholder: '',
             noResults: false,
-            cardStyle: 'simple'
+            cardStyle: 'simple',
+            includeArchived: false
         }
     },
     computed: {
         allClasses() {
-            return Object.keys(this.$store.state.allClasses)
+            if (this.includeArchived) {
+                return Object.keys(this.$store.state.allClasses)
+            } else {
+                let unarchivedClasses = []
+
+                let keys = Object.keys(this.$store.state.allClasses)
+                let values = Object.values(this.$store.state.allClasses)
+
+                for (let i=0; i<keys.length; i++) {
+                    if (!values[i].archived) {
+                        unarchivedClasses.push(keys[i])
+                    }
+                }
+
+                return unarchivedClasses
+            }
         },
         allStudents() {
             return this.$store.state.allStudents
@@ -167,6 +191,10 @@ export default {
             } else {
                 this.cardStyle = 'simple'
             }
+        },
+        toggleIncludeArchived() {
+            this.includeArchived = !this.includeArchived
+            this.search(this.term)
         }
     },
     mounted() {
@@ -207,7 +235,13 @@ export default {
 
 button > img {
     vertical-align: middle;
-    margin: 0 5px;
+    width: 25px;
+    margin: 0 10px;
+}
+
+.archive-icon {
+    width: 23px;
+    vertical-align: middle;
 }
 
 #toggleArea {
@@ -255,7 +289,11 @@ main {
 }
 
 #noResults > h2 {
-    margin-bottom: 10px;
+    margin: 10px 0 40px 0;
+}
+
+#noResults > h4 {
+    margin: 20px 0;
 }
 
 button {
