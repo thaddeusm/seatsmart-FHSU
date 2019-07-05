@@ -276,7 +276,7 @@ export default {
 			switch (step) {
 				case 2:
 				if (this.classChart.columns == 1) {
-					this.alertMessage = "Please verify the number of columns."
+					this.alertMessage = "Please verify the number of chairs in each row."
 					error = true
 				} else if (this.classChart.rows == 1) {
 					this.alertMessage = "Please verify the number of rows."
@@ -670,7 +670,7 @@ h1 {
 .error-area {
 	height: 15px;
 	text-align: center;
-	margin-bottom: 8px;
+	margin-bottom: 15px;
 }
 
 .error-area > h6 {
@@ -966,7 +966,7 @@ progress-button:disabled {
 	vertical-align: middle;
 	width: 20px;
 	margin-bottom: 3px;
-	margin-right: 10px;
+	margin-right: 5px;
 }
 
 .alert-icon-large {
