@@ -54,7 +54,8 @@
   		</Modal>
         <TouchBar :show="!noteModalOpen" :bar="[
             {type: 'spacer', size: 'flexible'},
-            {type: 'button', label: '🎫', method: function() {toggleCardStyle()}},
+            {type: 'button', label: '📦', method: function() {toggleIncludeArchived()}},
+            {type: 'button', label: '🎫', method: function() {toggleCardStyle()}}
 	       ]" 
            :escapeItem="{type: 'button', label: '🏠', method: routeHome}"
         />
@@ -168,31 +169,6 @@ export default {
                         }
                     }
                 }
-
-                // for (let i=0; i<this.unarchivedClasses.length; i++) {
-                //     let resultsThisClass = []
-
-                //     for (let j=0; j<this.allStudents.length; j++) {
-                //         if (this.allStudents[j].class == this.unarchivedClasses[i] && this.allStudents[j].firstName) {
-                //             let firstName = this.allStudents[j].firstName.toLowerCase()
-
-                //             // reduce to simple (English) first name
-                //             if (firstName.indexOf('(') !== -1) {
-                //                 firstName = firstName.split('(')[1].split(')')[0].split(' ')[0]
-                //             } else {
-                //                 firstName = firstName.split(' ')[0]
-                //             }
-
-                //             if (firstName.includes(term)) {
-                //                 resultsThisClass.push(this.allStudents[j]._id)
-                //             }
-                //         }
-                //     }
-
-                //     if (resultsThisClass.length > 0) {
-                //         this.results[this.unarchivedClasses[i]] = resultsThisClass
-                //     }
-                // }
             }
 
             this.checkForNoResults()
