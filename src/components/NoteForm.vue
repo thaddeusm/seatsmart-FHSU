@@ -104,7 +104,7 @@ export default {
 
 					db.createSomething('notes', this.note)
 						.then(() => {
-							this.$store.dispatch('setLastUpdatedStudent', this.student._id)
+							this.$store.dispatch('setNumStudentUpdates')
 							this.$emit('trigger-modal-close')
 						})
 				} else {
@@ -117,7 +117,9 @@ export default {
 					})
 						.then((numUpdated) => {
 							this.clearNote()
-							this.$store.dispatch('setLastUpdatedStudent', this.student._id)
+
+							// update store to trigger component refresh
+							this.$store.dispatch('setNumStudentUpdates')
 							this.$emit('trigger-modal-close')
 						})
 				}
@@ -135,7 +137,8 @@ export default {
 
 					db.createSomething('notes', this.note)
 						.then(() => {
-							this.$store.dispatch('setLastUpdatedStudent', this.students[studentIndex])
+							// update store to trigger component refresh
+							this.$store.dispatch('setNumStudentUpdates')
 						})
 					studentIndex++
 				}

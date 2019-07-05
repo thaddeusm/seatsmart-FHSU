@@ -141,8 +141,8 @@ export default {
 		}
 	},
 	computed: {
-		lastUpdatedStudent() {
-			return this.$store.state.lastUpdatedStudent
+		numStudentUpdates() {
+			return this.$store.state.numStudentUpdates
 		},
 		latestNotes() {
 			// sort and grab the three most recent notes (if any)
@@ -306,11 +306,8 @@ export default {
 		}
 	},
 	watch: {
-		lastUpdatedStudent(newValue, oldValue) {
-			if (newValue === this.student._id) {
-				// ensure info is updated when changes are made to student from parent
-				this.getStudent()
-			}
+		numStudentUpdates(newValue, oldValue) {
+			this.getStudent()
 		},
 		deselect(newValue, oldValue) {
 			if (newValue === true) {
