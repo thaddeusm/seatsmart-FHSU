@@ -1,4 +1,4 @@
-![Seatsmart Icon](https://seatsmart.now.sh/img/logo.b38f8b88.svg)
+![Seatsmart Icon](https://seatsmart.tech/img/logo.b38f8b88.svg)
 
 # Seatsmart (FHSU)
 Seatsmart offers a convenient way to implement classroom

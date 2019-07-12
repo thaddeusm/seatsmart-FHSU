@@ -363,9 +363,9 @@ export default {
 		},
 		openHomePage(section) {
 			if (section == 'main') {	
-				shell.openExternal('https://seatsmart.now.sh/')
+				shell.openExternal('https://seatsmart.tech/')
 			} else {
-				shell.openExternal('https://seatsmart.now.sh/#releaseNotes')
+				shell.openExternal('https://seatsmart.tech/#releaseNotes')
 			}
 		},
 		openEmail() {
