@@ -126,7 +126,7 @@
 				</p>
 			</section>
 			<section v-if="content == 'cards'">
-				<h1>Customize Name Cards</h1>
+				<h1>Name Cards</h1>
 				<div id="nameCardsArea">
 					<h4>Tally</h4>
 					<p>
