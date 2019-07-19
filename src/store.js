@@ -8,7 +8,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         preferences: null,
-        numStudentUpdates: '0',
+        lastStudentUpdated: null,
         lastView: null,
         earliestDatesNoted: {},
         allStudents: null,
@@ -24,8 +24,8 @@ export default new Vuex.Store({
             state.preferences = newPreferences
             api.setPreferences(newPreferences)
         },
-        setNumStudentUpdates(state, studentID) {
-            state.numStudentUpdates += 1
+        setLastStudentUpdated(state, studentID) {
+            state.lastStudentUpdated = studentID
         },
         setLastView(state, lastView) {
             state.lastView = lastView
@@ -66,8 +66,8 @@ export default new Vuex.Store({
 
             context.commit('setPreferences', currentPreferences)
         },
-        setNumStudentUpdates(context) {
-            context.commit('setNumStudentUpdates')
+        setLastStudentUpdated(context, studentID) {
+            context.commit('setLastStudentUpdated', studentID)
         },
         setLastView(context, lastView) {
             context.commit('setLastView', lastView)

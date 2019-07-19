@@ -141,8 +141,8 @@ export default {
 		}
 	},
 	computed: {
-		numStudentUpdates() {
-			return this.$store.state.numStudentUpdates
+		lastStudentUpdated() {
+			return this.$store.state.lastStudentUpdated
 		},
 		latestNotes() {
 			// sort and grab the three most recent notes (if any)
@@ -309,8 +309,14 @@ export default {
 		}
 	},
 	watch: {
-		numStudentUpdates(newValue, oldValue) {
-			this.getStudent()
+		lastStudentUpdated(newValue, oldValue) {
+			if (newValue == this.student._id) {
+
+				let scope = this
+				setTimeout(function() {
+					scope.getStudent()
+				}, 500, scope)
+			}
 		},
 		deselect(newValue, oldValue) {
 			if (newValue === true) {

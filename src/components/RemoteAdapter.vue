@@ -169,7 +169,7 @@ export default {
         						this.initConfirm(request.id)
 
         						// trigger store mutation to rerender name card component
-        						this.$store.dispatch('setNumStudentUpdates')
+        						this.$store.dispatch('setLastStudentUpdated', newNote.student)
 
         						// add action to log in parent component with student name
         						this.$emit('action-completed', `Saved new note about ${request.action.data.studentName}`)
