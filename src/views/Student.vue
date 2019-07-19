@@ -203,6 +203,9 @@ export default {
         calculationPreference() {
             return this.$store.state.preferences.calculation
         },
+        weightValues() {
+            return this.$store.state.preferences.weightValues
+        },
         trend() {
             // start with average participation score
             let trendArr = [70]
@@ -238,7 +241,7 @@ export default {
                     if (notesThisWeek.length === 0) {
                         lastValue = trendArr[trendArr.length - 1]
                         // if 'no news', add 4 to participation score
-                        trendArr.push(lastValue + 4)
+                        trendArr.push(lastValue + parseInt(this.weightValues.medium))
                     } else {
                         for (let k=0; k<notesThisWeek.length; k++) {
                             lastValue = trendArr[trendArr.length - 1]
@@ -328,25 +331,25 @@ export default {
             if (note.type == 'positive') {
                 switch (this.determineBehaviorWeight('positive', note.behavior.Description, note.behavior.Weight)) {
                     case ('low'):
-                        adjustment = 2
+                        adjustment = parseInt(this.weightValues.low)
                         break
                     case ('medium'):
-                        adjustment = 4
+                        adjustment = parseInt(this.weightValues.medium)
                         break
                     case  ('strong'):
-                        adjustment = 8
+                        adjustment = parseInt(this.weightValues.strong)
                         break
                 }
             } else {
                 switch (this.determineBehaviorWeight('negative', note.behavior.Description, note.behavior.Weight)) {
                     case ('low'):
-                        adjustment = -2
+                        adjustment = -Math.abs(parseInt(this.weightValues.low))
                         break
                     case ('medium'):
-                        adjustment = -4
+                        adjustment = -Math.abs(parseInt(this.weightValues.medium))
                         break
                     case  ('strong'):
-                        adjustment = -8
+                        adjustment = -Math.abs(parseInt(this.weightValues.strong))
                         break
                 }
             }

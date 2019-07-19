@@ -166,6 +166,9 @@ export default {
 		calculationPreference() {
 			return this.$store.state.preferences.calculation
 		},
+		weightValues() {
+			return this.$store.state.preferences.weightValues
+		},
 		calculationInterval() {
 			return this.$store.state.preferences.calculationInterval
 		},
@@ -229,25 +232,25 @@ export default {
 						if (intervalNotes[i].type === 'positive') {
 							switch (this.determineBehaviorWeight('positive', intervalNotes[i].behavior.Description, intervalNotes[i].behavior.Weight)) {
 								case ('low'):
-									trendNumber += 2
+									trendNumber += parseInt(this.weightValues.low)
 									break
 								case ('medium'):
-									trendNumber += 4
+									trendNumber += parseInt(this.weightValues.medium)
 									break
 								case ('strong'):
-									trendNumber += 8
+									trendNumber += parseInt(this.weightValues.strong)
 									break
 							}
 						} else {
 							switch (this.determineBehaviorWeight('negative', intervalNotes[i].behavior.Description, intervalNotes[i].behavior.Weight)) {
 								case ('low'):
-									trendNumber -= 2
+									trendNumber -= parseInt(this.weightValues.low)
 									break
 								case ('medium'):
-									trendNumber -= 4
+									trendNumber -= parseInt(this.weightValues.medium)
 									break
 								case ('strong'):
-									trendNumber -= 8
+									trendNumber -= parseInt(this.weightValues.strong)
 									break
 							}
 						}

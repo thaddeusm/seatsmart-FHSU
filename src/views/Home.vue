@@ -310,6 +310,19 @@ export default {
                 scope.$store.dispatch('getPreferences')
             }
 
+            // check to ensure weightValues is set
+            if (!scope.$store.state.preferences.hasOwnProperty('weightValues')) {
+                scope.$store.dispatch('setPreferences', {
+                    weightValues: {
+                        low: 2,
+                        medium: 4,
+                        strong: 8
+                    }
+                })
+
+                scope.$store.dispatch('getPreferences')
+            }
+
         }, 3000, scope)
     }
 }

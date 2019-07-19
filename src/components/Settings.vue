@@ -124,6 +124,24 @@
 					assumes that a student is participating well if no notes are recorded pertaining to
 					them in a given week.
 				</p>
+				<h4 id="pointValueHeading">Point Values</h4>
+				<p>
+					Seatsmart helps you adjust grades regularly by preparing calculations for the current calculation interval (which can be customized in the settings for <button class="inner-link" @click="changeContent('cards')">Name Cards</button>).  For example, behaviors with a low weight add (or remove) 2 points from the student's trend score by default.
+				</p>
+				<p>
+					You can enter alternative values below:
+				</p>
+				<br>
+				<div class="label-row black-border">
+					<span>Low</span>
+					<span>Medium</span>
+					<span>Strong</span>
+				</div>
+				<div class="form-group">
+					<input type="number" name="low" v-model="weightValues.low">
+					<input type="number" name="medium" v-model="weightValues.medium">
+					<input type="number" name="strong" v-model="weightValues.strong">
+				</div>
 			</section>
 			<section v-if="content == 'cards'">
 				<h1>Name Cards</h1>
@@ -231,7 +249,12 @@ export default {
 					Weight: null
 				}
 			],
-			behaviorToTally: null
+			behaviorToTally: null,
+			weightValues: {
+				low: null,
+				medium: null,
+				strong: null
+			}
 		}
 	},
 	computed: {
@@ -349,7 +372,8 @@ export default {
 					positiveBehaviors: this.positiveBehaviors,
 					negativeBehaviors: this.negativeBehaviors,
 					behaviorToTally: this.behaviorToTally,
-					calculationInterval: this.calculationInterval
+					calculationInterval: this.calculationInterval,
+					weightValues: this.weightValues
 				})
 
 				let scope = this
@@ -379,6 +403,7 @@ export default {
 		this.negativeBehaviors = this.$store.state.preferences.negativeBehaviors
 		this.behaviorToTally = this.$store.state.preferences.behaviorToTally
 		this.calculationInterval = this.$store.state.preferences.calculationInterval
+		this.weightValues = this.$store.state.preferences.weightValues
 	}
 }
 </script>
@@ -560,6 +585,10 @@ input {
 	color: var(--red);
 	padding: 10px;
 	height: 20px;
+}
+
+#pointValueHeading {
+	margin-top: 60px;
 }
 
 .black-text {
