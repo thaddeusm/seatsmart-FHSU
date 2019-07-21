@@ -168,8 +168,15 @@ export default {
         						// send confirmation to remote client
         						this.initConfirm(request.id)
 
-        						// trigger store mutation to rerender name card component
-        						this.$store.dispatch('setLastStudentUpdated', newNote.student)
+        						// clear most recent updated student first
+								let scope = this
+								this.$store.dispatch('setLastStudentUpdated', '0')
+
+								// then update state to ensure that consecutive
+								// notes about the same student are reflected in UI
+								setTimeout(function() {
+									scope.$store.dispatch('setLastStudentUpdated', newNote.student)
+								}, 500, scope)
 
         						// add action to log in parent component with student name
         						this.$emit('action-completed', `Saved new note about ${request.action.data.studentName}`)

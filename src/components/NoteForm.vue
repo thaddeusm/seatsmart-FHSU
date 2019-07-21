@@ -104,7 +104,17 @@ export default {
 
 					db.createSomething('notes', this.note)
 						.then(() => {
-							this.$store.dispatch('setLastStudentUpdated', this.note.student)
+							// clear most recent updated student first
+							let scope = this
+							this.$store.dispatch('setLastStudentUpdated', '0')
+
+							// then update state to ensure that consecutive
+							// notes about the same student are reflected in UI
+							setTimeout(function() {
+								scope.$store.dispatch('setLastStudentUpdated', scope.note.student)
+							}, 500, scope)
+
+							
 							this.$emit('trigger-modal-close')
 						})
 				} else {
@@ -118,8 +128,16 @@ export default {
 						.then((numUpdated) => {
 							this.clearNote()
 
-							// update store to trigger component refresh
-							this.$store.dispatch('setLastStudentUpdated', this.note.student)
+							// clear most recent updated student first
+							let scope = this
+							this.$store.dispatch('setLastStudentUpdated', '0')
+
+							// then update state to ensure that consecutive
+							// notes about the same student are reflected in UI
+							setTimeout(function() {
+								scope.$store.dispatch('setLastStudentUpdated', scope.note.student)
+							}, 500, scope)
+							
 							this.$emit('trigger-modal-close')
 						})
 				}
@@ -137,8 +155,15 @@ export default {
 
 					db.createSomething('notes', this.note)
 						.then(() => {
-							// update store to trigger component refresh
-							this.$store.dispatch('setLastStudentUpdated', this.note.student)
+							// clear most recent updated student first
+							let scope = this
+							this.$store.dispatch('setLastStudentUpdated', '0')
+
+							// then update state to ensure that consecutive
+							// notes about the same student are reflected in UI
+							setTimeout(function() {
+								scope.$store.dispatch('setLastStudentUpdated', scope.note.student)
+							}, 500, scope)
 						})
 					studentIndex++
 				}

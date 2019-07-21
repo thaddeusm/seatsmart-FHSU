@@ -311,11 +311,8 @@ export default {
 	watch: {
 		lastStudentUpdated(newValue, oldValue) {
 			if (newValue == this.student._id) {
-
-				let scope = this
-				setTimeout(function() {
-					scope.getStudent()
-				}, 500, scope)
+				// update component
+				this.getStudent()
 			}
 		},
 		deselect(newValue, oldValue) {
