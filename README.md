@@ -21,7 +21,7 @@ and this information is not stored in any cloud database.  This is powered by a
 
 Every attempt is made to ensure design and UX consistency for PC and Mac, the 
 operating systems currently used by faculty.  However, desktop (larger) screen 
-sizes are disregarded as faculty are provided or rely upon laptop computers.  An 
+sizes are given less priority as faculty are provided or rely upon laptop computers.  An 
 additional effort has been made to support OSX-specific APIs such as the touchbar, 
 recognizing that faculty members who have chosen to purchase their own computers 
 have sometimes selected more advanced Apple computers with this feature.
@@ -56,9 +56,7 @@ Though its implementation in this repo is specific to the format of FHSU's roste
 this could be refactored in forked projects for other institutional settings.
 
 ## Development Timeline
-Seatsmart is currently being used by faculty members across several departments.  
-Basic features are complete with remote/realtime features being planned for the upcoming 
-academic year (2019-2020).
+Seatsmart graduated from beta during the Spring 2019 semester and is currently being used by faculty members across several academic departments.  Basic features are complete with further remote/realtime functionality being planned for the upcoming academic year (2019-2020) to allow students to connect with their personal devices to complete small formative assessment activities for greater engagement during class periods.
 
 ## Design Concepts and Inspiration
 [mockups @Figma](https://www.figma.com/file/OxI3WKOFswThYuEfOR6UaV7V/Seatsmart)
@@ -68,7 +66,7 @@ practices that are considered effective for courses conducted at FHSU satellite 
 in China.  Paper-based seating charts with spaces for annotation have been in use for 
 some time and are still the preferred choice for many faculty members.  Seatsmart 
 offers a digital alternative as a convenience, while striving to add features that are 
-difficult to implement in analog (e.g. trend calculations, randomization, etc.).
+difficult to implement in analog (e.g. trend calculations, randomization, etc.).  The choice of colors and typography is meant to fit the university context (adult learners).
 
 New York City Metro signs were of particular inspiration, which feature circular icons 
 with solid colors.  The color palette is based upon FHSU branding colors, with the choice 
