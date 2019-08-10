@@ -3,14 +3,14 @@
 		<header>
 			<h1 ref="pageHeader" v-if="id == undefined">New Chart</h1>
 			<h1 ref="pageHeader" v-else>Edit Chart ({{ classChart.name }})</h1>
-			<h6 v-if="progress == 1">Enter the rows and columns of seating in the classroom:</h6>
+			<h6 v-if="progress == 1">Enter the columns and rows of seating in the classroom:</h6>
 			<h6 v-if="progress == 2 && mode == 'new'">Fill in information about the class:</h6>
 			<h6 v-if="progress == 2 && mode == 'edit'">Edit information about the class:</h6>
 			<h6 v-if="progress == 3 && mode == 'new'">Create a student list or import the XLSX from TigerCentral <button class="modal-button" @click="modalOpen = true">(?)</button></h6>
 			<h6 v-if="progress == 3 && mode == 'edit'">Edit the student list:</h6>
 		</header>
 		<section id="diagram">
-			<SeatingDiagram :rows="classChart.rows" :columns="classChart.columns" />
+			<SeatingDiagram :rows="rowNumber" :columns="columnNumber" />
 		</section>
 		<section id="chartForm">
 			<section class="error-area">
@@ -21,19 +21,19 @@
 					<h3>Classroom Arrangement</h3>
 					<div class="input-wrapper">
 						<div class="label-row">
+							<h5 class="select-label">How many chairs will you use in each row?</h5>
+						</div>
+						<div class="select-wrapper">
+							<v-select v-model="classChart.columns" :options="[
+								1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
+							]"></v-select>
+						</div>
+						<div class="label-row">
 							<h5 class="select-label">How many rows will you use?</h5>
 						</div>
 						<div class="select-wrapper">
 							<v-select v-model="classChart.rows" :options="[
 								1, 2, 3, 4, 5, 6, 7, 8, 9
-							]"></v-select>
-						</div>
-						<div class="label-row">
-							<h5 class="select-label">How many chairs are in each row?</h5>
-						</div>
-						<div class="select-wrapper">
-							<v-select v-model="classChart.columns" :options="[
-								1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
 							]"></v-select>
 						</div>
 					</div>
@@ -232,14 +232,20 @@ export default {
 	computed: {
 		lastView() {
 			return this.$store.state.lastView
+		},
+		rowNumber() {
+			return parseInt(this.classChart.rows)
+		},
+		columnNumber() {
+			return parseInt(this.classChart.columns)
 		}
 	},
 	methods: {
 		saveClassChart() {
 			if (this.classChart._id !== null) {
 				db.updateSomething('classes', {_id: this.classChart._id}, {
-					columns: this.classChart.columns,
-					rows: this.classChart.rows,
+					columns: this.columnNumber,
+					rows: this.rowNumber,
 					name: this.classChart.name,
 					semester: this.classChart.semester,
 					year: this.classChart.year,
@@ -250,8 +256,8 @@ export default {
 				})
 			} else {
 				db.createSomething('classes', {
-					columns: this.classChart.columns,
-					rows: this.classChart.rows,
+					columns: this.columnNumber,
+					rows: this.rowNumber,
 					name: this.classChart.name,
 					semester: this.classChart.semester,
 					year: this.classChart.year,
@@ -275,10 +281,10 @@ export default {
 			// handle error checks for each form step
 			switch (step) {
 				case 2:
-				if (this.classChart.columns == 1) {
+				if (this.columnNumber == 1) {
 					this.alertMessage = "Please verify the number of chairs in each row."
 					error = true
-				} else if (this.classChart.rows == 1) {
+				} else if (this.rowNumber == 1) {
 					this.alertMessage = "Please verify the number of rows."
 					error = true
 				}
@@ -293,7 +299,7 @@ export default {
 				}
 				break
 				case 4:
-				if (Number.parseInt(this.classChart.rows) * Number.parseInt(this.classChart.columns) < this.classStudents.length) {
+				if (this.rowNumber * this.columnNumber < this.classStudents.length) {
 					this.alertMessage = 'There are not enough seats in the chart for students'
 					error = true
 				}
@@ -561,7 +567,7 @@ export default {
 					// check for errors with student's current seats
 					this.seatingConflict = false
 					for (let i=0; i<this.classStudents.length; i++) {
-						if (this.classStudents[i].seat.row > this.classChart.rows || this.classStudents[i].seat.column > this.classChart.columns) {
+						if (this.classStudents[i].seat.row > this.rowNumber || this.classStudents[i].seat.column > this.columnNumber) {
 							this.seatingConflict = true
 							break
 						}
@@ -594,23 +600,23 @@ export default {
 	created() {
 		if (this.id !== undefined) {
 			db.readSomething('classes', {_id: this.id})
-			.then((existingClass) => {
-				this.classChart.name = existingClass[0].name
-				this.classChart.columns = existingClass[0].columns
-				this.classChart.rows = existingClass[0].rows
-				this.classChart.semester = existingClass[0].semester
-				this.classChart.year = existingClass[0].year
-				this.classChart._id = existingClass[0]._id
+				.then((existingClass) => {
+					this.classChart.name = existingClass[0].name
+					this.classChart.columns = existingClass[0].columns
+					this.classChart.rows = existingClass[0].rows
+					this.classChart.semester = existingClass[0].semester
+					this.classChart.year = existingClass[0].year
+					this.classChart._id = existingClass[0]._id
 
 
-				this.mode = 'edit'
+					this.mode = 'edit'
 
-				db.readSomething('students', {class: this.id})
-				.then((students) => {
-					this.classStudents = students
+					db.readSomething('students', {class: this.id})
+					.then((students) => {
+						this.classStudents = students
 
+					})
 				})
-			})
 		} else {
 			this.classChart.columns = 1
 			this.classChart.rows = 1
@@ -722,8 +728,7 @@ progress-button:disabled {
 }
 
 #formOne {
-	width: 300px;
-	margin-top: 20px;
+	width: 350px;
 	margin-left: auto;
 	margin-right: auto;
 }
