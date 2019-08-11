@@ -1,6 +1,11 @@
 <template>
     <div id="container" ref="container">
         <header>
+            <section id="activitiesArea">
+                <button @click="routeToActivities" id="activitiesButton">
+                    <img id="activitiesLogo" src="@/assets/activities-circle.svg" alt="activities logo"> activites
+                </button>
+            </section>
             <section id="searchArea">
                 <SearchBox v-on:start-search="search" placeholder="student name" />
             </section>
@@ -273,6 +278,10 @@ export default {
             if (term !== '') {
                 this.$router.push(`/search/${term}`)
             }
+        },
+        routeToActivities() {
+            this.$store.dispatch('setLastView', '/')
+            this.$router.push('/activities')
         }
     },
     created() {
@@ -337,20 +346,46 @@ export default {
     opacity: 0;
 }
 
+header {
+    display: grid;
+    grid-template-rows: 60% 1fr;
+    grid-template-columns: 5% 18% 1fr 18% 5%;
+    grid-template-areas: 
+        ". activities . search ."
+        "logo logo logo logo logo";
+    height: 250px;
+    align-items: center;
+    justify-content: center;
+}
+
 #searchArea {
+    grid-area: search;
     text-align: right;
-    padding-top: 20px;
-    padding-right: 26px;
 }
 
 #logoArea {
+    grid-area: logo;
     text-align: center;
-    margin-top: 30px;
-    margin-bottom: 50px;
 }
 
 #logo {
     width: 120px;
+}
+
+#activitiesArea {
+    grid-area: activities;
+}
+
+#activitiesLogo {
+    width: 40px;
+    vertical-align: middle;
+    margin-bottom: 3px;
+    margin-right: 10px;
+}
+
+#activitiesButton {
+    color: var(--yellow);
+    font-size: 16px;
 }
 
 main {

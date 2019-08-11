@@ -8,6 +8,8 @@ import RearrangeSeats from './views/RearrangeSeats.vue'
 import Highlighter from './views/Highlighter.vue'
 import Student from './views/Student.vue'
 import Search from './views/Search.vue'
+import Activities from './views/Activities.vue'
+import ActivityCreation from './views/ActivityCreation.vue'
 
 Vue.use(Router)
 
@@ -55,6 +57,15 @@ export default new Router({
         path:'/search/:term',
         props: true,
         component: Search
+    },
+    {
+        path:'/activities',
+        props: true,
+        component: Activities
+    },
+    {
+        path: '/activity/new',
+        component: ActivityCreation
     }
   ]
 })

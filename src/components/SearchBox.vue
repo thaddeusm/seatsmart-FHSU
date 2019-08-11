@@ -26,12 +26,10 @@ export default {
 
 <style scoped>
 div {
-	padding-top: 10px;
-	margin-right: 30px;
+	
 }
 
 input {
-	margin: 15px;
 	border-radius: 10px;
 	padding: 7px 12px;
 	font-size: 1.2em;
@@ -44,7 +42,7 @@ button {
     outline: none;
     border: none;
     cursor: pointer;
-	margin-left: -50px;
+	margin-left: -35px;
 }
 
 input:focus {
@@ -53,6 +51,6 @@ input:focus {
 
 img {
 	vertical-align: middle;
-	margin-bottom: 6px;
+	padding-bottom: 5px;
 }
 </style>
