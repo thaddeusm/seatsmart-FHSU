@@ -13,6 +13,9 @@ function getDB(name) {
 		case 'notes':
 			return remote.getGlobal('notes')
 			break
+		case 'activities':
+			return remote.getGlobal('activities')
+			break
 	}
 }
 
@@ -50,9 +53,36 @@ notes:
 		Weight: String
 	},
 	student: String,
-	dateNoted: {},
+	dateNoted: Object,
 	comment: String,
 	type: String
+}
+
+activities (high-level):
+{
+	name: String,
+	activityType: String,
+	dateCreated: Object,
+	content: Object,
+	options: Object,
+}
+
+activity survey:
+{
+	name: String,
+	activityType: 'survey',
+	dateCreated: Object,
+	content: {
+		prompt: String,
+		choices: Array (of strings)
+	},
+	options: {
+		timeLimit: {
+			enabled: Boolean,
+			(minutes): Number,
+			(seconds): Number
+		}
+	}
 }
 */
 

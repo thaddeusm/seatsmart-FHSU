@@ -30,6 +30,11 @@ global.notes = new Datastore({
   autoload: true
 })
 
+global.activities = new Datastore({
+  filename: `${userDocs}/Seatsmart/activities.db`,
+  autoload: true
+})
+
 // provides build version information for use in UI
 global.version = app.getVersion()
 
