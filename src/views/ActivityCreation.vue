@@ -30,13 +30,23 @@
 							</button>
 							<div class="switch-config" v-if="surveyData.timeLimit.enabled">
 								<div class="label-row">
-									<span>Minutes</span>
-									<span>Seconds</span>
+									<span v-if="surveyData.timeLimit.minutes !== '1'">
+										Minutes
+									</span>
+									<span v-else>
+										Minute
+									</span>
+									<span v-if="surveyData.timeLimit.seconds !== '1'">
+										Seconds
+									</span>
+									<span v-else>
+										Second
+									</span>
 								</div>
 								<div>
 									<div class="form-group">
-										<input class="small-input" type="number" min="1" max="59" name="timeLimitMinutes" v-model="surveyData.timeLimit.minutes">
-										<input class="small-input" type="number" min="1" max="59" name="timeLimitSeconds" v-model="surveyData.timeLimit.seconds">
+										<input class="small-input" type="number" min="0" max="59" name="timeLimitMinutes" v-model="surveyData.timeLimit.minutes">
+										<input class="small-input" type="number" min="0" max="59" name="timeLimitSeconds" v-model="surveyData.timeLimit.seconds">
 									</div>
 								</div>
 							</div>
@@ -104,8 +114,8 @@ export default {
 				name: '',
 				timeLimit: {
 					enabled: true,
-					minutes: 1,
-					seconds: 1
+					minutes: '1',
+					seconds: '1'
 				},
 				prompt: '',
 				choices: ['', '']
@@ -148,6 +158,14 @@ export default {
 							if (this.surveyData.name == '') {
 								this.alertMessage = 'Please name the survey activity.'
 								check = true
+							} else if (this.surveyData.timeLimit.enabled) {
+								if (this.surveyData.timeLimit.seconds > 59) {
+									this.alertMessage = 'Please enter a valid number of seconds.'
+									check = true
+								} else if (this.surveyData.timeLimit.minutes < 1 && this.surveyData.timeLimit.seconds < 1) {
+									this.alertMessage = 'Please enter a time limit'
+									check = true
+								}
 							}
 							break
 						case 2:

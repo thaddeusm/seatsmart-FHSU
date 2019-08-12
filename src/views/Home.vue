@@ -348,7 +348,7 @@ export default {
 
 header {
     display: grid;
-    grid-template-rows: 60% 1fr;
+    grid-template-rows: 40% 1fr;
     grid-template-columns: 5% 18% 1fr 18% 5%;
     grid-template-areas: 
         ". activities . search ."
@@ -361,6 +361,7 @@ header {
 #searchArea {
     grid-area: search;
     text-align: right;
+    align-self: flex-end;
 }
 
 #logoArea {
@@ -374,6 +375,7 @@ header {
 
 #activitiesArea {
     grid-area: activities;
+    align-self: flex-end;
 }
 
 #activitiesLogo {
