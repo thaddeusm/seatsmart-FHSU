@@ -97,7 +97,7 @@
 								<button class="delete-button" @click="removeFormGroup(index)">-</button>
 							</div>
 							<section id="addButtonArea">
-								<button class="add-button black-text" @click="addFormGroup()">+</button>
+								<button class="add-button" @click="addFormGroup()">+</button>
 							</section>
 						</div>
 					</div>
