@@ -34,6 +34,11 @@ export default new Router({
         component: ChartCreation
     },
     {
+        path: '/activity/edit/:id',
+        props: true,
+        component: ActivityCreation
+    },
+    {
         path: '/chart/bulknote/:id',
         props: true,
         component: BulkNote

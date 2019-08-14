@@ -62,7 +62,6 @@ activities (high-level):
 {
 	name: String,
 	activityType: String,
-	dateCreated: Object,
 	content: Object,
 	options: Object,
 }
@@ -71,7 +70,6 @@ activity survey:
 {
 	name: String,
 	activityType: 'survey',
-	dateCreated: Object,
 	content: {
 		prompt: String,
 		choices: Array (of strings)

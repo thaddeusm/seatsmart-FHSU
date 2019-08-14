@@ -1,8 +1,8 @@
 <template>
 	<div id="container">
 		<header>
-			<h1 ref="pageHeader" v-if="id == undefined">New Activity</h1>
-			<h1 ref="pageHeader" v-else>Edit Activity (...)</h1>
+			<h1 ref="pageHeader" v-if="id == undefined">New {{ capitalizeString(activityChoice) }} Activity</h1>
+			<h1 ref="pageHeader" v-else>Edit {{ capitalizeString(activityChoice) }} Activity</h1>
 		</header>
 		<section id="activityChoice">
 			<button class="activity-button" @click="chooseActivity('survey')" :class="[activityChoice == 'survey' ? 'selected' : '']">
@@ -82,12 +82,15 @@
 				</section>
 			</div>
 			<div id="previewArea" v-if="progress == 3">
-				<section>
+				<section class="form-container">
+					<h3>Preview the {{ capitalizeString(activityChoice) }}</h3>
 					<qriously 
+						v-if="previewRoomID !== ''"
 						id="qr"
 						:value="`https://activities.seatsmart.tech/?room=${previewRoomID}`"
-						:size="300" 
+						:size="200" 
 					/>
+					<section id="roomIDLoading" v-else></section>
 				</section>
 				<section class="progress-button-area">
 					<button class="progress-button" @click="routeBack"><img class="back-icon" src="@/assets/backarrowwhite.svg" alt="back icon"></button>
@@ -132,11 +135,12 @@ export default {
 				timeLimit: {
 					enabled: true,
 					minutes: '1',
-					seconds: '1'
+					seconds: '0'
 				},
 				prompt: '',
 				choices: ['', '']
 			},
+			dateCreated: {},
 			previewRoomID: ''
 		}
 	},
@@ -144,17 +148,20 @@ export default {
 		previewRoomEstablished(roomID) {
 			console.log(roomID)
 			this.previewRoomID = roomID
-
-			this.changeProgress(3)
 		},
 		previewDeviceConnected() {
+			console.log('preview device connected')
+		},
+		activityDataRequested() {
+			console.log('data requested, sending...')
+
 			let data = {
 				activityType: this.activityChoice,
 				activityData: this.surveyData,
-				mode: 'preview'
+				activityMode: 'preview'
 			}
 
-			this.$socket.emit('activityPreviewDataIncoming', this.encrypt(data))
+			this.$socket.emit('activityDataIncoming', this.encrypt(data))
 		}
 	},
 	methods: {
@@ -221,9 +228,48 @@ export default {
 		},
 		startPreview() {
 			this.$socket.emit('createPreviewRoom')
+			this.changeProgress(3)
 		},
 		saveActivity() {
-
+			if (this.id !== undefined) {
+				db.updateSomething('activities', {_id: this.id}, {
+					name: this.surveyData.name,
+					activityType: 'survey',
+					dateCreated: this.dateCreated,
+					content: {
+						prompt: this.surveyData.prompt,
+						choices: this.surveyData.choices
+					},
+					options: {
+						timeLimit: {
+							enabled: this.surveyData.timeLimit.enabled,
+							minutes: this.surveyData.timeLimit.minutes,
+							seconds: this.surveyData.timeLimit.seconds
+						}
+					}
+				}).then((numUpdated) => {
+					this.$router.go(-1)
+				})
+			} else {
+				db.createSomething('activities', {
+					name: this.surveyData.name,
+					activityType: 'survey',
+					dateCreated: moment(),
+					content: {
+						prompt: this.surveyData.prompt,
+						choices: this.surveyData.choices
+					},
+					options: {
+						timeLimit: {
+							enabled: this.surveyData.timeLimit.enabled,
+							minutes: this.surveyData.timeLimit.minutes,
+							seconds: this.surveyData.timeLimit.seconds
+						}
+					}
+				}).then(() => {
+					this.$router.go(-1)
+				})
+			}
 		},
 		encrypt(data) {
             return sjcl.encrypt(this.previewRoomID, JSON.stringify(data))
@@ -233,6 +279,30 @@ export default {
 
             return JSON.parse(decrypted)
         },
+        capitalizeString(str) {
+			return str.charAt(0).toUpperCase() + str.slice(1)
+		}
+	},
+	created() {
+		if (this.id !== undefined) {
+			db.readSomething('activities', {_id: this.id})
+				.then((existingActivity) => {
+
+					this.activityChoice = existingActivity[0].activityType
+
+					if (existingActivity[0].activityType == 'survey') {
+						this.surveyData.name = existingActivity[0].name
+						this.surveyData.timeLimit.enabled = existingActivity[0].options.timeLimit.enabled
+						this.surveyData.timeLimit.minutes = existingActivity[0].options.timeLimit.minutes
+						this.surveyData.timeLimit.seconds = existingActivity[0].options.timeLimit.seconds
+						this.surveyData.prompt = existingActivity[0].content.prompt
+						this.surveyData.choices = existingActivity[0].content.choices
+						this.dateCreated = existingActivity[0].dateCreated
+					}
+
+					this.mode = 'edit'
+				})
+		}
 	}
 }
 </script>
@@ -310,6 +380,10 @@ button {
 }
 
 #formTwo {
+	width: 400px;
+}
+
+#previewArea {
 	width: 400px;
 }
 
@@ -525,10 +599,31 @@ button:disabled {
 
 #qr {
 	background: var(--white);
-	width: 300px;
-	height: 300px;
+	box-shadow: 2px 2px 5px var(--black);
+	width: 200px;
+	height: 200px;
 	margin: 20px auto;
 	border-radius: 5px;
 	vertical-align: middle;
+}
+
+#roomIDLoading {
+    height: 190px;
+    width: 190px;
+    margin: 20px auto;
+    border-radius: 200px;
+    border-top: 5px solid var(--light-gray);
+    border-right: 5px solid var(--yellow);
+    border-bottom: 5px solid var(--yellow);
+    border-left: 5px solid var(--yellow);
+    animation-name: spin;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+}
+
+@keyframes spin {
+    from {transform: rotate(0);}
+    to {transform: rotate(360deg);}
 }
 </style>

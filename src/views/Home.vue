@@ -161,7 +161,7 @@ export default {
             this.alertModalClassID = id
         },
         deleteClass(id) {
-            // delete class and its associated records (studens and their notes)
+            // delete class and its associated records (students and their notes)
             db.deleteSomething('classes', {_id: id})
                 .then((num) => {
                     this.$store.dispatch('getAllClasses')

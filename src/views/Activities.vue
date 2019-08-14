@@ -12,7 +12,35 @@
 		</header>
 		<main>
 			<ButtonCard icon="+" text="activity" to="/activity/new"/>
+			<section id="existingActivities">
+				<div class="activity-button-area" v-for="(activity, index) in activities" >
+					<ButtonCard 
+						:text="activity.name" 
+						to="/activities" 
+						:key="`activity${index}`" 
+					/>
+					<div class="modify-button-area">
+	                    <button @click="editActivity(activity._id)" class="modify-activity-button"><img src="@/assets/edit.svg" alt="edit icon"></button>
+	                 <!--    <button @click="archiveClass(classToDisplay._id)" class="archive-activity-button"><img src="@/assets/archive.svg" alt="archive icon"></button> -->
+	                    <button @click="promptDeleteActivity(activity._id, activity.name)" class="modify-activity-button"><img src="@/assets/delete.svg" alt="delete icon"></button>
+	                </div>
+				</div>
+			</section>
 		</main>
+		<transition name="fade">
+            <Modal v-if="alertModalOpen" v-on:trigger-close="alertModalOpen = false" :dismissable="true" size="small">
+                <template slot="content">
+                    <img src="@/assets/alert.svg" alt="alert icon" class="alert-icon-large">
+                    <div class="modal-body">
+                        <h4>Are you sure you want to permanently delete {{ alertModalActivity }}?</h4>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="modal-footer-button red" @click="deleteActivity(alertModalActivityID)">Delete {{ alertModalActivity }}</button>
+                        <button class="modal-footer-button" @click="alertModalOpen = false">Cancel</button>
+                    </div>
+                </template>
+            </Modal>
+        </transition>
 		<TouchBar 
 			:bar="[
 				{type: 'spacer', size: 'flexible'},
@@ -26,21 +54,73 @@
 </template>
 
 <script>
+import db from '@/db.js'
+
 import ButtonCard from '@/components/ButtonCard.vue'
+import Modal from '@/components/Modal.vue'
 import TouchBar from '@/components/TouchBar.vue'
 
 export default {
 	name: 'Activities',
 	components: {
 		ButtonCard,
+		Modal,
 		TouchBar
+	},
+	data() {
+		return {
+			activities: [{
+				name: '',
+				activityType: '',
+				dateCreated: {_d: ''},
+				content: {},
+				options: {}
+			}],
+			modalOpen: false,
+            alertModalOpen: false,
+            alertModalActivity: '',
+            alertModalActivityID: '',
+		}
 	},
 	methods: {
         routeBack() {
             let lastView = this.$store.state.lastView
 
             this.$router.push(lastView)
+        },
+        getActivities() {
+        	db.readSomething('activities', {})
+                .then((results) => {
+                    this.activities = results.sort((a, b) => {
+                        let dateA = a.dateNoted._d
+                        let dateB = b.dateNoted._d
+
+                        return dateA < dateB ? -1 : 1
+                    })
+
+                })
+        },
+        editActivity(id) {
+            this.$router.push(`/activity/edit/${id}`)
+        },
+        promptDeleteActivity(id, name) {
+        	this.alertModalActivity = name
+            this.alertModalOpen = true
+            this.alertModalActivityID = id
+        },
+        deleteActivity(id) {
+        	db.deleteSomething('activities', {_id: id})
+                .then((num) => {
+                    this.alertModalOpen = false
+                    this.alertModalClass = ''
+                    this.alertModalClassID = ''
+
+                    this.getActivities()
+                })
         }
+	},
+	mounted() {
+		this.getActivities()
 	}
 }
 </script>
@@ -87,10 +167,78 @@ main {
     margin-bottom: 100px;
 }
 
+#existingActivities {
+	margin: 90px 0 20px 0;
+}
+
+.activity-button-area {
+    display: inline-block;
+    margin: 20px 0;
+}
+
+.activity-button-area > * {
+    margin: 0 30px;
+}
+
+.modify-activity-button {
+    color: var(--red);
+    margin: 10px 40px;
+}
+
+.modify-activity-button > img {
+    width: 20px;
+}
+
 button {
     background: none;
     outline: none;
     border: none;
     cursor: pointer;
+}
+
+.alert-icon-large {
+	vertical-align: middle;
+	width: 50px;
+	margin-top: 30px;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.modal-body {
+    height: 150px;
+    padding-top: 70px;
+    text-align: center;
+}
+
+.modal-footer {
+    background: var(--gray);
+    text-align: center;
+    height: 75px;
+}
+
+.modal-footer-button {
+    padding: 5px 10px;
+    background: var(--light-gray);
+    color: var(--black);
+    font-size: 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    outline: none;
+    margin-top: 25px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.red {
+    background: var(--red)!important;
+    color: var(--white)!important;
+}
+
+.fade-enter-active, .fade-leave-active {
+    transition: opacity .2s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
 }
 </style>
