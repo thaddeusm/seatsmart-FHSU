@@ -13,16 +13,27 @@
 		<main>
 			<ButtonCard icon="+" text="activity" to="/activity/new"/>
 		</main>
+		<TouchBar 
+			:bar="[
+				{type: 'spacer', size: 'flexible'},
+                {type: 'button', label: 'New Activity', method: function() {$router.push('/activity/new')}},
+                {type: 'spacer', size: 'flexible'}
+			]"
+			:show="true" 
+            :escapeItem="{type: 'button', label: 'back', method: function() {routeBack()}}"
+        />
 	</div>
 </template>
 
 <script>
 import ButtonCard from '@/components/ButtonCard.vue'
+import TouchBar from '@/components/TouchBar.vue'
 
 export default {
 	name: 'Activities',
 	components: {
-		ButtonCard
+		ButtonCard,
+		TouchBar
 	},
 	methods: {
         routeBack() {

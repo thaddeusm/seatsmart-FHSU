@@ -77,11 +77,18 @@
 					</div>
 					<section class="progress-button-area">
 						<button class="progress-button" @click="routeBack"><img class="back-icon" src="@/assets/backarrowwhite.svg" alt="back icon"></button>
-						<button class="progress-button" @click="changeProgress(3)">preview survey</button>
+						<button class="progress-button" @click="startPreview">preview survey</button>
 					</section>
 				</section>
 			</div>
 			<div id="previewArea" v-if="progress == 3">
+				<section>
+					<qriously 
+						id="qr"
+						:value="`https://activities.seatsmart.tech/?room=${previewRoomID}`"
+						:size="300" 
+					/>
+				</section>
 				<section class="progress-button-area">
 					<button class="progress-button" @click="routeBack"><img class="back-icon" src="@/assets/backarrowwhite.svg" alt="back icon"></button>
 					<button class="progress-button" @click="saveActivity">save activity</button>
@@ -91,16 +98,26 @@
 		<section id="progressNodes">
 			<ProgressNodes :steps="steps" :progress="progress" />
 		</section>
+		<TouchBar 
+			:show="true" 
+            :escapeItem="{type: 'button', label: 'back', method: function() {routeBack()}}"
+        />
 	</div>
 </template>
 
 <script>
+import sjcl from 'sjcl'
+import db from '@/db.js'
+import moment from 'moment'
+
 import ProgressNodes from '@/components/ProgressNodes.vue'
+import TouchBar from '@/components/TouchBar.vue'
 
 export default {
 	name: 'ActivityCreation',
 	components: {
-		ProgressNodes
+		ProgressNodes,
+		TouchBar
 	},
 	props: ['id'],
 	data() {
@@ -119,7 +136,25 @@ export default {
 				},
 				prompt: '',
 				choices: ['', '']
+			},
+			previewRoomID: ''
+		}
+	},
+	sockets: {
+		previewRoomEstablished(roomID) {
+			console.log(roomID)
+			this.previewRoomID = roomID
+
+			this.changeProgress(3)
+		},
+		previewDeviceConnected() {
+			let data = {
+				activityType: this.activityChoice,
+				activityData: this.surveyData,
+				mode: 'preview'
 			}
+
+			this.$socket.emit('activityPreviewDataIncoming', this.encrypt(data))
 		}
 	},
 	methods: {
@@ -177,14 +212,27 @@ export default {
 								check = true
 							}
 							break
+						case 3:
+							break
 					}
 			}
 
 			return check
 		},
+		startPreview() {
+			this.$socket.emit('createPreviewRoom')
+		},
 		saveActivity() {
 
-		}
+		},
+		encrypt(data) {
+            return sjcl.encrypt(this.previewRoomID, JSON.stringify(data))
+        },
+        decrypt(data) {
+            let decrypted = sjcl.decrypt(this.previewRoomID, data)
+
+            return JSON.parse(decrypted)
+        },
 	}
 }
 </script>
@@ -473,5 +521,14 @@ button {
 button:disabled {
 	opacity: .5;
 	cursor: not-allowed;
+}
+
+#qr {
+	background: var(--white);
+	width: 300px;
+	height: 300px;
+	margin: 20px auto;
+	border-radius: 5px;
+	vertical-align: middle;
 }
 </style>

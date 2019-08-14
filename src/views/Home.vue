@@ -70,7 +70,8 @@
                 {type: 'button', label: 'New Chart', method: function() {$router.push('/charts/new')}},
                 {type: 'spacer', size: 'flexible'},
                 {type: 'button', label: 'Settings', method: openModal}
-            ]"
+            ]" 
+            :escapeItem="{type: 'button', label: 'Activities', method: function() {routeToActivities()}}"
         />
     </div>
 </template>
