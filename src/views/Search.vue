@@ -237,24 +237,23 @@ export default {
 #searchHeader {
     position: fixed;
     top: 0;
-    height: 150px;
+    height: 250px;
     width: 100%;
     display: grid;
     z-index: 10;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 13px 1fr 30%;
+    grid-template-columns: 5% 18% 1fr 18% 5%;
+    grid-template-rows: 20% 20% 1fr;
     grid-template-areas:
-        ". ."
-        "back search"
-        ". toggle";
+        ". . . . ."
+        ". back . search ."
+        ". . . toggle .";
     align-items: center;
     background: var(--black);
 }
 
 #backArea {
     grid-area: back;
-    margin-left: 30px;
-    margin-top: 10px;
+    align-self: center;
 }
 
 button > img {
@@ -271,20 +270,20 @@ button > img {
 #toggleArea {
     grid-area: toggle;
     text-align: right;
-    margin-right: 45px;
+    margin-top: 15px;
     align-self: flex-start;
 }
 
 #searchArea {
     grid-area: search;
     text-align: right;
-    margin-right: 26px;
+    align-self: center;
 }
 
 main {
     color: var(--white);
     text-align: center;
-    margin-top: 200px;
+    margin-top: 250px;
 }
 
 .result {

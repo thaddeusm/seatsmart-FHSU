@@ -145,11 +145,11 @@ export default {
 		}
 	},
 	sockets: {
-		previewRoomEstablished(roomID) {
+		activityRoomEstablished(roomID) {
 			console.log(roomID)
 			this.previewRoomID = roomID
 		},
-		previewDeviceConnected() {
+		activityDeviceConnected() {
 			console.log('preview device connected')
 		},
 		activityDataRequested() {
@@ -158,7 +158,8 @@ export default {
 			let data = {
 				activityType: this.activityChoice,
 				activityData: this.surveyData,
-				activityMode: 'preview'
+				activityMode: 'preview',
+				activityDate: moment()
 			}
 
 			this.$socket.emit('activityDataIncoming', this.encrypt(data))
@@ -227,7 +228,7 @@ export default {
 			return check
 		},
 		startPreview() {
-			this.$socket.emit('createPreviewRoom')
+			this.$socket.emit('createActivityRoom')
 			this.changeProgress(3)
 		},
 		saveActivity() {

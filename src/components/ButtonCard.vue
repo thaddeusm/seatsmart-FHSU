@@ -1,5 +1,10 @@
 <template>
-	<button v-if="button && display" class="button-card" @click="onClick(param)">
+	<button v-if="button && simple" class="button-card simple" @click="onClick(index)">
+		<h6>
+			{{ text }}
+		</h6>
+	</button>
+	<button v-else-if="button && display" class="button-card" @click="onClick(param)">
 		<h5>
 			{{ name }}
 		</h5>
@@ -30,7 +35,9 @@ export default {
 		button: Boolean, 
 		onClick: Function, 
 		param: String, 
-		selected: Boolean
+		index: Number,
+		selected: Boolean,
+		simple: Boolean
 	},
 	data() {
 		return {
@@ -78,6 +85,10 @@ export default {
 	vertical-align: middle;
 	justify-self: center;
 	align-self: center;
+}
+
+.simple {
+	box-sizing: content-box;
 }
 
 .button-card:hover {

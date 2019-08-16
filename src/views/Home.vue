@@ -349,9 +349,10 @@ export default {
 
 header {
     display: grid;
-    grid-template-rows: 40% 1fr;
+    grid-template-rows: 20% 20% 1fr;
     grid-template-columns: 5% 18% 1fr 18% 5%;
     grid-template-areas: 
+        ". . . . ."
         ". activities . search ."
         "logo logo logo logo logo";
     height: 250px;
@@ -362,7 +363,7 @@ header {
 #searchArea {
     grid-area: search;
     text-align: right;
-    align-self: flex-end;
+    align-self: center;
 }
 
 #logoArea {
@@ -376,13 +377,12 @@ header {
 
 #activitiesArea {
     grid-area: activities;
-    align-self: flex-end;
+    align-self: center;
 }
 
 #activitiesLogo {
-    width: 40px;
+    width: 25px;
     vertical-align: middle;
-    margin-bottom: 3px;
     margin-right: 10px;
 }
 

@@ -2,9 +2,7 @@
 	<div id="container">
 		<header>
 			<div id="backArea">
-				<button @click="routeBack">
-					<img src="@/assets/backarrowwhite.svg" alt="back arrow" id="backArrow">
-				</button>
+				<button id="backButton" @click="$router.push('/')"><img src="@/assets/backarrowwhite.svg" alt="back arrow"> <img src="@/assets/home.svg" alt="home icon"></button>
 			</div>
 			<div id="iconArea">
 				<img src="@/assets/activities-circle.svg" alt="activities icon" id="icon">
@@ -16,17 +14,31 @@
 				<div class="activity-button-area" v-for="(activity, index) in activities" >
 					<ButtonCard 
 						:text="activity.name" 
-						to="/activities" 
+						:button="true"
+						:display="true"
+						:simple="true"
 						:key="`activity${index}`" 
+						:onClick="launchActivity"
+						:index="index"
 					/>
 					<div class="modify-button-area">
 	                    <button @click="editActivity(activity._id)" class="modify-activity-button"><img src="@/assets/edit.svg" alt="edit icon"></button>
-	                 <!--    <button @click="archiveClass(classToDisplay._id)" class="archive-activity-button"><img src="@/assets/archive.svg" alt="archive icon"></button> -->
 	                    <button @click="promptDeleteActivity(activity._id, activity.name)" class="modify-activity-button"><img src="@/assets/delete.svg" alt="delete icon"></button>
 	                </div>
 				</div>
 			</section>
 		</main>
+		<transition name="fade">
+            <Modal v-if="modalOpen" v-on:trigger-close="modalOpen = false" :dismissable="false" size="large">
+                <template slot="content">
+                    <ActivityAdapter 
+                    	:activity="launchedActivity"
+                    	:allowAnonymous="true"
+                    	v-on:trigger-modal-close="modalOpen = false"
+                    />
+                </template>
+            </Modal>
+        </transition>
 		<transition name="fade">
             <Modal v-if="alertModalOpen" v-on:trigger-close="alertModalOpen = false" :dismissable="true" size="small">
                 <template slot="content">
@@ -58,6 +70,7 @@ import db from '@/db.js'
 
 import ButtonCard from '@/components/ButtonCard.vue'
 import Modal from '@/components/Modal.vue'
+import ActivityAdapter from '@/components/ActivityAdapter.vue'
 import TouchBar from '@/components/TouchBar.vue'
 
 export default {
@@ -65,6 +78,7 @@ export default {
 	components: {
 		ButtonCard,
 		Modal,
+		ActivityAdapter,
 		TouchBar
 	},
 	data() {
@@ -80,6 +94,13 @@ export default {
             alertModalOpen: false,
             alertModalActivity: '',
             alertModalActivityID: '',
+            launchedActivity: {
+				name: '',
+				activityType: '',
+				dateCreated: {_d: ''},
+				content: {},
+				options: {}
+			}
 		}
 	},
 	methods: {
@@ -92,8 +113,8 @@ export default {
         	db.readSomething('activities', {})
                 .then((results) => {
                     this.activities = results.sort((a, b) => {
-                        let dateA = a.dateNoted._d
-                        let dateB = b.dateNoted._d
+                        let dateA = a.dateCreated._d
+                        let dateB = b.dateCreated._d
 
                         return dateA < dateB ? -1 : 1
                     })
@@ -117,6 +138,10 @@ export default {
 
                     this.getActivities()
                 })
+        },
+        launchActivity(index) {
+        	this.launchedActivity = this.activities[index]
+        	this.modalOpen = true
         }
 	},
 	mounted() {
@@ -135,9 +160,10 @@ export default {
 
 header {
 	display: grid;
-	grid-template-rows: 40% 1fr;
+	grid-template-rows: 20% 20% 1fr;
     grid-template-columns: 5% 18% 1fr 18% 5%;
     grid-template-areas: 
+        ". . . . ."
         ". back . . ."
         "icon icon icon icon icon";
 	height: 250px;
@@ -148,7 +174,13 @@ header {
 #backArea {
 	grid-area: back;
 	font-size: 14px;
-	align-self: flex-end;
+	align-self: center;
+}
+
+#backButton > img {
+	width: 25px;
+    margin: 0 10px;
+    vertical-align: middle;
 }
 
 #iconArea {
@@ -168,16 +200,12 @@ main {
 }
 
 #existingActivities {
-	margin: 90px 0 20px 0;
+	margin: 50px 0 20px 0;
 }
 
 .activity-button-area {
     display: inline-block;
     margin: 20px 0;
-}
-
-.activity-button-area > * {
-    margin: 0 30px;
 }
 
 .modify-activity-button {
