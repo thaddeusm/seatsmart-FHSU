@@ -3,12 +3,12 @@
 		<section id="activityHeader">
 			<h1>{{ activity.name }}</h1>
 		</section>
-		<section id="activityBody" :class="[activity.activityType]">
+		<section :class="[activity.activityType, activityStage == 'started' ? 'activity-body-narrow':'activity-body-wide']">
 			<section id="activityBanner">
 				
 			</section>
-			<section id="activityDisplay">
-				<section class="button-container" v-if="allowAnonymous && !launched">
+			<section class="activity-display">
+				<section class="button-container" v-if="allowAnonymous && activityStage == 'configuring'">
 					<h3>Launch</h3>
 					<div class="select-wrapper">
 						<v-select 
@@ -32,7 +32,7 @@
 						</button>
 					</div>
 				</section>
-				<section class="button-container" v-if="launched">
+				<section class="button-container" v-if="activityStage == 'launched'">
 					<h3>Connect Devices</h3>
 					<qriously 
 						v-if="roomID !== ''"
@@ -56,9 +56,29 @@
 						</button>
 					</div>
 				</section>
-				<section class="user-info" v-if="launched">
+				<section class="results-container" v-if="activityStage == 'started'">
+					<vc-donut
+						background="black" foreground="black"
+						:size="250" unit="px" :thickness="20"
+						has-legend legend-placement="left"
+						:sections="donutSections" :total="connectedUsers.length"
+					>
+						<h1>{{ responseRatio }}%</h1>
+						<h5>response</h5>
+					</vc-donut>
+					<div class="actions-wrapper">
+						<button 
+							class="action-button cancel-button"
+							@click="endActivity"
+						>
+							end {{ activity.activityType }}
+						</button>
+					</div>
+				</section>
+				<section class="user-info" v-if="activityStage == 'launched'">
 					<div v-if="launchChoice == 'anonymously'" id="userCountSpace">
-						<img src="@/assets/users.svg" alt="users icon" id="usersIcon">
+						<img v-if="connected" src="@/assets/usersconnected.svg" alt="users icon" class="users-icon">
+						<img v-else src="@/assets/usersdisconnected.svg" alt="users icon" class="users-icon">
 						<h3>{{ connectedUsers.length }}</h3>
 					</div>
 				</section>
@@ -81,10 +101,22 @@ export default {
 	data() {
 		return {
 			launchChoice: '',
-			launched: false,
+			activityStage: 'configuring',
 			roomID: '',
 			responses: [],
-			connectedUsers: []
+			connectedUsers: [],
+			donutSectionColorSpectrum: [
+				'#FCBB04',
+				'#E5E5E5',
+				'#D2360A',
+				'#6C6C6C',
+				'#B28402',
+				'#FFFFFF',
+				'#832206',
+				'#FDCD48',
+				'#F66239'
+			],
+			connected: false
 		}
 	},
 	computed: {
@@ -109,12 +141,53 @@ export default {
 			})
 
 			return arr
+		},
+		donutSections() {
+			let responses = this.responses
+
+			let sections = []
+
+			// format survey choices into sections per donut chart API
+			if (this.activity.activityType == 'survey') {
+				for (let i=0; i<this.activity.content.choices.length; i++) {
+					let obj = {
+						value: 0,
+						label: this.activity.content.choices[i],
+						color: this.donutSectionColorSpectrum[i]
+					}
+
+					sections.push(obj)
+				}
+
+				// increment section values based upon participant responses
+				for (let j=0; j<responses.length; j++) {
+					for (let k=0; k<sections.length; k++) {
+						if (sections[k].label == responses[j].choice) {
+							sections[k].value++
+							break
+						}
+					}
+				}
+			}
+
+			return sections
+		},
+		responseRatio() {
+			let ratio = this.responses.length / this.connectedUsers.length
+
+			let percentage = ratio * 100
+
+			if (percentage > 0) {
+				return percentage
+			} else {
+				return 0
+			}
 		}
 	},
 	methods: {
 		launchActivity() {
 			if (this.launchChoice == 'anonymously') {
-				this.launched = true
+				this.activityStage = 'launched'
 
 				this.$socket.emit('createActivityRoom')
 
@@ -127,6 +200,13 @@ export default {
 			// allow connected devices to start activity
 			this.$socket.emit('sendStartSignal')
 			// display live results view
+			this.activityStage = 'started'
+		},
+		endActivity() {
+			// save session info (todo)
+
+			this.activityEnded = true
+			this.$emit('trigger-modal-close')
 		},
 		cancelActivity() {
 			this.$socket.emit('cancelActivity')
@@ -145,6 +225,7 @@ export default {
 		activityRoomEstablished(roomID) {
 			console.log(roomID)
 			this.roomID = roomID
+			this.connected = true
 		},
 		activityDeviceConnected(deviceID) {
 			console.log('preview device connected')
@@ -179,16 +260,25 @@ export default {
 			this.responses.push(decrypted)
 		},
 		disconnect() {
+			this.connected = false
 			this.$socket.emit('rejoinActivityRoom', this.roomID)
 		},
 		rejoinedActivityRoom() {
 			console.log('rejoined room')
+			this.connected = true
 		},
 		deviceDisconnection(disconnectedSocketID) {
 			let target = this.connectedUsers.indexOf(disconnectedSocketID)
 			console.log('an activity device disconnected')
 			if (target !== -1) {
 				this.connectedUsers.splice(target, 1)
+			}
+		},
+		activityStatusRequested(requestingDevice) {
+			if (this.activityStage == 'started') {
+				this.startActivity()
+			} else {
+				this.$socket.emit('rejectDeviceParticipation', requestingDevice)
 			}
 		}
 	},
@@ -218,10 +308,18 @@ export default {
 	align-self: center;
 }
 
-#activityBody {
+.activity-body-wide {
 	grid-area: body;
 	display: grid;
 	grid-template-columns: 66% 1fr;
+	align-items: center;
+	grid-template-areas: "banner display";
+}
+
+.activity-body-narrow {
+	grid-area: body;
+	display: grid;
+	grid-template-columns: 47% 1fr;
 	align-items: center;
 	grid-template-areas: "banner display";
 }
@@ -231,7 +329,7 @@ export default {
 	grid-area: banner;
 }
 
-#activityDisplay {
+.activity-display {
 	grid-area: display;
 	align-self: flex-start;
 }
@@ -248,6 +346,21 @@ export default {
 .button-container > h3 {
 	color: var(--white);
 	text-align: center;
+}
+
+.results-container {
+	padding: 20px 5px;
+	background: var(--dark-gray);
+	color: var(--white);
+	font-family: "ArchivoNarrow";
+	width: 85%;
+	margin: 0 auto;
+	border-radius: 5px;
+	box-shadow: 0px 0px 5px var(--black);
+}
+
+.results-container > .actions-wrapper {
+	margin-top: 40px;
 }
 
 .select-wrapper {
@@ -329,7 +442,7 @@ export default {
 	text-align: center;
 }
 
-#usersIcon {
+.users-icon {
 	width: 35px;
 }
 </style>

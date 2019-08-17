@@ -16,6 +16,11 @@ Vue.use(SequentialEntrance)
 import vSelect from 'vue-select'
 Vue.component('v-select', vSelect)
 
+import Donut from 'vue-css-donut-chart'
+import 'vue-css-donut-chart/dist/vcdonut.css'
+
+Vue.use(Donut)
+
 import SocketIO from 'socket.io-client'
 import VueSocketIO from 'vue-socket.io'
 

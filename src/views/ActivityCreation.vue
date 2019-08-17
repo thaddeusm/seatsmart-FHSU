@@ -71,7 +71,7 @@
 								<button class="delete-button" @click="removeSurveyChoice(index)" :disabled="index < 2">-</button>
 							</div>
 							<section id="addButtonArea">
-								<button class="add-button" @click="addSurveyChoice">+</button>
+								<button class="add-button" @click="addSurveyChoice" :disabled="surveyData.choices.length >= 9">+</button>
 							</section>
 						</div>
 					</div>
