@@ -1,0 +1,154 @@
+<template>
+	<div class="container">
+		<h1>Select an Activity</h1>
+		<section id="existingActivities">
+			<div class="activity-button-area" v-for="(activity, index) in activities" >
+				<ButtonCard 
+					:text="activity.name" 
+					:button="true"
+					:display="true"
+					:simple="true"
+					:key="`activity${index}`" 
+					:onClick="setActivityChoice"
+					:index="index"
+	                :class="[activity.activityType, activityChoice == activity ? 'selected':'']"
+				/>
+			</div>
+		</section>
+		<section id="footer">
+			<button 
+				class="action-button cancel-button" 
+				@click="cancelActivity"
+			>
+				Cancel
+			</button>
+			<button 
+				class="action-button launch-button"
+				@click="launchActivity"
+				:disabled="activityChoice == null"
+			>
+				Launch Activity
+			</button>
+		</section>
+	</div>
+</template>
+
+<script>
+import db from '@/db.js'
+
+import ButtonCard from '@/components/ButtonCard.vue'
+
+export default {
+	name: 'ActivitySelector',
+	components: {
+		ButtonCard
+	},
+	data() {
+		return {
+			activities: [],
+			activityChoice: null
+		}
+	},
+	methods: {
+		getActivities() {
+        	db.readSomething('activities', {})
+                .then((results) => {
+                    this.activities = results.sort((a, b) => {
+                        let dateA = a.dateCreated._d
+                        let dateB = b.dateCreated._d
+
+                        return dateA < dateB ? -1 : 1
+                    })
+
+                })
+        },
+        setActivityChoice(activityIndex) {
+        	this.activityChoice = this.activities[activityIndex]
+        	console.log(this.activityChoice)
+        },
+        launchActivity() {
+        	this.$emit('set-activity-choice', this.activityChoice)
+        },
+        cancelActivity() {
+        	this.$emit('cancel-activity')
+        }
+	},
+	mounted() {
+		this.getActivities()
+	}
+}
+</script>
+
+<style scoped>
+.container {
+	background: var(--black);
+	height: 100%;
+	width: 100%;
+	display: grid;
+	grid-template-rows: 15% 1fr 15%;
+	align-items: center;
+	justify-content: center;
+}
+
+h1 {
+	text-align: center;
+	color: var(--light-gray);
+}
+
+#existingActivities {
+	margin: 20px 0;
+	overflow: auto;
+}
+
+.activity-button-area {
+    display: inline-block;
+    margin: 20px 0;
+}
+
+.activity-button-area > * {
+    margin: 0 40px;
+}
+
+.actions-wrapper {
+	text-align: center;
+}
+
+.action-button {
+	font-size: 16px;
+	padding: 5px 12px;
+	border-radius: 5px;
+	cursor: pointer;
+	box-shadow: 0px 0px 1px var(--black);
+	outline: none;
+	margin: 0 5px;
+}
+
+.action-button:disabled {
+	cursor: not-allowed;
+}
+
+.launch-button {
+	background: var(--yellow);
+	color: var(--black);
+}
+
+.cancel-button {
+	background: var(--light-gray);
+	color: var(--black);
+}
+
+.survey {
+    background-image: linear-gradient(rgba(255, 255, 255, .9)), url('~@/assets/survey-illustration.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: left;
+}
+
+#footer {
+	text-align: center;
+}
+
+.selected {
+	border: 3px solid var(--yellow);
+}
+</style>

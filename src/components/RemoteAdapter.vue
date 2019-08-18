@@ -215,6 +215,7 @@ section {
 	position: fixed;
 	top: 45px;
 	right: 45px;
+	display: inline-block;
 }
 
 button {

@@ -22,13 +22,13 @@
 							class="action-button cancel-button" 
 							@click="$emit('trigger-modal-close')"
 						>
-							cancel
+							Cancel
 						</button>
 						<button 
 							class="action-button launch-button"
 							@click="launchActivity"
 						>
-							go
+							Go
 						</button>
 					</div>
 				</section>
@@ -46,13 +46,13 @@
 							class="action-button cancel-button" 
 							@click="cancelActivity"
 						>
-							cancel
+							Cancel
 						</button>
 						<button 
 							class="action-button launch-button"
 							@click="startActivity"
 						>
-							start
+							Start
 						</button>
 					</div>
 				</section>
@@ -74,11 +74,11 @@
 							class="action-button cancel-button"
 							@click="endActivity"
 						>
-							end {{ activity.activityType }}
+							End {{ activity.activityType }}
 						</button>
 					</div>
 				</section>
-				<section class="results-container" v-if="activityStage == 'ended'">
+				<section class="results-container" v-if="activityStage == 'ended' && !addNotes">
 					<h3>Final Results</h3>
 					<vc-donut
 						background="black" foreground="black"
@@ -94,15 +94,23 @@
 							class="action-button cancel-button"
 							@click="$emit('trigger-modal-close')"
 						>
-							close
+							Close without Notes
+						</button>
+						<button 
+							class="action-button launch-button"
+							@click="beginAddNotes"
+							v-if="responses.length > 0"
+						>
+							Add Participation Notes
 						</button>
 					</div>
 				</section>
 				<section class="user-info" v-if="activityStage == 'launched'">
-					<div v-if="launchChoice == 'anonymously'" id="userCountSpace">
+					<div id="userCountSpace">
 						<img v-if="connected" src="@/assets/usersconnected.svg" alt="users icon" class="users-icon">
 						<img v-else src="@/assets/usersdisconnected.svg" alt="users icon" class="users-icon">
 						<h3>{{ connectedUsers.length }}</h3>
+						<h5 v-if="launchChoice == 'chart' && mostRecentlyConnectedStudent !== ''">{{ mostRecentlyConnectedStudent }}</h5>
 					</div>
 				</section>
 			</section>
@@ -119,7 +127,9 @@ export default {
 	name: 'ActivityAdapter',
 	props: {
 		activity: Object,
-		allowAnonymous: Boolean
+		allowAnonymous: Boolean,
+		chart: String,
+		students: Array
 	},
 	data() {
 		return {
@@ -140,7 +150,8 @@ export default {
 				'#F66239'
 			],
 			connected: false,
-			chart: ''
+			mostRecentlyConnectedStudent: '',
+			addNotes: false
 		}
 	},
 	computed: {
@@ -215,7 +226,12 @@ export default {
 						response: response
 					}
 				} else {
-					// todo
+					let simpleResponseObj = { choice: response.choice }
+
+					return {
+						respondent: response.student,
+						response: simpleResponseObj
+					}
 				}
 			})
 
@@ -254,7 +270,7 @@ export default {
 		},
 		cancelActivity() {
 			this.$socket.emit('cancelActivity')
-			this.$emit('trigger-modal-close')
+			this.$emit('cancel-activity')
 		},
 		encrypt(data) {
             return sjcl.encrypt(this.roomID, JSON.stringify(data))
@@ -263,6 +279,13 @@ export default {
             let decrypted = sjcl.decrypt(this.roomID, data)
 
             return JSON.parse(decrypted)
+        },
+        beginAddNotes() {
+        	// display note info and options
+
+        	// save participation notes (after properly identifying students by name)
+
+        	// close modal
         }
 	},
 	sockets: {
@@ -284,18 +307,32 @@ export default {
 			let data
 
 			if (this.activity.activityType == 'survey') {
-				data = {
-					activityType: this.activity.activityType,
-					activityData: {
-						timeLimit: this.activity.options.timeLimit,
-						prompt: this.activity.content.prompt,
-						choices: this.activity.content.choices
-					},
-					activityMode: this.launchChoice,
-					activityDate: moment()
+				if (this.launchChoice == 'anonymously') {
+					data = {
+						activityType: this.activity.activityType,
+						activityData: {
+							timeLimit: this.activity.options.timeLimit,
+							prompt: this.activity.content.prompt,
+							choices: this.activity.content.choices
+						},
+						activityMode: this.launchChoice,
+						activityDate: moment()
+					}
+				} else {
+					data = {
+						activityType: this.activity.activityType,
+						activityData: {
+							timeLimit: this.activity.options.timeLimit,
+							prompt: this.activity.content.prompt,
+							choices: this.activity.content.choices
+						},
+						activityMode: this.launchChoice,
+						activityDate: moment(),
+						students: this.students
+					}
 				}
 			}
-
+			console.log(data)
 			this.$socket.emit('activityDataIncoming', this.encrypt(data))
 		},
 		incomingResponseData(encryptedData) {
@@ -321,14 +358,21 @@ export default {
 		activityStatusRequested(requestingDevice) {
 			if (this.activityStage == 'started') {
 				this.startActivity()
-			} else {
+			} else if (this.activityStage == 'ended') {
 				this.$socket.emit('rejectDeviceParticipation', requestingDevice)
 			}
+		},
+		incomingUsername(name) {
+			this.mostRecentlyConnectedStudent = name
 		}
 	},
 	mounted() {
 		if (this.allowAnonymous) {
 			this.launchChoice = 'anonymously'
+		} else {
+			this.launchChoice = 'chart'
+			this.activityStage = 'launched'
+			this.$socket.emit('createActivityRoom')
 		}
 	}
 }
@@ -508,5 +552,13 @@ export default {
 
 .users-icon {
 	width: 35px;
+}
+
+.fade-enter-active, .fade-leave-active {
+	transition: opacity .2s;
+}
+
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+	opacity: 0;
 }
 </style>

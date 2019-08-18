@@ -1,6 +1,9 @@
 <template>
 	<div id="chartContainer">
 		<header id="chartHeader">
+			<button id="activityLaunchButton" @click="activityModalOpen = true">
+				<img src="@/assets/activities-circle.svg" alt="activities icon">
+			</button>
 			<TitleBar
 				:edit="cardType == 'edit'"
 				v-on:edit-info="setLastView(`/chart/${id}`)"
@@ -224,6 +227,26 @@
 				</template>
 			</Modal>
 		</transition>
+		<transition name="fade">
+            <Modal v-if="activityModalOpen" v-on:trigger-close="activityModalOpen = false" :dismissable="false" size="large">
+                <template slot="content">
+                	<ActivitySelector 
+                		v-if="activityChoice == null" 
+                		v-on:set-activity-choice="setActivityChoice"
+                		v-on:cancel-activity="cancelActivity"
+                	/>
+                    <ActivityAdapter 
+                    	v-else
+                    	:allowAnonymous="false"
+                    	:chart="id"
+                    	:activity="activityChoice"
+                    	:students="presentStudents"
+                    	v-on:cancel-activity="cancelActivity"
+                    	v-on:trigger-modal-close="activityModalOpen = false"
+                    />
+                </template>
+            </Modal>
+        </transition>
 		<TouchBar :show="!modalOpen" 
 			:bar="[
 				{type: 'button', label: '🔀', method: function() {rearrangeSeats()}},
@@ -256,6 +279,8 @@ import TouchBar from '@/components/TouchBar.vue'
 import RemoteAdapter from '@/components/RemoteAdapter.vue'
 import RemoteConfigPanel from '@/components/RemoteConfigPanel.vue'
 import RemoteStatusPanel from '@/components/RemoteStatusPanel.vue'
+import ActivityAdapter from '@/components/ActivityAdapter.vue'
+import ActivitySelector from '@/components/ActivitySelector.vue'
 
 export default {
 	name: 'Chart',
@@ -270,7 +295,9 @@ export default {
 		TouchBar,
 		RemoteAdapter,
 		RemoteConfigPanel,
-		RemoteStatusPanel
+		RemoteStatusPanel,
+		ActivityAdapter,
+		ActivitySelector
 	},
 	data() {
 		return {
@@ -368,12 +395,26 @@ export default {
 			remoteClientConnected: false,
 			remoteConfigured: false,
 			remotePanelOpen: false,
-			remoteActionLog: []
+			remoteActionLog: [],
+			activityModalOpen: false,
+			activityChoice: null
 		}
 	},
 	computed: {
 		isHuge() {
 			return this.classInfo.rows > 8 || this.classInfo.columns > 8
+		},
+		presentStudents() {
+			let available = this.students.filter(student => {
+				return this.absentStudents.indexOf(student._id) == -1
+			})
+
+			return available.map((student) => {
+				return {
+					firstName: student.firstName,
+					lastName: student.lastName
+				}
+			})
 		}
 	},
 	methods: {
@@ -695,6 +736,15 @@ export default {
 			this.remoteConfigured = false
 			this.remoteActionLog = []
 			this.clearRandom()
+		},
+		setActivityChoice(chosenActivity) {
+			this.activityChoice = chosenActivity
+
+			console.log(this.activityChoice)
+		},
+		cancelActivity() {
+			this.activityModalOpen = false
+			this.activityChoice = null
 		}
 	},
 	mounted() {
@@ -770,6 +820,16 @@ body {
 
 #chartHeader {
 	
+}
+
+#activityLaunchButton {
+	position: fixed;
+	top: 45px;
+	left: 45px;
+}
+
+#activityLaunchButton > img {
+	width: 30px;
 }
 
 #chartMain {
