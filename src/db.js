@@ -16,6 +16,9 @@ function getDB(name) {
 		case 'activities':
 			return remote.getGlobal('activities')
 			break
+		case 'activitySessions':
+			return remote.getGlobal('activitySessions')
+			break
 	}
 }
 
@@ -81,6 +84,17 @@ activity survey:
 			(seconds): Number
 		}
 	}
+}
+
+activitySessions:
+{
+	date: Object,
+	activity: Object,
+	responses: [{
+		respondent: String,
+		response: String
+	}],
+	chart: String
 }
 */
 

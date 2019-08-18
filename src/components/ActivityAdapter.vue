@@ -3,7 +3,7 @@
 		<section id="activityHeader">
 			<h1>{{ activity.name }}</h1>
 		</section>
-		<section :class="[activity.activityType, activityStage == 'started' ? 'activity-body-narrow':'activity-body-wide']">
+		<section :class="[activity.activityType, activityStage == 'started' ? 'activity-body-narrow':'activity-body-wide', activityStage == 'ended' ? 'activity-body-narrow':'activity-body-wide']">
 			<section id="activityBanner">
 				
 			</section>
@@ -57,6 +57,29 @@
 					</div>
 				</section>
 				<section class="results-container" v-if="activityStage == 'started'">
+					<h3>Collecting Responses</h3>
+					<vc-donut
+						background="black" foreground="black"
+						:size="250" unit="px" :thickness="20"
+						has-legend legend-placement="left"
+						:sections="donutSections" :total="connectedUsers.length"
+						v-if="responses.length > 0"
+					>
+						<h1>{{ responseRatio }}%</h1>
+						<h5>response</h5>
+					</vc-donut>
+					<section id="waitingForResponses" v-else></section>
+					<div class="actions-wrapper">
+						<button 
+							class="action-button cancel-button"
+							@click="endActivity"
+						>
+							end {{ activity.activityType }}
+						</button>
+					</div>
+				</section>
+				<section class="results-container" v-if="activityStage == 'ended'">
+					<h3>Final Results</h3>
 					<vc-donut
 						background="black" foreground="black"
 						:size="250" unit="px" :thickness="20"
@@ -69,9 +92,9 @@
 					<div class="actions-wrapper">
 						<button 
 							class="action-button cancel-button"
-							@click="endActivity"
+							@click="$emit('trigger-modal-close')"
 						>
-							end {{ activity.activityType }}
+							close
 						</button>
 					</div>
 				</section>
@@ -116,7 +139,8 @@ export default {
 				'#FDCD48',
 				'#F66239'
 			],
-			connected: false
+			connected: false,
+			chart: ''
 		}
 	},
 	computed: {
@@ -178,17 +202,31 @@ export default {
 			let percentage = ratio * 100
 
 			if (percentage > 0) {
-				return percentage
+				return Math.floor(percentage)
 			} else {
 				return 0
 			}
+		},
+		responsesInDBFormat() {
+			return this.responses.map((response) => {
+				if (this.launchChoice == 'anonymously') {
+					return {
+						respondent: 'anonymous',
+						response: response
+					}
+				} else {
+					// todo
+				}
+			})
+
+
 		}
 	},
 	methods: {
 		launchActivity() {
 			if (this.launchChoice == 'anonymously') {
 				this.activityStage = 'launched'
-
+				this.chart = 'anonymous'
 				this.$socket.emit('createActivityRoom')
 
 				// start immediately
@@ -204,9 +242,15 @@ export default {
 		},
 		endActivity() {
 			// save session info (todo)
-
-			this.activityEnded = true
-			this.$emit('trigger-modal-close')
+			db.createSomething('activitySessions', {
+				date: moment(),
+				activity: this.activity,
+				responses: this.responsesInDBFormat,
+				chart: this.chart
+			}).then(() => {
+				this.activityStage = 'ended'
+				this.$socket.close()
+			})
 		},
 		cancelActivity() {
 			this.$socket.emit('cancelActivity')
@@ -349,14 +393,19 @@ export default {
 }
 
 .results-container {
-	padding: 20px 5px;
+	padding: 20px 15px;
 	background: var(--dark-gray);
 	color: var(--white);
-	font-family: "ArchivoNarrow";
+	font-weight: 50;
 	width: 85%;
 	margin: 0 auto;
 	border-radius: 5px;
 	box-shadow: 0px 0px 5px var(--black);
+}
+
+.results-container > h3 {
+	text-align: center;
+	margin-bottom: 20px;
 }
 
 .results-container > .actions-wrapper {
@@ -417,6 +466,21 @@ export default {
     width: 190px;
     margin: 20px auto;
     border-radius: 200px;
+    border-top: 5px solid var(--light-gray);
+    border-right: 5px solid var(--yellow);
+    border-bottom: 5px solid var(--yellow);
+    border-left: 5px solid var(--yellow);
+    animation-name: spin;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+}
+
+#waitingForResponses {
+	height: 230px;
+    width: 230px;
+    margin: 20px auto;
+    border-radius: 250px;
     border-top: 5px solid var(--light-gray);
     border-right: 5px solid var(--yellow);
     border-bottom: 5px solid var(--yellow);

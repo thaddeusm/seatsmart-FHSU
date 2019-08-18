@@ -48,8 +48,8 @@
                         <h4>Are you sure you want to permanently delete {{ alertModalActivity }}?</h4>
                     </div>
                     <div class="modal-footer">
-                        <button class="modal-footer-button red" @click="deleteActivity(alertModalActivityID)">Delete {{ alertModalActivity }}</button>
                         <button class="modal-footer-button" @click="alertModalOpen = false">Cancel</button>
+                        <button class="modal-footer-button red" @click="deleteActivity(alertModalActivityID)">Delete Activity</button>
                     </div>
                 </template>
             </Modal>
@@ -207,6 +207,10 @@ main {
 .activity-button-area {
     display: inline-block;
     margin: 20px 0;
+}
+
+.activity-button-area > * {
+    margin: 0 40px;
 }
 
 .modify-activity-button {

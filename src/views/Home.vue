@@ -59,8 +59,8 @@
                         <h4>Are you sure you want to permanently delete {{ alertModalClass }}?</h4>
                     </div>
                     <div class="modal-footer">
-                        <button class="modal-footer-button red" @click="deleteClass(alertModalClassID)">Delete {{ alertModalClass }}</button>
                         <button class="modal-footer-button" @click="alertModalOpen = false">Cancel</button>
+                        <button class="modal-footer-button red" @click="deleteClass(alertModalClassID)">Delete {{ alertModalClass }}</button>
                     </div>
                 </template>
             </Modal>

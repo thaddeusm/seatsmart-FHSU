@@ -99,6 +99,7 @@ export default {
 			// reset config UI when host closes connection session
 			this.enabled = false
 			this.connected = false
+			this.$socket.close()
 		}
 	},
 	methods: {
