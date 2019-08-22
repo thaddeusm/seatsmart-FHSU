@@ -412,7 +412,8 @@ export default {
 			return available.map((student) => {
 				return {
 					firstName: student.firstName,
-					lastName: student.lastName
+					lastName: student.lastName,
+					id: student._id
 				}
 			})
 		}

@@ -1,120 +1,138 @@
 <template>
 	<div class="container">
-		<section id="activityHeader">
-			<h1>{{ activity.name }}</h1>
-		</section>
-		<section :class="[activity.activityType, activityStage == 'started' ? 'activity-body-narrow':'activity-body-wide', activityStage == 'ended' ? 'activity-body-narrow':'activity-body-wide']">
-			<section id="activityBanner">
-				
+		<NoteForm 
+			v-if="addNotes" 
+			:students="genuineParticipants" 
+			type="multiple modal"
+			v-on:trigger-modal-close="$emit('trigger-modal-close')"
+		/>
+		<div class="activity-container" v-else>
+			<section id="activityHeader">
+				<h1>{{ activity.name }}</h1>
 			</section>
-			<section class="activity-display">
-				<section class="button-container" v-if="allowAnonymous && activityStage == 'configuring'">
-					<h3>Launch</h3>
-					<div class="select-wrapper">
-						<v-select 
-							v-model="launchChoice" 
-							:options="launchOptions"
-						>
-						</v-select>
-					</div>
-					<div class="actions-wrapper">
-						<button 
-							class="action-button cancel-button" 
-							@click="$emit('trigger-modal-close')"
-						>
-							Cancel
-						</button>
-						<button 
-							class="action-button launch-button"
-							@click="launchActivity"
-						>
-							Go
-						</button>
-					</div>
+			<section :class="[activity.activityType, activityStage == 'started' ? 'activity-body-narrow':'activity-body-wide', activityStage == 'ended' ? 'activity-body-narrow':'activity-body-wide']">
+				<section id="activityBanner">
+					
 				</section>
-				<section class="button-container" v-if="activityStage == 'launched'">
-					<h3>Connect Devices</h3>
-					<qriously 
-						v-if="roomID !== ''"
-						id="qr"
-						:value="`https://activities.seatsmart.tech/?room=${roomID}`"
-						:size="200" 
-					/>
-					<section id="roomIDLoading" v-else></section>
-					<div class="actions-wrapper">
-						<button 
-							class="action-button cancel-button" 
-							@click="cancelActivity"
-						>
-							Cancel
-						</button>
-						<button 
-							class="action-button launch-button"
-							@click="startActivity"
-						>
-							Start
-						</button>
-					</div>
-				</section>
-				<section class="results-container" v-if="activityStage == 'started'">
-					<h3>Collecting Responses</h3>
-					<vc-donut
-						background="black" foreground="black"
-						:size="250" unit="px" :thickness="20"
-						has-legend legend-placement="left"
-						:sections="donutSections" :total="connectedUsers.length"
-						v-if="responses.length > 0"
-					>
-						<h1>{{ responseRatio }}%</h1>
-						<h5>response</h5>
-					</vc-donut>
-					<section id="waitingForResponses" v-else></section>
-					<div class="actions-wrapper">
-						<button 
-							class="action-button cancel-button"
-							@click="endActivity"
-						>
-							End {{ activity.activityType }}
-						</button>
-					</div>
-				</section>
-				<section class="results-container" v-if="activityStage == 'ended' && !addNotes">
-					<h3>Final Results</h3>
-					<vc-donut
-						background="black" foreground="black"
-						:size="250" unit="px" :thickness="20"
-						has-legend legend-placement="left"
-						:sections="donutSections" :total="connectedUsers.length"
-					>
-						<h1>{{ responseRatio }}%</h1>
-						<h5>response</h5>
-					</vc-donut>
-					<div class="actions-wrapper">
-						<button 
-							class="action-button cancel-button"
-							@click="$emit('trigger-modal-close')"
-						>
-							Close without Notes
-						</button>
-						<button 
-							class="action-button launch-button"
-							@click="beginAddNotes"
+				<section class="activity-display">
+					<section class="button-container" v-if="allowAnonymous && activityStage == 'configuring'">
+						<h3>Launch</h3>
+						<div class="select-wrapper">
+							<v-select 
+								v-model="launchChoice" 
+								:options="launchOptions"
+							>
+							</v-select>
+						</div>
+						<div class="actions-wrapper">
+							<button 
+								class="action-button cancel-button" 
+								@click="$emit('trigger-modal-close')"
+							>
+								Cancel
+							</button>
+							<button 
+								class="action-button launch-button"
+								@click="launchActivity"
+							>
+								Go
+							</button>
+						</div>
+					</section>
+					<section class="button-container" v-if="activityStage == 'launched'">
+						<h3>Connect Devices</h3>
+						<qriously 
+							v-if="roomID !== ''"
+							id="qr"
+							:value="`https://activities.seatsmart.tech/?room=${roomID}`"
+							:size="200" 
+						/>
+						<section id="roomIDLoading" v-else></section>
+						<div class="actions-wrapper">
+							<button 
+								class="action-button cancel-button" 
+								@click="cancelActivity"
+							>
+								Cancel
+							</button>
+							<button 
+								class="action-button launch-button"
+								@click="startActivity"
+							>
+								Start
+							</button>
+						</div>
+					</section>
+					<section class="results-container" v-if="activityStage == 'started'">
+						<h3>Collecting Responses</h3>
+						<vc-donut
+							background="black" foreground="black"
+							:size="250" unit="px" :thickness="20"
+							has-legend legend-placement="left"
+							:sections="donutSections" :total="connectedUsers.length"
 							v-if="responses.length > 0"
 						>
-							Add Participation Notes
-						</button>
-					</div>
-				</section>
-				<section class="user-info" v-if="activityStage == 'launched'">
-					<div id="userCountSpace">
-						<img v-if="connected" src="@/assets/usersconnected.svg" alt="users icon" class="users-icon">
-						<img v-else src="@/assets/usersdisconnected.svg" alt="users icon" class="users-icon">
-						<h3>{{ connectedUsers.length }}</h3>
-						<h5 v-if="launchChoice == 'chart' && mostRecentlyConnectedStudent !== ''">{{ mostRecentlyConnectedStudent }}</h5>
-					</div>
+							<h1>{{ responseRatio }}%</h1>
+							<h5>response</h5>
+						</vc-donut>
+						<section id="waitingForResponses" v-else></section>
+						<div class="actions-wrapper">
+							<button 
+								class="action-button cancel-button"
+								@click="endActivity"
+							>
+								End {{ activity.activityType }}
+							</button>
+						</div>
+					</section>
+					<section class="results-container" v-if="activityStage == 'ended'">
+						<h3>Final Results</h3>
+						<vc-donut
+							background="black" foreground="black"
+							:size="250" unit="px" :thickness="20"
+							has-legend legend-placement="left"
+							:sections="donutSections" :total="connectedUsers.length"
+						>
+							<h1>{{ responseRatio }}%</h1>
+							<h5>response</h5>
+						</vc-donut>
+						<div class="actions-wrapper" v-if="allowAnonymous">
+							<button 
+								class="action-button cancel-button"
+								@click="$emit('trigger-modal-close')"
+							>
+								Close
+							</button>
+						</div>
+						<div class="actions-wrapper" v-else>
+							<button 
+								class="action-button cancel-button"
+								@click="$emit('trigger-modal-close')"
+							>
+								Close without Notes
+							</button>
+							<button 
+								class="action-button launch-button"
+								@click="beginAddNotes"
+								v-if="responses.length > 0"
+							>
+								Add Participation Notes
+							</button>
+						</div>
+					</section>
+					<section class="user-info" v-if="activityStage == 'launched'">
+						<div id="userCountSpace">
+							<img v-if="connected" src="@/assets/usersconnected.svg" alt="users icon" class="users-icon">
+							<img v-else src="@/assets/usersdisconnected.svg" alt="users icon" class="users-icon">
+							<h3>{{ connectedUsers.length }}</h3>
+							<h5 v-if="launchChoice == 'chart' && mostRecentlyConnectedStudent !== ''" id="mostRecentlyConnectedStudent">
+								{{ mostRecentlyConnectedStudent }}
+							</h5>
+						</div>
+					</section>
 				</section>
 			</section>
-		</section>
+		</div>
 	</div>
 </template>
 
@@ -123,6 +141,8 @@ import db from '@/db.js'
 import sjcl from 'sjcl'
 import moment from 'moment'
 
+import NoteForm from '@/components/NoteForm.vue'
+
 export default {
 	name: 'ActivityAdapter',
 	props: {
@@ -130,6 +150,9 @@ export default {
 		allowAnonymous: Boolean,
 		chart: String,
 		students: Array
+	},
+	components: {
+		NoteForm
 	},
 	data() {
 		return {
@@ -234,15 +257,26 @@ export default {
 					}
 				}
 			})
+		},
+		genuineParticipants() {
+			let allResponses = this.responses
 
+			if (this.activity.activityType == 'survey') {
+				let responseArray = allResponses.filter(response => {
+					return response.choice !== ''
+				})
 
+				// provide only student DB ids to Note Form
+				return responseArray.map(response => {
+					return response.student.id
+				})
+			}
 		}
 	},
 	methods: {
 		launchActivity() {
 			if (this.launchChoice == 'anonymously') {
 				this.activityStage = 'launched'
-				this.chart = 'anonymous'
 				this.$socket.emit('createActivityRoom')
 
 				// start immediately
@@ -258,19 +292,36 @@ export default {
 		},
 		endActivity() {
 			// save session info (todo)
+
+			// set the DB property to 'anonymous' if no chart prop value
+			let chartStatus
+
+			if (this.chart == undefined) {
+				chartStatus = 'anonymous'
+			} else {
+				chartStatus = this.chart
+			}
+
+
 			db.createSomething('activitySessions', {
 				date: moment(),
 				activity: this.activity,
 				responses: this.responsesInDBFormat,
-				chart: this.chart
+				chart: chartStatus
 			}).then(() => {
 				this.activityStage = 'ended'
 				this.$socket.close()
 			})
 		},
 		cancelActivity() {
+			if (this.chart !== undefined) {
+				this.$emit('cancel-activity')
+			} else {
+				this.$emit('trigger-modal-close')
+			}
+
 			this.$socket.emit('cancelActivity')
-			this.$emit('cancel-activity')
+			
 		},
 		encrypt(data) {
             return sjcl.encrypt(this.roomID, JSON.stringify(data))
@@ -282,10 +333,17 @@ export default {
         },
         beginAddNotes() {
         	// display note info and options
+        	this.addNotes = true
 
-        	// save participation notes (after properly identifying students by name)
+        	// // save participation notes (after properly identifying students by name)
+        	// let students = this.genuineParticipants
 
-        	// close modal
+        	// for (let i=0; i<students.length; i++) {
+        	// 	db.createSomething('notes', {
+
+        	// 	})
+        	// }
+        	// // close modal
         }
 	},
 	sockets: {
@@ -362,8 +420,10 @@ export default {
 				this.$socket.emit('rejectDeviceParticipation', requestingDevice)
 			}
 		},
-		incomingUsername(name) {
-			this.mostRecentlyConnectedStudent = name
+		incomingUsername(encryptedFullName) {
+			let fullName = this.decrypt(encryptedFullName)
+
+			this.mostRecentlyConnectedStudent = `${fullName.firstName} ${fullName.lastName}`
 		}
 	},
 	mounted() {
@@ -380,6 +440,11 @@ export default {
 
 <style scoped>
 .container {
+	width: 100%;
+	height: 100%;
+}
+
+.activity-container {
 	width: 100%;
 	height: 100%;
 	display: grid;
@@ -552,6 +617,23 @@ export default {
 
 .users-icon {
 	width: 35px;
+}
+
+#mostRecentlyConnectedStudent {
+	margin-top: 15px;
+	animation-name: fadeUp;
+	animation-duration: 1s;
+}
+
+@keyframes fadeUp {
+	from {
+		opacity: 0;
+		transform: translateY(-20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
 .fade-enter-active, .fade-leave-active {

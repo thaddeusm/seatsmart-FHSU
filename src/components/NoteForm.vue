@@ -1,5 +1,5 @@
 <template>
-	<div id="noteFormContainer" :class="[type !== 'single' ? 'contain-self' : '']">
+	<div id="noteFormContainer" :class="[type == 'multiple' ? 'contain-self' : '']">
 		<section id="noteFormHeader">
 			<h1 v-if="type === 'single' && noteToEdit == undefined">New Note about {{student.firstName}}</h1>
 			<h1 v-if="type === 'single' && noteToEdit !== undefined">Edit Note about {{student.firstName}}</h1>
@@ -20,11 +20,11 @@
 			</section>
 		</section>
 		<section id="noteFormFooter">
-			<button class="footer-button white" v-if="type == 'single'" @click="closeModal">Cancel</button>
+			<button class="footer-button white" v-if="type !== 'multiple'" @click="closeModal">Cancel</button>
 			<router-link class="footer-button white" v-else :to="to">Cancel</router-link>
 			<button v-if="step == 1" @click="changeStep(2)" class="footer-button positive" ref="nextButton" :disabled="note.behavior.Abbreviation == null">Next</button>
-			<button v-else-if="step == 2 && type !== 'single'" @click="saveNote" class="footer-button positive" :disabled="type !== 'single' && students.length == 0">Save</button>
-			<button v-else-if="step == 2 && type == 'single'" @click="saveNote" class="footer-button positive">Save</button>
+			<button v-else-if="step == 2 && type == 'multiple'" @click="saveNote" class="footer-button positive" :disabled="type !== 'single' && students.length == 0">Save</button>
+			<button v-else-if="step == 2 && type !== 'multiple'" @click="saveNote" class="footer-button positive">Save</button>
 		</section>
 	</div>
 </template>
@@ -141,6 +141,34 @@ export default {
 							this.$emit('trigger-modal-close')
 						})
 				}
+			} else if (this.type == 'multiple modal') {
+				let studentIndex = 0
+
+				for (let i=0; i<this.students.length; i++) {
+					this.note.student = this.students[studentIndex]
+
+					if (this.note.type === 'negative' && this.note.behavior.Abbreviation === 'A') {
+						if (moment(this.note.dateNoted._d).dayOfYear() === moment().dayOfYear()) {
+							this.$emit('absence', this.note.student)
+						}
+					}
+
+					db.createSomething('notes', this.note)
+						.then(() => {
+							// clear most recent updated student first
+							let scope = this
+							this.$store.dispatch('setLastStudentUpdated', '0')
+
+							// then update state to ensure that consecutive
+							// notes about the same student are reflected in UI
+							setTimeout(function() {
+								scope.$store.dispatch('setLastStudentUpdated', scope.note.student)
+							}, 500, scope)
+						})
+					studentIndex++
+				}
+
+				this.$emit('trigger-modal-close')
 			} else {
 				let studentIndex = 0
 
