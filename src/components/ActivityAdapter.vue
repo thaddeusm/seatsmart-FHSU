@@ -64,7 +64,8 @@
 						</div>
 					</section>
 					<section class="results-container" v-if="activityStage == 'started'">
-						<h3>Collecting Responses</h3>
+						<h3 v-if="connected">Collecting Responses</h3>
+						<h3 v-else>Disconnected...Trying to Reconnect</h3>
 						<vc-donut
 							background="black" foreground="black"
 							:size="250" unit="px" :thickness="20"
@@ -149,7 +150,8 @@ export default {
 		activity: Object,
 		allowAnonymous: Boolean,
 		chart: String,
-		students: Array
+		students: Array,
+		remoteConnected: Boolean
 	},
 	components: {
 		NoteForm
@@ -278,10 +280,13 @@ export default {
 			if (this.launchChoice == 'anonymously') {
 				this.activityStage = 'launched'
 				this.$socket.emit('createActivityRoom')
-
-				// start immediately
 			} else {
 				// route to chart and launch
+				this.$router.push({
+					name: 'chart',
+					params: {id: this.launchChoice.id},
+					query: {activityToLaunch: this.activity._id}
+				})
 			}
 		},
 		startActivity() {
@@ -291,8 +296,6 @@ export default {
 			this.activityStage = 'started'
 		},
 		endActivity() {
-			// save session info (todo)
-
 			// set the DB property to 'anonymous' if no chart prop value
 			let chartStatus
 
@@ -310,7 +313,11 @@ export default {
 				chart: chartStatus
 			}).then(() => {
 				this.activityStage = 'ended'
-				this.$socket.close()
+
+				// persist socket if remote is connected
+				if (this.chart == '') {
+					this.$socket.close()
+				}
 			})
 		},
 		cancelActivity() {
@@ -321,6 +328,11 @@ export default {
 			}
 
 			this.$socket.emit('cancelActivity')
+
+			// persist socket if remote is connected
+			if (this.chart == '') {
+				this.$socket.close()
+			}
 			
 		},
 		encrypt(data) {
@@ -332,18 +344,8 @@ export default {
             return JSON.parse(decrypted)
         },
         beginAddNotes() {
-        	// display note info and options
+        	// display bulk note component
         	this.addNotes = true
-
-        	// // save participation notes (after properly identifying students by name)
-        	// let students = this.genuineParticipants
-
-        	// for (let i=0; i<students.length; i++) {
-        	// 	db.createSomething('notes', {
-
-        	// 	})
-        	// }
-        	// // close modal
         }
 	},
 	sockets: {

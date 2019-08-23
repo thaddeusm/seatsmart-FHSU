@@ -144,6 +144,11 @@ export default {
 			previewRoomID: ''
 		}
 	},
+	computed: {
+		lastView() {
+			return this.$store.state.lastView
+		}
+	},
 	sockets: {
 		activityRoomEstablished(roomID) {
 			console.log(roomID)
@@ -267,8 +272,19 @@ export default {
 							seconds: this.surveyData.timeLimit.seconds
 						}
 					}
-				}).then(() => {
-					this.$router.go(-1)
+				}).then((savedActivity) => {
+					if (this.lastView.includes('chart')) {
+						let chartID = this.lastView.split('/')[2]
+						console.log(chartID)
+						// route back to chart and launch
+						this.$router.push({
+							name: 'chart',
+							params: {id: chartID},
+							query: {activityToLaunch: savedActivity._id}
+						})
+					} else {
+						this.$router.go(-1)
+					}
 				})
 			}
 		},
@@ -285,6 +301,8 @@ export default {
 		}
 	},
 	created() {
+		console.log(this.$route.redirectedFrom)
+
 		if (this.id !== undefined) {
 			db.readSomething('activities', {_id: this.id})
 				.then((existingActivity) => {

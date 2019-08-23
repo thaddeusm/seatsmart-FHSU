@@ -1,6 +1,7 @@
 <template>
 	<div class="container">
-		<h1>Select an Activity</h1>
+		<h1 v-if="activities.length > 0">Select an Activity</h1>
+		<h1 v-else>Create an Activity</h1>
 		<section id="existingActivities">
 			<div class="activity-button-area" v-for="(activity, index) in activities" >
 				<ButtonCard 
@@ -13,6 +14,9 @@
 					:index="index"
 	                :class="[activity.activityType, activityChoice == activity ? 'selected':'']"
 				/>
+			</div>
+			<div class="activity-button-area">
+				<ButtonCard icon="+" text="activity" to="/activity/new"/>
 			</div>
 		</section>
 		<section id="footer">
@@ -103,6 +107,7 @@ h1 {
 .activity-button-area {
     display: inline-block;
     margin: 20px 0;
+    text-align: center;
 }
 
 .activity-button-area > * {

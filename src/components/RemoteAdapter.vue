@@ -93,6 +93,7 @@ export default {
 		},
 		requestAction(action) {
 			this.processActionRequest(this.decrypt(action))
+			this.connected = true
 			this.$emit('connected')
 		},
 		sessionEnded() {

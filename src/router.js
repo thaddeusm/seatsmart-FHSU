@@ -26,7 +26,8 @@ export default new Router({
     {
         path: '/chart/:id',
         props: true,
-        component: Chart
+        component: Chart,
+        name: 'chart'
     },
     {
         path: '/chart/edit/:id',
@@ -66,7 +67,10 @@ export default new Router({
     {
         path:'/activities',
         props: true,
-        component: Activities
+        component: Activities,
+        props: (route) => ({
+          activityToLaunch: route.query.activity
+        })
     },
     {
         path: '/activity/new',
