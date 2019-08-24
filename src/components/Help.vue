@@ -149,7 +149,7 @@
 				Remote
 			</h4>
 			<p>
-				When viewing a class chart, you may have noticed the <img class="embedded-icon" src="@/assets/remote.svg" alt="remote icon"> icon at the upper right corner of the screen.  Clicking this icon (if you are connected to the Internet) will reveal a QR code that you can scan with your mobile device.  This will set up a secure to allow you control basic features of Seatsmart remotely.
+				When viewing a class chart, you may have noticed the <img class="embedded-icon" src="@/assets/remote.svg" alt="remote icon"> icon at the upper-right corner of the screen.  Clicking this icon (if you are connected to the Internet) will reveal a QR code that you can scan with your mobile device.  This will set up a secure connection to allow you control basic features of Seatsmart remotely.
 			</p>
 			<p><i>Why would you use this?</i></p>
 			<p>
@@ -159,7 +159,7 @@
 				<img class="profile-image" src="@/assets/thaddeus.png" alt="sketched image of Thaddeus">
 				<div class="text-bubble">
 					<p>
-						My favorite way to use the Remote is to stand toward the back of the classroom with the Seatsmart chart in presentation mode, projected at the front of the classroom.  I use my iPad to have Seatsmart choose a random student <img class="embedded-icon-inverted" src="@/assets/randomblack.svg" alt="dice icon">, which the students can see illuminated in yellow on the screen in front of them.
+						My favorite way to use the Remote is to stand toward the back of the classroom with the Seatsmart chart in presentation mode, projected at the front of the classroom.  I use my iPad to have Seatsmart choose a random student <img class="embedded-icon-inverted" src="@/assets/randomblack.svg" alt="dice icon">, which the students can see illuminated in yellow/gold on the screen in front of them.
 					</p>
 					<p>
 						Then, I may ask a pop quiz question or for an example that contributes to the lesson.  Then, I tap the <img class="embedded-icon-inverted" src="@/assets/note.svg" alt="note icon">  button to give the student participation points before moving on.
@@ -170,7 +170,7 @@
 				Connecting with Students' Devices (Activities)
 			</h4>
 			<p>
-				You can find the Activities icon (<img class="embedded-icon-plain" src="@/assets/activities-circle.svg" alt="activities icon">) on the upper-left corner of the screen both when you first open Seatsmart and when you are viewing a class chart.  When clicking this icon from the starting screen, you can create new realtime activities for your classes in advance and manage existing ones.  From a class chart, this icon acts as a launch window to help you initiate the activity during class.
+				You can find the Activities icon (<img class="embedded-icon-plain" src="@/assets/activities-circle.svg" alt="activities icon">) at the upper-left corner of the screen both when you first open Seatsmart and when you are viewing a class chart.  When clicking this icon from the starting screen, you can create new realtime activities for your classes in advance and manage existing ones.  From a class chart, this icon acts as a launch window to help you initiate the activity during class.
 			</p>
 			<p>
 				Launching an activity allows students to securely connect their devices with your computer via a QR code for a short but engaging event (such as a survey).  After you end the activity session, you will be prompted to choose whether or not to immediately add participation records for all active participants.
