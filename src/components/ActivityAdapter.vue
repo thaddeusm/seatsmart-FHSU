@@ -58,6 +58,7 @@
 							<button 
 								class="action-button launch-button"
 								@click="startActivity"
+								:disabled="connectedUsers.length == 0"
 							>
 								Start
 							</button>
@@ -600,6 +601,11 @@ export default {
     animation-duration: 1s;
     animation-iteration-count: infinite;
     animation-timing-function: ease-in-out;
+}
+
+button:disabled {
+	opacity: .6;
+	cursor: not-allowed;
 }
 
 @keyframes spin {

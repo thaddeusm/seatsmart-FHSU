@@ -243,7 +243,7 @@
                     	:students="presentStudents"
                     	:remoteConnected="remoteConnected"
                     	v-on:cancel-activity="cancelActivity"
-                    	v-on:trigger-modal-close="activityModalOpen = false"
+                    	v-on:trigger-modal-close="cancelActivity"
                     />
                 </template>
             </Modal>
