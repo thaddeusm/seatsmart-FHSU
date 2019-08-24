@@ -15,7 +15,9 @@ allows the user to update (replace) the application without impacting particatio
 
 When Internet access is available, instructors can use the 
 [Remote](https://github.com/thaddeusm/seatsmart-remote) feature to 
-access basic features from a mobile device.  Data is encrypted during transport 
+access basic features from a mobile device.  They can also engage with students
+in [Activities](https://github.com/thaddeusm/seatsmart-activities) for 
+realtime formative assessments.  Data is encrypted during transport 
 and this information is not stored in any cloud database.  This is powered by a 
 [realtime server](https://github.com/thaddeusm/seatsmart-remote-server) on the backend.
 
