@@ -31,7 +31,7 @@
 			</p>
 		</section>
 		<!-- Show help about chart UI -->
-		<section v-if="progress.indexOf('created class') !== -1">
+		<section v-if="progress.indexOf('created class') !== -1 && progress.indexOf('explored remote features') !== -1">
 			<h4>
 				Using a Chart
 			</h4>
@@ -141,10 +141,83 @@
 				Seatsmart Remote is an optional feature that allows you to take advantage of basic functions without being tied to a computer.  Actions currently supported include selecting a random student and adding a new note about a student/students.  This feature requires Internet access on both the computer and the mobile device (with or without a VPN).  
 			</p>
 			<p>
-				Realtime communication occurs over a secure server with data encrypted in transport (the server cannot decode the information).  The server does not store this information anywhere.  <strong>The QR code (or optional 4-digit numeric code) should be kept hidden from students</strong>.  You can begin and end a remote connection by clicking <img id="remoteIcon" src="@/assets/remote.svg" alt="remote icon"> at the top right corner of the chart.  This icon will turn yellow when the connection is active and red when it is attempting to restore a connection.
+				Realtime communication occurs over a secure server with data encrypted in transport (the server cannot decode the information).  The server does not store this information anywhere.  <strong>The QR code (or optional 4-digit numeric code) should be kept hidden from students</strong>.  You can begin and end a remote connection by clicking <img class="embedded-icon" src="@/assets/remote.svg" alt="remote icon"> at the top right corner of the chart.  This icon will turn yellow when the connection is active and red when it is attempting to restore a connection.
 			</p>
 			<p>
 				The remote connection is automatically broken when you leave the chart.  This helps to shorten the remote session, which decreases the likelihood of any security or device performance issues.
+			</p>
+			<br>
+			<br>
+			<h4>
+				Activities
+			</h4>
+			<p>
+				Like Remote, Seatsmart Activites is an optional feature that requires access to the Internet.  Further, it also requires that students have access to Internet-connected devices (smartphones).  The goal of Activities is to engage students while providing you simple, in-class assessment tools.  
+			</p>
+			<p>
+				The activities you launch through Seatsmart should not make students feel like they are taking a quiz.  Ideally, the process will be somewhat gamified and encourage willing participation.  Since students will be using their own devices to connect, it is important to communicate the short duration and specific purpose of your activities.  Be sure to state beforehand whether or not you would expect students to switch to other applications during or after your activity.
+			</p>
+			<p>
+				This feature will be under active development throughout the 2019-2020 academic year.  Bug reports, feature suggestions, and other comments about Activities are appreciated (see the <button class="inner-link" @click="$emit('change-content', 'about')">About</button> section for contact links).
+			</p>
+		</section>
+		<section v-else-if="progress.indexOf('explored remote features') == -1">
+			<h4>
+				Connecting Remote Devices
+			</h4>
+			<p>
+				Seatsmart is and always will be an offline-first application.  All features essential to managing classroom participation records do not require an Internet connection and all data is stored on your computer (check for the "Seatsmart" folder in your computer's My Documents / Documents area).
+			</p>
+			<p>
+				Features such as Remote and Activities are completely optional and are only meant to add convenience or opportunities for students to participate.
+			</p>
+			<br><br>
+			<h4>
+				Remote
+			</h4>
+			<p>
+				When viewing a class chart, you may have noticed the <img class="embedded-icon" src="@/assets/remote.svg" alt="remote icon"> icon at the upper right corner of the screen.  Clicking this icon (if you are connected to the Internet) will reveal a QR code that you can scan with your mobile device.  This will set up a secure to allow you control basic features of Seatsmart remotely.
+			</p>
+			<p><i>Why would you use this?</i></p>
+			<p>
+				Using Seatsmart actively in class would otherwise require you to be near your computer (at the front of the room) and to switch between other programs you may be running (Powerpoint).  Using a mobile device as a remote instead allows you to move around the classroom, interacting with students and recording participation notes as they occur without needing to go back to the computer.
+			</p>
+			<div class="personal-note">
+				<img class="profile-image" src="@/assets/thaddeus.png" alt="sketched image of Thaddeus">
+				<div class="text-bubble">
+					<p>
+						My favorite way to use the Remote is to stand toward the back of the classroom with the Seatsmart chart in presentation mode, projected at the front of the classroom.  I use my iPad to have Seatsmart choose a random student <img class="embedded-icon-inverted" src="@/assets/randomblack.svg" alt="dice icon">, which the students can see illuminated in yellow on the screen in front of them.
+					</p>
+					<p>
+						Then, I may ask a pop quiz question or for an example that contributes to the lesson.  Then, I tap the <img class="embedded-icon-inverted" src="@/assets/note.svg" alt="note icon">  button to give the student participation points before moving on.
+					</p>
+				</div>
+			</div>
+			<h4>
+				Connecting with Students' Devices (Activities)
+			</h4>
+			<p>
+				You can find the Activities icon (<img class="embedded-icon-plain" src="@/assets/activities-circle.svg" alt="activities icon">) on the upper-left corner of the screen both when you first open Seatsmart and when you are viewing a class chart.  When clicking this icon from the starting screen, you can create new realtime activities for your classes in advance and manage existing ones.  From a class chart, this icon acts as a launch window to help you initiate the activity during class.
+			</p>
+			<p>
+				Launching an activity allows students to securely connect their devices with your computer via a QR code for a short but engaging event (such as a survey).  After you end the activity session, you will be prompted to choose whether or not to immediately add participation records for all active participants.
+			</p>
+			<div class="personal-note">
+				<img class="profile-image" src="@/assets/thaddeus.png" alt="sketched image of Thaddeus">
+				<div class="text-bubble">
+					<p>
+						This is a very new feature in Seatsmart that I look forward to exploring in my classes this fall.  I hope you find it convenient that it integrates with your other classroom records and does not require logging into anything, which cannot be said of Kahoot, Socrative, or other popular education apps.
+					</p>
+					<p>
+						For example, before beginning a Composition class about ways to structure writing, I might launch a survey that asks students how long a typical paragraph should be.  The idea is not to look for a "correct answer", but instead to get a baseline of what students have heard/guessed before starting the lesson.  Students themselves may be interested in watching the screen as results are tabulated in realtime.
+					</p>
+					<p>
+						Then, I can quickly add participation points when prompted after I end the survey.  Behind the scenes, Seatsmart determines which students were "genuine" participants by ensuring that only students who selected an option during the time allowed receive credit.
+					</p>
+				</div>
+			</div>
+			<p>
+				Tip: Take advantage of the preview feature when creating an activity to get a sense of a student's experience.  Activities should feel more like a game than a quiz.  Also, keep in mind language barriers (keep wording concise or define beforehand).
 			</p>
 		</section>
 	</div>
@@ -248,11 +321,51 @@ li > img {
 	border: 2px solid var(--gray);
 }
 
-#remoteIcon {
+.embedded-icon {
 	padding: 3px;
 	background: var(--black);
 	height: 20px;
 	vertical-align: middle;
 	border-radius: 3px;
+}
+
+.embedded-icon-inverted {
+	padding: 3px;
+	background: var(--white);
+	height: 20px;
+	vertical-align: middle;
+	border-radius: 3px;
+}
+
+.embedded-icon-plain {
+	padding: 3px;
+	background: transparent;
+	height: 20px;
+	vertical-align: middle;
+	border-radius: 3px;
+}
+
+.personal-note {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	grid-template-areas: "profile textBubble";
+	margin: 30px 0;
+}
+
+.profile-image {
+	grid-area: profile;
+	width: 100px;
+	margin-right: 10px;
+	border-radius: 100px;
+	background: var(--white);
+	box-shadow: 0px 0px 5px var(--black);
+}
+
+.text-bubble {
+	grid-area: textBubble;
+	padding: 5px 15px;
+	background: var(--dark-gray);
+	color: var(--light-gray);
+	border-radius: 5px;
 }
 </style>

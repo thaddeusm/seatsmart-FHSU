@@ -298,8 +298,17 @@ export default {
         let scope = this
 
         setTimeout(function() {
-            if (scope.$store.state.preferences.progress.indexOf('created class') === -1) {
+            let progress = scope.$store.state.preferences.progress
+
+            if (progress.indexOf('created class') == -1) {
                 scope.modalOpen = true
+            } else if (progress.indexOf('read remote features info') == -1) {
+                scope.modalOpen = true
+
+                // update onboarding progress
+                scope.$store.dispatch('setPreferences', {
+                    progress: ['created class', 'rearranged seats', 'viewed class chart', 'viewed a student page', 'read remote features info']
+                })
             }
 
             // check to ensure behaviorToTally is set

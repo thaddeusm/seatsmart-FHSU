@@ -273,9 +273,13 @@ export default {
 						}
 					}
 				}).then((savedActivity) => {
+					// update onboarding progress
+					this.$store.dispatch('setPreferences', {
+		                progress: ['created class', 'rearranged seats', 'viewed class chart', 'viewed a student page', 'read remote features info', 'explored remote features']
+		            })
+
 					if (this.lastView.includes('chart')) {
 						let chartID = this.lastView.split('/')[2]
-						console.log(chartID)
 						// route back to chart and launch
 						this.$router.push({
 							name: 'chart',

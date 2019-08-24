@@ -79,8 +79,11 @@ export default {
 			showQR: true
 		}
 	},
-	methods: {
-		
+	mounted() {
+		// update onboarding progress
+		this.$store.dispatch('setPreferences', {
+            progress: ['created class', 'rearranged seats', 'viewed class chart', 'viewed a student page', 'read remote features info', 'explored remote features']
+        })
 	}
 }
 </script>
