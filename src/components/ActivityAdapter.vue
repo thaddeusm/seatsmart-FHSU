@@ -127,7 +127,7 @@
 							<img v-if="connected" src="@/assets/usersconnected.svg" alt="users icon" class="users-icon">
 							<img v-else src="@/assets/usersdisconnected.svg" alt="users icon" class="users-icon">
 							<h3>{{ connectedUsers.length }}</h3>
-							<h5 v-if="launchChoice == 'chart' && mostRecentlyConnectedStudent !== ''" id="mostRecentlyConnectedStudent">
+							<h5 v-if="launchChoice.id !== 'anonymously' && mostRecentlyConnectedStudent !== ''" id="mostRecentlyConnectedStudent">
 								{{ mostRecentlyConnectedStudent }}
 							</h5>
 						</div>
@@ -159,7 +159,7 @@ export default {
 	},
 	data() {
 		return {
-			launchChoice: '',
+			launchChoice: {id: '', label: ''},
 			activityStage: 'configuring',
 			roomID: '',
 			responses: [],
@@ -246,7 +246,7 @@ export default {
 		},
 		responsesInDBFormat() {
 			return this.responses.map((response) => {
-				if (this.launchChoice == 'anonymously') {
+				if (this.launchChoice.id == 'anonymously') {
 					return {
 						respondent: 'anonymous',
 						response: response
@@ -278,7 +278,7 @@ export default {
 	},
 	methods: {
 		launchActivity() {
-			if (this.launchChoice == 'anonymously') {
+			if (this.launchChoice.id == 'anonymously') {
 				this.activityStage = 'launched'
 				this.$socket.emit('createActivityRoom')
 			} else {
@@ -368,7 +368,7 @@ export default {
 			let data
 
 			if (this.activity.activityType == 'survey') {
-				if (this.launchChoice == 'anonymously') {
+				if (this.launchChoice.id == 'anonymously') {
 					data = {
 						activityType: this.activity.activityType,
 						activityData: {
@@ -376,7 +376,7 @@ export default {
 							prompt: this.activity.content.prompt,
 							choices: this.activity.content.choices
 						},
-						activityMode: this.launchChoice,
+						activityMode: this.launchChoice.id,
 						activityDate: moment()
 					}
 				} else {
@@ -387,7 +387,7 @@ export default {
 							prompt: this.activity.content.prompt,
 							choices: this.activity.content.choices
 						},
-						activityMode: this.launchChoice,
+						activityMode: this.launchChoice.id,
 						activityDate: moment(),
 						students: this.students
 					}
@@ -425,15 +425,14 @@ export default {
 		},
 		incomingUsername(encryptedFullName) {
 			let fullName = this.decrypt(encryptedFullName)
-
+			console.log(fullName)
 			this.mostRecentlyConnectedStudent = `${fullName.firstName} ${fullName.lastName}`
 		}
 	},
 	mounted() {
 		if (this.allowAnonymous) {
-			this.launchChoice = 'anonymously'
+			this.launchChoice = {id: 'anonymously', label: 'anonymously'}
 		} else {
-			this.launchChoice = 'chart'
 			this.activityStage = 'launched'
 			this.$socket.emit('createActivityRoom')
 		}
