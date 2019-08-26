@@ -89,7 +89,7 @@ export default {
 	height: 100%;
 	width: 100%;
 	display: grid;
-	grid-template-rows: 15% 1fr 15%;
+	grid-template-rows: 15% auto 15%;
 	align-items: center;
 	justify-content: center;
 }
@@ -100,8 +100,10 @@ h1 {
 }
 
 #existingActivities {
-	margin: 20px 0;
+	margin: 20px auto;
+	text-align: center;
 	overflow: auto;
+	max-height: 350px;
 }
 
 .activity-button-area {

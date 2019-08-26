@@ -126,7 +126,9 @@ export default {
             this.$router.push(`/activity/edit/${id}`)
         },
         promptDeleteActivity(id, name) {
-        	this.alertModalActivity = name
+        	document.body.scrollTop = document.documentElement.scrollTop = 0;
+
+            this.alertModalActivity = name
             this.alertModalOpen = true
             this.alertModalActivityID = id
         },
