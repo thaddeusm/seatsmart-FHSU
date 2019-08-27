@@ -6,6 +6,8 @@ participation guidance by the Department of English at Fort Hays State
 University for courses conducted at campuses in China.  
 
 ## Application Scope
+*The application is under active development.  [Read the roadmap](https://github.com/thaddeusm/seatsmart-FHSU/wiki/Development-Roadmap-(Academic-Year-2019-2020)).*
+
 Internet connection stability is a serious concern for faculty.  In addition, 
 the application deals with student records related to participation, which 
 should be stored securely.  Seatsmart is designed to be offline-first, with all 
