@@ -251,8 +251,7 @@ export default {
 					year: this.classChart.year,
  					archived: this.classChart.archived
 				}).then((numUpdated) => {
-					this.$store.dispatch('getAllClasses')
-					this.$router.push(`/chart/${this.classChart._id}`)
+					return numUpdated
 				})
 			} else {
 				db.createSomething('classes', {
@@ -266,6 +265,8 @@ export default {
 					this.classChart._id = classChart._id
 					this.$refs.pageHeader.innerHTML += ' (' + this.classChart.name + ')'
 					this.classStudents[0].class = classChart._id
+
+					return classChart
 				})
 
 			}
@@ -590,7 +591,10 @@ export default {
 							}
 						}
 
-						this.saveClassChart()
+						let numUpdated = this.saveClassChart()
+
+						this.$store.dispatch('getAllClasses')
+						this.$router.push(`/chart/${this.classChart._id}`)
 					}
 				}
 
