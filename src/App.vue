@@ -76,7 +76,7 @@ h4 {
     font-family: "ArchivoNarrow";
     font-weight: lighter;
     -webkit-user-select: none;
-    font-size: 24px;
+    font-size: 22px;
 }
 
 h5 {

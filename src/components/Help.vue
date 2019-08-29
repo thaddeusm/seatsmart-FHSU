@@ -1,6 +1,10 @@
 <template>
 	<div>
 		<h1>Help</h1>
+		<p>
+			<button @click="openWebPage('video')" class="inner-link">Watch a comprehensive walkthrough video</button> (Internet access required).
+		</p>
+		<br><br>
 		<!-- Show intro help about setting behaviors and calculation -->
 		<section v-if="progress.indexOf('created class') === -1">
 			<h4>Getting Started</h4>
@@ -328,6 +332,8 @@
 </template>
 
 <script>
+const shell = require('electron').shell
+
 import Tabs from '@/components/Tabs.vue'
 import NameCard from '@/components/NameCard.vue'
 
@@ -350,6 +356,13 @@ export default {
 	methods: {
 		showCaption(caption) {
 			this.caption = caption
+		},
+		openWebPage(page) {
+			if (page == 'video') {	
+				shell.openExternal('https://mailfhsu-my.sharepoint.com/:v:/g/personal/tbmccleary_fhsu_edu/ERWcdtM1yBJPhffl5rvttiwBP8JNyhQA9_RoBg-kEkw4Pw?e=iyrKnZ')
+			} else {
+				shell.openExternal('https://seatsmart.tech/')
+			}
 		}
 	}
 }
@@ -471,5 +484,14 @@ li > img {
 	background: var(--dark-gray);
 	color: var(--light-gray);
 	border-radius: 5px;
+}
+
+.inner-link {
+	background: none;
+	border: none;
+	outline: none;
+	cursor: pointer;
+	font-size: 18px;
+	border-bottom: 2px solid var(--yellow);
 }
 </style>
