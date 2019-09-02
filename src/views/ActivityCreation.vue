@@ -5,9 +5,13 @@
 			<h1 ref="pageHeader" v-else>Edit {{ capitalizeString(activityChoice) }} Activity</h1>
 		</header>
 		<section id="activityChoice">
-			<button class="activity-button" @click="chooseActivity('survey')" :class="[activityChoice == 'survey' ? 'selected' : '']">
+			<button class="activity-button" @click="chooseActivity('survey')" :class="[activityChoice == 'survey' ? 'selected' : '']" :disabled="progress !== 1">
 				<img src="@/assets/survey-illustration.svg" alt="survey illustration">
-				 <h5>survey</h5>
+				<h5>survey</h5>
+			</button>
+			<button class="activity-button" @click="chooseActivity('response pool')" :class="[activityChoice == 'response pool' ? 'selected' : '']" :disabled="progress !== 1">
+				<img src="@/assets/response-pool-illustration.svg" alt="response pool illustration">
+				<h5>response pool</h5>
 			</button>
 		</section>
 		<section id="border"></section>
@@ -16,7 +20,7 @@
 				<h6><img v-if="alertMessage.length > 0" src="@/assets/alert.svg" alt="alert icon" class="alert-icon-small"> {{ alertMessage }}</h6>
 			</section>
 			<div v-if="activityChoice == 'survey'">
-				<section id="formOne" v-if="progress == 1">
+				<section class="form-one" v-if="progress == 1">
 					<div class="form-container">
 						<h3>Options</h3>
 						<div class="input-wrapper">
@@ -25,7 +29,7 @@
 						</div>
 						<div class="switch-wrapper">
 							<h5>Time Limit</h5>
-							<button :class="[surveyData.timeLimit.enabled ? 'on' : 'off' ,'switch']" @click="toggleSurveyTimer">
+							<button :class="[surveyData.timeLimit.enabled ? 'on' : 'off' ,'switch']" @click="toggleTimer">
 								<img src="@/assets/switch-circle.svg" alt="switch circle">
 							</button>
 							<div class="switch-config" v-if="surveyData.timeLimit.enabled">
@@ -57,7 +61,7 @@
 						<button class="progress-button" @click="changeProgress(2)">add survey content</button>
 					</section>
 				</section>
-				<section id="formTwo" v-if="progress == 2">
+				<section class="form-two" v-if="progress == 2">
 					<div class="form-container">
 						<h3>Content</h3>
 						<div class="input-wrapper">
@@ -78,6 +82,72 @@
 					<section class="progress-button-area">
 						<button class="progress-button" @click="routeBack"><img class="back-icon" src="@/assets/backarrowwhite.svg" alt="back icon"></button>
 						<button class="progress-button" @click="startPreview">preview survey</button>
+					</section>
+				</section>
+			</div>
+			<div v-else>
+				<section class="form-one" v-if="progress == 1">
+					<div class="form-container">
+						<h3>Options</h3>
+						<div class="input-wrapper">
+							<h5>Name</h5>
+							<input class="large-input" type="text" name="surveyName" v-model="responsePoolData.name" placeholder="Response Pool name...">
+						</div>
+						<div class="switch-wrapper">
+							<h5>Allow Multiple Responses</h5>
+							<button :class="[responsePoolData.allowMultipleResponses ? 'on' : 'off' ,'switch']" @click="toggleAllowMultipleResponses">
+								<img src="@/assets/switch-circle.svg" alt="switch circle">
+							</button>
+						</div>
+						<div class="switch-wrapper">
+							<h5>Time Limit</h5>
+							<button :class="[responsePoolData.timeLimit.enabled ? 'on' : 'off' ,'switch']" @click="toggleTimer">
+								<img src="@/assets/switch-circle.svg" alt="switch circle">
+							</button>
+							<div class="switch-config" v-if="responsePoolData.timeLimit.enabled">
+								<div class="label-row">
+									<span v-if="responsePoolData.timeLimit.minutes !== '1'">
+										Minutes
+									</span>
+									<span v-else>
+										Minute
+									</span>
+									<span v-if="responsePoolData.timeLimit.seconds !== '1'">
+										Seconds
+									</span>
+									<span v-else>
+										Second
+									</span>
+								</div>
+								<div>
+									<div class="form-group">
+										<input class="small-input" type="number" min="0" max="59" name="timeLimitMinutes" v-model="responsePoolData.timeLimit.minutes">
+										<input class="small-input" type="number" min="0" max="59" name="timeLimitSeconds" v-model="responsePoolData.timeLimit.seconds">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<section class="progress-button-area">
+						<button class="progress-button" @click="routeBack"><img class="back-icon" src="@/assets/backarrowwhite.svg" alt="back icon"></button>
+						<button class="progress-button" @click="changeProgress(2)">add response pool content</button>
+					</section>
+				</section>
+				<section class="form-two" v-if="progress == 2">
+					<div class="form-container">
+						<h3>Content</h3>
+						<div class="input-wrapper">
+							<h5>Prompt</h5>
+							<input class="large-input" type="text" name="responsePoolPrompt" v-model="responsePoolData.prompt" placeholder="Prompt...">
+						</div>
+						<div class="input-wrapper">
+							<h5>Example Response</h5>
+							<input class="large-input" type="text" name="responsePoolExample" v-model="responsePoolData.example" placeholder="Example response...">
+						</div>
+					</div>
+					<section class="progress-button-area">
+						<button class="progress-button" @click="routeBack"><img class="back-icon" src="@/assets/backarrowwhite.svg" alt="back icon"></button>
+						<button class="progress-button" @click="startPreview">preview response pool</button>
 					</section>
 				</section>
 			</div>
@@ -140,6 +210,17 @@ export default {
 				prompt: '',
 				choices: ['', '']
 			},
+			responsePoolData: {
+				name: '',
+				timeLimit: {
+					enabled: true,
+					minutes: '1',
+					seconds: '0'
+				},
+				prompt: '',
+				example: '',
+				allowMultipleResponses: true
+			},
 			dateCreated: {},
 			previewRoomID: ''
 		}
@@ -160,9 +241,18 @@ export default {
 		activityDataRequested() {
 			console.log('data requested, sending...')
 
+			let activityData
+
+			if (this.activityChoice == 'survey') {
+				activityData = this.surveyData
+			} else {
+				activityData = this.responsePoolData
+			}
+
+
 			let data = {
 				activityType: this.activityChoice,
-				activityData: this.surveyData,
+				activityData: activityData,
 				activityMode: 'preview',
 				activityDate: moment()
 			}
@@ -186,8 +276,15 @@ export default {
 				this.progress = step
 			}
 		},
-		toggleSurveyTimer() {
-			this.surveyData.timeLimit.enabled = !this.surveyData.timeLimit.enabled
+		toggleTimer() {
+			if (this.activityChoice === 'survey') {
+				this.surveyData.timeLimit.enabled = !this.surveyData.timeLimit.enabled
+			} else {
+				this.responsePoolData.timeLimit.enabled = !this.responsePoolData.timeLimit.enabled
+			}
+		},
+		toggleAllowMultipleResponses() {
+			this.responsePoolData.allowMultipleResponses = !this.responsePoolData.allowMultipleResponses
 		},
 		addSurveyChoice() {
 			this.surveyData.choices.push('')
@@ -228,6 +325,36 @@ export default {
 						case 3:
 							break
 					}
+				break
+				case 'response pool':
+					switch (this.progress) {
+						case 1:
+							if (this.responsePoolData.name == '') {
+								this.alertMessage = 'Please name the response pool activity.'
+								check = true
+							} else if (this.responsePoolData.timeLimit.enabled) {
+								if (this.responsePoolData.timeLimit.seconds > 59) {
+									this.alertMessage = 'Please enter a valid number of seconds.'
+									check = true
+								} else if (this.responsePoolData.timeLimit.minutes < 1 && this.responsePoolData.timeLimit.seconds < 1) {
+									this.alertMessage = 'Please enter a time limit'
+									check = true
+								}
+							}
+							break
+						case 2:
+							if (this.responsePoolData.prompt == '') {
+								this.alertMessage = 'Please provide a response pool prompt.'
+								check = true
+							} else if (this.responsePoolData.example == '') {
+								this.alertMessage = 'Please provide an example response.'
+								check = true
+							}
+							break
+						case 3:
+							break
+					}
+				break
 			}
 
 			return check
@@ -237,59 +364,71 @@ export default {
 			this.changeProgress(3)
 		},
 		saveActivity() {
-			if (this.id !== undefined) {
-				db.updateSomething('activities', {_id: this.id}, {
-					name: this.surveyData.name,
-					activityType: 'survey',
-					dateCreated: this.dateCreated,
-					content: {
-						prompt: this.surveyData.prompt,
-						choices: this.surveyData.choices
-					},
-					options: {
-						timeLimit: {
-							enabled: this.surveyData.timeLimit.enabled,
-							minutes: this.surveyData.timeLimit.minutes,
-							seconds: this.surveyData.timeLimit.seconds
-						}
-					}
-				}).then((numUpdated) => {
-					this.$router.go(-1)
-				})
-			} else {
-				db.createSomething('activities', {
-					name: this.surveyData.name,
-					activityType: 'survey',
-					dateCreated: moment(),
-					content: {
-						prompt: this.surveyData.prompt,
-						choices: this.surveyData.choices
-					},
-					options: {
-						timeLimit: {
-							enabled: this.surveyData.timeLimit.enabled,
-							minutes: this.surveyData.timeLimit.minutes,
-							seconds: this.surveyData.timeLimit.seconds
-						}
-					}
-				}).then((savedActivity) => {
-					// update onboarding progress
-					this.$store.dispatch('setPreferences', {
-		                progress: ['created class', 'rearranged seats', 'viewed class chart', 'viewed a student page', 'read remote features info', 'explored remote features']
-		            })
+			let dataToSave
 
-					if (this.lastView.includes('chart')) {
-						let chartID = this.lastView.split('/')[2]
-						// route back to chart and launch
-						this.$router.push({
-							name: 'chart',
-							params: {id: chartID},
-							query: {activityToLaunch: savedActivity._id}
-						})
-					} else {
-						this.$router.go(-1)
+			if (this.activityChoice == 'survey') {
+				dataToSave = {
+						name: this.surveyData.name,
+						activityType: 'survey',
+						dateCreated: this.dateCreated,
+						content: {
+							prompt: this.surveyData.prompt,
+							choices: this.surveyData.choices
+						},
+						options: {
+							timeLimit: {
+								enabled: this.surveyData.timeLimit.enabled,
+								minutes: this.surveyData.timeLimit.minutes,
+								seconds: this.surveyData.timeLimit.seconds
+							}
+						}
+					}						
+			} else {
+				dataToSave = {
+						name: this.responsePoolData.name,
+						activityType: 'response pool',
+						dateCreated: this.dateCreated,
+						content: {
+							prompt: this.responsePoolData.prompt,
+							example: this.responsePoolData.example
+						},
+						options: {
+							timeLimit: {
+								enabled: this.responsePoolData.timeLimit.enabled,
+								minutes: this.responsePoolData.timeLimit.minutes,
+								seconds: this.responsePoolData.timeLimit.seconds
+							},
+							allowMultipleResponses: this.responsePoolData.allowMultipleResponses
+						}
 					}
-				})
+			}
+
+
+			if (this.id !== undefined) {
+				db.updateSomething('activities', {_id: this.id}, dataToSave)
+					.then((numUpdated) => {
+						this.$router.go(-1)
+					})
+			} else {
+				db.createSomething('activities', dataToSave)
+					.then((savedActivity) => {
+						// update onboarding progress
+						this.$store.dispatch('setPreferences', {
+			                progress: ['created class', 'rearranged seats', 'viewed class chart', 'viewed a student page', 'read remote features info', 'explored remote features']
+			            })
+
+						if (this.lastView.includes('chart')) {
+							let chartID = this.lastView.split('/')[2]
+							// route back to chart and launch
+							this.$router.push({
+								name: 'chart',
+								params: {id: chartID},
+								query: {activityToLaunch: savedActivity._id}
+							})
+						} else {
+							this.$router.go(-1)
+						}
+					})
 			}
 		},
 		encrypt(data) {
@@ -301,7 +440,14 @@ export default {
             return JSON.parse(decrypted)
         },
         capitalizeString(str) {
-			return str.charAt(0).toUpperCase() + str.slice(1)
+        	// handle single and multiple-word names
+			let arr = str.split(' ')
+
+			for (let i=0; i<arr.length; i++) {
+				arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1)
+			}
+
+			return arr.join(' ')
 		}
 	},
 	created() {
@@ -320,6 +466,14 @@ export default {
 						this.surveyData.timeLimit.seconds = existingActivity[0].options.timeLimit.seconds
 						this.surveyData.prompt = existingActivity[0].content.prompt
 						this.surveyData.choices = existingActivity[0].content.choices
+						this.dateCreated = existingActivity[0].dateCreated
+					} else {
+						this.responsePoolData.name = existingActivity[0].name
+						this.responsePoolData.timeLimit.enabled = existingActivity[0].options.timeLimit.enabled
+						this.responsePoolData.timeLimit.minutes = existingActivity[0].options.timeLimit.minutes
+						this.responsePoolData.timeLimit.seconds = existingActivity[0].options.timeLimit.seconds
+						this.responsePoolData.prompt = existingActivity[0].content.prompt
+						this.responsePoolData.example = existingActivity[0].content.example
 						this.dateCreated = existingActivity[0].dateCreated
 					}
 
@@ -379,6 +533,7 @@ button {
 	padding: 5px 15px;
 	border-radius: 5px;
 	box-shadow: 1px 2px 1px 2px var(--gray);
+	margin: 10px;
 }
 
 .activity-button:active {
@@ -386,7 +541,7 @@ button {
 }
 
 .activity-button > img {
-	width: 280px;
+	width: 220px;
 	margin-bottom: 5px;
 }
 
@@ -398,11 +553,11 @@ button {
 	text-align: center;
 }
 
-#formOne {
+.form-one {
 	width: 400px;
 }
 
-#formTwo {
+.form-two {
 	width: 400px;
 }
 
@@ -448,12 +603,13 @@ button {
 		"label switch"
 		"config config";
 	align-items: center;
+	margin: 15px 0;
 }
 
 .switch-wrapper > h5 {
 	grid-area: label;
 	text-align: left;
-	padding-left: 5px;
+	padding-left: 10px;
 }
 
 .switch-wrapper > .switch {

@@ -12,7 +12,7 @@
 					:key="`activity${index}`" 
 					:onClick="setActivityChoice"
 					:index="index"
-	                :class="[activity.activityType, activityChoice == activity ? 'selected':'']"
+	                :class="[activity.activityType.split(' ').join('-'), activityChoice == activity ? 'selected':'']"
 				/>
 			</div>
 			<div class="activity-button-area">
@@ -146,6 +146,13 @@ h1 {
 
 .survey {
     background-image: linear-gradient(rgba(255, 255, 255, .9)), url('~@/assets/survey-illustration.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: left;
+}
+
+.response-pool {
+    background-image: linear-gradient(rgba(255, 255, 255, .7)), url('~@/assets/response-pool-illustration.svg');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: left;

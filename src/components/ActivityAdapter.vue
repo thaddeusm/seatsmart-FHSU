@@ -10,7 +10,7 @@
 			<section id="activityHeader">
 				<h1>{{ activity.name }}</h1>
 			</section>
-			<section :class="[activity.activityType, activityStage == 'started' ? 'activity-body-narrow':'activity-body-wide', activityStage == 'ended' ? 'activity-body-narrow':'activity-body-wide']">
+			<section :class="[activity.activityType.split(' ').join('-'), activityStage == 'started' ? 'activity-body-narrow':'activity-body-wide', activityStage == 'ended' ? 'activity-body-narrow':'activity-body-wide']">
 				<section id="activityBanner">
 					
 				</section>
@@ -67,17 +67,32 @@
 					<section class="results-container" v-if="activityStage == 'started'">
 						<h3 v-if="connected">Collecting Responses</h3>
 						<h3 v-else>Disconnected...Trying to Reconnect</h3>
-						<vc-donut
-							background="black" foreground="black"
-							:size="250" unit="px" :thickness="20"
-							has-legend legend-placement="left"
-							:sections="donutSections" :total="connectedUsers.length"
-							v-if="responses.length > 0"
-						>
-							<h1>{{ responseRatio }}%</h1>
-							<h5>response</h5>
-						</vc-donut>
-						<section id="waitingForResponses" v-else></section>
+						<div v-if="activity.activityType == 'survey'">
+							<vc-donut
+								background="black" foreground="black"
+								:size="250" unit="px" :thickness="20"
+								has-legend legend-placement="left"
+								:sections="donutSections" :total="connectedUsers.length"
+								v-if="responses.length > 0"
+							>
+								<h1>{{ responseRatio }}%</h1>
+								<h5>response</h5>
+							</vc-donut>
+						</div>
+						<div v-if="activity.activityType == 'response pool'">
+							<ul v-if="responses.length > 0">
+								<li v-for="(response, index) in responses" v-if="hiddenResponses.indexOf(index) === -1">
+									<h4>{{ response.response }}</h4>
+									<button class="hide-button" @click="hideResponse(index)">
+										<img src="@/assets/hide.svg" alt="hide icon">
+									</button>
+								</li>
+							</ul>
+							<button v-if="responses.length > 0" class="show-all-button" @click="hiddenResponses = []" :disabled="hiddenResponses.length == 0">
+								show all
+							</button>
+						</div>
+						<section id="waitingForResponses" v-if="responses.length == 0"></section>
 						<div class="actions-wrapper">
 							<button 
 								class="action-button cancel-button"
@@ -89,15 +104,30 @@
 					</section>
 					<section class="results-container" v-if="activityStage == 'ended'">
 						<h3>Final Results</h3>
-						<vc-donut
-							background="black" foreground="black"
-							:size="250" unit="px" :thickness="20"
-							has-legend legend-placement="left"
-							:sections="donutSections" :total="connectedUsers.length"
-						>
-							<h1>{{ responseRatio }}%</h1>
-							<h5>response</h5>
-						</vc-donut>
+						<div v-if="activity.activityType == 'survey'">
+							<vc-donut
+								background="black" foreground="black"
+								:size="250" unit="px" :thickness="20"
+								has-legend legend-placement="left"
+								:sections="donutSections" :total="connectedUsers.length"
+							>
+								<h1>{{ responseRatio }}%</h1>
+								<h5>response</h5>
+							</vc-donut>
+						</div>
+						<div v-if="activity.activityType == 'response pool'">
+							<ul v-if="responses.length > 0">
+								<li v-for="(response, index) in responses" v-if="hiddenResponses.indexOf(index) === -1">
+									<h4>{{ response.response }}</h4>
+									<button class="hide-button" @click="hideResponse(index)">
+										<img src="@/assets/hide.svg" alt="hide icon">
+									</button>
+								</li>
+							</ul>
+							<button v-if="responses.length > 0" class="show-all-button" @click="hiddenResponses = []" :disabled="hiddenResponses.length == 0">
+								show all
+							</button>
+						</div>
 						<div class="actions-wrapper" v-if="allowAnonymous">
 							<button 
 								class="action-button cancel-button"
@@ -177,7 +207,8 @@ export default {
 			],
 			connected: false,
 			mostRecentlyConnectedStudent: '',
-			addNotes: false
+			addNotes: false,
+			hiddenResponses: []
 		}
 	},
 	computed: {
@@ -273,6 +304,11 @@ export default {
 				return responseArray.map(response => {
 					return response.student.id
 				})
+			} else {
+				// provide only student DB ids to Note Form
+				return allResponses.map(response => {
+					return response.student.id
+				})
 			}
 		}
 	},
@@ -347,6 +383,9 @@ export default {
         beginAddNotes() {
         	// display bulk note component
         	this.addNotes = true
+        },
+        hideResponse(index) {
+        	this.hiddenResponses.push(index)
         }
 	},
 	sockets: {
@@ -386,6 +425,32 @@ export default {
 							timeLimit: this.activity.options.timeLimit,
 							prompt: this.activity.content.prompt,
 							choices: this.activity.content.choices
+						},
+						activityMode: this.launchChoice.id,
+						activityDate: moment(),
+						students: this.students
+					}
+				}
+			} else {
+				if (this.launchChoice.id == 'anonymously') {
+					data = {
+						activityType: this.activity.activityType,
+						activityData: {
+							timeLimit: this.activity.options.timeLimit,
+							prompt: this.activity.content.prompt,
+							example: this.activity.content.example,
+							allowMultipleResponses: this.activity.options.allowMultipleResponses
+						},
+						activityMode: this.launchChoice.id,
+						activityDate: moment()
+					}
+				} else {
+					data = {
+						activityType: this.activity.activityType,
+						activityData: {
+							timeLimit: this.activity.options.timeLimit,
+							prompt: this.activity.content.prompt,
+							example: this.activity.content.example
 						},
 						activityMode: this.launchChoice.id,
 						activityDate: moment(),
@@ -535,6 +600,22 @@ export default {
 	text-align: center;
 }
 
+ul {
+	list-style: none;
+	height: 230px;
+	overflow: auto;
+}
+
+li {
+	display: grid;
+	grid-template-columns: 1fr 10%;
+	background: var(--gray);
+	padding: 10px;
+	margin: 15px 0;
+	align-items: center;
+	justify-content: center;
+}
+
 .action-button {
 	font-size: 16px;
 	padding: 5px 12px;
@@ -543,6 +624,19 @@ export default {
 	box-shadow: 0px 0px 1px var(--black);
 	outline: none;
 	margin: 0 5px;
+}
+
+.show-all-button {
+	display: block;
+	font-size: 16px;
+	padding: 5px 12px;
+	border-radius: 5px;
+	cursor: pointer;
+	box-shadow: 0px 0px 1px var(--black);
+	outline: none;
+	background: var(--yellow);
+	color: var(--black);
+	margin: 10px auto;
 }
 
 .launch-button {
@@ -555,11 +649,32 @@ export default {
 	color: var(--black);
 }
 
+.hide-button {
+	background: none;
+	cursor: pointer;
+	outline: none;
+	border: none;
+	display: block;
+}
+
+.hide-button > img {
+	height: 20px;
+	margin-left: ;
+	vertical-align: middle;
+}
+
 .survey {
 	background-image: url('~@/assets/survey-illustration.svg');
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: -300px 20px;
+}
+
+.response-pool {
+	background-image: url('~@/assets/response-pool-illustration.svg');
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: 0 -20px;
 }
 
 #qr {

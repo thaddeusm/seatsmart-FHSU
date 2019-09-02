@@ -20,7 +20,7 @@
 						:key="`activity${index}`" 
 						:onClick="launchActivity"
 						:index="index"
-                        :class="[activity.activityType]"
+                        :class="[activity.activityType.split(' ').join('-')]"
 					/>
 					<div class="modify-button-area">
 	                    <button @click="editActivity(activity._id)" class="modify-activity-button"><img src="@/assets/edit.svg" alt="edit icon"></button>
@@ -272,6 +272,13 @@ button {
 
 .survey {
     background-image: linear-gradient(rgba(255, 255, 255, .9)), url('~@/assets/survey-illustration.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: left;
+}
+
+.response-pool {
+    background-image: linear-gradient(rgba(255, 255, 255, .7)), url('~@/assets/response-pool-illustration.svg');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: left;
