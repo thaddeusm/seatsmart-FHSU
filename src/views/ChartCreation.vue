@@ -91,7 +91,7 @@
 						</div>
 						<div ref="formArea">
 							<div class="form-group" v-for="(student, index) in classStudents" :key="index">
-								<input class="small-input" type="text" name="firstName" v-model="student.firstName">
+								<input class="small-input" type="text" name="firstName" v-model="student.firstName" :ref="index">
 								<input class="small-input" type="text" name="lastName" v-model="student.lastName">
 								<input class="small-input" type="text" name="tigerID" v-model="student.tigerID">
 								<button class="delete-button" @click="removeFormGroup(index)">-</button>
@@ -342,6 +342,13 @@ export default {
 
 			this.classStudents.push(obj)
 
+			// move focus to new row
+			let scope = this
+			setTimeout(function() {
+				let lastInput = scope.classStudents.length - 1
+				
+				scope.$refs[lastInput][0].focus()
+			}, 300, scope)
 		},
 		removeFormGroup(index) {
 			this.alertMessage = ''

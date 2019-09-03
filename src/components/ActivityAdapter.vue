@@ -351,10 +351,8 @@ export default {
 			}).then(() => {
 				this.activityStage = 'ended'
 
-				// persist socket if remote is connected
-				if (this.chart == '') {
-					this.$socket.close()
-				}
+				// ensure that connected devices are notified
+				this.$socket.emit('cancelActivity')
 			})
 		},
 		cancelActivity() {
