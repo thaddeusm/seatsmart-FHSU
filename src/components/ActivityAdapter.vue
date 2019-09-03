@@ -448,7 +448,8 @@ export default {
 						activityData: {
 							timeLimit: this.activity.options.timeLimit,
 							prompt: this.activity.content.prompt,
-							example: this.activity.content.example
+							example: this.activity.content.example,
+							allowMultipleResponses: this.activity.options.allowMultipleResponses
 						},
 						activityMode: this.launchChoice.id,
 						activityDate: moment(),
