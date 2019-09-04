@@ -162,7 +162,7 @@ export default {
 							// then update state to ensure that consecutive
 							// notes about the same student are reflected in UI
 							setTimeout(function() {
-								scope.$store.dispatch('setLastStudentUpdated', scope.note.student)
+								scope.$store.dispatch('setLastStudentUpdated', 'all')
 							}, 500, scope)
 						})
 					studentIndex++

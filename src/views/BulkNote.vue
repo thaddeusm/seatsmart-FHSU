@@ -153,6 +153,13 @@ export default {
                         this.classStudents = results
                         for (let i=0; i<results.length; i++) {
                             let thisStudent = results[i]
+
+                            if (thisStudent.firstName.indexOf('(') !== -1) {
+                                thisStudent.firstName = thisStudent.firstName.split('(')[1].split(')')[0].split(' ')[0]
+                            } else {
+                                thisStudent.firstName = thisStudent.firstName.split(' ')[0]
+                            }
+
                             let thisRow = thisStudent.seat.row
                             let thisColumn = thisStudent.seat.column
 

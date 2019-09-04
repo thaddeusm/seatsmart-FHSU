@@ -310,7 +310,7 @@ export default {
 	},
 	watch: {
 		lastStudentUpdated(newValue, oldValue) {
-			if (newValue == this.student._id) {
+			if (newValue == this.student._id || newValue == 'all') {
 				// update component
 				this.getStudent()
 			}
