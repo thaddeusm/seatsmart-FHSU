@@ -108,7 +108,7 @@ export default {
             let values = Object.values(allClassesObj)
 
             for (let i=0; i<keys.length; i++) {
-                if (allClassesObj[keys[i]].archived == false) {
+                if (!allClassesObj[keys[i]].archived) {
                     unarchived.push(keys[i])
                 }
             }
@@ -172,7 +172,6 @@ export default {
             }
 
             this.checkForNoResults()
-
             // update last page record in $store
             this.$store.dispatch('setLastView', `/search/${term}`)
 
