@@ -117,7 +117,7 @@
 						</div>
 						<div v-if="activity.activityType == 'response pool'">
 							<ul v-if="responses.length > 0">
-								<li v-for="(response, index) in responses" v-if="hiddenResponses.indexOf(index) === -1">
+								<li v-for="(response, index) in responses" v-if="hiddenResponses.indexOf(index) === -1" :key="`response${index}`">
 									<h4>{{ response.response }}</h4>
 									<button class="hide-button" @click="hideResponse(index)">
 										<img src="@/assets/hide.svg" alt="hide icon">
@@ -162,6 +162,13 @@
 							</h5>
 						</div>
 					</section>
+					<Countdown 
+						id="countdown"  
+						v-if="activity.options.timeLimit.enabled && activityStage == 'started'"
+						:countdownRunning="countdownStarted"
+						:timeLimit="timeLimitInSeconds"
+						v-on:countdown-ended="endActivity"
+					/>
 				</section>
 			</section>
 		</div>
@@ -174,6 +181,7 @@ import sjcl from 'sjcl'
 import moment from 'moment'
 
 import NoteForm from '@/components/NoteForm.vue'
+import Countdown from '@/components/Countdown.vue'
 
 export default {
 	name: 'ActivityAdapter',
@@ -185,7 +193,8 @@ export default {
 		remoteConnected: Boolean
 	},
 	components: {
-		NoteForm
+		NoteForm,
+		Countdown
 	},
 	data() {
 		return {
@@ -208,7 +217,8 @@ export default {
 			connected: false,
 			mostRecentlyConnectedStudent: '',
 			addNotes: false,
-			hiddenResponses: []
+			hiddenResponses: [],
+			countdownStarted: false
 		}
 	},
 	computed: {
@@ -310,6 +320,21 @@ export default {
 					return response.student.id
 				})
 			}
+		},
+		timeLimitInSeconds() {
+			if (this.activity.options.timeLimit.enabled) {
+				let minutes = parseInt(this.activity.options.timeLimit.minutes)
+				let seconds = parseInt(this.activity.options.timeLimit.seconds)
+
+				if (minutes > 0) {
+					let minutesToSeconds = minutes * 60
+					return minutesToSeconds + seconds
+				} else {
+					return seconds
+				}
+			} else {
+				return undefined
+			}
 		}
 	},
 	methods: {
@@ -331,6 +356,14 @@ export default {
 			this.$socket.emit('sendStartSignal')
 			// display live results view
 			this.activityStage = 'started'
+
+			// start countdown, if enabled
+			if (this.activity.options.timeLimit.enabled) {
+				let scope = this
+				setTimeout(function() {
+					scope.countdownStarted = true
+				}, 3500, scope)
+			}
 		},
 		endActivity() {
 			// set the DB property to 'anonymous' if no chart prop value
@@ -381,6 +414,14 @@ export default {
         beginAddNotes() {
         	// display bulk note component
         	this.addNotes = true
+        },
+        addResponse(response) {
+        	if (this.activity.activityType == 'survey') {
+        		this.responses.push(response)
+        	} else {
+        		// push response to the top of the list for better UX
+        		this.responses.unshift(response)
+        	}
         },
         hideResponse(index) {
         	this.hiddenResponses.push(index)
@@ -463,7 +504,8 @@ export default {
 		incomingResponseData(encryptedData) {
 			let decrypted = this.decrypt(encryptedData)
 			console.log('Received response: ', decrypted)
-			this.responses.push(decrypted)
+			
+			this.addResponse(decrypted)
 		},
 		disconnect() {
 			this.connected = false
@@ -744,6 +786,11 @@ button:disabled {
 	margin-top: 15px;
 	animation-name: fadeUp;
 	animation-duration: 1s;
+}
+
+#countdown {
+	text-align: center;
+	margin-top: 20px;
 }
 
 @keyframes fadeUp {
