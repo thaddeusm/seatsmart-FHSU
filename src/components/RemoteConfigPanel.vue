@@ -10,13 +10,13 @@
 				<qriously 
 					id="qr"
 					v-if="showQR"
-					:value="`https://remote.seatsmart.tech/?room=${roomID}`" 
+					:value="`https://remote.seatsmart.tech/`" 
 					:size="200" 
 				/>
 				<div id="qrGhost" v-else>
 					<h1>{{ roomID }}</h1>
 				</div>
-				<button class="qr-toggle" v-if="showQR" @click="showQR = false">hide QR</button>
+				<button class="qr-toggle" v-if="showQR" @click="showQR = false">get the code</button>
 				<button class="qr-toggle" v-else @click="showQR = true">show QR</button>
 			</section>
 		</section>
@@ -137,7 +137,8 @@ export default {
 	background: var(--white);
 	width: 200px;
 	height: 200px;
-	margin: 20px auto;
+	margin: 5px auto 25px auto;
+	padding: 5px;
 	border-radius: 5px;
 	vertical-align: middle;
 }
@@ -146,7 +147,8 @@ export default {
 	background: var(--light-gray);
 	width: 200px;
 	height: 200px;
-	margin: 20px auto;
+	margin: 5px auto 25px auto;
+	padding: 5px;
 	border-radius: 5px;
 	display: grid;
 	align-items: center;

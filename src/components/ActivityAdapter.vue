@@ -40,11 +40,12 @@
 						</div>
 					</section>
 					<section class="button-container" v-if="activityStage == 'launched'">
-						<h3>Connect Devices</h3>
+						<h3 v-if="roomID !== ''">Use code: {{ roomID }}</h3>
+						<h3 v-else>Loading...</h3>
 						<qriously 
 							v-if="roomID !== ''"
 							id="qr"
-							:value="`https://activities.seatsmart.tech/?room=${roomID}`"
+							value="https://activities.seatsmart.tech/"
 							:size="200" 
 						/>
 						<section id="roomIDLoading" v-else></section>
