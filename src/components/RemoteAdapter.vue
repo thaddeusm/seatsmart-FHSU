@@ -19,14 +19,16 @@ export default {
 		classInfo: Object,
 		students: Array,
 		absentStudents: Array,
-		randomStudent: Number
+		randomStudent: Number,
+		activityInProgress: Object
 	},
 	data() {
 		return {
 			enabled: false,
 			connected: false,
 			roomID: '',
-			receivedActions: []
+			receivedActions: [],
+			activities: []
 		}
 	},
 	computed: {
@@ -132,11 +134,25 @@ export default {
 					positive: this.positiveBehaviors,
 					negative: this.negativeBehaviors
 				},
-				absentStudents: this.absentStudents
+				absentStudents: this.absentStudents,
+				activities: this.activities,
+				activityInProgress: this.activityInProgress
 			}
 
 			this.$socket.emit('dataIncoming', this.encrypt(rawData))
         },
+        getActivities() {
+			db.readSomething('activities', {})
+                .then((results) => {
+                    this.activities = results.sort((a, b) => {
+                        let dateA = a.dateCreated._d
+                        let dateB = b.dateCreated._d
+
+                        return dateA < dateB ? -1 : 1
+                    })
+
+                })
+		},
         initConfirm(id) {
         	// send confirmation that the action was completed to remote client
         	this.$socket.emit('initConfirm', this.encrypt(id))
@@ -204,9 +220,18 @@ export default {
 	        			// trigger normal UI action in parent component
 	        			this.$emit('clear-random')
 	        			break
+	        		case 'launch activity':
+	        			// emit launch action to parent component
+	        			this.$emit('launch-activity', request.action.data.activity)
+	        			// send confirmation to remote client
+	        			this.initConfirm(request.id)
+	        			break
 	        	}
         	}
         }
+	},
+	mounted() {
+		this.getActivities()
 	}
 }
 </script>

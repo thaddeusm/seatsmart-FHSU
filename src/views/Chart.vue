@@ -20,10 +20,12 @@
 				v-on:select-random="selectRandom"
 				v-on:clear-random="clearRandom"
 				v-on:end-config="remoteConfigured = true"
+				v-on:launch-activity="launchActivityFromRemote"
 				:classInfo="classInfo"
 				:students="students"
 				:absentStudents="absentStudents"
 				:randomStudent="randomStudent"
+				:activityInProgress="activityChoice"
 			/>
 		</header>
 		<main id="chartMain" ref="chartMain">
@@ -743,6 +745,11 @@ export default {
 		cancelActivity() {
 			this.activityModalOpen = false
 			this.activityChoice = null
+		},
+		launchActivityFromRemote(activity) {
+			console.log(activity)
+			this.setActivityChoice(activity)
+			this.activityModalOpen = true
 		}
 	},
 	mounted() {

@@ -138,7 +138,7 @@ export default {
 	width: 200px;
 	height: 200px;
 	margin: 5px auto 25px auto;
-	padding: 5px;
+	padding: 10px;
 	border-radius: 5px;
 	vertical-align: middle;
 }
@@ -148,7 +148,7 @@ export default {
 	width: 200px;
 	height: 200px;
 	margin: 5px auto 25px auto;
-	padding: 5px;
+	padding: 10px;
 	border-radius: 5px;
 	display: grid;
 	align-items: center;

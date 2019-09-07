@@ -18,7 +18,7 @@
 					<qriously 
 						v-if="showQR"
 						id="qr"
-						:value="`https://remote.seatsmart.tech/?room=${roomID}`" 
+						:value="`https://remote.seatsmart.tech/`" 
 						:size="100" 
 					/>
 					<div id="qrGhost" v-else>
@@ -119,6 +119,7 @@ export default {
 	background: var(--white);
 	width: 100px;
 	height: 100px;
+	padding: 5px;
 	margin: 15px auto 5px auto;
 	border-radius: 5px;
 	vertical-align: middle;
@@ -153,6 +154,7 @@ export default {
 	height: 100px;
 	margin: 15px auto 5px auto;
 	border-radius: 5px;
+	padding: 5px;
 	display: grid;
 	align-items: center;
 	color: var(--black);
