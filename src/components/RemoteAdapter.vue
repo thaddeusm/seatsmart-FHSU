@@ -49,6 +49,9 @@ export default {
 		},
 		randomStudent(newValue, oldValue) {
 			this.sendData()
+		},
+		activityInProgress(newValue, oldValue) {
+			this.sendData()
 		}
 	},
 	sockets: {

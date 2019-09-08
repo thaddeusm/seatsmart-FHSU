@@ -25,7 +25,7 @@
 				:students="students"
 				:absentStudents="absentStudents"
 				:randomStudent="randomStudent"
-				:activityInProgress="activityChoice"
+				:activityInProgress="activityInProgressData"
 			/>
 		</header>
 		<main id="chartMain" ref="chartMain">
@@ -246,6 +246,9 @@
                     	:remoteConnected="remoteConnected"
                     	v-on:cancel-activity="cancelActivity"
                     	v-on:trigger-modal-close="cancelActivity"
+                    	v-on:update-connected-users="updateStudentsConnectedToActivity"
+                    	v-on:update-activity-responses="updateActivityResponses"
+                    	v-on:update-activity-status="updateActivityStatus"
                     />
                 </template>
             </Modal>
@@ -400,7 +403,10 @@ export default {
 			remotePanelOpen: false,
 			remoteActionLog: [],
 			activityModalOpen: false,
-			activityChoice: null
+			activityChoice: null,
+			studentsConnectedToActivity: [],
+			activityResponses: [],
+			activityStatus: null
 		}
 	},
 	computed: {
@@ -419,6 +425,20 @@ export default {
 					id: student._id
 				}
 			})
+		},
+		activityInProgressData() {
+			if (this.activityChoice !== null) {
+				let data = {
+					...this.activityChoice,
+					connectedUsers: this.studentsConnectedToActivity,
+					responses: this.activityResponses,
+					status: this.activityStatus
+				}
+
+				return data
+			} else {
+				return null
+			}
 		}
 	},
 	methods: {
@@ -745,11 +765,23 @@ export default {
 		cancelActivity() {
 			this.activityModalOpen = false
 			this.activityChoice = null
+			this.studentsConnectedToActivity = []
+			this.activityResults = []
+			this.activityStatus = null
 		},
 		launchActivityFromRemote(activity) {
 			console.log(activity)
 			this.setActivityChoice(activity)
 			this.activityModalOpen = true
+		},
+		updateStudentsConnectedToActivity(mostRecentlyConnectedStudent) {
+			this.studentsConnectedToActivity.push(mostRecentlyConnectedStudent)
+		},
+		updateActivityResponses(responses) {
+			this.activityResponses = responses
+		},
+		updateActivityStatus(status) {
+			this.activityStatus = status
 		}
 	},
 	mounted() {

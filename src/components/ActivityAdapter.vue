@@ -338,6 +338,17 @@ export default {
 			}
 		}
 	},
+	watch: {
+		mostRecentlyConnectedStudent(newValue, oldValue) {
+			this.$emit('update-connected-users', newValue)
+		},
+		responses(newValue, oldValue) {
+			this.$emit('update-activity-responses', newValue)
+		},
+		activityStage(newValue, oldValue) {
+			this.$emit('update-activity-status', newValue)
+		}
+	},
 	methods: {
 		launchActivity() {
 			if (this.launchChoice.id == 'anonymously') {
