@@ -517,6 +517,8 @@ export default {
 			let decrypted = this.decrypt(encryptedData)
 			console.log('Received response: ', decrypted)
 			
+			this.$socket.emit('confirmResponseReceipt', this.encrypt(decrypted.id))
+			console.log('Confirm response receipt', decrypted)
 			this.addResponse(decrypted)
 		},
 		disconnect() {
