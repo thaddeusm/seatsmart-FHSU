@@ -153,7 +153,7 @@
 				Remote
 			</h4>
 			<p>
-				When viewing a class chart, you may have noticed the <img class="embedded-icon" src="@/assets/remote.svg" alt="remote icon"> icon at the upper-right corner of the screen.  Clicking this icon (if you are connected to the Internet) will reveal a QR code that you can scan with your mobile device.  You should scan this code with a QR reader application or your device's default camera app (not WeChat).  This will set up a secure connection to allow you control basic features of Seatsmart remotely.
+				When viewing a class chart, you may have noticed the <img class="embedded-icon" src="@/assets/remote.svg" alt="remote icon"> icon at the upper-right corner of the screen.  Clicking this icon (if you are connected to the Internet) will reveal a QR code that you can scan with your mobile device.  This will set up a secure connection to allow you control basic features of Seatsmart remotely.
 			</p>
 			<p><i>Why would you use this?</i></p>
 			<p>
@@ -177,7 +177,7 @@
 				You can find the Activities icon (<img class="embedded-icon-plain" src="@/assets/activities-circle.svg" alt="activities icon">) at the upper-left corner of the screen both when you first open Seatsmart and when you are viewing a class chart.  When clicking this icon from the starting screen, you can create new realtime activities for your classes in advance and manage existing ones.  From a class chart, this icon acts as a launch window to help you initiate the activity during class.
 			</p>
 			<p>
-				Launching an activity allows students to securely connect their devices with your computer via a QR code for a short but engaging event (such as a survey).  They should scan this code with a QR reader application or their device's default camera app (not WeChat).  After you end the activity session, you will be prompted to choose whether or not to immediately add participation records for all active participants.
+				Launching an activity allows students to securely connect their devices with your computer via a QR code for a short but engaging event (such as a survey).  After you end the activity session, you will be prompted to choose whether or not to immediately add participation records for all active participants.
 			</p>
 			<div class="personal-note">
 				<img class="profile-image" src="@/assets/thaddeus.png" alt="sketched image of Thaddeus">
@@ -305,10 +305,10 @@
 				Remote
 			</h4>
 			<p>
-				Seatsmart Remote is an optional feature that allows you to take advantage of basic functions without being tied to a computer.  Actions currently supported include selecting a random student and adding a new note about a student/students.  This feature requires Internet access on both the computer and the mobile device (with or without a VPN).  
+				Seatsmart Remote is an optional feature that allows you to take advantage of basic functions without being tied to a computer.  Actions currently supported include selecting a random student, adding a new note about a student/students, and controlling Activities (see next section).  This feature requires Internet access on both the computer and the mobile device (with or without a VPN).  
 			</p>
 			<p>
-				Realtime communication occurs over a secure server with data encrypted in transport (the server cannot decode the information).  The server does not store this information anywhere.  <strong>The QR code (or optional 4-digit numeric code) should be kept hidden from students</strong>.  You should scan the code with a QR reader application or your device's default camera app (not WeChat).  You can begin and end a remote connection by clicking <img class="embedded-icon" src="@/assets/remote.svg" alt="remote icon"> at the top right corner of the chart.  This icon will turn yellow when the connection is active and red when it is attempting to restore a connection.
+				Realtime communication occurs over a secure server with data encrypted in transport (the server cannot decode the information).  The server does not store this information anywhere.  <strong>The QR code (or optional 4-digit numeric code) should be kept hidden from students</strong>.  You can begin and end a remote connection by clicking <img class="embedded-icon" src="@/assets/remote.svg" alt="remote icon"> at the top right corner of the chart.  This icon will turn yellow when the connection is active and red when it is attempting to restore a connection.
 			</p>
 			<p>
 				The remote connection is automatically broken when you leave the chart.  This helps to shorten the remote session, which decreases the likelihood of any security or device performance issues.
@@ -322,7 +322,7 @@
 				Like Remote, Seatsmart Activites is an optional feature that requires access to the Internet.  Further, it also requires that students have access to Internet-connected devices (smartphones).  The goal of Activities is to engage students while providing you simple, in-class assessment tools.  
 			</p>
 			<p>
-				The activities you launch through Seatsmart should not make students feel like they are taking a quiz.  Ideally, the process will be somewhat gamified and encourage willing participation.  Since students will be using their own devices to connect, it is important to communicate the short duration and specific purpose of your activities.  Be sure to state beforehand whether or not you would expect students to switch to other applications during or after your activity.  Also, you should remind students to scan the code with a QR reader application or their device's default camera app (not WeChat).
+				The activities you launch through Seatsmart should not make students feel like they are taking a quiz.  Ideally, the process will be somewhat gamified and encourage willing participation.  Since students will be using their own devices to connect, it is important to communicate the short duration and specific purpose of your activities.  Be sure to state beforehand whether or not you would expect students to switch to other applications during or after your activity.
 			</p>
 			<p>
 				This feature will be under active development throughout the 2019-2020 academic year.  Bug reports, feature suggestions, and other comments about Activities are appreciated (see the <button class="inner-link" @click="$emit('change-content', 'about')">About</button> section for contact links).

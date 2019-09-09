@@ -21,6 +21,8 @@
 				v-on:clear-random="clearRandom"
 				v-on:end-config="remoteConfigured = true"
 				v-on:launch-activity="launchActivityFromRemote"
+				v-on:start-activity="startActivityFromRemote"
+				v-on:cancel-activity="cancelActivityFromRemote"
 				:classInfo="classInfo"
 				:students="students"
 				:absentStudents="absentStudents"
@@ -244,6 +246,7 @@
                     	:activity="activityChoice"
                     	:students="presentStudents"
                     	:remoteConnected="remoteConnected"
+                    	:remoteStartActivity="remoteStartActivity"
                     	v-on:cancel-activity="cancelActivity"
                     	v-on:trigger-modal-close="cancelActivity"
                     	v-on:update-connected-users="updateStudentsConnectedToActivity"
@@ -406,7 +409,8 @@ export default {
 			activityChoice: null,
 			studentsConnectedToActivity: [],
 			activityResponses: [],
-			activityStatus: null
+			activityStatus: null,
+			remoteStartActivity: false
 		}
 	},
 	computed: {
@@ -768,9 +772,9 @@ export default {
 			this.studentsConnectedToActivity = []
 			this.activityResults = []
 			this.activityStatus = null
+			this.remoteStartActivity = false
 		},
 		launchActivityFromRemote(activity) {
-			console.log(activity)
 			this.setActivityChoice(activity)
 			this.activityModalOpen = true
 		},
@@ -782,6 +786,12 @@ export default {
 		},
 		updateActivityStatus(status) {
 			this.activityStatus = status
+		},
+		startActivityFromRemote(activity) {
+			this.remoteStartActivity = true
+		},
+		cancelActivityFromRemote(activity) {
+			this.cancelActivity()
 		}
 	},
 	mounted() {

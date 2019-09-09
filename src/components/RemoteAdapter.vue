@@ -229,6 +229,18 @@ export default {
 	        			// send confirmation to remote client
 	        			this.initConfirm(request.id)
 	        			break
+	        		case 'cancel activity':
+	        			// emit cancel action to parent component
+	        			this.$emit('cancel-activity', request.action.data.activity)
+	        			// send confirmation to remote client
+	        			this.initConfirm(request.id)
+	        			break
+	        		case 'start activity':
+	        			// emit cancel action to parent component
+	        			this.$emit('start-activity', request.action.data.activity)
+	        			// send confirmation to remote client
+	        			this.initConfirm(request.id)
+	        			break
 	        	}
         	}
         }

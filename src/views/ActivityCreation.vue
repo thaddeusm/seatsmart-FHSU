@@ -3,16 +3,21 @@
 		<header>
 			<h1 ref="pageHeader" v-if="id == undefined">New {{ capitalizeString(activityChoice) }} Activity</h1>
 			<h1 ref="pageHeader" v-else>Edit {{ capitalizeString(activityChoice) }} Activity</h1>
+			<button class="modal-button" @click="infoModalOpen = true">more information</button>
 		</header>
 		<section id="activityChoice">
-			<button class="activity-button" @click="chooseActivity('survey')" :class="[activityChoice == 'survey' ? 'selected' : '']" :disabled="progress !== 1">
-				<img src="@/assets/survey-illustration.svg" alt="survey illustration">
-				<h5>survey</h5>
-			</button>
-			<button class="activity-button" @click="chooseActivity('response pool')" :class="[activityChoice == 'response pool' ? 'selected' : '']" :disabled="progress !== 1">
-				<img src="@/assets/response-pool-illustration.svg" alt="response pool illustration">
-				<h5>response pool</h5>
-			</button>
+			<div class="activity-choice-container">
+				<button class="activity-button" @click="chooseActivity('survey')" :class="[activityChoice == 'survey' ? 'selected' : '']" :disabled="progress !== 1">
+					<img src="@/assets/survey-illustration.svg" alt="survey illustration">
+					<h5>survey</h5>
+				</button>
+			</div>
+			<div class="activity-choice-container">
+				<button class="activity-button" @click="chooseActivity('response pool')" :class="[activityChoice == 'response pool' ? 'selected' : '']" :disabled="progress !== 1">
+					<img src="@/assets/response-pool-illustration.svg" alt="response pool illustration">
+					<h5>response pool</h5>
+				</button>
+			</div>
 		</section>
 		<section id="border"></section>
 		<section id="activityForm">
@@ -172,6 +177,26 @@
 		<section id="progressNodes">
 			<ProgressNodes :steps="steps" :progress="progress" />
 		</section>
+		<transition name="fade">
+            <Modal v-if="infoModalOpen" v-on:trigger-close="infoModalOpen = false" :dismissable="true" size="small">
+                <template slot="content">
+                    <div class="activity-info">
+                    	<h2>
+                    		{{ activityChoice }}s
+                    	</h2>
+                    	<p>
+                    		The activities you launch through Seatsmart should not make students feel like they are taking a quiz.  Ideally, the process will be somewhat gamified and encourage willing participation.  Since students will be using their own devices to connect, it is important to communicate the short duration and specific purpose of your activities.
+                    	</p>
+                    	<p v-if="activityChoice == 'survey'">
+                    		Surveys are ideal when you would like to receive honest feedback as responses are tabulated without identifying the individual choices of your students.  You can provide up to nine choices, which will be displayed on the students' devices in the same order in which you list them in the form below.
+                    	</p>
+                    	<p v-else>
+                    		Response pools offer an open-ended format for feedback, which can even be configured to allow students to submit multiple responses.  Responses will be displayed anonymously as they are received by your computer.  Two moderation options will be presented to you during the activity: hiding or deleting responses.
+                    	</p>
+                    </div>
+                </template>
+            </Modal>
+        </transition>
 		<TouchBar 
 			:show="true" 
             :escapeItem="{type: 'button', label: 'back', method: function() {routeBack()}}"
@@ -184,6 +209,7 @@ import sjcl from 'sjcl'
 import db from '@/db.js'
 import moment from 'moment'
 
+import Modal from '@/components/Modal.vue'
 import ProgressNodes from '@/components/ProgressNodes.vue'
 import TouchBar from '@/components/TouchBar.vue'
 
@@ -191,7 +217,8 @@ export default {
 	name: 'ActivityCreation',
 	components: {
 		ProgressNodes,
-		TouchBar
+		TouchBar,
+		Modal
 	},
 	props: ['id'],
 	data() {
@@ -223,7 +250,8 @@ export default {
 				allowMultipleResponses: true
 			},
 			dateCreated: {},
-			previewRoomID: ''
+			previewRoomID: '',
+			infoModalOpen: false
 		}
 	},
 	computed: {
@@ -530,6 +558,10 @@ button {
 	text-align: center;
 }
 
+.activity-choice-container {
+	display: inline-block;
+}
+
 .activity-button {
 	padding: 5px 15px;
 	border-radius: 5px;
@@ -544,6 +576,31 @@ button {
 .activity-button > img {
 	width: 220px;
 	margin-bottom: 5px;
+}
+
+.modal-button {
+	background: none;
+	outline: none;
+	color: var(--red);
+	border: none;
+	cursor: pointer;
+	vertical-align: text-top;
+	font-size: 14px;
+}
+
+.activity-info {
+	
+}
+
+.activity-info > h2 {
+	background: var(--gray);
+	color: var(--white);
+	padding: 20px 0;
+	text-align: center;
+}
+
+.activity-info > p {
+	padding: 15px 30px;
 }
 
 #activityForm {
@@ -805,5 +862,13 @@ button:disabled {
 @keyframes spin {
     from {transform: rotate(0);}
     to {transform: rotate(360deg);}
+}
+
+.fade-enter-active, .fade-leave-active {
+    transition: opacity .2s;
+}
+
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
 }
 </style>

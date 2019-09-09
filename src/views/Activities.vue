@@ -170,8 +170,11 @@ header {
         ". back . . ."
         "icon icon icon icon icon";
 	height: 250px;
+    width: 100%;
 	align-items: center;
     justify-content: center;
+    position: fixed;
+    top: 0;
 }
 
 #backArea {
@@ -198,7 +201,7 @@ header {
 main {
     text-align: center;
     width: 100%;
-    margin-top: 94px;
+    margin-top: 300px;
     margin-bottom: 100px;
 }
 
@@ -287,6 +290,7 @@ button {
 .fade-enter-active, .fade-leave-active {
     transition: opacity .2s;
 }
+
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
     opacity: 0;
 }

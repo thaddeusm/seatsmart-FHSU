@@ -83,6 +83,9 @@
 						<div v-if="activity.activityType == 'response pool'">
 							<ul v-if="responses.length > 0">
 								<li v-for="(response, index) in responses" v-if="hiddenResponses.indexOf(index) === -1">
+									<button class="delete-response-button" @click="deleteResponse(index)">
+										<img src="@/assets/delete.svg" alt="delete icon">
+									</button>
 									<h4>{{ response.response }}</h4>
 									<button class="hide-button" @click="hideResponse(index)">
 										<img src="@/assets/hide.svg" alt="hide icon">
@@ -119,6 +122,9 @@
 						<div v-if="activity.activityType == 'response pool'">
 							<ul v-if="responses.length > 0">
 								<li v-for="(response, index) in responses" v-if="hiddenResponses.indexOf(index) === -1" :key="`response${index}`">
+									<button class="delete-response-button" @click="deleteResponse(index)">
+										<img src="@/assets/delete.svg" alt="delete icon">
+									</button>
 									<h4>{{ response.response }}</h4>
 									<button class="hide-button" @click="hideResponse(index)">
 										<img src="@/assets/hide.svg" alt="hide icon">
@@ -191,7 +197,8 @@ export default {
 		allowAnonymous: Boolean,
 		chart: String,
 		students: Array,
-		remoteConnected: Boolean
+		remoteConnected: Boolean,
+		remoteStartActivity: Boolean
 	},
 	components: {
 		NoteForm,
@@ -347,6 +354,11 @@ export default {
 		},
 		activityStage(newValue, oldValue) {
 			this.$emit('update-activity-status', newValue)
+		},
+		remoteStartActivity(newValue, oldValue) {
+			if (newValue == true) {
+				this.startActivity()
+			}
 		}
 	},
 	methods: {
@@ -437,6 +449,9 @@ export default {
         },
         hideResponse(index) {
         	this.hiddenResponses.push(index)
+        },
+        deleteResponse(index) {
+        	this.responses.splice(index, 1)
         }
 	},
 	sockets: {
@@ -528,6 +543,10 @@ export default {
 		rejoinedActivityRoom() {
 			console.log('rejoined room')
 			this.connected = true
+
+			if (this.activityStage == 'started') {
+				this.startActivity()
+			}
 		},
 		deviceDisconnection(disconnectedSocketID) {
 			let target = this.connectedUsers.indexOf(disconnectedSocketID)
@@ -663,7 +682,7 @@ ul {
 
 li {
 	display: grid;
-	grid-template-columns: 1fr 10%;
+	grid-template-columns: 10% 1fr 10%;
 	background: var(--gray);
 	padding: 10px;
 	margin: 15px 0;
@@ -714,8 +733,23 @@ li {
 
 .hide-button > img {
 	height: 20px;
-	margin-left: ;
 	vertical-align: middle;
+}
+
+.delete-response-button {
+	background: none;
+	cursor: pointer;
+	outline: none;
+	border: none;
+	display: block;
+}
+
+.delete-response-button > img {
+	height: 14px;
+	padding: 3px;
+	vertical-align: middle;
+	background: var(--white);
+	border-radius: 2px;
 }
 
 .survey {
@@ -758,10 +792,10 @@ li {
 }
 
 #waitingForResponses {
-	height: 230px;
-    width: 230px;
+	height: 240px;
+    width: 240px;
     margin: 20px auto;
-    border-radius: 250px;
+    border-radius: 240px;
     border-top: 5px solid var(--light-gray);
     border-right: 5px solid var(--yellow);
     border-bottom: 5px solid var(--yellow);
