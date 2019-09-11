@@ -566,6 +566,9 @@ export default {
 			let fullName = this.decrypt(encryptedFullName)
 			console.log(fullName)
 			this.mostRecentlyConnectedStudent = `${fullName.firstName} ${fullName.lastName}`
+		},
+		rejoinedRoom() {
+			console.log('a device rejoined')
 		}
 	},
 	mounted() {
