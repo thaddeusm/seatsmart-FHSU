@@ -45,9 +45,9 @@
             </ActionBar>
         </footer>
         <transition name="fade">
-            <Modal v-if="modalOpen" v-on:trigger-close="modalOpen = false" :dismissable="false" size="large">
+            <Modal v-if="modalOpen" v-on:trigger-close="closeModal" :dismissable="false" size="large">
                 <template slot="content">
-                    <Settings v-on:trigger-modal-close="modalOpen = false"/>
+                    <Settings v-on:trigger-modal-close="closeModal"/>
                 </template>
             </Modal>
         </transition>
@@ -132,6 +132,9 @@ export default {
     methods: {
         openModal() {
             this.modalOpen = true
+        },
+        closeModal() {
+            this.modalOpen = false
         },
         editClass(id) {
             this.$store.dispatch('setLastView', '/')

@@ -14,6 +14,13 @@ export default {
 	props: {
 		dismissable: Boolean, 
 		size: String
+	},
+	mounted() {
+		document.body.scrollTop = document.documentElement.scrollTop = 0
+		document.body.style.overflow = 'hidden'
+	},
+	beforeDestroy() {
+		document.body.style.overflow = 'auto'
 	}
 }
 </script>

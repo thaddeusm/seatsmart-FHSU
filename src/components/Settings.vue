@@ -42,13 +42,13 @@
 									<v-select v-model="behavior.Abbreviation" :options="[
 										'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
 										'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
-									]" @keyup="alertMessage = ''"></v-select>
+									]"></v-select>
 								</section>
 								<input type="text" name="description" v-model="behavior.Description">
 								<section class="inline select-wrapper">
 									<v-select v-model="behavior.Weight" :options="[
 										'low', 'medium', 'strong'
-									]" @keyup="alertMessage = ''"></v-select>
+									]"></v-select>
 								</section>
 								<button class="delete-button black-text" @click="removeFormGroup('positive', index)">-</button>
 							</div>
@@ -69,13 +69,13 @@
 									<v-select v-model="behavior.Abbreviation" :options="[
 										'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
 										'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
-									]" @keyup="alertMessage = ''"></v-select>
+									]"></v-select>
 								</section>
 								<input type="text" name="description" v-model="behavior.Description">
 								<section class="inline select-wrapper">
 									<v-select v-model="behavior.Weight" :options="[
 										'low', 'medium', 'strong'
-									]" @keyup="alertMessage = ''"></v-select>
+									]"></v-select>
 								</section>
 								<button v-if="index !== 0" class="delete-button white-text" @click="removeFormGroup('negative', index)">-</button>
 							</div>
@@ -301,6 +301,8 @@ export default {
 			}
 		},
 		errorExists(form) {
+			this.alertMessage = ''
+
 			let formToCheck = this.selectForm(form)
 
 			let error = false
@@ -333,7 +335,7 @@ export default {
 			}
 
 			// in case current view is elsewhere, place back on behaviors if error for easy correction
-			if (error) {
+			if (error == true) {
 				this.changeContent('behaviors')
 			}
 

@@ -301,15 +301,11 @@ export default {
     },
     methods: {
         openModal(type) {
-            document.body.scrollTop = document.documentElement.scrollTop = 0;
-
             if (type == 'note') {
                 this.modalOpen = true
             } else {
                 this.alertModalOpen = true
             }
-
-            document.body.style.overflow = 'hidden'
         },
         closeModal(type) {
             if (type == 'note') {
@@ -318,8 +314,6 @@ export default {
             } else {
                 this.alertModalOpen = false
             }
-
-            document.body.style.overflow = 'auto'
 
             let scope = this
             setTimeout(function() {

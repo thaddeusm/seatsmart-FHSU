@@ -30,12 +30,12 @@
 			</section>
 		</main>
 		<transition name="fade">
-            <Modal v-if="modalOpen" v-on:trigger-close="modalOpen = false" :dismissable="false" size="large">
+            <Modal v-if="modalOpen" v-on:trigger-close="closeModal" :dismissable="false" size="large">
                 <template slot="content">
                     <ActivityAdapter 
                     	:activity="launchedActivity"
                     	:allowAnonymous="true"
-                    	v-on:trigger-modal-close="modalOpen = false"
+                    	v-on:trigger-modal-close="closeModal"
                     />
                 </template>
             </Modal>
@@ -105,6 +105,12 @@ export default {
 		}
 	},
 	methods: {
+        openModal() {
+            this.modalOpen = true
+        },
+        closeModal() {
+            this.modalOpen = false
+        },
         routeBack() {
             let lastView = this.$store.state.lastView
 
@@ -144,7 +150,7 @@ export default {
         },
         launchActivity(index) {
         	this.launchedActivity = this.activities[index]
-        	this.modalOpen = true
+        	this.openModal()
         }
 	},
 	mounted() {
