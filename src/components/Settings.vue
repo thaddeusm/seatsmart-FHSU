@@ -32,23 +32,42 @@
 				<Tabs :sections="[{label: 'Positive', color: 'yellow'}, {label: 'Negative', color: 'red'}]">
 					<template slot="Positive">
 						<div class="label-row black-border">
-							<span>Abbreviation</span>
-							<span>Description</span>
-							<span>Weight</span>
+							<span class="behavior-label">Abbreviation</span>
+							<span class="behavior-label">Description</span>
+							<span class="behavior-label">Weight</span>
 						</div>
 						<div ref="formArea">
 							<div class="form-group" v-for="(behavior, index) in positiveBehaviors" :key="index">
-								<section class="inline select-wrapper">
-									<v-select v-model="behavior.Abbreviation" :options="[
-										'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-										'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
-									]"></v-select>
+								<section class="inline">
+									<select 
+										name="posAbbreviation"
+										v-model="behavior.Abbreviation"
+										class="narrow-select"
+									>
+										<option 
+											v-for="(abbreviationOption, index) in abbreviationOptions" 
+											:value="abbreviationOption"
+											:key="`posAbbreviation${index}`"
+										>
+											{{ abbreviationOption }}	
+										</option>		
+									</select>
 								</section>
-								<input type="text" name="description" v-model="behavior.Description">
-								<section class="inline select-wrapper">
-									<v-select v-model="behavior.Weight" :options="[
-										'low', 'medium', 'strong'
-									]"></v-select>
+								<input class="large-input" type="text" name="description" v-model="behavior.Description">
+								<section class="inline">
+									<select 
+										name="posWeight"
+										v-model="behavior.Weight"
+										class="wide-select"
+									>
+										<option 
+											v-for="(weightOption, index) in weightOptions" 
+											:value="weightOption"
+											:key="`posWeight${index}`"
+										>
+											{{ weightOption }}	
+										</option>		
+									</select>
 								</section>
 								<button class="delete-button black-text" @click="removeFormGroup('positive', index)">-</button>
 							</div>
@@ -59,23 +78,42 @@
 					</template>
 					<template slot="Negative">
 						<div class="label-row white-border">
-							<span>Abbreviation</span>
-							<span>Description</span>
-							<span>Weight</span>
+							<span class="behavior-label">Abbreviation</span>
+							<span class="behavior-label">Description</span>
+							<span class="behavior-label">Weight</span>
 						</div>
 						<div ref="formArea">
 							<div class="form-group" v-for="(behavior, index) in negativeBehaviors" :key="index">
-								<section class="inline select-wrapper">
-									<v-select v-model="behavior.Abbreviation" :options="[
-										'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-										'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
-									]"></v-select>
+								<section class="inline">
+									<select 
+										name="negAbbreviation"
+										v-model="behavior.Abbreviation"
+										class="narrow-select"
+									>
+										<option 
+											v-for="(abbreviationOption, index) in abbreviationOptions" 
+											:value="abbreviationOption"
+											:key="`negAbbreviation${index}`"
+										>
+											{{ abbreviationOption }}	
+										</option>		
+									</select>
 								</section>
-								<input type="text" name="description" v-model="behavior.Description">
-								<section class="inline select-wrapper">
-									<v-select v-model="behavior.Weight" :options="[
-										'low', 'medium', 'strong'
-									]"></v-select>
+								<input class="large-input" type="text" name="description" v-model="behavior.Description">
+								<section class="inline">
+									<select 
+										name="negWeight"
+										v-model="behavior.Weight"
+										class="wide-select"
+									>
+										<option 
+											v-for="(weightOption, index) in weightOptions" 
+											:value="weightOption"
+											:key="`negWeight${index}`"
+										>
+											{{ weightOption }}	
+										</option>		
+									</select>
 								</section>
 								<button v-if="index !== 0" class="delete-button white-text" @click="removeFormGroup('negative', index)">-</button>
 							</div>
@@ -124,7 +162,7 @@
 					assumes that a student is participating well if no notes are recorded pertaining to
 					them in a given week.
 				</p>
-				<h4 id="pointValueHeading">Point Values</h4>
+				<h4 class="subheading">Point Values</h4>
 				<p>
 					Seatsmart helps you adjust grades regularly by preparing calculations for the current calculation interval (which can be customized in the settings for <button class="inner-link" @click="changeContent('cards')">Name Cards</button>).  For example, behaviors with a low weight add (or remove) 2 points from the student's trend score by default.
 				</p>
@@ -133,15 +171,24 @@
 				</p>
 				<br>
 				<div class="label-row black-border">
-					<span>Low</span>
-					<span>Medium</span>
-					<span>Strong</span>
+					<span class="calculation-label">Low</span>
+					<span class="calculation-label">Medium</span>
+					<span class="calculation-label">Strong</span>
 				</div>
 				<div class="form-group">
-					<input type="number" name="low" v-model="weightValues.low">
-					<input type="number" name="medium" v-model="weightValues.medium">
-					<input type="number" name="strong" v-model="weightValues.strong">
+					<input class="small-input" type="number" name="low" v-model="weightValues.low">
+					<input class="small-input" type="number" name="medium" v-model="weightValues.medium">
+					<input class="small-input" type="number" name="strong" v-model="weightValues.strong">
 				</div>
+				<h4 class="subheading">Calculation Interval</h4>
+				<p>
+					By default, a Seatsmart chart includes the option to view participation trends for the current week.  This is meant to help you quickly adjust participation points on Blackboard to provide students regular feedback.  You can customize the interval being calculated by choosing either "bi-weekly" or "monthly" calculations as an alternative below.
+				</p>
+				<select name="interval" v-model="calculationInterval" class="block-select">
+					<option value="weekly">weekly</option>
+					<option value="bi-weekly">bi-weekly</option>
+					<option value="monthly">monthly</option>
+				</select>
 			</section>
 			<section v-if="content == 'cards'">
 				<h1>Name Cards</h1>
@@ -152,19 +199,15 @@
 						This allows you to track student progress in an area you consider vital to your course.
 						By default, Seatsmart displays absences.  You can choose an alternative behavior below:
 					</p>
-					<section class="select-wrapper-large">
-						<v-select v-model="behaviorToTally" :options="allBehaviors"></v-select>
-					</section>
-					<h4>Calculation Interval</h4>
-					<p>
-						By default, a Seatsmart chart includes the option to view participation trends for the current week.  This is meant to help you quickly adjust participation points on Blackboard to provide students regular feedback.  You can customize the interval being calculated by choosing either "bi-weekly" or "monthly" calculations as an alternative below.
-					</p>
-					<section class="select-wrapper-large">
-						<v-select
-						  :options="['weekly', 'bi-weekly', 'monthly']"
-						  v-model="calculationInterval"
-						></v-select>
-					</section>
+					<select name="tally" v-model="behaviorToTally" class="block-select">
+						<option 
+							v-for="(behavior, index) in allBehaviors" 
+							:value="behavior"
+							:key="`behavior${index}tally`"
+						>
+							{{ behavior }}
+						</option>
+					</select>
 				</div>
 			</section>
 			<section v-if="content == 'about'">
@@ -254,7 +297,14 @@ export default {
 				low: null,
 				medium: null,
 				strong: null
-			}
+			},
+			abbreviationOptions: [
+				'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+				'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+			],
+			weightOptions: [
+				'low', 'medium', 'strong'
+			]
 		}
 	},
 	computed: {
@@ -506,22 +556,17 @@ h3 {
 }
 
 /* Form styles */
-.select-wrapper {
-	background: var(--white);
-	border-radius: 4px;
-	margin: 10px 10px;
-	width: 160px;
-	color: var(--black);
-	font-family: "ArchivoNarrow";
+.block-select {
+	width: 100%;
+	margin: 10px 0 40px 0;
 }
 
-.select-wrapper-large {
-	background: var(--white);
-	border-radius: 4px;
-	margin: 10px auto 20px auto;
-	width: 300px;
-	color: var(--black);
-	font-family: "ArchivoNarrow";
+.narrow-select {
+	width: 70px;
+}
+
+.wide-select {
+	width: 120px;
 }
 
 .inline {
@@ -533,14 +578,20 @@ input {
 	font-size: 15px;
 	padding: 7px 10px 9px 10px;
 	margin: 10px 10px;
-	width: 140px;
 	color: var(--black);
 	border: 1px solid var(--light-gray);
 	outline: none;
 }
 
+.large-input {
+	width: 300px;
+}
+
+.small-input {
+	width: 169px;
+}
+
 .label-row {
-	padding-left: 5px;
 	padding-bottom: 5px;
 }
 
@@ -554,8 +605,20 @@ input {
 
 .label-row > span {
 	display: inline-block;
-	width: 160px;
 	margin: 0 10px;
+}
+
+.behavior-label:first-child {
+	width: 195px;
+}
+
+.behavior-label:nth-child(2) {
+	width: 235px;
+}
+
+.calculation-label {
+	width: 30%;
+	text-align: center;
 }
 
 .delete-button {
@@ -589,7 +652,7 @@ input {
 	height: 20px;
 }
 
-#pointValueHeading {
+.subheading {
 	margin-top: 60px;
 }
 

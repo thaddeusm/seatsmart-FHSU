@@ -13,10 +13,6 @@ import SequentialEntrance from 'vue-sequential-entrance'
 import 'vue-sequential-entrance/vue-sequential-entrance.css'
 Vue.use(SequentialEntrance)
 
-import vSelect from 'vue-select'
-import 'vue-select/dist/vue-select.css'
-Vue.component('v-select', vSelect)
-
 import Donut from 'vue-css-donut-chart'
 import 'vue-css-donut-chart/dist/vcdonut.css'
 

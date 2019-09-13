@@ -23,19 +23,27 @@
 						<div class="label-row">
 							<h5 class="select-label">How many chairs will you use in each row?</h5>
 						</div>
-						<div class="select-wrapper">
-							<v-select v-model="classChart.columns" :options="[
-								1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
-							]"></v-select>
-						</div>
+						<select name="columns" v-model="classChart.columns">
+							<option 
+								v-for="(columnOption, index) in columnOptions"
+								:key="`columnOption${index}`"
+								:value="columnOption"
+							>
+								{{ columnOption }}
+							</option>
+						</select>
 						<div class="label-row">
 							<h5 class="select-label">How many rows will you use?</h5>
 						</div>
-						<div class="select-wrapper">
-							<v-select v-model="classChart.rows" :options="[
-								1, 2, 3, 4, 5, 6, 7, 8, 9
-							]"></v-select>
-						</div>
+						<select name="rows" v-model="classChart.rows">
+							<option 
+								v-for="(rowOption, index) in rowOptions"
+								:key="`rowOption${index}`"
+								:value="rowOption"
+							>
+								{{ rowOption }}
+							</option>
+						</select>
 					</div>
 				</div>
 				<section class="progress-button-area">
@@ -54,17 +62,23 @@
 						<div class="label-row">
 							<h5 class="select-label">Semester</h5>
 						</div>
-						<div class="select-wrapper">
-							<v-select v-model="classChart.semester" :options="[
-							'Fall', 'Spring', 'Summer'
-							]"></v-select>
-						</div>
+						<select name="semester" v-model="classChart.semester">
+							<option value="Fall">Fall</option>
+							<option value="Spring">Spring</option>
+							<option value="Summer">Summer</option>
+						</select>
 						<div class="label-row">
 							<h5 class="select-label">Year</h5>
 						</div>
-						<div class="select-wrapper">
-							<v-select v-model="classChart.year" :options="years"></v-select>
-						</div>
+						<select name="year" v-model="classChart.year">
+							<option 
+								v-for="(year, index) in years"
+								:key="`year${index}`"
+								:value="year"
+							>
+								{{ year }}
+							</option>
+						</select>
 					</div>
 				</div>
 				<section class="progress-button-area">
@@ -226,7 +240,13 @@ export default {
 			deletedStudents: [],
 			numberOfStudentsAdded: 0,
 			seatingConflict: false,
-			incompleteInformation: false
+			incompleteInformation: false,
+			columnOptions: [
+				1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
+			],
+			rowOptions: [
+				1, 2, 3, 4, 5, 6, 7, 8, 9
+			]
 		}
 	},
 	computed: {
@@ -803,15 +823,6 @@ progress-button:disabled {
 	outline: none;
 }
 
-.select-wrapper {
-	background: var(--white);
-	border-radius: 4px;
-	margin: 0 0 20px 0;
-	color: var(--black);
-	font-family: "ArchivoNarrow";
-	display: block;
-}
-
 .select-label {
 	display: inline-block;
 	margin: 0;
@@ -996,6 +1007,11 @@ progress-button:disabled {
 
 .back-icon {
 	width: 15px;
+}
+
+select {
+	width: 100%;
+	margin: 5px 0 20px 0;
 }
 
 .fade-enter-active, .fade-leave-active {

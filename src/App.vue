@@ -135,4 +135,27 @@ textarea {
 body {
     font-family: "ArchivoNarrow";
 }
+
+select {
+    -webkit-appearance: none;
+    border-radius: 4px;
+    font-size: 15px;
+    min-width: 50px;
+    padding: 8px 20px 8px 10px;
+    margin: 10px 10px;
+    color: var(--black);
+    background: var(--white);
+    border: 1px solid var(--light-gray);
+    outline: none;
+    font-family: "ArchivoNarrow";
+    background-image: url("~@/assets/select.svg");
+    background-repeat: no-repeat;
+    background-position: center right 5px;
+    background-size: 15px;
+    cursor: pointer;
+}
+
+option {
+    
+}
 </style>

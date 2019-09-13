@@ -17,12 +17,16 @@
 				<section class="activity-display">
 					<section class="button-container" v-if="allowAnonymous && activityStage == 'configuring'">
 						<h3>Launch</h3>
-						<div class="select-wrapper">
-							<v-select 
-								v-model="launchChoice" 
-								:options="launchOptions"
-							>
-							</v-select>
+						<div>
+							<select name="launch" v-model="launchChoice">
+								<option 
+									v-for="(launchOption, index) in launchOptions" 
+									:value="launchOption"
+									:key="`option${index}`"
+								>
+									{{ launchOption.label }}
+								</option>
+							</select>
 						</div>
 						<div class="actions-wrapper">
 							<button 
@@ -665,14 +669,6 @@ export default {
 	margin-top: 40px;
 }
 
-.select-wrapper {
-	background: var(--white);
-	border-radius: 4px;
-	margin: 20px auto;
-	color: var(--black);
-	font-family: "ArchivoNarrow";
-}
-
 .actions-wrapper {
 	text-align: center;
 }
@@ -807,6 +803,11 @@ li {
     animation-duration: 1s;
     animation-iteration-count: infinite;
     animation-timing-function: ease-in-out;
+}
+
+select {
+	width: 100%;
+	margin: 20px 0;
 }
 
 button:disabled {
