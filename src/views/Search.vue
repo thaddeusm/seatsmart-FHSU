@@ -36,7 +36,7 @@
             <div v-if="noResults" id="noResults">
                 <img id="searchSplash" src="@/assets/searchimage.svg" alt="search illustration">
                 <h2>No students were found.</h2>
-                <h4>Be sure to search using students' "English" names.</h4>
+                <h4>Be sure to search using students' "English" names or Tiger IDs.</h4>
                 <h4 v-if="!includeArchived">
                     Also, you can click the 
                     <img class="archive-icon" src="@/assets/archivewhite.svg" alt="enable archive icon"> icon above to include students from archived classes.
@@ -125,34 +125,16 @@ export default {
             this.placeholder = term
             this.results = []
 
+            let regex = /\d/
+
             if (this.includeArchived) {
                 this.allClasses.forEach(id => {
                     this.results[id] = []
                 })
 
                 for (let i=0; i<this.allStudents.length; i++) {
-                    if (this.allStudents[i].firstName) {
-                        let firstName = this.allStudents[i].firstName.toLowerCase()
 
-                        // reduce to simple (English) first name
-                        if (firstName.indexOf('(') !== -1) {
-                            firstName = firstName.split('(')[1].split(')')[0].split(' ')[0]
-                        } else {
-                            firstName = firstName.split(' ')[0]
-                        }
-
-                        if (firstName.includes(term)) {
-                            this.results[this.allStudents[i].class].push(this.allStudents[i]._id)
-                        }
-                    }
-                }
-            } else {
-                this.unarchivedClasses.forEach(id => {
-                    this.results[id] = []
-                })
-
-                for (let i=0; i<this.allStudents.length; i++) {
-                    if (this.unarchivedClasses.includes(this.allStudents[i].class)) {
+                    if (term.match(regex) == null) {
                         if (this.allStudents[i].firstName) {
                             let firstName = this.allStudents[i].firstName.toLowerCase()
 
@@ -165,6 +147,49 @@ export default {
 
                             if (firstName.includes(term)) {
                                 this.results[this.allStudents[i].class].push(this.allStudents[i]._id)
+                            }
+                        }
+                    } else {
+                        if (this.allStudents[i].tigerID) {
+                            let tigerID = this.allStudents[i].tigerID
+
+                            if (tigerID == term) {
+                                this.results[this.allStudents[i].class].push(this.allStudents[i]._id)
+                            }
+                        }
+                    }
+                }
+            } else {
+                this.unarchivedClasses.forEach(id => {
+                    this.results[id] = []
+                })
+
+                for (let i=0; i<this.allStudents.length; i++) {
+                    if (term.match(regex) == null) {
+                        if (this.unarchivedClasses.includes(this.allStudents[i].class)) {
+                            if (this.allStudents[i].firstName) {
+                                let firstName = this.allStudents[i].firstName.toLowerCase()
+
+                                // reduce to simple (English) first name
+                                if (firstName.indexOf('(') !== -1) {
+                                    firstName = firstName.split('(')[1].split(')')[0].split(' ')[0]
+                                } else {
+                                    firstName = firstName.split(' ')[0]
+                                }
+
+                                if (firstName.includes(term)) {
+                                    this.results[this.allStudents[i].class].push(this.allStudents[i]._id)
+                                }
+                            }
+                        }
+                    } else {
+                        if (this.unarchivedClasses.includes(this.allStudents[i].class)) {
+                            if (this.allStudents[i].tigerID) {
+                                let tigerID = this.allStudents[i].tigerID
+
+                                if (tigerID == term) {
+                                    this.results[this.allStudents[i].class].push(this.allStudents[i]._id)
+                                }
                             }
                         }
                     }

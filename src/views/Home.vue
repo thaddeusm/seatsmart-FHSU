@@ -7,7 +7,7 @@
                 </button>
             </section>
             <section id="searchArea">
-                <SearchBox v-on:start-search="search" placeholder="student name" />
+                <SearchBox v-on:start-search="search" placeholder="student name/ID" />
             </section>
             <section id="logoArea">
                 <img id="logo" src="@/assets/logo.svg" alt="seatsmart logo">
