@@ -205,7 +205,9 @@
 					<input class="small-input" type="number" name="strong" v-model="weightValues.strong">
 				</div>
 			</section>
-			<section v-if="content == 'transfer'"></section>
+			<section v-if="content == 'transfer'">
+				<Transfer />
+			</section>
 			<section v-if="content == 'about'">
 				<h1>About</h1>
 				<p>
@@ -260,13 +262,15 @@
 const shell = require('electron').shell
 
 import Tabs from '@/components/Tabs.vue'
+import Transfer from '@/components/Transfer.vue'
 import Help from '@/components/Help.vue'
 
 export default {
 	name: 'Settings',
 	components: {
 		Tabs,
-		Help
+		Help,
+		Transfer
 	},
 	data() {
 		return {

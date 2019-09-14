@@ -291,6 +291,7 @@ export default {
 	},
 	methods: {
 		chooseActivity(activity) {
+			this.alertMessage = ''
 			this.activityChoice = activity
 		},
 		routeBack() {
