@@ -11,15 +11,19 @@
 			Use the tools below to import and export your records.
 		</p>
 		<h4 class="subheading">Import</h4>
-		<drop 
-			:class="[over ? 'drop-bold-outline' : 'drop-light-outline', 'drop-area']" 
-			@drop="handleDrop" 
-			@dragover="over = true" 
-			@dragleave="over = false"
-		>
-			<button class="drop-area-button" @click="handleOpen">import data</button>
-			<span>or drag and drop here</span>
-		</drop>
+		<h5 class="message">{{ importMessage }}</h5>
+		<div v-if="!importing">
+			<drop 
+				:class="[over ? 'drop-bold-outline' : 'drop-light-outline', 'drop-area']" 
+				@drop="handleDrop" 
+				@dragover="over = true" 
+				@dragleave="over = false"
+			>
+				<button class="drop-area-button" @click="handleOpen">find chart file</button>
+				<span>or drag and drop here</span>
+			</drop>
+		</div>
+		<div class="loader" v-else></div>
 		<h4 class="subheading">Export</h4>
 		<h5 class="message">{{ exportMessage }}</h5>
 		<div v-if="!exporting" id="exportForm">
@@ -34,7 +38,7 @@
 			</select>
 			<button class="action-button bold" @click="generateTransferData" :disabled="chartToTransfer == ''">save</button>
 		</div>
-		<div id="loader" v-else></div>
+		<div class="loader" v-else></div>
 	</div>
 </template>
 
@@ -53,7 +57,8 @@ export default {
 			fileSavePath: '',
 			exporting: false,
 			exportMessage: 'Choose a class chart to export:',
-			importMessage: ''
+			importMessage: 'Find or drop in the chart:',
+			importing: false
 		}
 	},
 	computed: {
@@ -63,11 +68,13 @@ export default {
 	},
 	methods: {
 		generateTransferData() {
+			// provide UI feedback
 			this.exporting = true
 			this.exportMessage = 'Finding chart data...'
 
 			let classChartID = this.chartToTransfer
 
+			// structure for JSON data
 			let output = {
 				"chartData": this.classCharts[this.chartToTransfer],
 				"students": [],
@@ -88,6 +95,7 @@ export default {
 						"notes": []
 					}
 
+					// use array to ensure file is not written until after DB queries
 					let promises = []
 
 					for (let i=0; i<results.length; i++) {
@@ -102,11 +110,10 @@ export default {
 					}
 
 					Promise.all(promises).then(() => {
-						console.log(output)
-
 						let jsonObj = JSON.stringify(output)
 						let defaultFilename = this.classCharts[this.chartToTransfer].name
 
+						// once ready, use native save dialog
 						let options = {
 							title: "Save Exported Chart",
 							defaultPath: defaultFilename,
@@ -117,13 +124,16 @@ export default {
 							]
 				        }
 
+				        this.exportMessage = `${defaultFilename} is ready for export.`
+
 				        dialog.showSaveDialog(options, (filename) => {
 				        	this.fileSavePath = filename
 
+				        	// handle cancelation
 				        	if (filename !== undefined) {
 				        		fs.writeFileSync(filename, jsonObj, 'utf-8', this.endExport())
 				        	} else {
-				        		// reset
+				        		this.resetExport()
 				        	}
 				        })
 					})
@@ -131,23 +141,37 @@ export default {
 				})
 		},
 		endExport(filename) {
-			this.exporting = false
 			this.exportMessage = `Saved ${this.fileSavePath}`
+			this.exporting = false
+			
 			let scope = this
 			setTimeout(function() {
-				scope.exportMessage = 'Choose a class chart to export:'
-			}, 3000, scope)
+				scope.resetExport()
+			}, 4000, scope)
+		},
+		resetExport() {
+			this.chartToTransfer = ''
+			this.fileSavePath = ''
+			this.exportMessage = 'Choose a class chart to export:'
 		},
 		processIncomingTransferData(jsonFile) {
-			// check that the file is JSON
+			fs.readFile(jsonFile, 'utf8', (err, data) => {
+				if (err) {
+					// display error message
+				} else {
+					this.importing = true
 
-			// save the chart first
+					let chartData = JSON.parse(data)
+					console.log(chartData)
+					// save the chart first
 
-			// save the students next
+					// save the students next (ignore _id fields, use newly created chart _id)
 
-			// save the notes
+					// save the notes (ignore _id fields, use newly created student _id)
 
-			// save the activitySessions
+					// save the activitySessions (ignore _id fields, use newly created chart _id)
+				}
+			})
 		},
 		handleDrop(data, event) {
 			event.preventDefault()
@@ -223,27 +247,19 @@ h5 {
 	margin-left: 15px;
 }
 
+#exportForm {
+	display: grid;
+	grid-template-columns: 1fr auto;
+	align-items: center;
+}
+
 .wide-select {
-	width: 200px;
+	width: 100%;
 	margin: 10px 0;
 }
 
-input {
-	border-radius: 4px;
-	font-size: 15px;
-	padding: 7px 10px 9px 10px;
-	margin: 10px 10px;
-	color: var(--black);
-	border: 1px solid var(--light-gray);
-	outline: none;
-}
-
-.large-input {
-	width: 300px;
-}
-
 .action-button {
-	padding: 6px 10px 8px 10px;
+	padding: 7px 10px 7px 10px;
 	margin: 0 5px;
 	box-shadow: 0px 0px 1px var(--black);
 	font-size: 15px;
@@ -251,6 +267,7 @@ input {
 	border-radius: 5px;
 	cursor: pointer;
 	outline: none;
+	height: 30px;
 }
 
 .neutral {
@@ -269,7 +286,7 @@ input {
 	cursor: not-allowed;
 }
 
-#loader {
+.loader {
     height: 50px;
     width: 50px;
     margin: 0 auto;
