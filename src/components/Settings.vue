@@ -7,8 +7,8 @@
 			<ul id="navigationList">
 				<li class="active" ref="help"><button class="button-link" @click="changeContent('help')">Help</button></li>
 				<li class="inactive" ref="behaviors"><button class="button-link" @click="changeContent('behaviors')">Behaviors</button></li>
-				<li class="inactive" ref="cards"><button class="button-link" @click="changeContent('cards')">Name Cards</button></li>
 				<li class="inactive" ref="calculation"><button class="button-link" @click="changeContent('calculation')">Calculation</button></li>
+				<li class="inactive" ref="transfer"><button class="button-link" @click="changeContent('transfer')">Transfer</button></li>
 				<li class="inactive" ref="about"><button class="button-link" @click="changeContent('about')">About</button></li>
 			</ul>
 			<div id="navigationFooter">
@@ -123,6 +123,21 @@
 						</div>
 					</template>
 				</Tabs>
+				<h4 class="subheading">Tally</h4>
+				<p>
+					Each student's name card can tally and display one behavior on the upper left corner.
+					This allows you to track student progress in an area you consider vital to your course.
+					By default, Seatsmart displays absences.  You can choose an alternative behavior below:
+				</p>
+				<select name="tally" v-model="behaviorToTally" class="block-select">
+					<option 
+						v-for="(behavior, index) in allBehaviors" 
+						:value="behavior"
+						:key="`behavior${index}tally`"
+					>
+						{{ behavior }}
+					</option>
+				</select>
 			</section>
 			<section v-if="content == 'calculation'">
 				<h1>Calculation</h1>
@@ -162,9 +177,18 @@
 					assumes that a student is participating well if no notes are recorded pertaining to
 					them in a given week.
 				</p>
+				<h4 class="subheading">Calculation Interval</h4>
+				<p>
+					By default, a Seatsmart chart includes the option to view participation trends for the current week.  This is meant to help you quickly adjust participation points on Blackboard to provide students regular feedback.  You can customize the interval being calculated by choosing either "bi-weekly" or "monthly" calculations as an alternative below.
+				</p>
+				<select name="interval" v-model="calculationInterval" class="block-select">
+					<option value="weekly">weekly</option>
+					<option value="bi-weekly">bi-weekly</option>
+					<option value="monthly">monthly</option>
+				</select>
 				<h4 class="subheading">Point Values</h4>
 				<p>
-					Seatsmart helps you adjust grades regularly by preparing calculations for the current calculation interval (which can be customized in the settings for <button class="inner-link" @click="changeContent('cards')">Name Cards</button>).  For example, behaviors with a low weight add (or remove) 2 points from the student's trend score by default.
+					Seatsmart helps you adjust grades regularly by preparing calculations for the current calculation interval.  For example, behaviors with a low weight add (or remove) 2 points from the student's trend score by default.
 				</p>
 				<p>
 					You can enter alternative values below:
@@ -180,36 +204,8 @@
 					<input class="small-input" type="number" name="medium" v-model="weightValues.medium">
 					<input class="small-input" type="number" name="strong" v-model="weightValues.strong">
 				</div>
-				<h4 class="subheading">Calculation Interval</h4>
-				<p>
-					By default, a Seatsmart chart includes the option to view participation trends for the current week.  This is meant to help you quickly adjust participation points on Blackboard to provide students regular feedback.  You can customize the interval being calculated by choosing either "bi-weekly" or "monthly" calculations as an alternative below.
-				</p>
-				<select name="interval" v-model="calculationInterval" class="block-select">
-					<option value="weekly">weekly</option>
-					<option value="bi-weekly">bi-weekly</option>
-					<option value="monthly">monthly</option>
-				</select>
 			</section>
-			<section v-if="content == 'cards'">
-				<h1>Name Cards</h1>
-				<div id="nameCardsArea">
-					<h4>Tally</h4>
-					<p>
-						Each student's name card can tally and display one behavior on the upper left corner.
-						This allows you to track student progress in an area you consider vital to your course.
-						By default, Seatsmart displays absences.  You can choose an alternative behavior below:
-					</p>
-					<select name="tally" v-model="behaviorToTally" class="block-select">
-						<option 
-							v-for="(behavior, index) in allBehaviors" 
-							:value="behavior"
-							:key="`behavior${index}tally`"
-						>
-							{{ behavior }}
-						</option>
-					</select>
-				</div>
-			</section>
+			<section v-if="content == 'transfer'"></section>
 			<section v-if="content == 'about'">
 				<h1>About</h1>
 				<p>
@@ -332,7 +328,7 @@ export default {
 			// handle component navigation
 			this.content = area
 
-			let areas = ['help', 'behaviors', 'calculation', 'about', 'cards']
+			let areas = ['help', 'behaviors', 'calculation', 'about', 'transfer']
 
 			areas.forEach((a) => {
 				if (a !== area) {
@@ -558,7 +554,7 @@ h3 {
 /* Form styles */
 .block-select {
 	width: 100%;
-	margin: 10px 0 40px 0;
+	margin: 10px 0;
 }
 
 .narrow-select {
