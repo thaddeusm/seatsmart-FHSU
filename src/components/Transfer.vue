@@ -71,6 +71,14 @@ export default {
 			return this.$store.state.allClasses
 		}
 	},
+	watch: {
+		importing(newValue, oldValue) {
+			this.$emit('toggle-transfer-progress')
+		},
+		exporting(newValue, oldValue) {
+			this.$emit('toggle-transfer-progress')
+		}
+	},
 	methods: {
 		generateTransferData() {
 			// provide UI feedback

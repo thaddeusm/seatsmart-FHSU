@@ -12,7 +12,7 @@
 				<li class="inactive" ref="about"><button class="button-link" @click="changeContent('about')">About</button></li>
 			</ul>
 			<div id="navigationFooter">
-				<button @click="saveChanges">Close</button>
+				<button @click="saveChanges" :disabled="transferring">Close</button>
 			</div>
 		</aside>
 		<section id="settingsContent">
@@ -206,7 +206,9 @@
 				</div>
 			</section>
 			<section v-if="content == 'transfer'">
-				<Transfer />
+				<Transfer 
+					v-on:toggle-transfer-progress="toggleTransferring"
+				/>
 			</section>
 			<section v-if="content == 'about'">
 				<h1>About</h1>
@@ -304,7 +306,8 @@ export default {
 			],
 			weightOptions: [
 				'low', 'medium', 'strong'
-			]
+			],
+			transferring: false
 		}
 	},
 	computed: {
@@ -446,6 +449,9 @@ export default {
 		},
 		openEmail() {
 			shell.openExternal('mailto:tbmccleary@fhsu.edu?subject=Seatsmart')
+		},
+		toggleTransferring() {
+			this.transferring = !this.transferring
 		}
 	},
 	mounted() {
@@ -553,6 +559,12 @@ h3 {
 	cursor: pointer;
 	box-shadow: 0px 0px 1px var(--black);
 	outline: none;
+}
+
+#navigationFooter > button:disabled {
+	background: var(--light-gray)!important;
+	opacity: .6;
+	cursor: not-allowed;
 }
 
 /* Form styles */
