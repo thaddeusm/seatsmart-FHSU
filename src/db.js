@@ -41,7 +41,8 @@ students:
 	lastName: String,
 	tigerID: String,
 	class: String,
-	selected: Boolean
+	selected: Boolean,
+	highlight: String,
 	seat: {
 		row: Integer,
 		column: Integer

@@ -135,6 +135,8 @@ export default {
         },
         closeModal() {
             this.modalOpen = false
+
+            this.populateClasses()
         },
         editClass(id) {
             this.$store.dispatch('setLastView', '/')

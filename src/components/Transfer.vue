@@ -2,7 +2,7 @@
 	<div>
 		<h1>Transfer</h1>
 		<p>
-			In some situations it may be necessary to transfer seating chart information between computers (receiving a new computer, asking a substitute instructor to continue recording participation records, etc.).  Though Seatsmart files can be copied and pasted from your computer's document folder, this would force you to transfer all seating chart data rather than selecting a specific chart.
+			In some situations it may be necessary to transfer seating chart information between computers (receiving a new computer, asking a substitute instructor to continue recording participation records, etc.).  Though Seatsmart files can be copied and pasted from your computer's "(My) Documents" folder, this would force you to transfer all seating chart data rather than selecting a specific chart.
 		</p>
 		<p>
 			As always, these records should be treated carefully as they may include personally identifiable information about your students.  Seatsmart only allows you to transfer one chart at a time in an effort to minimize unnecessary data sharing.
@@ -57,8 +57,13 @@ export default {
 			fileSavePath: '',
 			exporting: false,
 			exportMessage: 'Choose a class chart to export:',
-			importMessage: 'Find or drop in the chart:',
-			importing: false
+			importMessage: 'Find or drop in a chart:',
+			importing: false,
+			toExport: {
+				"chartData": {},
+				"students": [],
+				"activitySessions": []
+			}
 		}
 	},
 	computed: {
@@ -74,71 +79,65 @@ export default {
 
 			let classChartID = this.chartToTransfer
 
-			// structure for JSON data
-			let output = {
-				"chartData": this.classCharts[this.chartToTransfer],
-				"students": [],
-				"activitySessions": []
-			}
+			this.toExport["chartData"] = this.classCharts[this.chartToTransfer]
 
 			// find activitySessions by chart
 			db.readSomething('activitySessions', {chart: classChartID})
 				.then(activitySessionResults => {
-					output["activitySessions"] = activitySessionResults							
+					this.toExport["activitySessions"] = activitySessionResults							
 				})
 
 			// find students by chart, notes by student
 			db.readSomething('students', {class: classChartID})
 				.then((results) => {
-					let student = {
-						"studentData": {},
-						"notes": []
-					}
-
-					// use array to ensure file is not written until after DB queries
-					let promises = []
-
-					for (let i=0; i<results.length; i++) {
-						student["studentData"] = results[i]
-						
-						promises.push(db.readSomething('notes', {student: results[i]._id})
-							.then(noteResults => {
-								student["notes"] = noteResults
-
-								output["students"].push(student)
-							}))
-					}
-
-					Promise.all(promises).then(() => {
-						let jsonObj = JSON.stringify(output)
-						let defaultFilename = this.classCharts[this.chartToTransfer].name
-
-						// once ready, use native save dialog
-						let options = {
-							title: "Save Exported Chart",
-							defaultPath: defaultFilename,
-							buttonLabel: "Save",
-
-							filters :[
-								{name: 'json', extensions: ['json']}
-							]
-				        }
-
-				        this.exportMessage = `${defaultFilename} is ready for export.`
-
-				        dialog.showSaveDialog(options, (filename) => {
-				        	this.fileSavePath = filename
-
-				        	// handle cancelation
-				        	if (filename !== undefined) {
-				        		fs.writeFileSync(filename, jsonObj, 'utf-8', this.endExport())
-				        	} else {
-				        		this.resetExport()
-				        	}
-				        })
+					this.buildStudentsForExport(results, 0)
+				})
+		},
+		buildStudentsForExport(students, index) {
+			db.readSomething('notes', {student: students[index]._id})
+				.then((studentNotes) => {
+					this.toExport["students"].push({
+						"studentData": students[index],
+						"notes": studentNotes
 					})
 
+					let newIndex = index + 1
+
+					if (newIndex == students.length) {
+						this.promptSave()
+					} else {
+						this.buildStudentsForExport(students, newIndex)
+					}
 				})
+		},
+		promptSave() {
+			let jsonObj = JSON.stringify(this.toExport)
+			let defaultFilename = this.classCharts[this.chartToTransfer].name
+
+			// once ready, use native save dialog
+			let options = {
+				title: "Save Exported Chart",
+				defaultPath: defaultFilename,
+				buttonLabel: "Save",
+
+				filters :[
+					{name: 'json', extensions: ['json']}
+				]
+	        }
+
+	        this.exportMessage = `${defaultFilename} is ready for export.`
+
+	        dialog.showSaveDialog(options, (filename) => {
+	        	this.fileSavePath = filename
+
+	        	// handle cancelation
+	        	if (filename !== undefined) {
+	        		fs.writeFileSync(filename, jsonObj, 'utf-8', this.endExport())
+	        	} else {
+	        		this.exporting = false
+	        		this.resetExport()
+	        	}
+	        })
 		},
 		endExport(filename) {
 			this.exportMessage = `Saved ${this.fileSavePath}`
@@ -147,29 +146,127 @@ export default {
 			let scope = this
 			setTimeout(function() {
 				scope.resetExport()
-			}, 4000, scope)
+			}, 3500, scope)
 		},
 		resetExport() {
 			this.chartToTransfer = ''
+			this.toExport = {
+				"chartData": {},
+				"students": [],
+				"activitySessions": []
+			}
 			this.fileSavePath = ''
 			this.exportMessage = 'Choose a class chart to export:'
+		},
+		resetImport(message) {
+			this.importMessage = message
+			this.importing = false
+			this.over = false
+			let scope = this
+			setTimeout(function() {
+				scope.importMessage = 'Find or drop in a chart:'
+			}, 3500, scope)
 		},
 		processIncomingTransferData(jsonFile) {
 			fs.readFile(jsonFile, 'utf8', (err, data) => {
 				if (err) {
-					// display error message
+					this.importMessage = 'File error.  Please check that it is a .json file or try exporting again.'
 				} else {
 					this.importing = true
 
-					let chartData = JSON.parse(data)
-					console.log(chartData)
+					let importedData
+					try {
+						importedData = JSON.parse(data)
+					} catch (e) {
+						this.resetImport('File error.  Please check that it is a .json file or try exporting again.')
+					}
+					
+					this.importMessage = 'Importing chart data...'
+
 					// save the chart first
+					let chartToSave = importedData.chartData
+					let newChartId
 
-					// save the students next (ignore _id fields, use newly created chart _id)
+					db.createSomething('classes', {
+						columns: chartToSave.columns,
+						rows: chartToSave.rows,
+						name: `(imported) ${chartToSave.name}`,
+						semester: chartToSave.semester,
+						year: chartToSave.year,
+	                	archived: chartToSave.archived
+					}).then((classChart) => {
+						newChartId = classChart._id
+						console.log('new chart saved', classChart)
 
-					// save the notes (ignore _id fields, use newly created student _id)
+						let activitySessions = importedData.activitySessions
+						let students = importedData.students
+						
+						this.saveActivitySessionsAsync(newChartId, activitySessions)
+						this.saveStudentsAsync(newChartId, students, 0)
+					})
+				}
+			})
+		},
+		saveActivitySessionsAsync: async function(newChartId, activitySessions) {
+			for (let i=0; i<activitySessions.length; i++) {
+				let newSession = activitySessions[i]
 
-					// save the activitySessions (ignore _id fields, use newly created chart _id)
+				await db.createSomething('activitySessions', {
+					date: newSession.date,
+					activity: newSession.activity,
+					responses: newSession.responses,
+					chart: newChartId
+				}).then(createdSession => {
+					console.log('new activity session saved', createdSession)
+				})
+			}
+		},
+		saveStudentsAsync: async function(newChartId, students, index) {
+			let newStudent = students[index].studentData
+
+			let promises = []
+
+			db.createSomething('students', {
+				firstName: newStudent.firstName,
+                lastName: newStudent.lastName,
+                selected: newStudent.selected,
+                highlight: newStudent.highlight,
+                tigerID: newStudent.tigerID,
+                class: newChartId,
+                seat: {
+                    row: newStudent.seat.row,
+                    column: newStudent.seat.column
+                }
+			}).then((createdStudent) => {
+				let newStudentNotes = students[index].notes
+
+				for (let j=0; j<newStudentNotes.length; j++) {
+					let newNote = newStudentNotes[j]
+
+					promises.push(db.createSomething('notes', {
+						behavior: {
+							Abbreviation: newNote.behavior.Abbreviation,
+							Description: newNote.behavior.Description,
+							Weight: newNote.behavior.Weight
+						},
+						student: createdStudent._id,
+						dateNoted: newNote.dateNoted,
+						comment: newNote.comment,
+						type: newNote.type
+					}).then((createdNote) => {
+						
+					}))
+				}
+			})
+			
+			Promise.all(promises).then(() => {
+				let newIndex = index + 1
+
+				if (newIndex == students.length) {
+					// end
+					this.resetImport('Import complete.')
+				} else {
+					this.saveStudentsAsync(newChartId, students, newIndex)
 				}
 			})
 		},
