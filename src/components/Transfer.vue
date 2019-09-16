@@ -36,7 +36,7 @@
 					{{ classChart.name }} ({{ classChart.semester }} {{ classChart.year }})
 				</option>
 			</select>
-			<button class="action-button bold" @click="generateTransferData" :disabled="chartToTransfer == ''">save</button>
+			<button class="action-button bold" @click="generateTransferData" :disabled="chartToTransfer == ''">export</button>
 		</div>
 		<div class="loader" v-else></div>
 	</div>
