@@ -590,7 +590,7 @@ export default {
 	width: 180px;
 	text-align: center;
 	margin-top: -4%;
-	margin-left: -80px;
+	margin-left: -90px;
 	z-index: 1000;
 	border-radius: 5px;
 	font-family: "ArchivoNarrow";
