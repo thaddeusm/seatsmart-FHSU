@@ -37,7 +37,9 @@
 			<span v-on:mouseover="$emit('show-caption', 'recent note indicator')">
 				<AbbreviationCircle id="demoCircle" :behavior="{Abbreviation: 'C', Description: 'Using Cell Phone', Weight: 'strong'}" size="small" color="red" />
 			</span>
-			<button class="simple-button more-button"><img src="@/assets/more.svg" alt="more icon" class="more-icon" v-on:mouseover="$emit('show-caption', 'link to view student profile')"></button>
+			<button class="simple-button more-button">
+				<img src="@/assets/more.svg" alt="more icon" class="more-icon" v-on:mouseover="$emit('show-caption', 'link to view student profile')">
+			</button>
 		</section>
 	</div>
 	<div v-else-if="type === 'edit'" id="editCardContainer">
@@ -68,7 +70,9 @@
 			<span id="absences" :class="[behaviorToTallyType == 'positive' ? 'yellow-text' : 'red-text']">{{ tally }}</span>
 		</section>
 		<section id="centerHeader" v-if="student.firstName !== ''">
-			<button id="addNoteButton" class="simple-button" @click="$emit('open-note-modal', student)">+</button>
+			<button id="addNoteButton" class="simple-button" @click="$emit('open-note-modal', student)">+
+				<span class="tooltip">New note for {{ student.firstName }} {{ student.lastName }}</span>
+			</button>
 		</section>
 		<section id="rightHeader" v-if="student.firstName !== '' && type !== 'simple'">
 			<button v-if="!student.selected" class="simple-button" @click="toggleSelected"><img class="star" src="@/assets/graystar.svg"></button>
@@ -85,7 +89,9 @@
 		<section id="cardFooter" v-if="student.firstName !== ''">
 			<AbbreviationCircle v-if="notes.length !== 0 && type !== 'simple'" v-for="(note, index) in latestNotes" :key="index" :behavior="note.behavior" :size="conserveSpace ? 'extra-small' : 'small'" :color="note.type === 'positive' ? 'yellow' : 'red'" />
 			<button v-if="studentID !== undefined" class="simple-button more-button" @click="viewStudentProfile"><img src="@/assets/more.svg" alt="more icon" class="more-icon"></button>
-			<button v-else class="simple-button more-button" @click="viewStudentProfile"><img src="@/assets/more.svg" alt="more icon" :class="[conserveSpace ? 'more-icon-smaller' : 'more-icon']"></button>
+			<button v-else class="simple-button more-button" @click="viewStudentProfile">
+				<img src="@/assets/more.svg" alt="more icon" :class="[conserveSpace ? 'more-icon-smaller' : 'more-icon']">
+			</button>
 		</section>
 	</div>
 </template>
@@ -570,5 +576,35 @@ export default {
 
 .absent {
 	opacity: .6;
+}
+
+.simple-button:hover .tooltip {
+	visibility: visible;
+}
+
+.tooltip {
+	visibility: hidden;
+	position: absolute;
+	background: var(--yellow);
+	padding: 5px;
+	width: 180px;
+	text-align: center;
+	margin-top: -4%;
+	margin-left: -85px;
+	z-index: 1000;
+	border-radius: 5px;
+	font-family: "ArchivoNarrow";
+	font-size: 14px;
+}
+
+.tooltip::after {
+	content: " ";
+	position: absolute;
+	top: 100%; /* At the bottom of the tooltip */
+	left: 50%;
+	margin-left: -10px;
+	border-width: 5px;
+	border-style: solid;
+	border-color: var(--yellow) transparent transparent transparent;
 }
 </style>
