@@ -127,6 +127,11 @@
 import db from '@/db'
 import moment from 'moment'
 
+moment.updateLocale("en", { week: {
+  dow: 1, // First day of week is Monday
+  doy: 6  // First week of year must contain 1 January (7 + 0 - 1)
+}})
+
 import TitleBar from '@/components/TitleBar.vue'
 import SeatingDiagram from '@/components/SeatingDiagram.vue'
 import AbbreviationCircle from '@/components/AbbreviationCircle.vue'

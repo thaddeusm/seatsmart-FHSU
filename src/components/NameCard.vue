@@ -101,6 +101,11 @@ import db from '@/db.js'
 import moment from 'moment'
 import AbbreviationCircle from '@/components/AbbreviationCircle.vue'
 
+moment.updateLocale("en", { week: {
+  dow: 1, // First day of week is Monday
+  doy: 6  // First week of year must contain 1 January (7 + 0 - 1)
+}})
+
 export default {
 	name: 'NameCard',
 	props: {
