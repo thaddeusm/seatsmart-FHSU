@@ -246,6 +246,8 @@ export default {
         }
     },
     mounted() {
+        window.scrollTo(0, 0)
+
         // start search on load for smooth transtiion from home view
         this.search(this.term)
     }

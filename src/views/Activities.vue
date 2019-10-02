@@ -28,6 +28,34 @@
 	                </div>
 				</div>
 			</section>
+            <section id="activitySessions">
+                <h2>
+                    Explore Recent Activity Sessions
+                </h2>
+                <div class="loader" v-if="sessionSorting"></div>
+                <div v-else class="activity-button-area" v-for="(session, index) in activitySessions" >
+                    <ButtonCard 
+                        :text="session.activity.name" 
+                        :button="true"
+                        :display="true"
+                        :simple="true"
+                        :key="`session${index}`" 
+                        :onClick="launchActivitySessionExplorer"
+                        :index="index"
+                        :class="[session.activity.activityType.split(' ').join('-')]"
+                    />
+                    <div class="session-info-area">
+                        <h6 v-if="session.chart !== 'anonymous'">
+                            with {{ allCharts[session.chart].name }} on<br>
+                            {{ makePrettyDate(session.date._d) }}
+                        </h6>
+                        <h6 v-else>
+                            with (Anonymous) on<br>
+                            {{ makePrettyDate(session.date._d) }}
+                        </h6>
+                    </div>
+                </div>
+            </section>
 		</main>
 		<transition name="fade">
             <Modal v-if="modalOpen" v-on:trigger-close="closeModal" :dismissable="false" size="large">
@@ -68,6 +96,12 @@
 
 <script>
 import db from '@/db.js'
+import moment from 'moment'
+
+moment.updateLocale("en", { week: {
+  dow: 1, // First day of week is Monday
+  doy: 6  // First week of year must contain 1 January (7 + 0 - 1)
+}})
 
 import ButtonCard from '@/components/ButtonCard.vue'
 import Modal from '@/components/Modal.vue'
@@ -91,6 +125,15 @@ export default {
 				content: {},
 				options: {}
 			}],
+            activitySessions: [{
+                date: {},
+                activity: {},
+                responses: [{
+                    respondent: '',
+                    response: ''
+                }],
+                chart: ''
+            }],
 			modalOpen: false,
             alertModalOpen: false,
             alertModalActivity: '',
@@ -101,9 +144,15 @@ export default {
 				dateCreated: {_d: ''},
 				content: {},
 				options: {}
-			}
+			},
+            sessionSorting: true
 		}
 	},
+    computed: {
+        allCharts() {
+            return this.$store.state.allClasses
+        }
+    },
 	methods: {
         openModal() {
             this.modalOpen = true
@@ -125,7 +174,20 @@ export default {
 
                         return dateA < dateB ? -1 : 1
                     })
+                })
+        },
+        getActivitySessions() {
+            db.readSomething('activitySessions', {})
+                .then((results) => {
+                    let thisWeek = moment().week()
 
+                    this.activitySessions = results.filter((session) => {
+                        if (moment(session.date._d).week() == thisWeek) {
+                            return session
+                        }
+                    })
+                    console.log(this.activitySessions)
+                    this.sessionSorting = false
                 })
         },
         editActivity(id) {
@@ -151,11 +213,26 @@ export default {
         launchActivity(index) {
         	this.launchedActivity = this.activities[index]
         	this.openModal()
+        },
+        launchActivitySessionExplorer(index) {
+            console.log(this.activitySessions[index])
+            this.$router.push(`/session/${this.activitySessions[index]._id}`)
+        },
+        makePrettyDate(dateObj) {
+            return moment(dateObj).format('dddd, MMM D')
         }
 	},
 	mounted() {
-		this.getActivities()
-	}
+		window.scrollTo(0, 0)
+
+        this.getActivities()
+	},
+    created() {
+        let scope = this
+        setTimeout(function() {
+            scope.getActivitySessions()
+        }, 1500, scope)
+    }
 }
 </script>
 
@@ -181,6 +258,17 @@ header {
     justify-content: center;
     position: fixed;
     top: 0;
+    z-index: 10;
+    background: var(--black);
+}
+
+h2 {
+    color: var(--light-gray);
+    margin-bottom: 20px;
+}
+
+h6 {
+    color: var(--yellow);
 }
 
 #backArea {
@@ -215,13 +303,19 @@ main {
 	margin: 50px 0 20px 0;
 }
 
-.activity-button-area {
-    display: inline-block;
-    margin: 20px 0;
+#activitySessions {
+    background: var(--black);
+    padding: 20px 0;
+    margin-top: 100px;
 }
 
-.activity-button-area > * {
-    margin: 0 40px;
+.activity-button-area {
+    display: inline-block;
+    margin: 20px 40px;
+}
+
+.session-info-area {
+    margin: 10px 40px;
 }
 
 .modify-activity-button {
@@ -291,6 +385,26 @@ button {
     background-repeat: no-repeat;
     background-size: cover;
     background-position: left;
+}
+
+.loader {
+    height: 100px;
+    width: 100px;
+    margin: 20px auto;
+    border-radius: 100px;
+    border-top: 3px solid var(--light-gray);
+    border-right: 3px solid var(--yellow);
+    border-bottom: 3px solid var(--yellow);
+    border-left: 3px solid var(--yellow);
+    animation-name: spin;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+}
+
+@keyframes spin {
+    from {transform: rotate(0);}
+    to {transform: rotate(360deg);}
 }
 
 .fade-enter-active, .fade-leave-active {

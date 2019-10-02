@@ -16,7 +16,7 @@ export default {
 		size: String
 	},
 	mounted() {
-		document.body.scrollTop = document.documentElement.scrollTop = 0
+		window.scrollTo(0, 0)
 		document.body.style.overflow = 'hidden'
 	},
 	beforeDestroy() {

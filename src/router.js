@@ -10,6 +10,7 @@ import Student from './views/Student.vue'
 import Search from './views/Search.vue'
 import Activities from './views/Activities.vue'
 import ActivityCreation from './views/ActivityCreation.vue'
+import SessionExplorer from './views/SessionExplorer.vue'
 
 Vue.use(Router)
 
@@ -75,6 +76,11 @@ export default new Router({
     {
         path: '/activity/new',
         component: ActivityCreation
-    }
+    },
+    {
+        path: '/session/:id',
+        props: true,
+        component: SessionExplorer
+    },
   ]
 })

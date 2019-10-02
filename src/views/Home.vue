@@ -298,6 +298,8 @@ export default {
         this.populateClasses()
     },
     mounted() {
+        window.scrollTo(0, 0)
+
         this.$store.dispatch('setLastView', '/')
 
         let scope = this
@@ -370,6 +372,11 @@ header {
         ". activities . search ."
         "logo logo logo logo logo";
     height: 250px;
+    width: 100%;
+    background: var(--black);
+    position: fixed;
+    top: 0;
+    z-index: 10;
     align-items: center;
     justify-content: center;
 }
@@ -408,6 +415,7 @@ header {
 main {
     text-align: center;
     width: 100%;
+    margin-top: 300px;
     margin-bottom: 100px;
 }
 
