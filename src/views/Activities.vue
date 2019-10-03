@@ -62,8 +62,8 @@
                     </div>
                 </div>
                 <div id="loadMoreArea" v-if="!allSessionsDisplayed && !sessionSorting">
-                    <button v-if="sessionScope !== 'month'" @click="loadMonthActivitySessions">show sessions this month</button>
-                    <button v-else-if="sessionScope !== 'week'" @click="loadWeekActivitySessions">show sessions this week</button>
+                    <button v-if="sessionScope !== 'Month'" @click="loadMonthActivitySessions">show sessions this month</button>
+                    <button v-else-if="sessionScope !== 'Week'" @click="loadWeekActivitySessions">show sessions this week</button>
                     <button @click="loadAllActivitySessions">show all</button>
                 </div>
             </section>
@@ -204,9 +204,9 @@ export default {
 
                     console.log(this.activitySessions)
                     this.sessionSorting = false
-
                     this.allSessionsDisplayed = true
                     this.sessionScope = 'All'
+                    window.scrollTo(0, 0)
                 })
         },
         loadMonthActivitySessions() {
@@ -239,10 +239,10 @@ export default {
                     })
 
                     this.activitySessions = sorted
-
                     console.log(this.activitySessions)
                     this.sessionSorting = false
                     this.sessionScope = 'Month'
+                    window.scrollTo(0, 0)
                 })
         },
         loadWeekActivitySessions() {
@@ -279,6 +279,7 @@ export default {
                     console.log(this.activitySessions)
                     this.sessionSorting = false
                     this.sessionScope = 'Week'
+                    window.scrollTo(0, 0)
                 })
         },
         reloadActivitySessions() {
