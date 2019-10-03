@@ -11,7 +11,7 @@
 		<main>
 			<ButtonCard icon="+" text="activity" to="/activity/new"/>
 			<section id="existingActivities">
-				<div class="activity-button-area" v-for="(activity, index) in activities" >
+				<div class="activity-button-area" v-for="(activity, index) in activities">
 					<ButtonCard 
 						:text="activity.name" 
 						:button="true"
@@ -30,12 +30,17 @@
 			</section>
             <section id="activitySessions">
                 <h2>
-                    Explore Recent Activity Sessions
+                    Explore {{ sessionScope }} Activity Sessions
                 </h2>
                 <div class="loader" v-if="sessionSorting"></div>
-                <div v-else class="activity-button-area" v-for="(session, index) in activitySessions" >
+                <div v-else-if="activitySessions.length == 0">
+                    <h4>
+                        No sessions to display.
+                    </h4>
+                </div>
+                <div v-else class="activity-button-area" v-for="(session, index) in activitySessions">
                     <ButtonCard 
-                        :text="session.activity.name" 
+                        :text="`${session.activity.name} (${session.responses.length})`" 
                         :button="true"
                         :display="true"
                         :simple="true"
@@ -43,17 +48,23 @@
                         :onClick="launchActivitySessionExplorer"
                         :index="index"
                         :class="[session.activity.activityType.split(' ').join('-')]"
+                        v-if="session.activity !== undefined"
                     />
                     <div class="session-info-area">
                         <h6 v-if="session.chart !== 'anonymous'">
-                            with {{ allCharts[session.chart].name }} on<br>
+                            {{ getChart(session.chart) }}<br>
                             {{ makePrettyDate(session.date._d) }}
                         </h6>
                         <h6 v-else>
-                            with (Anonymous) on<br>
+                            (anonymous group)<br>
                             {{ makePrettyDate(session.date._d) }}
                         </h6>
                     </div>
+                </div>
+                <div id="loadMoreArea" v-if="!allSessionsDisplayed && !sessionSorting">
+                    <button v-if="sessionScope !== 'month'" @click="loadMonthActivitySessions">show sessions this month</button>
+                    <button v-else-if="sessionScope !== 'week'" @click="loadWeekActivitySessions">show sessions this week</button>
+                    <button @click="loadAllActivitySessions">show all</button>
                 </div>
             </section>
 		</main>
@@ -145,7 +156,9 @@ export default {
 				content: {},
 				options: {}
 			},
-            sessionSorting: true
+            sessionSorting: true,
+            sessionScope: 'Week',
+            allSessionsDisplayed: false
 		}
 	},
     computed: {
@@ -159,11 +172,118 @@ export default {
         },
         closeModal() {
             this.modalOpen = false
+            this.reloadActivitySessions()
         },
         routeBack() {
             let lastView = this.$store.state.lastView
 
             this.$router.push(lastView)
+        },
+        loadAllActivitySessions() {
+            this.sessionSorting = true
+            this.activitySessions = [{
+                date: {},
+                activity: {},
+                responses: [{
+                    respondent: '',
+                    response: ''
+                }],
+                chart: ''
+            }]
+
+            db.readSomething('activitySessions', {})
+                .then((results) => {
+                    let sorted = results.sort((a, b) => {
+                        let dateA = a.date._d
+                        let dateB = b.date._d
+
+                        return dateA < dateB ? 1 : -1
+                    })
+
+                    this.activitySessions = sorted
+
+                    console.log(this.activitySessions)
+                    this.sessionSorting = false
+
+                    this.allSessionsDisplayed = true
+                    this.sessionScope = 'All'
+                })
+        },
+        loadMonthActivitySessions() {
+            this.sessionSorting = true
+            this.activitySessions = [{
+                date: {},
+                activity: {},
+                responses: [{
+                    respondent: '',
+                    response: ''
+                }],
+                chart: ''
+            }]
+
+            let thisMonth = moment().month()
+
+            db.readSomething('activitySessions', {})
+                .then((results) => {
+                    let sessionsThisMonth = results.filter((session) => {
+                        if (moment(session.date._d).month() == thisMonth) {
+                            return session
+                        }
+                    })
+
+                    let sorted = sessionsThisMonth.sort((a, b) => {
+                        let dateA = a.date._d
+                        let dateB = b.date._d
+
+                        return dateA < dateB ? 1 : -1
+                    })
+
+                    this.activitySessions = sorted
+
+                    console.log(this.activitySessions)
+                    this.sessionSorting = false
+                    this.sessionScope = 'Month'
+                })
+        },
+        loadWeekActivitySessions() {
+            this.sessionSorting = true
+            this.activitySessions = [{
+                date: {},
+                activity: {},
+                responses: [{
+                    respondent: '',
+                    response: ''
+                }],
+                chart: ''
+            }]
+
+            let thisWeek = moment().week()
+
+            db.readSomething('activitySessions', {})
+                .then((results) => {
+                    let sessionsThisWeek = results.filter((session) => {
+                        if (moment(session.date._d).week() == thisWeek) {
+                            return session
+                        }
+                    })
+
+                    let sorted = sessionsThisWeek.sort((a, b) => {
+                        let dateA = a.date._d
+                        let dateB = b.date._d
+
+                        return dateA < dateB ? 1 : -1
+                    })
+
+                    this.activitySessions = sorted
+
+                    console.log(this.activitySessions)
+                    this.sessionSorting = false
+                    this.sessionScope = 'Week'
+                })
+        },
+        reloadActivitySessions() {
+            this.allSessionsDisplayed = false
+            this.loadWeekActivitySessions()
         },
         getActivities() {
         	db.readSomething('activities', {})
@@ -174,20 +294,6 @@ export default {
 
                         return dateA < dateB ? -1 : 1
                     })
-                })
-        },
-        getActivitySessions() {
-            db.readSomething('activitySessions', {})
-                .then((results) => {
-                    let thisWeek = moment().week()
-
-                    this.activitySessions = results.filter((session) => {
-                        if (moment(session.date._d).week() == thisWeek) {
-                            return session
-                        }
-                    })
-                    console.log(this.activitySessions)
-                    this.sessionSorting = false
                 })
         },
         editActivity(id) {
@@ -220,6 +326,15 @@ export default {
         },
         makePrettyDate(dateObj) {
             return moment(dateObj).format('dddd, MMM D')
+        },
+        getChart(id) {
+            let chart = this.allCharts[id]
+
+            if (chart !== undefined) {
+                return chart.name
+            } else {
+                return '(unknown group)'
+            }
         }
 	},
 	mounted() {
@@ -230,7 +345,7 @@ export default {
     created() {
         let scope = this
         setTimeout(function() {
-            scope.getActivitySessions()
+            scope.loadWeekActivitySessions()
         }, 1500, scope)
     }
 }
@@ -316,6 +431,7 @@ main {
 
 .session-info-area {
     margin: 10px 40px;
+    width: 120px;
 }
 
 .modify-activity-button {
@@ -332,6 +448,22 @@ button {
     outline: none;
     border: none;
     cursor: pointer;
+}
+
+#loadMoreArea {
+    margin: 50px 0;
+}
+
+#loadMoreArea > button {
+    padding: 5px 10px;
+    background: var(--yellow);
+    color: var(--black);
+    font-size: 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    outline: none;
+    display: block;
+    margin: 30px auto;
 }
 
 .alert-icon-large {

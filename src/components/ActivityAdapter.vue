@@ -299,17 +299,38 @@ export default {
 		},
 		responsesInDBFormat() {
 			return this.responses.map((response) => {
+				let simpleResponseObj
 				if (this.launchChoice.id == 'anonymously') {
-					return {
-						respondent: 'anonymous',
-						response: response
+					if (this.activity.activityType == 'survey') {
+						simpleResponseObj = { choice: response.choice }
+
+						return {
+							respondent: 'anonymous',
+							response: simpleResponseObj
+						}
+					} else {
+						simpleResponseObj = { text: response.response }
+
+						return {
+							respondent: 'anonymous',
+							response: simpleResponseObj
+						}
 					}
 				} else {
-					let simpleResponseObj = { choice: response.choice }
+					if (this.activity.activityType == 'survey') {
+						simpleResponseObj = { choice: response.choice }
 
-					return {
-						respondent: response.student,
-						response: simpleResponseObj
+						return {
+							respondent: response.student,
+							response: simpleResponseObj
+						}
+					} else {
+						simpleResponseObj = { text: response.response }
+
+						return {
+							respondent: response.student,
+							response: simpleResponseObj
+						}
 					}
 				}
 			})

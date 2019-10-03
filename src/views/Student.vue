@@ -35,7 +35,7 @@
         <main>
             <header>
                 <section id="backArea">
-        			<button class="back-button" @click="routeBack"><img class="back-arrow" src="@/assets/backarrow.svg" alt="back arrow"> back to {{ originRoute }}</button>
+        			<button class="back-button" @click="routeBack"><img class="back-arrow" src="@/assets/backarrow.svg" alt="back arrow"> back</button>
         		</section>
                 <trend
                     v-if="trendLoaded"
@@ -407,9 +407,7 @@ export default {
             this.closeModal('alert')
         },
         routeBack() {
-            let lastView = this.$store.state.lastView
-
-            this.$router.push(lastView)
+            this.$router.go(-1)
         },
         toggleSelected() {
             db.updateSomething('students', {_id: this.id}, {
