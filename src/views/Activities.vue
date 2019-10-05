@@ -62,9 +62,9 @@
                     </div>
                 </div>
                 <div id="loadMoreArea" v-if="!allSessionsDisplayed && !sessionSorting">
-                    <button v-if="sessionScope !== 'Month'" @click="loadMonthActivitySessions">show sessions this month</button>
-                    <button v-else-if="sessionScope !== 'Week'" @click="loadWeekActivitySessions">show sessions this week</button>
-                    <button @click="loadAllActivitySessions">show all</button>
+                    <button v-if="sessionScope !== 'Month'" @click="loadMonthActivitySessions">load sessions this month</button>
+                    <button v-else-if="sessionScope !== 'Week'" @click="loadWeekActivitySessions">load sessions this week</button>
+                    <button @click="loadAllActivitySessions">load all</button>
                 </div>
             </section>
 		</main>
@@ -97,7 +97,8 @@
 			:bar="[
 				{type: 'spacer', size: 'flexible'},
                 {type: 'button', label: 'New Activity', method: function() {$router.push('/activity/new')}},
-                {type: 'spacer', size: 'flexible'}
+                {type: 'spacer', size: 'flexible'},
+                {type: 'button', label: 'Load All Sessions', method: function() {loadAllActivitySessions()}}
 			]"
 			:show="true" 
             :escapeItem="{type: 'button', label: 'back', method: function() {routeBack()}}"

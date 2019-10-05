@@ -107,7 +107,7 @@
 							<div class="form-group" v-for="(student, index) in classStudents" :key="index">
 								<input class="small-input" type="text" name="firstName" v-model="student.firstName" :ref="index">
 								<input class="small-input" type="text" name="lastName" v-model="student.lastName">
-								<input class="small-input" type="text" name="tigerID" v-model="student.tigerID">
+								<input class="small-input" type="text" name="tigerID" v-model="student.tigerID" placeholder="optional">
 								<button class="delete-button" @click="removeFormGroup(index)">-</button>
 							</div>
 							<section id="addButtonArea">
