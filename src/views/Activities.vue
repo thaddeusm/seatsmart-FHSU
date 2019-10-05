@@ -384,6 +384,10 @@ h2 {
     margin-bottom: 20px;
 }
 
+h4 {
+    color: var(--light-gray);
+}
+
 h6 {
     color: var(--yellow);
 }
