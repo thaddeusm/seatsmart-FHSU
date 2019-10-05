@@ -34,6 +34,10 @@
 					<button id="clearHighlightsButton" @click="clearAllHighlights">
 						<span class="tooltip">clear all</span>
 					</button>
+					<button id="teamHighlighterButton" @click="promptTeamHighlighter">
+						<img src="@/assets/team.svg" alt="team highlighter">
+						<span class="tooltip">make teams</span>
+					</button>
 				</template>
 				<template slot="right">
 					<button class="action-button" @click="$router.push(`/chart/${id}`)">
@@ -42,9 +46,36 @@
 				</template>
 			</ActionBar>
 		</footer>
+		<transition name="fade">
+			<Modal v-if="teamModalOpen" :dismissable="false" size="small">
+	    		<template slot="content">
+	    			<div class="team-modal-body">
+	    				<h4>How many teams do you want to make?</h4>
+	    				<select 
+							name="numberOfTeams"
+							v-model="teams"
+							class="narrow-select"
+						>
+							<option value="2">2</option>
+							<option value="3">3</option>	
+							<option value="4">4</option>	
+							<option value="5">5</option>	
+							<option value="6">6</option>	
+							<option value="7">7</option>	
+							<option value="8">8</option>		
+						</select>
+	    			</div>
+	    			<div class="team-modal-footer">
+	    				<button class="modal-footer-button" @click="teamModalOpen = false">Cancel</button>
+	    				<button class="modal-footer-button yellow" @click="startTeamHighlights">Make Teams</button>
+	    			</div>
+	    		</template>
+	    	</Modal>
+		</transition>
 		<TouchBar :show="true" :bar="[
 				{type: 'spacer', size: 'flexible'},
 				{type: 'button', label: 'clear all highlights', method: function() {clearAllHighlights()}},
+				{type: 'button', label: 'make teams', method: function() {promptTeamHighlighter()}},
 				{type: 'spacer', size: 'flexible'},
 				{type: 'button', label: 'discard changes', method: function() {$router.push(`/chart/${id}`)}}
 	    	]" 
@@ -96,6 +127,7 @@ export default {
 					}
 				}
 			],
+			totalStudents: 0,
             colors: [
                 '#04fcbb',
                 '#0445fc',
@@ -113,8 +145,17 @@ export default {
                 '#FFFFFF',
                 '#E5E5E5'
             ],
-			introModalOpen: false,
-			choiceModalOpen: true,
+            teamColors: [
+            	'#0445fc',
+            	'#73006c',
+            	'#00a10b',
+            	'#fc0445',
+            	'#04c1fc',
+            	'#04fc3f',
+            	'#c1fc04',
+            	'#ff3af2'
+            ],
+			teamModalOpen: false,
 			grid: [],
 			cardStyle: {
 				width: '',
@@ -126,8 +167,8 @@ export default {
 				marginTop: '',
 				marginBottom: ''
 			},
+			teams: 2,
 			exampleText: 'Tina',
-			choice: '',
 			testDropComplete: false
 		}
 	},
@@ -172,10 +213,13 @@ export default {
 			event.preventDefault()
 
             if (this.grid[row][column].student.firstName !== '') {
-                this.$refs[`${row}And${column}`][0].$el.style.background = data.highlight
-                this.$set(this.grid[row][column].student, 'highlight', data.highlight)
+            	this.updateHighlight(row, column, data.highlight)
             }
 
+		},
+		updateHighlight(row, column, highlight) {
+			this.$refs[`${row}And${column}`][0].$el.style.background = highlight
+            this.$set(this.grid[row][column].student, 'highlight', highlight)
 		},
 		placeStudentsInSeats() {
 			let remainingStudents = []
@@ -227,6 +271,41 @@ export default {
 
 				this.$router.push(`/chart/${this.id}`)
 			}
+		},
+		promptTeamHighlighter() {
+			this.teamModalOpen = true
+		},
+		startTeamHighlights() {
+			let teams = parseInt(this.teams)
+			let maxTeamSize = Math.ceil(this.totalStudents / teams)
+			
+			// create dictionary
+			let teamDictionary = {}
+
+			for (let i=0; i<teams; i++) {
+				teamDictionary[this.teamColors[i]] = 0
+			}
+
+			for (let j=0; j<this.grid.length; j++) {
+				let row = this.grid[j]
+
+				for (let k=0; k<row.length; k++) {
+					let student = row[k]
+
+					// choose team
+					let randomNum = Math.floor(Math.random() * Object.keys(teamDictionary).length)
+					let randomTeam = Object.keys(teamDictionary)[randomNum]
+
+					this.updateHighlight(j, k, randomTeam)
+					teamDictionary[randomTeam]++
+
+					if (teamDictionary[randomTeam] == maxTeamSize) {
+						delete teamDictionary[randomTeam]
+					}
+				}
+			}
+
+			this.teamModalOpen = false
 		}
 	},
 	created() {
@@ -260,7 +339,7 @@ export default {
 				db.readSomething('students', {class: this.id})
 					.then(results => {
 						this.studentsToHighlight = results
-
+						this.totalStudents = results.length
 						this.placeStudentsInSeats()
 					})
 			})
@@ -337,6 +416,25 @@ button {
 
 #clearHighlightsButton:hover .tooltip {
 	visibility: visible;
+}
+
+#teamHighlighterButton {
+	display: inline-block;
+	margin: 0 8px;
+	cursor: pointer;
+	vertical-align: middle;
+	margin-bottom: 2px;
+}
+
+#teamHighlighterButton > img {
+	height: 30px;
+	width: 30px;
+}
+
+#teamHighlighterButton:hover .tooltip {
+	visibility: visible;
+	margin-left: -50px;
+	width: 60px;
 }
 
 .tooltip {
@@ -468,13 +566,13 @@ button {
 	background: var(--yellow);
 }
 
-.choice-modal-body {
+.team-modal-body {
 	height: 180px;
 	padding-top: 120px;
 	text-align: center;
 }
 
-.choice-modal-footer {
+.team-modal-footer {
 	background: var(--gray);
 	text-align: center;
 	height: 75px;
@@ -483,6 +581,11 @@ button {
 .button-label {
 	font-size: 18px;
 	margin: 0 15%;
+}
+
+.narrow-select {
+	margin-top: 30px;
+	width: 70px;
 }
 
 .fade-enter-active, .fade-leave-active {
