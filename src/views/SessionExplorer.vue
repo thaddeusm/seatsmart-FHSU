@@ -89,16 +89,9 @@
                 </div>
             </section>
         </main>
-        <!-- <TouchBar :show="!modalOpen && !alertModalOpen" :bar="[
-            {type: 'spacer', size: 'flexible'},
-            {type: 'button', label: '⭐️', method: function() {toggleSelected()}},
-            {type: 'spacer', size: 'flexible'},
-			{type: 'button', label: 'Toggle Trends', method: function() {toggleTrendScope()}},
-            {type: 'spacer', size: 'flexible'},
-			{type: 'button', label: '📝', method: function() {openModal('note')}}
-	       ]" 
+        <TouchBar :show="true" :bar="[]" 
            :escapeItem="{type: 'button', label: 'Back', method: function() {routeBack()}}"
-        /> -->
+        />
     </div>
 </template>
 
