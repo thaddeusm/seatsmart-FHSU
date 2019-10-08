@@ -177,26 +177,24 @@
 		<section id="progressNodes">
 			<ProgressNodes :steps="steps" :progress="progress" />
 		</section>
-		<transition name="fade">
-            <Modal v-if="infoModalOpen" v-on:trigger-close="infoModalOpen = false" :dismissable="true" size="small">
-                <template slot="content">
-                    <div class="activity-info">
-                    	<h2>
-                    		{{ activityChoice }}s
-                    	</h2>
-                    	<p>
-                    		The activities you launch through Seatsmart should not make students feel like they are taking a quiz.  Ideally, the process will be somewhat gamified and encourage willing participation.  Since students will be using their own devices to connect, it is important to communicate the short duration and specific purpose of your activities.
-                    	</p>
-                    	<p v-if="activityChoice == 'survey'">
-                    		Surveys are ideal when you would like to receive honest feedback as responses are tabulated without identifying the individual choices of your students.  You can provide up to nine choices, which will be displayed on the students' devices in the same order in which you list them in the form below.
-                    	</p>
-                    	<p v-else>
-                    		Response pools offer an open-ended format for feedback, which can even be configured to allow students to submit multiple responses.  Responses will be displayed anonymously as they are received by your computer.  Two moderation options will be presented to you during the activity: hiding or deleting responses.
-                    	</p>
-                    </div>
-                </template>
-            </Modal>
-        </transition>
+        <Modal v-if="infoModalOpen" v-on:trigger-close="infoModalOpen = false" :dismissable="true" size="small">
+            <template slot="content">
+                <div class="activity-info">
+                	<h2>
+                		{{ activityChoice }}s
+                	</h2>
+                	<p>
+                		The activities you launch through Seatsmart should not make students feel like they are taking a quiz.  Ideally, the process will be somewhat gamified and encourage willing participation.  Since students will be using their own devices to connect, it is important to communicate the short duration and specific purpose of your activities.
+                	</p>
+                	<p v-if="activityChoice == 'survey'">
+                		Surveys are ideal when you would like to receive honest feedback as responses are tabulated without identifying the individual choices of your students.  You can provide up to nine choices, which will be displayed on the students' devices in the same order in which you list them in the form below.
+                	</p>
+                	<p v-else>
+                		Response pools offer an open-ended format for feedback, which can even be configured to allow students to submit multiple responses.  Responses will be displayed anonymously as they are received by your computer.  Two moderation options will be presented to you during the activity: hiding or deleting responses.
+                	</p>
+                </div>
+            </template>
+        </Modal>
 		<TouchBar 
 			:show="true" 
             :escapeItem="{type: 'button', label: 'back', method: function() {routeBack()}}"
@@ -863,13 +861,5 @@ button:disabled {
 @keyframes spin {
     from {transform: rotate(0);}
     to {transform: rotate(360deg);}
-}
-
-.fade-enter-active, .fade-leave-active {
-    transition: opacity .2s;
-}
-
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-    opacity: 0;
 }
 </style>
