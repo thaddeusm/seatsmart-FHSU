@@ -44,27 +44,23 @@
                 </template>
             </ActionBar>
         </footer>
-        <transition name="fade">
-            <Modal v-if="modalOpen" v-on:trigger-close="closeModal" :dismissable="false" size="large">
-                <template slot="content">
-                    <Settings v-on:trigger-modal-close="closeModal"/>
-                </template>
-            </Modal>
-        </transition>
-        <transition name="fade">
-            <Modal v-if="alertModalOpen" v-on:trigger-close="alertModalOpen = false" :dismissable="true" size="small">
-                <template slot="content">
-                    <img src="@/assets/alert.svg" alt="alert icon" class="alert-icon-large">
-                    <div class="modal-body">
-                        <h4>Are you sure you want to permanently delete {{ alertModalClass }}?</h4>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="modal-footer-button" @click="alertModalOpen = false">Cancel</button>
-                        <button class="modal-footer-button red" @click="deleteClass(alertModalClassID)">Delete {{ alertModalClass }}</button>
-                    </div>
-                </template>
-            </Modal>
-        </transition>
+        <Modal v-if="modalOpen" v-on:trigger-close="closeModal" :dismissable="false" size="large">
+            <template slot="content">
+                <Settings v-on:trigger-modal-close="closeModal"/>
+            </template>
+        </Modal>
+        <Modal v-if="alertModalOpen" v-on:trigger-close="alertModalOpen = false" :dismissable="true" size="small">
+            <template slot="content">
+                <img src="@/assets/alert.svg" alt="alert icon" class="alert-icon-large">
+                <div class="modal-body">
+                    <h4>Are you sure you want to permanently delete {{ alertModalClass }}?</h4>
+                </div>
+                <div class="modal-footer">
+                    <button class="modal-footer-button" @click="alertModalOpen = false">Cancel</button>
+                    <button class="modal-footer-button red" @click="deleteClass(alertModalClassID)">Delete {{ alertModalClass }}</button>
+                </div>
+            </template>
+        </Modal>
         <TouchBar :show="!modalOpen && !alertModalOpen" :bar="[
                 {type: 'spacer', size: 'flexible'},
                 {type: 'button', label: 'New Chart', method: function() {$router.push('/charts/new')}},
@@ -526,12 +522,5 @@ h6 {
 
 .archive-class-button > img {
     width: 20px;
-}
-
-.fade-enter-active, .fade-leave-active {
-    transition: opacity .2s;
-}
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-    opacity: 0;
 }
 </style>

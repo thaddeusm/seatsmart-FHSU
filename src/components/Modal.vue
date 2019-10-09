@@ -16,8 +16,8 @@ export default {
 		size: String
 	},
 	mounted() {
-		window.scrollTo(0, 0)
 		document.body.style.overflow = 'hidden'
+		window.scrollTo(0, 0)
 	},
 	beforeDestroy() {
 		document.body.style.overflow = 'auto'
@@ -28,7 +28,7 @@ export default {
 <style scoped>
 #overlay {
 	position: fixed;
-	z-index: 190;
+	z-index: 390;
 	top: 0;
 	left: 0;
 	width: 100vw;
@@ -45,7 +45,7 @@ export default {
 	bottom: 0;
 	right: 0;
 	margin: auto;
-	z-index: 200;
+	z-index: 500;
 	border: 3px solid var(--yellow);
 	border-radius: 5px;
 }

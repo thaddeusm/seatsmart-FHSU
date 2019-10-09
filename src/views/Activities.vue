@@ -34,7 +34,7 @@
                 </h2>
                 <div class="loader" v-if="sessionSorting"></div>
                 <div v-else-if="activitySessions.length == 0">
-                    <h4>
+                    <h4 id="notFound">
                         No sessions to display.
                     </h4>
                 </div>
@@ -68,42 +68,38 @@
                 </div>
             </section>
 		</main>
-		<transition name="fade">
-            <Modal v-if="modalOpen" v-on:trigger-close="closeModal" :dismissable="false" size="large">
-                <template slot="content">
-                    <ActivityAdapter 
-                    	:activity="launchedActivity"
-                    	:allowAnonymous="true"
-                    	v-on:trigger-modal-close="closeModal"
-                    />
-                </template>
-            </Modal>
-        </transition>
-		<transition name="fade">
-            <Modal v-if="alertModalOpen" v-on:trigger-close="alertModalOpen = false" :dismissable="true" size="small">
-                <template slot="content">
-                    <img src="@/assets/alert.svg" alt="alert icon" class="alert-icon-large">
-                    <div class="modal-body">
-                        <h4>Are you sure you want to permanently delete {{ alertModalActivity }}?</h4>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="modal-footer-button" @click="alertModalOpen = false">Cancel</button>
-                        <button class="modal-footer-button red" @click="deleteActivity(alertModalActivityID)">Delete Activity</button>
-                    </div>
-                </template>
-            </Modal>
-        </transition>
-		<TouchBar 
-			:bar="[
-				{type: 'spacer', size: 'flexible'},
+         <Modal v-if="modalOpen" v-on:trigger-close="closeModal" :dismissable="false" size="large">
+        <template slot="content">
+            <ActivityAdapter 
+                :activity="launchedActivity"
+                :allowAnonymous="true"
+                v-on:trigger-modal-close="closeModal"
+            />
+        </template>
+        </Modal>
+        <Modal v-if="alertModalOpen" v-on:trigger-close="alertModalOpen = false" :dismissable="true" size="small">
+            <template slot="content">
+                <img src="@/assets/alert.svg" alt="alert icon" class="alert-icon-large">
+                <div class="modal-body">
+                    <h4>Are you sure you want to permanently delete {{ alertModalActivity }}?</h4>
+                </div>
+                <div class="modal-footer">
+                    <button class="modal-footer-button" @click="alertModalOpen = false">Cancel</button>
+                    <button class="modal-footer-button red" @click="deleteActivity(alertModalActivityID)">Delete Activity</button>
+                </div>
+            </template>
+        </Modal>
+        <TouchBar 
+            :bar="[
+                {type: 'spacer', size: 'flexible'},
                 {type: 'button', label: 'New Activity', method: function() {$router.push('/activity/new')}},
                 {type: 'spacer', size: 'flexible'},
                 {type: 'button', label: 'Load All Sessions', method: function() {loadAllActivitySessions()}}
-			]"
-			:show="true" 
+            ]"
+            :show="true" 
             :escapeItem="{type: 'button', label: 'back', method: function() {routeBack()}}"
         />
-	</div>
+	</div> 
 </template>
 
 <script>
@@ -358,11 +354,12 @@ export default {
     background: var(--black);
     width: 100%;
     height: 100%;
-	z-index: 1;
+	z-index: -1;
 }
 
 header {
 	display: grid;
+    z-index: 10;
 	grid-template-rows: 20% 20% 1fr;
     grid-template-columns: 5% 18% 1fr 18% 5%;
     grid-template-areas: 
@@ -375,7 +372,6 @@ header {
     justify-content: center;
     position: fixed;
     top: 0;
-    z-index: 10;
     background: var(--black);
 }
 
@@ -384,7 +380,7 @@ h2 {
     margin-bottom: 20px;
 }
 
-h4 {
+#notFound {
     color: var(--light-gray);
 }
 
@@ -543,13 +539,5 @@ button {
 @keyframes spin {
     from {transform: rotate(0);}
     to {transform: rotate(360deg);}
-}
-
-.fade-enter-active, .fade-leave-active {
-    transition: opacity .2s;
-}
-
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-    opacity: 0;
 }
 </style>
