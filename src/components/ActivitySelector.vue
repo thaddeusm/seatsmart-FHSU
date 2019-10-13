@@ -5,7 +5,7 @@
 		<section id="existingActivities">
 			<div class="activity-button-area" v-for="(activity, index) in activities" >
 				<ButtonCard 
-					:text="activity.name" 
+					:text="abbreviatedName(activity.name)" 
 					:button="true"
 					:display="true"
 					:simple="true"
@@ -75,6 +75,11 @@ export default {
         },
         cancelActivity() {
         	this.$emit('cancel-activity')
+        },
+        abbreviatedName(name) {
+            if (name.length > 15) {
+                return name.slice(0, 15) + '...'
+            }
         }
 	},
 	mounted() {

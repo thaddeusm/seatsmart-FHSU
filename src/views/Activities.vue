@@ -13,7 +13,7 @@
 			<section id="existingActivities">
 				<div class="activity-button-area" v-for="(activity, index) in activities">
 					<ButtonCard 
-						:text="activity.name" 
+						:text="abbreviatedName(activity.name)" 
 						:button="true"
 						:display="true"
 						:simple="true"
@@ -40,7 +40,7 @@
                 </div>
                 <div v-else class="activity-button-area" v-for="(session, index) in activitySessions">
                     <ButtonCard 
-                        :text="`${session.activity.name} (${session.responses.length})`" 
+                        :text="`${abbreviatedName(session.activity.name)} (${session.responses.length})`" 
                         :button="true"
                         :display="true"
                         :simple="true"
@@ -324,6 +324,11 @@ export default {
         },
         makePrettyDate(dateObj) {
             return moment(dateObj).format('dddd, MMM D')
+        },
+        abbreviatedName(name) {
+            if (name.length > 15) {
+                return name.slice(0, 15) + '...'
+            }
         },
         getChart(id) {
             let chart = this.allCharts[id]

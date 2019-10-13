@@ -8,7 +8,7 @@
 		/>
 		<div class="activity-container" v-else>
 			<section id="activityHeader">
-				<h1>{{ activity.name }}</h1>
+				<h1>{{ abbreviatedName(activity.name) }}</h1>
 			</section>
 			<section :class="[activity.activityType.split(' ').join('-'), activityStage == 'started' ? 'activity-body-narrow':'activity-body-wide', activityStage == 'ended' ? 'activity-body-narrow':'activity-body-wide']">
 				<section id="activityBanner">
@@ -477,6 +477,11 @@ export default {
         },
         deleteResponse(index) {
         	this.responses.splice(index, 1)
+        },
+        abbreviatedName(name) {
+            if (name.length > 15) {
+                return name.slice(0, 15) + '...'
+            }
         }
 	},
 	sockets: {
