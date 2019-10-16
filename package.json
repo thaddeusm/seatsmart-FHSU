@@ -1,7 +1,7 @@
 {
   "name": "Seatsmart",
   "productName": "Seatsmart",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "author": "Thaddeus McCleary",
   "description": "a classroom participation tracking application",
   "scripts": {
