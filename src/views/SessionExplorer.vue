@@ -16,6 +16,14 @@
                 <h6 id="responses" v-if="session.responses.length > 1">
                 	{{ session.responses.length }} responses
                 </h6>
+                <button 
+                    v-if="loaded && session.activity.activityType == 'response pool'"
+                    id="exportResponsesButton" 
+                    @click="startExport" 
+                    :disabled="exporting"
+                >
+                    export responses
+                </button>
             </aside>
         </transition>
         <main>
@@ -97,6 +105,8 @@
 
 <script>
 const shell = require('electron').shell
+const { dialog } = require('electron').remote
+const fs = require('fs')
 
 import db from '@/db.js'
 import moment from 'moment'
@@ -140,7 +150,8 @@ export default {
                 '#832206',
                 '#FDCD48',
                 '#F66239'
-            ]
+            ],
+            exporting: false
 		}
 	},
 	computed: {
@@ -226,6 +237,44 @@ export default {
         },
         openEmail() {
             shell.openExternal('mailto:tbmccleary@fhsu.edu?subject=Seatsmart')
+        },
+        startExport() {
+            this.exporting = true
+            let responseString = ''
+
+            for (let i=0; i<this.session.responses.length; i++) {
+                let text = this.session.responses[i].response.text.split('\n').join()
+
+                responseString +=  `${text} \n`
+            }
+
+            let defaultFilename = this.session.activity.name
+
+            // once ready, use native save dialog
+            let options = {
+                title: "Save Exported Responses",
+                defaultPath: defaultFilename,
+                buttonLabel: "Save",
+                filters :[
+                    {name: 'txt', extensions: ['txt']}
+                ]
+            }
+
+            this.exportMessage = `${defaultFilename} is ready for export.`
+
+            dialog.showSaveDialog(options, (filename) => {
+                this.fileSavePath = filename
+
+                // handle cancelation
+                if (filename !== undefined) {
+                    fs.writeFileSync(filename, responseString, 'utf-8', this.resetExport())
+                } else {
+                    this.resetExport()
+                }
+            })
+        },
+        resetExport() {
+            this.exporting = false
         }
 	},
 	mounted() {
@@ -281,6 +330,24 @@ export default {
 #illustrationArea {
 	background: var(--light-gray);
 	margin: 20px 0;
+}
+
+#exportResponsesButton {
+    padding: 5px 10px;
+    background: var(--yellow);
+    color: var(--black);
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    outline: none;
+    display: block;
+    margin: 50px auto 10px auto;
+}
+
+#exportResponsesButton:disabled {
+    background: var(--light-gray);
+    opacity: .6;
+    cursor: not-allowed;
 }
 
 #responses {
