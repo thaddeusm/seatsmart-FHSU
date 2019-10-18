@@ -575,6 +575,10 @@ export default {
 				this.cardType = 'complex'
 			} else {
 				this.cardType = 'edit'
+
+				if (this.showingTrends) {
+					this.showingTrends = false
+				}
 			}
 		},
 		saveNewStudent() {
