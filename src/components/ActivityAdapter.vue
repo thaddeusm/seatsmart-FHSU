@@ -45,7 +45,7 @@
 					</section>
 					<section class="button-container" v-if="activityStage == 'launched'">
 						<h3 v-if="roomID !== ''">Use code: {{ roomID }}</h3>
-						<h3 v-else>Loading...</h3>
+						<h3 v-else>Connecting...</h3>
 						<qriously 
 							v-if="roomID !== ''"
 							id="qr"
