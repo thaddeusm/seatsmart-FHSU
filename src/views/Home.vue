@@ -166,6 +166,14 @@ export default {
             db.deleteSomething('classes', {_id: id})
                 .then((num) => {
                     this.$store.dispatch('getAllClasses')
+
+                    db.readSomething('activitySessions', {chart: id})
+                        .then(sessions => {
+                            for (let i=0; i<sessions.length; i++) {
+                                db.deleteSomething('activitySessions', {_id: sessions[i]._id})
+                            }
+                        })
+
                     db.readSomething('students', {class: id})
                         .then(classStudents => {
                             for (let i=0; i<classStudents.length; i++) {

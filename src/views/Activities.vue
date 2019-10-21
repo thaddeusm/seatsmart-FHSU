@@ -52,7 +52,7 @@
                     />
                     <div class="session-info-area">
                         <h6 v-if="session.chart !== 'anonymous'">
-                            {{ getChart(session.chart) }}<br>
+                            {{ abbreviatedName(getChart(session.chart)) }}<br>
                             {{ makePrettyDate(session.date._d) }}
                         </h6>
                         <h6 v-else>
