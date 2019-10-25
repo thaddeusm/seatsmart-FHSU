@@ -71,7 +71,7 @@
 		</section>
 		<section id="centerHeader" v-if="student.firstName !== ''">
 			<button id="addNoteButton" class="simple-button" @click="$emit('open-note-modal', student)">+
-				<span class="tooltip">New note for {{ student.firstName }} {{ student.lastName }}</span>
+				<span v-if="showTooltip" class="tooltip">New note for {{ student.firstName }} {{ student.lastName }}</span>
 			</button>
 		</section>
 		<section id="rightHeader" v-if="student.firstName !== '' && type !== 'simple'">
@@ -116,7 +116,8 @@ export default {
 		chosen: Boolean, 
 		conserveSpace: Boolean, 
 		studentID: String,
-		deselect: Boolean
+		deselect: Boolean,
+		showTooltip: Boolean
 	},
 	components: {
 		AbbreviationCircle
