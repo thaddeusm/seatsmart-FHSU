@@ -291,17 +291,21 @@ export default {
 
 				for (let k=0; k<row.length; k++) {
 					let student = row[k]
+					// skip empty seats
+					if (student.student._id !== '') {
+						// choose team
+						let randomNum = Math.floor(Math.random() * Object.keys(teamDictionary).length)
+						let randomTeam = Object.keys(teamDictionary)[randomNum]
 
-					// choose team
-					let randomNum = Math.floor(Math.random() * Object.keys(teamDictionary).length)
-					let randomTeam = Object.keys(teamDictionary)[randomNum]
+						
+						this.updateHighlight(j, k, randomTeam)
+						teamDictionary[randomTeam]++
 
-					this.updateHighlight(j, k, randomTeam)
-					teamDictionary[randomTeam]++
-
-					if (teamDictionary[randomTeam] == maxTeamSize) {
-						delete teamDictionary[randomTeam]
+						if (teamDictionary[randomTeam] == maxTeamSize) {
+							delete teamDictionary[randomTeam]
+						}
 					}
+					
 				}
 			}
 
