@@ -83,7 +83,7 @@ export default {
 		generateTransferData() {
 			// provide UI feedback
 			this.exporting = true
-			this.exportMessage = 'Finding chart data...'
+			this.exportMessage = 'Gathering chart data...'
 
 			let classChartID = this.chartToTransfer
 
