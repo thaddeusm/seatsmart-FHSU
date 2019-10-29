@@ -18,6 +18,12 @@
 					<h5>response pool</h5>
 				</button>
 			</div>
+			<div class="activity-choice-container">
+				<button class="activity-button" @click="chooseActivity('information gap')" :class="[activityChoice == 'information gap' ? 'selected' : '']" :disabled="progress !== 1">
+					<img src="@/assets/information-gap-illustration.svg" alt="information gap illustration">
+					<h5>information gap</h5>
+				</button>
+			</div>
 		</section>
 		<section id="border"></section>
 		<section id="activityForm">
@@ -90,7 +96,7 @@
 					</section>
 				</section>
 			</div>
-			<div v-else>
+			<div v-else-if="activityChoice == 'response pool'">
 				<section class="form-one" v-if="progress == 1">
 					<div class="form-container">
 						<h3>Options</h3>
@@ -156,6 +162,78 @@
 					</section>
 				</section>
 			</div>
+			<div v-else>
+				<section class="form-one" v-if="progress == 1">
+					<div class="form-container">
+						<h3>Options</h3>
+						<div class="input-wrapper">
+							<h5>Name</h5>
+							<input class="large-input" type="text" name="informationGapName" v-model="informationGapData.name" placeholder="Information Gap name...">
+						</div>
+						<div class="switch-wrapper">
+							<h5>Assign by Highlight Color</h5>
+							<button :class="[informationGapData.assignByHighlight ? 'on' : 'off' ,'switch']" @click="toggleAssignByHighlight">
+								<img src="@/assets/switch-circle.svg" alt="switch circle">
+							</button>
+						</div>
+					</div>
+					<section class="progress-button-area">
+						<button class="progress-button" @click="routeBack"><img class="back-icon" src="@/assets/backarrowwhite.svg" alt="back icon"></button>
+						<button class="progress-button" @click="changeProgress(2)">add information gap content</button>
+					</section>
+				</section>
+				<section class="form-two" v-if="progress == 2">
+					<div class="form-container">
+						<h3>Content</h3>
+						<div class="input-wrapper">
+							<h5>Prompt</h5>
+							<input class="large-input" type="text" name="informationGapPrompt" v-model="informationGapData.prompt" placeholder="Prompt...">
+						</div>
+						<div class="input-wrapper" id="choicesArea">
+							<h5>Content to Assign</h5>
+							<div class="form-group select-with-input" v-for="(assignment, index) in informationGapData.assignments">
+								<select name="assignment" v-model="assignment.resourceType">
+									<option value="text">text</option>
+									<option value="url">URL</option>
+									<option value="img">image</option>
+								</select>
+								<input 
+									v-if="informationGapData.assignments[index].resourceType == 'text'"
+									class="medium-input" 
+									type="text" 
+									:name="`assignment${index}`" 
+									v-model="informationGapData.assignments[index].resourceData" 
+									placeholder="Content..."
+								>
+								<input 
+									v-else-if="informationGapData.assignments[index].resourceType == 'url'"
+									class="medium-input" 
+									type="text" 
+									:name="`assignment${index}`" 
+									v-model="informationGapData.assignments[index].resourceData" 
+									placeholder="https://..."
+								>
+								<input 
+									v-else
+									class="medium-input" 
+									type="text" 
+									:name="`assignment${index}`" 
+									v-model="informationGapData.assignments[index].resourceData" 
+									placeholder="https://....jpeg"
+								>
+								<button class="delete-button" @click="removeInformationGapAssignment(index)" :disabled="index < 2">-</button>
+							</div>
+							<section id="addButtonArea">
+								<button class="add-button" @click="addInformationGapAssignment" :disabled="informationGapData.assignments.length >= 9">+</button>
+							</section>
+						</div>
+					</div>
+					<section class="progress-button-area">
+						<button class="progress-button" @click="routeBack"><img class="back-icon" src="@/assets/backarrowwhite.svg" alt="back icon"></button>
+						<button class="progress-button" @click="startPreview">preview information gap</button>
+					</section>
+				</section>
+			</div>
 			<div id="previewArea" v-if="progress == 3">
 				<section class="form-container">
 					<h3 v-if="previewRoomID == ''">Preview the {{ capitalizeString(activityChoice) }}</h3>
@@ -189,8 +267,11 @@
                 	<p v-if="activityChoice == 'survey'">
                 		Surveys are ideal when you would like to receive honest feedback as responses are tabulated without identifying the individual choices of your students.  You can provide up to nine choices, which will be displayed on the students' devices in the same order in which you list them in the form below.
                 	</p>
-                	<p v-else>
+                	<p v-else-if="activityChoice == 'response pool'">
                 		Response pools offer an open-ended format for feedback, which can even be configured to allow students to submit multiple responses.  Responses will be displayed anonymously as they are received by your computer.  Two moderation options will be presented to you during the activity: hiding or deleting responses.
+                	</p>
+                	<p v-else>
+                		Information Gaps provide a simple solution to a common aspect of a classroom activity - randomly distributing content.  Like other activities, this is meant to be used during simple, low-stakes tasks.  Also, if you use highlight colors to visually group students, you can have Seatsmart ensure that students with the same highlight color receive the same information gap assignment.
                 	</p>
                 </div>
             </template>
@@ -247,6 +328,21 @@ export default {
 				example: '',
 				allowMultipleResponses: true
 			},
+			informationGapData: {
+				name: '',
+				prompt: '',
+				assignByHighlight: false,
+				assignments: [
+					{
+						resourceType: '',
+						resourceData: ''
+					},
+					{
+						resourceType: '',
+						resourceData: ''
+					}
+				]
+			},
 			dateCreated: {},
 			previewRoomID: '',
 			infoModalOpen: false
@@ -272,8 +368,10 @@ export default {
 
 			if (this.activityChoice == 'survey') {
 				activityData = this.surveyData
-			} else {
+			} else if (this.activityChoice == 'response pool') {
 				activityData = this.responsePoolData
+			} else {
+				activityData = this.informationGapData
 			}
 
 
@@ -311,6 +409,9 @@ export default {
 				this.responsePoolData.timeLimit.enabled = !this.responsePoolData.timeLimit.enabled
 			}
 		},
+		toggleAssignByHighlight() {
+			this.informationGapData.assignByHighlight = !this.informationGapData.assignByHighlight
+		},
 		toggleAllowMultipleResponses() {
 			this.responsePoolData.allowMultipleResponses = !this.responsePoolData.allowMultipleResponses
 		},
@@ -319,6 +420,15 @@ export default {
 		},
 		removeSurveyChoice(index) {
 			this.surveyData.choices.splice(index, 1)
+		},
+		addInformationGapAssignment() {
+			this.informationGapData.assignments.push({
+				resourceType: '',
+				resourceData: ''
+			})
+		},
+		removeInformationGapAssignment(index) {
+			this.informationGapData.assignments.splice(index, 1)
 		},
 		errorExists() {
 			this.alertMessage = ''
@@ -383,6 +493,26 @@ export default {
 							break
 					}
 				break
+				case 'information gap':
+					switch (this.progress) {
+						case 1:
+							if (this.informationGapData.name == '') {
+								this.alertMessage = 'Please name the information gap activity.'
+								check = true
+							}
+							break
+						case 2:
+							if (this.informationGapData.prompt == '') {
+								this.alertMessage = 'Please provide a information gap prompt.'
+								check = true
+							} else if (this.informationGapData.assignments.indexOf('') !== -1) {
+								this.alertMessage = 'Please complete all assignment fields.'
+								check = true
+							}
+							break
+						case 3:
+							break
+					}
 			}
 
 			return check
@@ -411,7 +541,7 @@ export default {
 							}
 						}
 					}						
-			} else {
+			} else if (this.activityChoice == 'response pool') {
 				dataToSave = {
 						name: this.responsePoolData.name,
 						activityType: 'response pool',
@@ -429,6 +559,19 @@ export default {
 							allowMultipleResponses: this.responsePoolData.allowMultipleResponses
 						}
 					}
+			} else {
+				dataToSave = {
+						name: this.informationGapData.name,
+						activityType: 'information gap',
+						dateCreated: this.dateCreated,
+						content: {
+							prompt: this.informationGapData.prompt,
+							assignments: this.informationGapData.assignments
+						},
+						options: {
+							assignByHighlight: this.informationGapData.assignByHighlight
+						}
+					}	
 			}
 
 
@@ -495,13 +638,19 @@ export default {
 						this.surveyData.prompt = existingActivity[0].content.prompt
 						this.surveyData.choices = existingActivity[0].content.choices
 						this.dateCreated = existingActivity[0].dateCreated
-					} else {
+					} else if (existingActivity[0].activityType == 'response pool') {
 						this.responsePoolData.name = existingActivity[0].name
 						this.responsePoolData.timeLimit.enabled = existingActivity[0].options.timeLimit.enabled
 						this.responsePoolData.timeLimit.minutes = existingActivity[0].options.timeLimit.minutes
 						this.responsePoolData.timeLimit.seconds = existingActivity[0].options.timeLimit.seconds
 						this.responsePoolData.prompt = existingActivity[0].content.prompt
 						this.responsePoolData.example = existingActivity[0].content.example
+						this.dateCreated = existingActivity[0].dateCreated
+					} else {
+						this.informationGapData.name = existingActivity[0].name
+						this.informationGapData.assignByHighlight = existingActivity[0].options.assignByHighlight
+						this.informationGapData.prompt = existingActivity[0].content.prompt
+						this.informationGapData.assignments = existingActivity[0].content.assignments
 						this.dateCreated = existingActivity[0].dateCreated
 					}
 
@@ -565,6 +714,7 @@ button {
 	padding: 5px 15px;
 	border-radius: 5px;
 	box-shadow: 1px 2px 1px 2px var(--gray);
+	border: 2px solid var(--light-gray);
 	margin: 10px;
 }
 
@@ -725,6 +875,11 @@ button {
 	color: var(--black);
 	border: 1px solid var(--light-gray);
 	outline: none;
+}
+
+.select-with-input {
+	display: grid;
+	grid-template-columns: 30% 55% 15%;
 }
 
 #addButtonArea {

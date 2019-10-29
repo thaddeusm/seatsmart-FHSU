@@ -100,6 +100,13 @@
 								show all
 							</button>
 						</div>
+						<div v-if="activity.activityType == 'information gap'">
+							<ul v-if="responses.length > 0">
+								<li v-for="(response, index) in responses">
+									<h4>{{ response.response }}</h4>
+								</li>
+							</ul>
+						</div>
 						<section id="waitingForResponses" v-if="responses.length == 0"></section>
 						<div class="actions-wrapper">
 							<button 
@@ -139,6 +146,13 @@
 								show all
 							</button>
 						</div>
+						<div v-if="activity.activityType == 'information gap'">
+							<ul v-if="responses.length > 0">
+								<li v-for="(response, index) in responses">
+									<h4>{{ response.response }}</h4>
+								</li>
+							</ul>
+						</div>
 						<div class="actions-wrapper" v-if="allowAnonymous">
 							<button 
 								class="action-button cancel-button"
@@ -175,7 +189,7 @@
 					</section>
 					<Countdown 
 						id="countdown"  
-						v-if="activity.options.timeLimit.enabled && activityStage == 'started'"
+						v-if="activity.options.hasOwnProperty('timeLimit') && activity.options.timeLimit.enabled && activityStage == 'started'"
 						:countdownRunning="countdownStarted"
 						:timeLimit="timeLimitInSeconds"
 						v-on:countdown-ended="endActivity"
@@ -529,7 +543,7 @@ export default {
 						students: this.students
 					}
 				}
-			} else {
+			} else if (this.activity.activityType == 'response pool') {
 				if (this.launchChoice.id == 'anonymously') {
 					data = {
 						activityType: this.activity.activityType,
@@ -550,6 +564,31 @@ export default {
 							prompt: this.activity.content.prompt,
 							example: this.activity.content.example,
 							allowMultipleResponses: this.activity.options.allowMultipleResponses
+						},
+						activityMode: this.launchChoice.id,
+						activityDate: moment(),
+						students: this.students
+					}
+				}
+			} else {
+				if (this.launchChoice.id == 'anonymously') {
+					data = {
+						activityType: this.activity.activityType,
+						activityData: {
+							assignByHighlight: this.activity.options.assignByHighlight,
+							prompt: this.activity.content.prompt,
+							assignments: this.activity.content.assignments
+						},
+						activityMode: this.launchChoice.id,
+						activityDate: moment()
+					}
+				} else {
+					data = {
+						activityType: this.activity.activityType,
+						activityData: {
+							assignByHighlight: this.activity.options.assignByHighlight,
+							prompt: this.activity.content.prompt,
+							assignments: this.activity.content.assignments
 						},
 						activityMode: this.launchChoice.id,
 						activityDate: moment(),
@@ -791,6 +830,13 @@ li {
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: 0 -20px;
+}
+
+.information-gap {
+	background-image: url('~@/assets/information-gap-illustration.svg');
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: 0px -5px;
 }
 
 #qr {

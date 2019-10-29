@@ -528,6 +528,13 @@ button {
     background-position: left;
 }
 
+.information-gap {
+    background-image: linear-gradient(rgba(255, 255, 255, .7)), url('~@/assets/information-gap-illustration.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: left;
+}
+
 .loader {
     height: 100px;
     width: 100px;
