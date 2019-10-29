@@ -46,32 +46,30 @@
 				</template>
 			</ActionBar>
 		</footer>
-		<transition name="fade">
-			<Modal v-if="teamModalOpen" :dismissable="false" size="small">
-	    		<template slot="content">
-	    			<div class="team-modal-body">
-	    				<h4>How many teams do you want to make?</h4>
-	    				<select 
-							name="numberOfTeams"
-							v-model="teams"
-							class="narrow-select"
-						>
-							<option value="2">2</option>
-							<option value="3">3</option>	
-							<option value="4">4</option>	
-							<option value="5">5</option>	
-							<option value="6">6</option>	
-							<option value="7">7</option>	
-							<option value="8">8</option>		
-						</select>
-	    			</div>
-	    			<div class="team-modal-footer">
-	    				<button class="modal-footer-button" @click="teamModalOpen = false">Cancel</button>
-	    				<button class="modal-footer-button yellow" @click="startTeamHighlights">Make Teams</button>
-	    			</div>
-	    		</template>
-	    	</Modal>
-		</transition>
+		<Modal v-if="teamModalOpen" :dismissable="false" size="small">
+    		<template slot="content">
+    			<div class="team-modal-body">
+    				<h4>How many teams do you want to make?</h4>
+    				<select 
+						name="numberOfTeams"
+						v-model="teams"
+						class="narrow-select"
+					>
+						<option value="2">2</option>
+						<option value="3">3</option>	
+						<option value="4">4</option>	
+						<option value="5">5</option>	
+						<option value="6">6</option>	
+						<option value="7">7</option>	
+						<option value="8">8</option>		
+					</select>
+    			</div>
+    			<div class="team-modal-footer">
+    				<button class="modal-footer-button" @click="teamModalOpen = false">Cancel</button>
+    				<button class="modal-footer-button yellow" @click="startTeamHighlights">Make Teams</button>
+    			</div>
+    		</template>
+    	</Modal>
 		<TouchBar :show="true" :bar="[
 				{type: 'spacer', size: 'flexible'},
 				{type: 'button', label: 'clear all highlights', method: function() {clearAllHighlights()}},

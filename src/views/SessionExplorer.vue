@@ -24,6 +24,9 @@
                 >
                     export responses
                 </button>
+                <button id="deleteSessionButton" @click="alertModalOpen = true">
+                    <img src="@/assets/delete.svg" alt="delete icon">
+                </button>
             </aside>
         </transition>
         <main>
@@ -135,6 +138,18 @@
                 </div>
             </section>
         </main>
+        <Modal v-if="alertModalOpen" v-on:trigger-close="alertModalOpen = false" :dismissable="true" size="small">
+            <template slot="content">
+                <img src="@/assets/alert.svg" alt="alert icon" class="alert-icon-large">
+                <div class="modal-body">
+                    <h4>Are you sure you want to permanently delete the records from this activity session?</h4>
+                </div>
+                <div class="modal-footer">
+                    <button class="modal-footer-button" @click="alertModalOpen = false">Cancel</button>
+                    <button class="modal-footer-button red" @click="deleteSession">Delete Session</button>
+                </div>
+            </template>
+        </Modal>
         <TouchBar :show="true" :bar="[]" 
            :escapeItem="{type: 'button', label: 'Back', method: function() {routeBack()}}"
         />
@@ -156,6 +171,7 @@ moment.updateLocale("en", { week: {
 
 import TitleBar from '@/components/TitleBar.vue'
 import TouchBar from '@/components/TouchBar.vue'
+import Modal from '@/components/Modal.vue'
 
 export default {
 	name: 'SessionExplorer',
@@ -164,7 +180,8 @@ export default {
 	},
 	components: {
 		TitleBar,
-		TouchBar
+		TouchBar,
+        Modal
 	},
 	data() {
 		return {
@@ -189,7 +206,8 @@ export default {
                 '#FDCD48',
                 '#F66239'
             ],
-            exporting: false
+            exporting: false,
+            alertModalOpen: false
 		}
 	},
 	computed: {
@@ -260,7 +278,7 @@ export default {
                 for (let i=0; i<this.session.activity.content.assignments.length; i++) {
                     let obj = {
                         value: 0,
-                        label: `assignment ${i + 1}`,
+                        label: `item ${i + 1}`,
                         color: this.donutSectionColorSpectrum[i]
                     }
 
@@ -270,7 +288,7 @@ export default {
                 // increment section values based upon participant responses
                 for (let j=0; j<responses.length; j++) {
                     for (let k=0; k<sections.length; k++) {
-                        if (sections[k].label == `assignment ${parseInt(responses[j].response.assignment) + 1}`) {
+                        if (sections[k].label == `item ${parseInt(responses[j].response.assignment) + 1}`) {
                             sections[k].value++
                             break
                         }
@@ -348,6 +366,12 @@ export default {
         },
         resetExport() {
             this.exporting = false
+        },
+        deleteSession() {
+            db.deleteSomething('activitySessions', {_id: this.id})
+                .then(() => {
+                    this.$router.go(-1)
+                })
         }
 	},
 	mounted() {
@@ -421,6 +445,15 @@ export default {
     background: var(--light-gray);
     opacity: .6;
     cursor: not-allowed;
+}
+
+#deleteSessionButton {
+    display: block;
+    margin: 70px auto 10px auto;
+}
+
+#deleteSessionButton > img {
+    width: 20px;
 }
 
 #responses {
@@ -610,6 +643,45 @@ p {
 a {
     text-decoration: none;
     color: var(--black);
+}
+
+.modal-body {
+    height: 150px;
+    padding-top: 70px;
+    text-align: center;
+}
+
+.modal-footer {
+    background: var(--gray);
+    text-align: center;
+    height: 75px;
+}
+
+.modal-footer-button {
+    padding: 5px 10px;
+    background: var(--light-gray);
+    color: var(--black);
+    font-size: 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    outline: none;
+    margin-top: 25px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.alert-icon-large {
+    vertical-align: middle;
+    width: 50px;
+    margin-top: 30px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.red {
+    background: var(--red)!important;
+    color: var(--white)!important;
 }
 
 .fade-enter-active, .fade-leave-active {

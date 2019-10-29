@@ -121,143 +121,129 @@
 		    	</template>
 		    </ActionBar>
 		</footer>
-		<transition name="fade">
-      		<Modal v-if="noteModalOpen" v-on:trigger-close="noteModalOpen = false" :dismissable="true" size="large">
-        		<template slot="content">
-          			<NoteForm
-						type="single"
-						:student="newNoteStudent"
-						v-on:trigger-modal-close="noteModalOpen = false"
-						v-on:absence="addAbsence"
-					/>
-        		</template>
-      		</Modal>
-    	</transition>
-		<transition name="fade">
-      		<Modal v-if="newStudentModalOpen" v-on:trigger-close="resetNewStudent" :dismissable="false" size="small">
-        		<template slot="content">
-					<div class="student-modal">
-						<section class="student-modal-header">
-							<h3>Add a New Student</h3>
-						</section>
-						<section class="student-form">
-							<div>
-								<div class="form-group">
-									<div class="alert-area"><span class="student-alert">{{ studentFormAlertMessage }}</span></div>
-									<input class="small-input" type="text" name="firstName" v-model="newStudent.firstName" placeholder="first name">
-									<input class="small-input" type="text" name="lastName" v-model="newStudent.lastName" placeholder="last name">
-									<input class="small-input" type="text" name="tigerID" v-model="newStudent.tigerID" placeholder="Tiger ID">
-								</div>
+		<Modal v-if="noteModalOpen" v-on:trigger-close="noteModalOpen = false" :dismissable="true" size="large">
+    		<template slot="content">
+      			<NoteForm
+					type="single"
+					:student="newNoteStudent"
+					v-on:trigger-modal-close="noteModalOpen = false"
+					v-on:absence="addAbsence"
+				/>
+    		</template>
+  		</Modal>
+		<Modal v-if="newStudentModalOpen" v-on:trigger-close="resetNewStudent" :dismissable="false" size="small">
+    		<template slot="content">
+				<div class="student-modal">
+					<section class="student-modal-header">
+						<h3>Add a New Student</h3>
+					</section>
+					<section class="student-form">
+						<div>
+							<div class="form-group">
+								<div class="alert-area"><span class="student-alert">{{ studentFormAlertMessage }}</span></div>
+								<input class="small-input" type="text" name="firstName" v-model="newStudent.firstName" placeholder="first name">
+								<input class="small-input" type="text" name="lastName" v-model="newStudent.lastName" placeholder="last name">
+								<input class="small-input" type="text" name="tigerID" v-model="newStudent.tigerID" placeholder="Tiger ID">
 							</div>
-						</section>
-						<section class="student-modal-footer">
-							<button class="student-footer-button" @click="resetNewStudent">Cancel</button>
-							<button class="student-footer-button yellow" @click="saveNewStudent">Save</button>
-						</section>
-					</div>
-        		</template>
-      		</Modal>
-    	</transition>
-		<transition name="fade">
-      		<Modal v-if="editStudentModalOpen" v-on:trigger-close="resetStudentToEdit" :dismissable="false" size="small">
-        		<template slot="content">
-					<div class="student-modal">
-						<section class="student-modal-header">
-							<h3>Edit {{ studentToEdit.firstName }} {{ studentToEdit.lastName[0] }}.</h3>
-						</section>
-						<section class="student-form">
-							<div v-if="!promptStudentDelete">
-								<div class="form-group">
-									<div class="alert-area"><span class="student-alert">{{ studentFormAlertMessage }}</span></div>
-									<input class="small-input" type="text" name="firstName" v-model="studentToEdit.firstName" placeholder="first name">
-									<input class="small-input" type="text" name="lastName" v-model="studentToEdit.lastName" placeholder="last name">
-									<input class="small-input" type="text" name="tigerID" v-model="studentToEdit.tigerID" placeholder="Tiger ID">
-								</div>
+						</div>
+					</section>
+					<section class="student-modal-footer">
+						<button class="student-footer-button" @click="resetNewStudent">Cancel</button>
+						<button class="student-footer-button yellow" @click="saveNewStudent">Save</button>
+					</section>
+				</div>
+    		</template>
+  		</Modal>
+		<Modal v-if="editStudentModalOpen" v-on:trigger-close="resetStudentToEdit" :dismissable="false" size="small">
+    		<template slot="content">
+				<div class="student-modal">
+					<section class="student-modal-header">
+						<h3>Edit {{ studentToEdit.firstName }} {{ studentToEdit.lastName[0] }}.</h3>
+					</section>
+					<section class="student-form">
+						<div v-if="!promptStudentDelete">
+							<div class="form-group">
+								<div class="alert-area"><span class="student-alert">{{ studentFormAlertMessage }}</span></div>
+								<input class="small-input" type="text" name="firstName" v-model="studentToEdit.firstName" placeholder="first name">
+								<input class="small-input" type="text" name="lastName" v-model="studentToEdit.lastName" placeholder="last name">
+								<input class="small-input" type="text" name="tigerID" v-model="studentToEdit.tigerID" placeholder="Tiger ID">
 							</div>
-							<div v-else>
-								<h4>
-									Are you sure you want to permanently delete {{ studentToEdit.firstName }}?
-								</h4>
-							</div>
-						</section>
-						<section class="student-modal-footer">
-							<button class="student-footer-button red" @click="promptStudentDelete = true" v-if="!promptStudentDelete">Delete Student</button>
-							<button class="student-footer-button" @click="resetStudentToEdit">Cancel</button>
-							<button class="student-footer-button red" v-if="promptStudentDelete" @click="deleteStudent">Delete {{ studentToEdit.firstName }}</button>
-							<button class="student-footer-button yellow" @click="saveEditedStudent" v-if="!promptStudentDelete">Save</button>
-						</section>
-					</div>
-        		</template>
-      		</Modal>
-    	</transition>
-		<transition name="fade">
-      		<Modal v-if="modalOpen" v-on:trigger-close="closeSettings" :dismissable="false" size="large">
-        		<template slot="content">
-          			<Settings v-on:trigger-modal-close="closeSettings"/>
-        		</template>
-      		</Modal>
-    	</transition>
-		<transition name="fade">
-			<Modal v-if="alert.isAlert" :dismissable="false" size="small">
-				<template slot="content">
-					<div class="alert-modal-body">
-	    				<h4 v-html="alert.alertMessage"></h4>
-	    			</div>
-	    			<div class="alert-modal-footer">
-	    				<button class="modal-footer-button yellow" @click="alert.action" v-if="alert.action !== null">Ok</button>
-	    				<button class="modal-footer-button" @click="alert.isAlert = false" v-else>Got it</button>
-	    			</div>
-				</template>
-			</Modal>
-		</transition>
-		<transition name="fade">
-			<Modal v-if="remotePanelOpen" v-on:trigger-close="closeRemotePanel" :dismissable="true" size="small">
-				<template slot="content">
-					<RemoteConfigPanel 
-						v-if="!remoteConfigured"
-						v-on:trigger-modal-close="closeRemotePanel"
-						v-on:end-config="remoteConfigured = true"
-						:roomID="remoteRoomID"
-						:remoteClientConnected="remoteClientConnected"
-						:remoteConnected="remoteConnected"
-					/>
-					<RemoteStatusPanel 
-						v-else
-						v-on:disconnect="closeRemoteConnection"
-						v-on:trigger-modal-close="closeRemotePanel"
-						:roomID="remoteRoomID"
-						:remoteClientConnected="remoteClientConnected"
-						:remoteConnected="remoteConnected"
-						:log="remoteActionLog"
-					/>
-				</template>
-			</Modal>
-		</transition>
-		<transition name="fade">
-            <Modal v-if="activityModalOpen" v-on:trigger-close="activityModalOpen = false" :dismissable="false" size="large">
-                <template slot="content">
-                	<ActivitySelector 
-                		v-if="activityChoice == null" 
-                		v-on:set-activity-choice="setActivityChoice"
-                		v-on:cancel-activity="cancelActivity"
-                	/>
-                    <ActivityAdapter 
-                    	v-else
-                    	:allowAnonymous="false"
-                    	:chart="id"
-                    	:activity="activityChoice"
-                    	:students="presentStudents"
-                    	:remoteConnected="remoteConnected"
-                    	:remoteStartActivity="remoteStartActivity"
-                    	v-on:cancel-activity="cancelActivity"
-                    	v-on:trigger-modal-close="cancelActivity"
-                    	v-on:update-connected-users="updateStudentsConnectedToActivity"
-                    	v-on:update-activity-responses="updateActivityResponses"
-                    	v-on:update-activity-status="updateActivityStatus"
-                    />
-                </template>
-            </Modal>
-        </transition>
+						</div>
+						<div v-else>
+							<h4>
+								Are you sure you want to permanently delete {{ studentToEdit.firstName }}?
+							</h4>
+						</div>
+					</section>
+					<section class="student-modal-footer">
+						<button class="student-footer-button red" @click="promptStudentDelete = true" v-if="!promptStudentDelete">Delete Student</button>
+						<button class="student-footer-button" @click="resetStudentToEdit">Cancel</button>
+						<button class="student-footer-button red" v-if="promptStudentDelete" @click="deleteStudent">Delete {{ studentToEdit.firstName }}</button>
+						<button class="student-footer-button yellow" @click="saveEditedStudent" v-if="!promptStudentDelete">Save</button>
+					</section>
+				</div>
+    		</template>
+  		</Modal>
+		<Modal v-if="modalOpen" v-on:trigger-close="closeSettings" :dismissable="false" size="large">
+    		<template slot="content">
+      			<Settings v-on:trigger-modal-close="closeSettings"/>
+    		</template>
+  		</Modal>
+		<Modal v-if="alert.isAlert" :dismissable="false" size="small">
+			<template slot="content">
+				<div class="alert-modal-body">
+    				<h4 v-html="alert.alertMessage"></h4>
+    			</div>
+    			<div class="alert-modal-footer">
+    				<button class="modal-footer-button yellow" @click="alert.action" v-if="alert.action !== null">Ok</button>
+    				<button class="modal-footer-button" @click="alert.isAlert = false" v-else>Got it</button>
+    			</div>
+			</template>
+		</Modal>
+		<Modal v-if="remotePanelOpen" v-on:trigger-close="closeRemotePanel" :dismissable="true" size="small">
+			<template slot="content">
+				<RemoteConfigPanel 
+					v-if="!remoteConfigured"
+					v-on:trigger-modal-close="closeRemotePanel"
+					v-on:end-config="remoteConfigured = true"
+					:roomID="remoteRoomID"
+					:remoteClientConnected="remoteClientConnected"
+					:remoteConnected="remoteConnected"
+				/>
+				<RemoteStatusPanel 
+					v-else
+					v-on:disconnect="closeRemoteConnection"
+					v-on:trigger-modal-close="closeRemotePanel"
+					:roomID="remoteRoomID"
+					:remoteClientConnected="remoteClientConnected"
+					:remoteConnected="remoteConnected"
+					:log="remoteActionLog"
+				/>
+			</template>
+		</Modal>
+		<Modal v-if="activityModalOpen" v-on:trigger-close="activityModalOpen = false" :dismissable="false" size="large">
+            <template slot="content">
+            	<ActivitySelector 
+            		v-if="activityChoice == null" 
+            		v-on:set-activity-choice="setActivityChoice"
+            		v-on:cancel-activity="cancelActivity"
+            	/>
+                <ActivityAdapter 
+                	v-else
+                	:allowAnonymous="false"
+                	:chart="id"
+                	:activity="activityChoice"
+                	:students="presentStudents"
+                	:remoteConnected="remoteConnected"
+                	:remoteStartActivity="remoteStartActivity"
+                	v-on:cancel-activity="cancelActivity"
+                	v-on:trigger-modal-close="cancelActivity"
+                	v-on:update-connected-users="updateStudentsConnectedToActivity"
+                	v-on:update-activity-responses="updateActivityResponses"
+                	v-on:update-activity-status="updateActivityStatus"
+                />
+            </template>
+        </Modal>
 		<TouchBar :show="!modalOpen" 
 			:bar="[
 				{type: 'button', label: '🔀', method: function() {rearrangeSeats()}},

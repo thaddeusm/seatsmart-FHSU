@@ -108,8 +108,6 @@
 								:sections="assignmentDonutSections" :total="connectedUsers.length"
 								v-if="responses.length > 0"
 							>
-								<h1>{{ responseRatio }}%</h1>
-								<h5>response</h5>
 							</vc-donut>
 						</div>
 						<section id="waitingForResponses" v-if="responses.length == 0"></section>
@@ -158,8 +156,6 @@
 								has-legend legend-placement="left"
 								:sections="assignmentDonutSections" :total="connectedUsers.length"
 							>
-								<h1>{{ responseRatio }}%</h1>
-								<h5>response</h5>
 							</vc-donut>
 						</div>
 						<div class="actions-wrapper" v-if="allowAnonymous">
@@ -320,7 +316,7 @@ export default {
 				for (let i=0; i<this.activity.content.assignments.length; i++) {
 					let obj = {
 						value: 0,
-						label: `assignment ${i + 1}`,
+						label: `item ${i + 1}`,
 						color: this.donutSectionColorSpectrum[i]
 					}
 
@@ -330,7 +326,7 @@ export default {
 				// increment section values based upon participant responses
 				for (let j=0; j<responses.length; j++) {
 					for (let k=0; k<sections.length; k++) {
-						if (sections[k].label == `assignment ${parseInt(responses[j].assignment) + 1}`) {
+						if (sections[k].label == `item ${parseInt(responses[j].assignment) + 1}`) {
 							sections[k].value++
 							break
 						}
