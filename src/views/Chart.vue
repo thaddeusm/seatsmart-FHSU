@@ -425,10 +425,20 @@ export default {
 			})
 
 			return available.map((student) => {
-				return {
-					firstName: student.firstName,
-					lastName: student.lastName,
-					id: student._id
+				if (student.highlight) {
+					return {
+						firstName: student.firstName,
+						lastName: student.lastName,
+						id: student._id,
+						highlight: student.highlight
+					}
+				} else {
+					return {
+						firstName: student.firstName,
+						lastName: student.lastName,
+						id: student._id,
+						highlight: '#E5E5E5'
+					}
 				}
 			})
 		},

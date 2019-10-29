@@ -96,6 +96,44 @@
                     </sequential-entrance>
                 </div>
             </section>
+            <section v-else-if="loaded && session.activity.activityType == 'information gap'">
+                <div class="survey" v-if="session.responses.length > 0">
+                    <vc-donut
+                        background="black" foreground="black"
+                        :size="250" unit="px" :thickness="20"
+                        has-legend legend-placement="bottom"
+                        :sections="assignmentDonutSections" :total="session.responses.length"
+                    >
+                    </vc-donut>
+                </div>
+                <div id="responseArea">
+                    <h2>
+                        Individual Responses
+                    </h2>
+                    <sequential-entrance fromTop delay="20">
+                        <div 
+                            v-for="(response, index) in session.responses" 
+                            :key="`response${index}`"
+                            class="response-card"
+                        >
+                            <section 
+                                class="response-header"
+                            >
+                                <div 
+                                    class="circle" 
+                                    :style="{background: findSpectrumColor(response.response.assignment)}">
+                                </div>
+                            </section>
+                            <section class="response-body">
+                                <h5><router-link :to="`/student/${response.respondent.id}`">
+                                    {{ response.respondent.firstName }} 
+                                    {{ response.respondent.lastName }}
+                                </router-link></h5>
+                            </section>
+                        </div>
+                    </sequential-entrance>
+                </div>
+            </section>
         </main>
         <TouchBar :show="true" :bar="[]" 
            :escapeItem="{type: 'button', label: 'Back', method: function() {routeBack()}}"
@@ -212,6 +250,35 @@ export default {
             }
 
             return sections
+        },
+        assignmentDonutSections() {
+            let responses = this.session.responses
+            let sections = []
+
+            // format survey choices into sections per donut chart API
+            if (this.session.activity.activityType == 'information gap') {
+                for (let i=0; i<this.session.activity.content.assignments.length; i++) {
+                    let obj = {
+                        value: 0,
+                        label: `assignment ${i + 1}`,
+                        color: this.donutSectionColorSpectrum[i]
+                    }
+
+                    sections.push(obj)
+                }
+
+                // increment section values based upon participant responses
+                for (let j=0; j<responses.length; j++) {
+                    for (let k=0; k<sections.length; k++) {
+                        if (sections[k].label == `assignment ${parseInt(responses[j].response.assignment) + 1}`) {
+                            sections[k].value++
+                            break
+                        }
+                    }
+                }
+            }
+
+            return sections
         }
 	},
 	methods: {
@@ -231,7 +298,13 @@ export default {
             return moment(dateObj).format('dddd, MMM D')
         },
         findSpectrumColor(choice) {
-            let index = this.session.activity.content.choices.indexOf(choice)
+            let index
+
+            if (this.session.activityType == 'survey') {
+                index = this.session.activity.content.choices.indexOf(choice)
+            } else {
+                index = choice
+            }
 
             return this.donutSectionColorSpectrum[index]
         },

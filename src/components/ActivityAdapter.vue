@@ -101,11 +101,16 @@
 							</button>
 						</div>
 						<div v-if="activity.activityType == 'information gap'">
-							<ul v-if="responses.length > 0">
-								<li v-for="(response, index) in responses">
-									<h4>{{ response.response }}</h4>
-								</li>
-							</ul>
+							<vc-donut
+								background="black" foreground="black"
+								:size="250" unit="px" :thickness="20"
+								has-legend legend-placement="left"
+								:sections="assignmentDonutSections" :total="connectedUsers.length"
+								v-if="responses.length > 0"
+							>
+								<h1>{{ responseRatio }}%</h1>
+								<h5>response</h5>
+							</vc-donut>
 						</div>
 						<section id="waitingForResponses" v-if="responses.length == 0"></section>
 						<div class="actions-wrapper">
@@ -147,11 +152,15 @@
 							</button>
 						</div>
 						<div v-if="activity.activityType == 'information gap'">
-							<ul v-if="responses.length > 0">
-								<li v-for="(response, index) in responses">
-									<h4>{{ response.response }}</h4>
-								</li>
-							</ul>
+							<vc-donut
+								background="black" foreground="black"
+								:size="250" unit="px" :thickness="20"
+								has-legend legend-placement="left"
+								:sections="assignmentDonutSections" :total="connectedUsers.length"
+							>
+								<h1>{{ responseRatio }}%</h1>
+								<h5>response</h5>
+							</vc-donut>
 						</div>
 						<div class="actions-wrapper" v-if="allowAnonymous">
 							<button 
@@ -187,13 +196,15 @@
 							</h5>
 						</div>
 					</section>
-					<Countdown 
-						id="countdown"  
-						v-if="activity.options.hasOwnProperty('timeLimit') && activity.options.timeLimit.enabled && activityStage == 'started'"
-						:countdownRunning="countdownStarted"
-						:timeLimit="timeLimitInSeconds"
-						v-on:countdown-ended="endActivity"
-					/>
+					<div v-if="activity.options.hasOwnProperty('timeLimit')">
+						<Countdown 
+							id="countdown"  
+							v-if="activity.options.timeLimit.enabled && activityStage == 'started'"
+							:countdownRunning="countdownStarted"
+							:timeLimit="timeLimitInSeconds"
+							v-on:countdown-ended="endActivity"
+						/>
+					</div>
 				</section>
 			</section>
 		</div>
@@ -300,6 +311,35 @@ export default {
 
 			return sections
 		},
+		assignmentDonutSections() {
+			let responses = this.responses
+			let sections = []
+
+			// format survey choices into sections per donut chart API
+			if (this.activity.activityType == 'information gap') {
+				for (let i=0; i<this.activity.content.assignments.length; i++) {
+					let obj = {
+						value: 0,
+						label: `assignment ${i + 1}`,
+						color: this.donutSectionColorSpectrum[i]
+					}
+
+					sections.push(obj)
+				}
+
+				// increment section values based upon participant responses
+				for (let j=0; j<responses.length; j++) {
+					for (let k=0; k<sections.length; k++) {
+						if (sections[k].label == `assignment ${parseInt(responses[j].assignment) + 1}`) {
+							sections[k].value++
+							break
+						}
+					}
+				}
+			}
+
+			return sections
+		},
 		responseRatio() {
 			let ratio = this.responses.length / this.connectedUsers.length
 
@@ -322,6 +362,13 @@ export default {
 							respondent: 'anonymous',
 							response: simpleResponseObj
 						}
+					} else if (this.activity.activityType == 'information gap') {
+						simpleResponseObj = { assignment: response.assignment }
+
+						return {
+							respondent: 'anonymous',
+							response: simpleResponseObj
+						}
 					} else {
 						simpleResponseObj = { text: response.response }
 
@@ -333,6 +380,13 @@ export default {
 				} else {
 					if (this.activity.activityType == 'survey') {
 						simpleResponseObj = { choice: response.choice }
+
+						return {
+							respondent: response.student,
+							response: simpleResponseObj
+						}
+					} else if (this.activity.activityType == 'information gap') {
+						simpleResponseObj = { assignment: response.assignment }
 
 						return {
 							respondent: response.student,
@@ -369,7 +423,7 @@ export default {
 			}
 		},
 		timeLimitInSeconds() {
-			if (this.activity.options.timeLimit.enabled) {
+			if (this.activity.options.hasOwnProperty('timeLimit') && this.activity.options.timeLimit.enabled) {
 				let minutes = parseInt(this.activity.options.timeLimit.minutes)
 				let seconds = parseInt(this.activity.options.timeLimit.seconds)
 
@@ -379,6 +433,39 @@ export default {
 				} else {
 					return seconds
 				}
+			} else {
+				return undefined
+			}
+		},
+		assignmentsByHighlight() {
+			if (this.activity.activityType == 'information gap') {
+				let colors = [
+	                '#04fcbb',
+	                '#0445fc',
+	                '#04c1fc',
+	                '#73006c',
+	                '#bb04fc',
+	                '#ff3af2',
+	                '#c1fc04',
+	                '#04fc3f',
+	                '#00a10b',
+	                '#fc7d04',
+	                '#fc0445',
+	                '#b10230',
+	                '#878379',
+	                '#FFFFFF',
+	                '#E5E5E5'
+	            ]
+				let highlightDictionary = {}
+				let assignments = this.activity.content.assignments
+
+				for (let i=0; i<colors.length; i++) {
+					let randomAssignment = Math.floor(Math.random() * assignments.length)
+
+					highlightDictionary[colors[i]] = randomAssignment
+				}
+
+				return highlightDictionary
 			} else {
 				return undefined
 			}
@@ -420,12 +507,14 @@ export default {
 			// display live results view
 			this.activityStage = 'started'
 
-			// start countdown, if enabled
-			if (this.activity.options.timeLimit.enabled) {
-				let scope = this
-				setTimeout(function() {
-					scope.countdownStarted = true
-				}, 3500, scope)
+			if (this.activity.options.hasOwnProperty('timeLimit')) {
+				// start countdown, if enabled
+				if (this.activity.options.timeLimit.enabled) {
+					let scope = this
+					setTimeout(function() {
+						scope.countdownStarted = true
+					}, 3500, scope)
+				}
 			}
 		},
 		endActivity() {
@@ -479,7 +568,7 @@ export default {
         	this.addNotes = true
         },
         addResponse(response) {
-        	if (this.activity.activityType == 'survey') {
+        	if (this.activity.activityType !== 'response pool') {
         		this.responses.push(response)
         	} else {
         		// push response to the top of the list for better UX
@@ -576,6 +665,7 @@ export default {
 						activityType: this.activity.activityType,
 						activityData: {
 							assignByHighlight: this.activity.options.assignByHighlight,
+							assignmentsByHighlight: this.assignmentsByHighlight,
 							prompt: this.activity.content.prompt,
 							assignments: this.activity.content.assignments
 						},
@@ -587,6 +677,7 @@ export default {
 						activityType: this.activity.activityType,
 						activityData: {
 							assignByHighlight: this.activity.options.assignByHighlight,
+							assignmentsByHighlight: this.assignmentsByHighlight,
 							prompt: this.activity.content.prompt,
 							assignments: this.activity.content.assignments
 						},
