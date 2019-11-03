@@ -224,7 +224,7 @@
 								<button class="delete-button" @click="removeInformationGapAssignment(index)" :disabled="index < 2">-</button>
 							</div>
 							<section id="addButtonArea">
-								<button class="add-button" @click="addInformationGapAssignment" :disabled="informationGapData.assignments.length >= 9">+</button>
+								<button class="add-button" @click="addInformationGapAssignment">+</button>
 							</section>
 						</div>
 					</div>
@@ -334,11 +334,11 @@ export default {
 				assignByHighlight: false,
 				assignments: [
 					{
-						resourceType: '',
+						resourceType: 'text',
 						resourceData: ''
 					},
 					{
-						resourceType: '',
+						resourceType: 'text',
 						resourceData: ''
 					}
 				]
@@ -423,7 +423,7 @@ export default {
 		},
 		addInformationGapAssignment() {
 			this.informationGapData.assignments.push({
-				resourceType: '',
+				resourceType: 'text',
 				resourceData: ''
 			})
 		},
@@ -505,9 +505,22 @@ export default {
 							if (this.informationGapData.prompt == '') {
 								this.alertMessage = 'Please provide a information gap prompt.'
 								check = true
-							} else if (this.informationGapData.assignments.indexOf('') !== -1) {
-								this.alertMessage = 'Please complete all assignment fields.'
-								check = true
+							} else {
+								let missingInfo = false
+
+								for (let i=0; i<this.informationGapData.assignments.length; i++) {
+									let data = this.informationGapData.assignments[i].resourceData
+
+									if (data == '') {
+										missingInfo = true
+										break
+									}
+								}
+
+								if (missingInfo) {
+									this.alertMessage = 'Please provide content for each content item.'
+									check = true
+								}
 							}
 							break
 						case 3:
