@@ -104,7 +104,6 @@
 							<vc-donut
 								background="black" foreground="black"
 								:size="250" unit="px" :thickness="20"
-								has-legend legend-placement="left"
 								:sections="assignmentDonutSections" :total="connectedUsers.length"
 								v-if="responses.length > 0"
 							>
@@ -153,7 +152,6 @@
 							<vc-donut
 								background="black" foreground="black"
 								:size="250" unit="px" :thickness="20"
-								has-legend legend-placement="left"
 								:sections="assignmentDonutSections" :total="connectedUsers.length"
 							>
 							</vc-donut>
@@ -311,16 +309,24 @@ export default {
 			let responses = this.responses
 			let sections = []
 
+			let spectrumIndex = 0
+
 			// format survey choices into sections per donut chart API
 			if (this.activity.activityType == 'information gap') {
 				for (let i=0; i<this.activity.content.assignments.length; i++) {
+					if (spectrumIndex == this.donutSectionColorSpectrum.length) {
+                        spectrumIndex = 0
+                    }
+
 					let obj = {
 						value: 0,
 						label: `item ${i + 1}`,
-						color: this.donutSectionColorSpectrum[i]
+						color: this.donutSectionColorSpectrum[spectrumIndex]
 					}
 
 					sections.push(obj)
+					
+					spectrumIndex++
 				}
 
 				// increment section values based upon participant responses
