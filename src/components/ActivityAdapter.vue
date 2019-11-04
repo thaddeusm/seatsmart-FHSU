@@ -459,7 +459,7 @@ export default {
 
 				// iterate over shuffled list of assignments to minimize repetition
 				for (let i=0; i<colors.length; i++) {
-					if (assignmentIndex > colors.length) {
+					if (assignmentIndex == colors.length || assignmentIndex == assignments.length) {
 						assignmentIndex = 0
 					}
 					highlightDictionary[colors[i]] = assignmentIndex
