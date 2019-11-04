@@ -453,12 +453,17 @@ export default {
 	                '#E5E5E5'
 	            ]
 				let highlightDictionary = {}
-				let assignments = this.activity.content.assignments
+				let assignments = this.shuffle(this.activity.content.assignments)
 
+				let assignmentIndex = 0
+
+				// iterate over shuffled list of assignments to minimize repetition
 				for (let i=0; i<colors.length; i++) {
-					let randomAssignment = Math.floor(Math.random() * assignments.length)
-
-					highlightDictionary[colors[i]] = randomAssignment
+					if (assignmentIndex > colors.length) {
+						assignmentIndex = 0
+					}
+					highlightDictionary[colors[i]] = assignmentIndex
+					assignmentIndex++
 				}
 
 				return highlightDictionary
@@ -549,7 +554,6 @@ export default {
 			if (this.chart == '') {
 				this.$socket.close()
 			}
-			
 		},
 		encrypt(data) {
             return sjcl.encrypt(this.roomID, JSON.stringify(data))
@@ -583,6 +587,17 @@ export default {
             } else {
             	return name
             }
+        },
+        shuffle(arr) {
+        	let j, x, i
+		    for (i = arr.length - 1; i > 0; i--) {
+		        j = Math.floor(Math.random() * (i + 1))
+		        x = arr[i]
+		        arr[i] = arr[j]
+		        arr[j] = x
+		    }
+
+		    return arr
         }
 	},
 	sockets: {
