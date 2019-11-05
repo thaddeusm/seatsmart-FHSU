@@ -4,10 +4,10 @@
 	:class="[trend === 0 ? 'gray' : '', trend < 0 ? 'red' : '', trend > 0 ? 'yellow' : '']">
 		<section id="cardBody" v-if="student.firstName !== ''">
 			<h6 class="student-name" v-if="conserveSpace">
-				{{ student.firstName }} {{ student.lastName[0] }}.
+				{{ abbreviatedName(student.firstName) }} {{ student.lastName[0] }}.
 			</h6>
 			<h4 class="student-name" v-else>
-				{{ student.firstName }} {{ student.lastName[0] }}.
+				{{ abbreviatedName(student.firstName) }} {{ student.lastName[0] }}.
 			</h4>
 		</section>
 		<section id="cardFooter" v-if="student.firstName !== ''">
@@ -45,10 +45,10 @@
 	<div v-else-if="type === 'edit'" id="editCardContainer">
 		<section id="editCardBody" v-if="student.firstName !== ''">
 			<h6 class="student-name" v-if="conserveSpace">
-				{{ student.firstName }} {{ student.lastName[0] }}.
+				{{ abbreviatedName(student.firstName) }} {{ student.lastName[0] }}.
 			</h6>
 			<h4 class="student-name" v-else>
-				{{ student.firstName }} {{ student.lastName[0] }}.
+				{{ abbreviatedName(student.firstName) }} {{ student.lastName[0] }}.
 			</h4>
 		</section>
 		<section id="editCardBody" v-else>
@@ -80,10 +80,10 @@
 		</section>
 		<section id="cardBody" v-if="student.firstName !== ''">
 			<h6 class="student-name" v-if="conserveSpace">
-				{{ student.firstName }} {{ student.lastName[0] }}.
+				{{ abbreviatedName(student.firstName) }} {{ student.lastName[0] }}.
 			</h6>
 			<h4 class="student-name" v-else>
-				{{ student.firstName }} {{ student.lastName[0] }}.
+				{{ abbreviatedName(student.firstName) }} {{ student.lastName[0] }}.
 			</h4>
 		</section>
 		<section id="cardFooter" v-if="student.firstName !== ''">
@@ -426,7 +426,14 @@ export default {
 			} else {
 				return weight
 			}
-		}
+		},
+		abbreviatedName(name) {
+            if (name.length > 5) {
+                return name.slice(0, 5) + '...'
+            } else {
+                return name
+            }
+        }
 	},
 	mounted() {
 		// grab student info from the DB

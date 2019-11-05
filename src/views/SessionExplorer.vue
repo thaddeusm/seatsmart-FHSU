@@ -329,7 +329,7 @@ export default {
         findSpectrumColor(choice) {
             let index
 
-            if (this.session.activityType == 'survey') {
+            if (this.session.activity.activityType == 'survey') {
                 index = this.session.activity.content.choices.indexOf(choice)
             } else {
                 if (choice > this.donutSectionColorSpectrum.length) {
@@ -338,7 +338,6 @@ export default {
                     index = choice
                 }
             }
-            console.log(index)
             return this.donutSectionColorSpectrum[index]
         },
         openEmail() {
