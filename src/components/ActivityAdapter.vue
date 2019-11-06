@@ -80,8 +80,8 @@
 								:sections="donutSections" :total="connectedUsers.length"
 								v-if="responses.length > 0"
 							>
-								<h1>{{ responseRatio }}%</h1>
-								<h5>response</h5>
+								<h5 v-if="responses.length == 1">1 response</h5>
+								<h5 v-else>{{ responses.length }} responses</h5>
 							</vc-donut>
 						</div>
 						<div v-if="activity.activityType == 'response pool'">
@@ -128,8 +128,8 @@
 								has-legend legend-placement="left"
 								:sections="donutSections" :total="connectedUsers.length"
 							>
-								<h1>{{ responseRatio }}%</h1>
-								<h5>response</h5>
+								<h5 v-if="responses.length == 1">1 response</h5>
+								<h5 v-else>{{ responses.length }} responses</h5>
 							</vc-donut>
 						</div>
 						<div v-if="activity.activityType == 'response pool'">
@@ -341,17 +341,6 @@ export default {
 			}
 
 			return sections
-		},
-		responseRatio() {
-			let ratio = this.responses.length / this.connectedUsers.length
-
-			let percentage = ratio * 100
-
-			if (percentage > 0) {
-				return Math.floor(percentage)
-			} else {
-				return 0
-			}
 		},
 		responsesInDBFormat() {
 			return this.responses.map((response) => {

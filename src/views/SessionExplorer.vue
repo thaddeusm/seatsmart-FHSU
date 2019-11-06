@@ -68,6 +68,8 @@
                         has-legend legend-placement="bottom"
                         :sections="donutSections" :total="session.responses.length"
                     >
+                        <h5 v-if="session.responses.length == 1">1 response</h5>
+                        <h5 v-else>{{ session.responses.length }} responses</h5>
                     </vc-donut>
                 </div>
                 <div id="responseArea">
@@ -85,7 +87,15 @@
                             >
                                 <div 
                                     class="circle" 
-                                    :style="{background: findSpectrumColor(response.response.choice)}">
+                                    v-if="response.response.choice"
+                                    :style="{background: findSpectrumColor(response.response.choice)}"
+                                >
+                                </div>
+                                <div 
+                                    v-else
+                                    class="circle" 
+                                    :style="{background: '#000000'}"
+                                >
                                 </div>
                             </section>
                             <section class="response-body">
@@ -93,7 +103,12 @@
                                     {{ response.respondent.firstName }} 
                                     {{ response.respondent.lastName }}
                                 </router-link></h5>
-                                <p>{{ response.response.choice }}</p>
+                                <p v-if="response.response.choice">
+                                    {{ response.response.choice }}
+                                </p>
+                                <p v-else>
+                                    (did not complete)
+                                </p>
                             </section>
                         </div>
                     </sequential-entrance>
@@ -104,8 +119,11 @@
                     <vc-donut
                         background="black" foreground="black"
                         :size="250" unit="px" :thickness="20"
+                        has-legend
                         :sections="assignmentDonutSections" :total="session.responses.length"
                     >
+                        <h5 v-if="session.responses.length == 1">1 item assigned</h5>
+                        <h5 v-else>{{ session.responses.length }} items assigned</h5>
                     </vc-donut>
                 </div>
                 <div id="responseArea">
@@ -122,8 +140,15 @@
                                 class="response-header"
                             >
                                 <div 
-                                    class="circle" 
+                                    class="circle"
+                                    v-if="response.response.assignment" 
                                     :style="{background: findSpectrumColor(response.response.assignment)}">
+                                </div>
+                                <div 
+                                    v-else
+                                    class="circle" 
+                                    :style="{background: '#000000'}"
+                                >
                                 </div>
                             </section>
                             <section class="response-body">
