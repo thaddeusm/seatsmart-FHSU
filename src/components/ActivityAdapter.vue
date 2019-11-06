@@ -70,7 +70,7 @@
 						</div>
 					</section>
 					<section class="results-container" v-if="activityStage == 'started'">
-						<h3 v-if="connected">Collecting Responses</h3>
+						<h3 v-if="connected">Collecting Responses (code: {{ roomID }})</h3>
 						<h3 v-else>Disconnected...Trying to Reconnect</h3>
 						<div v-if="activity.activityType == 'survey'">
 							<vc-donut
