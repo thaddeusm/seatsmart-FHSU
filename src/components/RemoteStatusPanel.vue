@@ -18,11 +18,11 @@
 					<qriously 
 						v-if="showQR"
 						id="qr"
-						:value="`https://remote.seatsmart.tech/`" 
+						:value="`https://remote.seatsmart.tech/code/${roomID}`" 
 						:size="100" 
 					/>
 					<div id="qrGhost" v-else>
-						<h5>{{ roomID }}</h5>
+						
 					</div>
 					<button class="qr-toggle" v-if="showQR" @click="showQR = false">hide QR</button>
 					<button class="qr-toggle" v-else @click="showQR = true">show QR</button>

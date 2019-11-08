@@ -44,12 +44,12 @@
 						</div>
 					</section>
 					<section class="button-container" v-if="activityStage == 'launched'">
-						<h3 v-if="roomID !== ''">Use code: {{ roomID }}</h3>
+						<h3 v-if="roomID !== ''">Scan to Connect:</h3>
 						<h3 v-else>Connecting...</h3>
 						<qriously 
 							v-if="roomID !== ''"
 							id="qr"
-							value="https://activities.seatsmart.tech/"
+							:value="`https://activities.seatsmart.tech/code/${roomID}`"
 							:size="200" 
 						/>
 						<section id="roomIDLoading" v-else></section>
@@ -70,7 +70,7 @@
 						</div>
 					</section>
 					<section class="results-container" v-if="activityStage == 'started'">
-						<h3 v-if="connected">Collecting Responses (code: {{ roomID }})</h3>
+						<h3 v-if="connected">Collecting Responses</h3>
 						<h3 v-else>Disconnected...Trying to Reconnect</h3>
 						<div v-if="activity.activityType == 'survey'">
 							<vc-donut

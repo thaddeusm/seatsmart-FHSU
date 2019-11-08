@@ -10,7 +10,7 @@
 				<qriously 
 					id="qr"
 					v-if="showQR"
-					:value="`https://remote.seatsmart.tech/`" 
+					:value="`https://remote.seatsmart.tech/code/${roomID}`" 
 					:size="200" 
 				/>
 				<div id="qrGhost" v-else>
