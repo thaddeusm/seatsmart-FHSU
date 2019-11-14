@@ -30,6 +30,15 @@
                     <button @click="toggleSelected" v-if="selected"><img src="@/assets/yellowstar.svg" alt="select icon"></button>
                     <button @click="toggleSelected" v-else><img src="@/assets/graystar.svg" alt="select icon"></button>
                 </div>
+                <section id="switchArea">
+                    <p>
+                        <span class="switch-label">notes</span> 
+                        <button :class="[showActivities ? 'on' : 'off' ,'switch']" @click="toggleRecordsDisplay">
+                            <img src="@/assets/switch-circle.svg" alt="switch circle">
+                        </button> 
+                        <span class="switch-label">activities</span>
+                    </p>
+                </section>
             </aside>
         </transition>
         <main>
@@ -55,7 +64,7 @@
                     <button v-if="monthTrend.length > 1" :class="[trendScope === 'month' ? 'selected' : '', 'trend-adjust']" @click="toggleTrendScope">this month</button>
                 </section>
             </header>
-            <section id="noteArea" v-if="loaded">
+            <section id="noteArea" v-if="loaded && !showActivities">
                 <h2 v-if="this.notes.length == 0">Add a Note</h2>
                 <h2 v-else>Notes</h2>
                 <div id="addNoteArea">
@@ -79,6 +88,17 @@
                             <transition name="fade">
                                 <button @click="promptDelete(note._id)" class="delete-button" v-if="trendLoaded"><img src="@/assets/delete.svg" alt="delete icon"></button>
                             </transition>
+                        </section>
+                    </div>
+                </sequential-entrance>
+            </section>
+            <section id="activityArea" v-if="loaded && showActivities">
+                <sequential-entrance fromTop delay="20">
+                    <div v-for="(session, index) in activitySessions" :key="`session${index}`" :class="[session.activity.activityType.split(' ').join('-'), 'activity-card']">
+                        <section class="activity-body">
+                            <h5>{{ session.activity.name }}</h5>
+                            <span class="date-text">on {{ makePrettyDate(session.date._d) }}</span>
+                            <button @click="routeToActivitySession(session._id)">view session</button>
                         </section>
                     </div>
                 </sequential-entrance>
@@ -188,6 +208,18 @@ export default {
                     comment: null
 				}
             ],
+            activitySessions: [
+                {
+                    date: {},
+                    activity: {},
+                    responses: [{
+                        respondent: null,
+                        response: null
+                    }],
+                    chart: null,
+                    _id: ''
+                }
+            ],
             trendScope: 'all',
             loaded: false,
             trendLoaded: false,
@@ -195,7 +227,8 @@ export default {
             alertModalOpen: false,
             noteToDelete: null,
             noteToEdit: undefined,
-            selected: false
+            selected: false,
+            showActivities: false
         }
     },
     computed: {
@@ -381,9 +414,43 @@ export default {
 
                     this.loaded = true
 
-
                     // show page after all student data loaded
                     this.getEarliestDateNoted()
+
+                    let scope = this
+                    setTimeout(function() {
+                        scope.getActivityRecords()
+                    }, 1500, scope)
+                })
+        },
+        getActivityRecords() {
+            db.readSomething('activitySessions', {chart: this.student.class})
+                .then((results) => {
+                    let studentResults = []
+
+                    // filter out activity records that did not include the student
+                    for (let i=0; i<results.length; i++) {
+                        let result = results[i]
+
+                        for (let j=0; j<result.responses.length; j++) {
+                            let record = result.responses[i]
+                            console.log(record.respondent.id == this.student._id)
+                            if (record.respondent.id == this.student._id) {
+                                studentResults.push(result)
+                                break
+                            }
+                        }
+                    }
+
+                    this.activitySessions = studentResults.sort((a, b) => {
+                        let dateA = a.date._d
+                        let dateB = b.date._d
+
+                        return dateA < dateB ? -1 : 1
+                    })
+
+                    console.log(results)
+
                 })
         },
         startEdit(note) {
@@ -500,6 +567,12 @@ export default {
             } else {
                 return weight
             }
+        },
+        toggleRecordsDisplay() {
+            this.showActivities = !this.showActivities
+        },
+        routeToActivitySession(sessionId) {
+            this.$router.push(`/session/${sessionId}`)
         }
     },
     mounted() {
@@ -819,6 +892,91 @@ main {
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
+}
+
+#switchArea {
+    text-align: center;
+    margin: 50px auto;
+}
+
+.switch {
+    height: 27px;
+    width: 55px;
+    border-radius: 27px;
+    text-align: left;
+    border: 1px solid var(--black);
+    transition: all .1s ease-in;
+    margin-left: 10px;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.switch > img {
+    height: 25px;
+    vertical-align: middle;
+}
+
+.off {
+    background: var(--gray);
+    padding-left: 0;
+}
+
+.on {
+    background: var(--yellow);
+    padding-left: 35px;
+}
+
+.survey {
+    background-image: linear-gradient(rgba(255, 255, 255, .9)), url('~@/assets/survey-illustration.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: left;
+}
+
+.response-pool {
+    background-image: linear-gradient(rgba(255, 255, 255, .7)), url('~@/assets/response-pool-illustration.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: left;
+}
+
+.information-gap {
+    background-image: linear-gradient(rgba(255, 255, 255, .7)), url('~@/assets/information-gap-illustration.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: left;
+}
+
+#activityArea {
+    margin: 50px auto 50px auto;
+    text-align: center;
+}
+
+.activity-card {
+    display: inline-grid;
+    width: 320px;
+    height: 200px;
+    margin: 40px 5%;
+    border-radius: 10px;
+    box-shadow: 1px 2px 1px 2px var(--gray);
+    align-items: center;
+}
+
+.activity-body > h5 {
+    text-align: center;
+    margin: 5px auto;
+}
+
+.activity-body > button {
+    display: block;
+    padding: 5px 10px;
+    background: var(--yellow);
+    color: var(--black);
+    font-size: 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    outline: none;
+    margin: 25px auto;
 }
 
 .fade-enter-active, .fade-leave-active {

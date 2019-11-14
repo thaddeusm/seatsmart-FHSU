@@ -95,7 +95,8 @@ activitySessions:
 		respondent: String,
 		response: String
 	}],
-	chart: String
+	chart: String,
+	name: String
 }
 */
 
