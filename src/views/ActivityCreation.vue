@@ -355,15 +355,9 @@ export default {
 	},
 	sockets: {
 		activityRoomEstablished(roomID) {
-			console.log(roomID)
 			this.previewRoomID = roomID
 		},
-		activityDeviceConnected() {
-			console.log('preview device connected')
-		},
 		activityDataRequested() {
-			console.log('data requested, sending...')
-
 			let activityData
 
 			if (this.activityChoice == 'survey') {
@@ -635,8 +629,6 @@ export default {
 		}
 	},
 	created() {
-		console.log(this.$route.redirectedFrom)
-
 		if (this.id !== undefined) {
 			db.readSomething('activities', {_id: this.id})
 				.then((existingActivity) => {

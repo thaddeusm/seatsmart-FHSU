@@ -199,7 +199,6 @@ export default {
 
                     this.activitySessions = sorted
 
-                    console.log(this.activitySessions)
                     this.sessionSorting = false
                     this.allSessionsDisplayed = true
                     this.sessionScope = 'All'
@@ -236,7 +235,6 @@ export default {
                     })
 
                     this.activitySessions = sorted
-                    console.log(this.activitySessions)
                     this.sessionSorting = false
                     this.sessionScope = 'Month'
                     window.scrollTo(0, 0)
@@ -273,7 +271,6 @@ export default {
 
                     this.activitySessions = sorted
 
-                    console.log(this.activitySessions)
                     this.sessionSorting = false
                     this.sessionScope = 'Week'
                     window.scrollTo(0, 0)
@@ -319,7 +316,6 @@ export default {
         	this.openModal()
         },
         launchActivitySessionExplorer(index) {
-            console.log(this.activitySessions[index])
             this.$router.push(`/session/${this.activitySessions[index]._id}`)
         },
         makePrettyDate(dateObj) {

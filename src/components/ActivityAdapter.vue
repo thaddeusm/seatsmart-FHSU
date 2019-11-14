@@ -487,7 +487,6 @@ export default {
 				}
 
 				return assignmentDictionary
-				console.log('Assignments by student: ', assignmentDictionary)
 			} else {
 				return undefined
 			}
@@ -623,20 +622,15 @@ export default {
 	},
 	sockets: {
 		activityRoomEstablished(roomID) {
-			console.log(roomID)
 			this.roomID = roomID
 			this.connected = true
 		},
 		activityDeviceConnected(deviceID) {
-			console.log('preview device connected')
-
 			if (this.connectedUsers.indexOf(deviceID) == -1) {
 				this.connectedUsers.push(deviceID)
 			}
 		},
 		activityDataRequested() {
-			console.log('data requested, sending...')
-
 			let data
 
 			if (this.activity.activityType == 'survey') {
@@ -720,15 +714,12 @@ export default {
 					}
 				}
 			}
-			console.log(data)
 			this.$socket.emit('activityDataIncoming', this.encrypt(data))
 		},
 		incomingResponseData(encryptedData) {
 			let decrypted = this.decrypt(encryptedData)
-			console.log('Received response: ', decrypted)
 			
 			this.$socket.emit('confirmResponseReceipt', this.encrypt(decrypted.id))
-			console.log('Confirm response receipt', decrypted)
 			this.addResponse(decrypted)
 		},
 		disconnect() {
@@ -736,7 +727,6 @@ export default {
 			this.$socket.emit('rejoinActivityRoom', this.roomID)
 		},
 		rejoinedActivityRoom() {
-			console.log('rejoined room')
 			this.connected = true
 
 			if (this.activityStage == 'started') {
@@ -745,7 +735,6 @@ export default {
 		},
 		deviceDisconnection(disconnectedSocketID) {
 			let target = this.connectedUsers.indexOf(disconnectedSocketID)
-			console.log('an activity device disconnected')
 			if (target !== -1) {
 				this.connectedUsers.splice(target, 1)
 			}
@@ -759,11 +748,7 @@ export default {
 		},
 		incomingUsername(encryptedFullName) {
 			let fullName = this.decrypt(encryptedFullName)
-			console.log(fullName)
 			this.mostRecentlyConnectedStudent = `${fullName.firstName} ${fullName.lastName}`
-		},
-		rejoinedRoom() {
-			console.log('a device rejoined')
 		}
 	},
 	mounted() {

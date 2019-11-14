@@ -341,8 +341,6 @@ export default {
                 .then((results) => {
                     this.session = results[0]
                     this.loaded = true
-
-                    console.log(this.session)
                 })
 		},
 		routeBack() {

@@ -68,7 +68,6 @@ export default {
         },
         setActivityChoice(activityIndex) {
         	this.activityChoice = this.activities[activityIndex]
-        	console.log(this.activityChoice)
         },
         launchActivity() {
         	this.$emit('set-activity-choice', this.activityChoice)
