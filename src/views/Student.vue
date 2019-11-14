@@ -45,6 +45,7 @@
                     :auto-draw="true"
                     :autoDrawDuration="3000"
                     :smooth="true"
+                    gradientDirection="bottom"
                     :key="trendScope"
                 >
                 </trend>
