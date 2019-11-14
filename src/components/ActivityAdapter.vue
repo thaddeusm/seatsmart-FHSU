@@ -465,6 +465,32 @@ export default {
 			} else {
 				return undefined
 			}
+		},
+		assignmentsByStudent() {
+			if (this.activity.activityType == 'information gap' && this.launchChoice.id !== 'anonymously') {
+				let assignmentDictionary = {}
+				let assignments = this.shuffle(this.activity.content.assignments)
+
+				let assignmentIndex = 0
+
+				// iterate over shuffled list of assignments to minimize repetition
+				for (let i=0; i<this.students.length; i++) {
+					let student = this.students[i].id
+
+					assignmentDictionary[student] = assignmentIndex
+					
+					if (assignmentIndex !== assignments.length) {
+						assignmentIndex++
+					} else {
+						assignmentIndex = 0
+					}
+				}
+
+				return assignmentDictionary
+				console.log('Assignments by student: ', assignmentDictionary)
+			} else {
+				return undefined
+			}
 		}
 	},
 	watch: {
@@ -684,6 +710,7 @@ export default {
 						activityData: {
 							assignByHighlight: this.activity.options.assignByHighlight,
 							assignmentsByHighlight: this.assignmentsByHighlight,
+							assignmentsByStudent: this.assignmentsByStudent,
 							prompt: this.activity.content.prompt,
 							assignments: this.activity.content.assignments
 						},
