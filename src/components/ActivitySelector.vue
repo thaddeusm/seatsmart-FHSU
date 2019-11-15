@@ -18,9 +18,9 @@
 			<div class="activity-button-area">
 				<ButtonCard icon="+" text="activity" to="/activity/new"/>
 			</div>
-			<h2>
-				Previous Activity Sessions
-			</h2>
+			<h3>
+				Review Previous Activity Sessions
+			</h3>
 			<div class="activity-button-area" v-for="(session, index) in activitySessions" v-if="activitySessions[0].chart">
 				<ButtonCard 
 	                :text="`${abbreviatedName(session.activity.name)} (${session.responses.length})`" 
@@ -245,6 +245,11 @@ h1 {
 
 .session-info-area {
     margin: 10px 40px;
+}
+
+h3 {
+	margin: 80px auto 20px auto;
+	color: var(--yellow);
 }
 
 h6 {
