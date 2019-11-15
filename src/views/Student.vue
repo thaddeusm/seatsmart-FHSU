@@ -36,7 +36,7 @@
                         <button :class="[showActivities ? 'on' : 'off' ,'switch']" @click="toggleRecordsDisplay">
                             <img src="@/assets/switch-circle.svg" alt="switch circle">
                         </button> 
-                        <span class="switch-label">activities</span>
+                         <span class="switch-label">activities</span>
                     </p>
                 </section>
             </aside>
@@ -432,10 +432,11 @@ export default {
                     for (let i=0; i<results.length; i++) {
                         let result = results[i]
 
+
                         for (let j=0; j<result.responses.length; j++) {
-                            let record = result.responses[i]
-                            console.log(record.respondent.id == this.student._id)
-                            if (record.respondent.id == this.student._id) {
+                            let respondent = result.responses[j].respondent.id
+                            
+                            if (respondent == this.student._id) {
                                 studentResults.push(result)
                                 break
                             }
@@ -446,10 +447,10 @@ export default {
                         let dateA = a.date._d
                         let dateB = b.date._d
 
-                        return dateA < dateB ? -1 : 1
+                        return dateA < dateB ? 1 : -1
                     })
 
-                    console.log(results)
+                    console.log(this.activitySessions)
 
                 })
         },
@@ -906,8 +907,8 @@ main {
     text-align: left;
     border: 1px solid var(--black);
     transition: all .1s ease-in;
-    margin-left: 10px;
-    margin-right: 10px;
+    margin-left: 15px;
+    margin-right: 15px;
     vertical-align: middle;
 }
 
@@ -923,7 +924,7 @@ main {
 
 .on {
     background: var(--yellow);
-    padding-left: 35px;
+    padding-left: 30px;
 }
 
 .survey {
