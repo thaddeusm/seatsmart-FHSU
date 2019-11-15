@@ -30,7 +30,7 @@
                     <button @click="toggleSelected" v-if="selected"><img src="@/assets/yellowstar.svg" alt="select icon"></button>
                     <button @click="toggleSelected" v-else><img src="@/assets/graystar.svg" alt="select icon"></button>
                 </div>
-                <section id="switchArea">
+                <section id="switchArea" v-if="activitiesLoaded">
                     <p>
                         <span class="switch-label">notes</span> 
                         <button :class="[showActivities ? 'on' : 'off' ,'switch']" @click="toggleRecordsDisplay">
@@ -229,7 +229,8 @@ export default {
             noteToDelete: null,
             noteToEdit: undefined,
             selected: false,
-            showActivities: false
+            showActivities: false,
+            activitiesLoaded: false
         }
     },
     computed: {
@@ -427,32 +428,33 @@ export default {
         getActivityRecords() {
             db.readSomething('activitySessions', {chart: this.student.class})
                 .then((results) => {
-                    let studentResults = []
+                    if (results.length > 0) {
+                        let studentResults = []
 
-                    // filter out activity records that did not include the student
-                    for (let i=0; i<results.length; i++) {
-                        let result = results[i]
+                        // filter out activity records that did not include the student
+                        for (let i=0; i<results.length; i++) {
+                            let result = results[i]
 
 
-                        for (let j=0; j<result.responses.length; j++) {
-                            let respondent = result.responses[j].respondent.id
-                            
-                            if (respondent == this.student._id) {
-                                studentResults.push(result)
-                                break
+                            for (let j=0; j<result.responses.length; j++) {
+                                let respondent = result.responses[j].respondent.id
+                                
+                                if (respondent == this.student._id) {
+                                    studentResults.push(result)
+                                    break
+                                }
                             }
                         }
-                    }
 
-                    this.activitySessions = studentResults.sort((a, b) => {
-                        let dateA = a.date._d
-                        let dateB = b.date._d
+                        this.activitySessions = studentResults.sort((a, b) => {
+                            let dateA = a.date._d
+                            let dateB = b.date._d
 
-                        return dateA < dateB ? 1 : -1
-                    })
+                            return dateA < dateB ? 1 : -1
+                        })
 
-                    console.log(this.activitySessions)
-
+                        this.activitiesLoaded = true
+                    } 
                 })
         },
         startEdit(note) {
