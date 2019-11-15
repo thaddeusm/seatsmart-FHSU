@@ -18,6 +18,27 @@
 			<div class="activity-button-area">
 				<ButtonCard icon="+" text="activity" to="/activity/new"/>
 			</div>
+			<h2>
+				Previous Activity Sessions
+			</h2>
+			<div class="activity-button-area" v-for="(session, index) in activitySessions" v-if="activitySessions[0].chart">
+				<ButtonCard 
+	                :text="`${abbreviatedName(session.activity.name)} (${session.responses.length})`" 
+	                :button="true"
+	                :display="true"
+	                :simple="true"
+	                :key="`session${index}`" 
+	                :onClick="routeToActivitySession"
+	                :index="index"
+	                :class="[session.activity.activityType.split(' ').join('-')]"
+	                v-if="session.activity !== undefined"
+	            />
+	            <div class="session-info-area">
+                    <h6>
+                        {{ makePrettyDate(session.date._d) }}
+                    </h6>
+                </div>
+        	</div>
 		</section>
 		<section id="footer">
 			<button 
@@ -39,18 +60,39 @@
 
 <script>
 import db from '@/db.js'
+import moment from 'moment'
+
+moment.updateLocale("en", { week: {
+  dow: 1, // First day of week is Monday
+  doy: 6  // First week of year must contain 1 January (7 + 0 - 1)
+}})
 
 import ButtonCard from '@/components/ButtonCard.vue'
 
 export default {
 	name: 'ActivitySelector',
+	props: {
+		chart: String
+	},
 	components: {
 		ButtonCard
 	},
 	data() {
 		return {
 			activities: [],
-			activityChoice: null
+			activityChoice: null,
+			activitySessions: [
+                {
+                    date: {},
+                    activity: {},
+                    responses: [{
+                        respondent: null,
+                        response: null
+                    }],
+                    chart: null,
+                    _id: ''
+                }
+            ]
 		}
 	},
 	methods: {
@@ -64,6 +106,20 @@ export default {
                         return dateA < dateB ? -1 : 1
                     })
 
+                    this.getActivitySessions()
+                })
+        },
+        getActivitySessions() {
+        	db.readSomething('activitySessions', {chart: this.chart})
+                .then((results) => {
+                    this.activitySessions = results.sort((a, b) => {
+                        let dateA = a.date._d
+                        let dateB = b.date._d
+
+                        return dateA < dateB ? 1 : -1
+                    })
+
+                    console.log(this.activitySessions)
                 })
         },
         setActivityChoice(activityIndex) {
@@ -81,6 +137,14 @@ export default {
             } else {
             	return name
             }
+        },
+        routeToActivitySession(index) {
+        	let id = this.activitySessions[index]._id
+
+            this.$router.push(`/session/${id}`)
+        },
+        makePrettyDate(dateObj) {
+            return moment(dateObj).format('dddd, MMM D')
         }
 	},
 	mounted() {
@@ -177,5 +241,13 @@ h1 {
 
 .selected {
 	border: 3px solid var(--yellow);
+}
+
+.session-info-area {
+    margin: 10px 40px;
+}
+
+h6 {
+    color: var(--yellow);
 }
 </style>

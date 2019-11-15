@@ -136,6 +136,7 @@
             {type: 'button', label: '⭐️', method: function() {toggleSelected()}},
             {type: 'spacer', size: 'flexible'},
 			{type: 'button', label: 'Toggle Trends', method: function() {toggleTrendScope()}},
+            {type: 'button', label: 'Toggle Notes/Activities', method: function() {toggleRecordsDisplay()}},
             {type: 'spacer', size: 'flexible'},
 			{type: 'button', label: '📝', method: function() {openModal('note')}}
 	       ]" 
@@ -897,7 +898,7 @@ main {
 
 #switchArea {
     text-align: center;
-    margin: 50px auto;
+    margin: 75px auto;
 }
 
 .switch {
@@ -907,8 +908,7 @@ main {
     text-align: left;
     border: 1px solid var(--black);
     transition: all .1s ease-in;
-    margin-left: 15px;
-    margin-right: 15px;
+    margin: 0 15px;
     vertical-align: middle;
 }
 
@@ -972,6 +972,7 @@ main {
     display: block;
     padding: 5px 10px;
     background: var(--yellow);
+    box-shadow: 1px 1px 5px 1px var(--gray);
     color: var(--black);
     font-size: 18px;
     border-radius: 5px;

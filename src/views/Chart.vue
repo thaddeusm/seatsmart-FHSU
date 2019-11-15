@@ -227,6 +227,7 @@
             		v-if="activityChoice == null" 
             		v-on:set-activity-choice="setActivityChoice"
             		v-on:cancel-activity="cancelActivity"
+            		:chart="id"
             	/>
                 <ActivityAdapter 
                 	v-else
