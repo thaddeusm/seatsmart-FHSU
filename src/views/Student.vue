@@ -98,6 +98,15 @@
                         <section class="activity-body">
                             <h5>{{ session.activity.name }}</h5>
                             <span class="date-text">on {{ makePrettyDate(session.date._d) }}</span>
+                            <p class="response-text" v-if="session.responses.response.text">
+                                {{ session.responses.response.text }}
+                            </p>
+                            <p class="response-text" v-else-if="session.responses.response.choice">
+                                {{ session.responses.response.choice }}
+                            </p>
+                            <p class="response-text" v-else>
+                                (Click the button below to view complete session records.)
+                            </p>
                             <button @click="routeToActivitySession(session._id)">view session</button>
                         </section>
                     </div>
@@ -441,6 +450,7 @@ export default {
                                 
                                 if (respondent == this.student._id) {
                                     studentResults.push(result)
+                                    result.responses = result.responses[j]
                                     break
                                 }
                             }
@@ -452,6 +462,8 @@ export default {
 
                             return dateA < dateB ? 1 : -1
                         })
+
+                        console.log(this.activitySessions)
 
                         this.activitiesLoaded = true
                     } 
@@ -963,6 +975,7 @@ main {
     border-radius: 10px;
     box-shadow: 1px 2px 1px 2px var(--gray);
     align-items: center;
+    padding: 10px;
 }
 
 .activity-body > h5 {
@@ -981,6 +994,18 @@ main {
     cursor: pointer;
     outline: none;
     margin: 25px auto;
+}
+
+.activity-body > p {
+    font-weight: 100;
+    background: var(--white);
+    padding: 5px 12px;
+    border-radius: 3px;
+    height: 60px;
+    overflow: auto;
+    margin: 15px 0 10px 0;
+    text-align: left;
+    box-shadow: 1px 1px 5px 1px var(--light-gray);
 }
 
 .fade-enter-active, .fade-leave-active {

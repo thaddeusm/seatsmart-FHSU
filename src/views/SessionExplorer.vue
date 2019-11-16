@@ -36,6 +36,10 @@
         		</section>
             </header>
             <section v-if="loaded && session.activity.activityType == 'response pool' && !responsesMissing" class="response-pool">
+                <h3 class="prompt">
+                    {{ session.activity.content.prompt }}
+                </h3>
+                <h2>Responses</h2>
                 <ul v-if="session.responses.length > 0" id="responsePoolList">
                     <li v-for="(response, index) in session.responses" v-if="response.response.text" :key="`response${index}`">
                         <h4>{{ response.response.text }}</h4>
@@ -128,7 +132,7 @@
                 </div>
                 <div id="responseArea">
                     <h2>
-                        Individual Responses
+                        Content Assignments
                     </h2>
                     <sequential-entrance fromTop delay="20">
                         <div 
@@ -341,6 +345,8 @@ export default {
                 .then((results) => {
                     this.session = results[0]
                     this.loaded = true
+
+                    console.log(results)
                 })
 		},
 		routeBack() {
@@ -549,6 +555,10 @@ ul {
     margin: 50px 0 5px 0;
 }
 
+#responsePoolList > li > h4:first-child {
+    margin: 20px 0 5px 0;
+}
+
 #responsePoolList > li > h5 {
     text-align: right;
     margin-bottom: 50px;
@@ -719,6 +729,16 @@ a {
 .red {
     background: var(--red)!important;
     color: var(--white)!important;
+}
+
+.prompt {
+    background: var(--white);
+    padding: 50px;
+    margin-bottom: 75px;
+}
+
+h2 {
+    text-align: center;
 }
 
 .fade-enter-active, .fade-leave-active {
