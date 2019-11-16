@@ -77,7 +77,7 @@
 								background="black" foreground="black"
 								:size="250" unit="px" :thickness="20"
 								has-legend legend-placement="left"
-								:sections="donutSections" :total="connectedUsers.length"
+								:sections="donutSections" :total="responses.length"
 								v-if="responses.length > 0"
 							>
 								<h5 v-if="responses.length == 1">1 response</h5>
@@ -87,7 +87,7 @@
 						<div v-if="activity.activityType == 'response pool'">
 							<ul v-if="responses.length > 0">
 								<li v-for="(response, index) in responses" v-if="hiddenResponses.indexOf(index) === -1">
-									<button class="delete-response-button" @click="deleteResponse(index)">
+									<button class="delete-response-button" @click="deleteResponse(index)" disabled>
 										<img src="@/assets/delete.svg" alt="delete icon">
 									</button>
 									<h4>{{ response.response }}</h4>
@@ -104,7 +104,7 @@
 							<vc-donut
 								background="black" foreground="black"
 								:size="250" unit="px" :thickness="20"
-								:sections="assignmentDonutSections" :total="connectedUsers.length"
+								:sections="assignmentDonutSections" :total="responses.length"
 								v-if="responses.length > 0"
 							>
 							</vc-donut>
@@ -114,6 +114,7 @@
 							<button 
 								class="action-button cancel-button"
 								@click="endActivity"
+								:disabled="ending"
 							>
 								End {{ activity.activityType }}
 							</button>
@@ -126,7 +127,7 @@
 								background="black" foreground="black"
 								:size="250" unit="px" :thickness="20"
 								has-legend legend-placement="left"
-								:sections="donutSections" :total="connectedUsers.length"
+								:sections="donutSections" :total="responses.length"
 							>
 								<h5 v-if="responses.length == 1">1 response</h5>
 								<h5 v-else>{{ responses.length }} responses</h5>
@@ -152,7 +153,7 @@
 							<vc-donut
 								background="black" foreground="black"
 								:size="250" unit="px" :thickness="20"
-								:sections="assignmentDonutSections" :total="connectedUsers.length"
+								:sections="assignmentDonutSections" :total="responses.length"
 							>
 							</vc-donut>
 						</div>
@@ -249,7 +250,8 @@ export default {
 			mostRecentlyConnectedStudent: '',
 			addNotes: false,
 			hiddenResponses: [],
-			countdownStarted: false
+			countdownStarted: false,
+			ending: false
 		}
 	},
 	computed: {
@@ -539,27 +541,35 @@ export default {
 			}
 		},
 		endActivity() {
-			// set the DB property to 'anonymous' if no chart prop value
-			let chartStatus
+			this.$socket.emit('endActivitySession')
 
-			if (this.chart == undefined) {
-				chartStatus = 'anonymous'
-			} else {
-				chartStatus = this.chart
+			this.ending = true
+
+			let scope = this
+			setTimeout(function() {
+				scope.saveActivitySession()
+			}, 10000, scope)
+		},
+		saveActivitySession() {
+			if (this.activityStage !== 'ended') {
+				// set the DB property to 'anonymous' if no chart prop value
+				let chartStatus
+
+				if (this.chart == undefined) {
+					chartStatus = 'anonymous'
+				} else {
+					chartStatus = this.chart
+				}
+
+				db.createSomething('activitySessions', {
+					date: moment(),
+					activity: this.activity,
+					responses: this.responsesInDBFormat,
+					chart: chartStatus
+				}).then(() => {
+					this.activityStage = 'ended'
+				})
 			}
-
-
-			db.createSomething('activitySessions', {
-				date: moment(),
-				activity: this.activity,
-				responses: this.responsesInDBFormat,
-				chart: chartStatus
-			}).then(() => {
-				this.activityStage = 'ended'
-
-				// ensure that connected devices are notified
-				this.$socket.emit('cancelActivity')
-			})
 		},
 		cancelActivity() {
 			if (this.chart !== undefined) {
@@ -618,6 +628,16 @@ export default {
 		    }
 
 		    return arr
+        },
+        mergeResponses(arrayOfResponses) {
+        	console.log('Responses from host device: ', this.responses)
+        	console.log('Responses from server: ', arrayOfResponses)
+
+        	if (arrayOfResponses.length > this.responses.length) {
+        		this.responses = arrayOfResponses
+        	}
+
+        	this.saveActivitySession()
         }
 	},
 	sockets: {
@@ -719,8 +739,22 @@ export default {
 		incomingResponseData(encryptedData) {
 			let decrypted = this.decrypt(encryptedData)
 			
-			this.$socket.emit('confirmResponseReceipt', this.encrypt(decrypted.id))
 			this.addResponse(decrypted)
+		},
+		incomingResponses(encryptedArray) {
+			console.log('Responses coming from server: ', encryptedArray)
+
+			let decryptedArray = []
+
+			for (let i=0; i<encryptedArray.length; i++) {
+				let decrypted = this.decrypt(encryptedArray[i])
+
+				decryptedArray.push(decrypted)
+			}
+
+			this.mergeResponses(decryptedArray)
+
+			this.$socket.emit('confirmResponsesReceipt')
 		},
 		disconnect() {
 			this.connected = false
