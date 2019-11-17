@@ -54,7 +54,7 @@ function createWindow () {
 
   // Create the frameless window but hide until load
   win = new BrowserWindow({
-    'frame': false,
+    'titleBarStyle': 'hiddenInset',
     'backgroundColor': '#000000',
     'show': false,
     webPreferences: { webSecurity: false }
