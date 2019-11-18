@@ -237,11 +237,11 @@
 			<div id="previewArea" v-if="progress == 3">
 				<section class="form-container">
 					<h3 v-if="previewRoomID == ''">Preview the {{ capitalizeString(activityChoice) }}</h3>
-					<h3 v-else>Use code {{ previewRoomID }}</h3>
+					<h3 v-else>Scan to Connect</h3>
 					<qriously 
 						v-if="previewRoomID !== ''"
 						id="qr"
-						:value="`https://activities.seatsmart.tech/`"
+						:value="`https://activities.seatsmart.tech/code/${previewRoomID}`"
 						:size="200" 
 					/>
 					<section id="roomIDLoading" v-else></section>
