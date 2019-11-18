@@ -677,11 +677,11 @@ header {
 	grid-area: head;
 	text-align: center;
 	align-self: center;
-	margin-top: 70px;
 	margin-bottom: 40px;
 }
 
 h1 {
+	margin-top: 70px;
 	margin-bottom: 15px;
 }
 
