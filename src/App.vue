@@ -108,6 +108,7 @@ li {
 button {
     -webkit-user-select: none;
     font-family: "ArchivoNarrow";
+    -webkit-app-region: no-drag;
 }
 
 a {

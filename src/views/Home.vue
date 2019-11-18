@@ -383,6 +383,8 @@ header {
     z-index: 10;
     align-items: center;
     justify-content: center;
+    -webkit-user-select: none;
+    -webkit-app-region: drag;
 }
 
 #searchArea {
