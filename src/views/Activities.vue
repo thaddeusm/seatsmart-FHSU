@@ -96,7 +96,7 @@
                 {type: 'spacer', size: 'flexible'},
                 {type: 'button', label: 'Load All Sessions', method: function() {loadAllActivitySessions()}}
             ]"
-            :show="true" 
+            :show="!modalOpen && !alertModalOpen" 
             :escapeItem="{type: 'button', label: 'back', method: function() {routeBack()}}"
         />
 	</div> 
