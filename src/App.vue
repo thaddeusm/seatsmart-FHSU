@@ -151,7 +151,8 @@ select {
     cursor: pointer;
 }
 
-option {
-    
+header {
+    -webkit-user-select: none;
+    -webkit-app-region: drag;
 }
 </style>

@@ -637,6 +637,8 @@ export default {
     grid-template-columns: 25% 1fr;
     grid-template-rows: auto;
     grid-template-areas: "leftPanel main";
+    -webkit-user-select: none;
+    -webkit-app-region: drag;
 }
 
 .no-overflow {
