@@ -102,12 +102,12 @@ function createWindow () {
       win.show()
       win.focus()
 
-      // trying to suppress network error messages
+      // suppress network error messages
       autoUpdater.error = (msg) => {
         console.log(msg)
       }
 
-      // trying to suppress network error messages
+      // suppress network error messages
       // following https://github.com/electron-userland/electron-builder/issues/2398
       process.on('uncaughtException', (msg) => {
 
