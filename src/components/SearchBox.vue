@@ -26,15 +26,20 @@ export default {
 
 <style scoped>
 div {
-	
+	display: grid;
+	background: var(--light-gray);
+	border: 2px solid var(--gray);
+	border-radius: 10px;
+	grid-template-columns: 85% 15%;
+	grid-template-areas: "input button";
+	padding: 7px 12px;
 }
 
 input {
-	border-radius: 10px;
-	padding: 7px 12px;
 	font-size: 1.2em;
-	background: var(--light-gray);
-	border: 2px solid var(--gray);
+	grid-area: input;
+	background: none;
+	border: none;
 }
 
 button {
@@ -42,7 +47,8 @@ button {
     outline: none;
     border: none;
     cursor: pointer;
-	margin-left: -35px;
+    grid-area: button;
+    margin-bottom: -5px;
 }
 
 input:focus {

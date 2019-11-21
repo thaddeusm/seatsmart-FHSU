@@ -124,6 +124,17 @@ export default {
 			})
 		})
 	},
+	sortThings(db, reference, sortScheme) {
+		return new Promise(function(resolve, reject) {
+			getDB(db).find(reference).sort(sortScheme).exec(function(error, foundDocs) {
+				if (error) {
+					reject(error)
+				} else {
+					resolve(foundDocs)
+				}
+			})
+		})
+	},
 	updateSomething(db, query, update) {
 		return new Promise(function(resolve, reject) {
 			getDB(db).update(query, update, {}, function(error, numReplaced) {

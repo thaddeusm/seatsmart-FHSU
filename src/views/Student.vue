@@ -73,7 +73,7 @@
                     </transition>
                 </div>
                 <sequential-entrance fromTop delay="20">
-                    <div v-for="(note, index) in invertedNotes" :key="`note${index}`" :class="[note.type === 'positive' ? 'yellow-card' : 'red-card', 'note-card']">
+                    <div v-for="(note, index) in notes" :key="`note${index}`" :class="[note.type === 'positive' ? 'yellow-card' : 'red-card', 'note-card']">
                         <section class="note-header">
                             <AbbreviationCircle :behavior="note.behavior" size="medium" :color="note.type === 'positive' ? 'yellow' : 'red'"/>
                         </section>
@@ -331,15 +331,6 @@ export default {
 
             return trendArr
         },
-        invertedNotes() {
-            let arr = []
-
-            for (let i=this.notes.length - 1; i > -1; i--) {
-                arr.push(this.notes[i])
-            }
-
-            return arr
-        },
         originRoute() {
             // get the readable name of previous route to specify what 'back' means
             let previousRoute = this.$store.state.lastView
@@ -414,14 +405,9 @@ export default {
             this.$forceUpdate()
         },
         getNotes() {
-            db.readSomething('notes', {student: this.id})
+            db.sortThings('notes', {student: this.id}, {'dateNoted._d': -1})
                 .then((results) => {
-                    this.notes = results.sort((a, b) => {
-                        let dateA = a.dateNoted._d
-                        let dateB = b.dateNoted._d
-
-                        return dateA < dateB ? -1 : 1
-                    })
+                    this.notes = results
 
                     this.loaded = true
 
@@ -435,7 +421,7 @@ export default {
                 })
         },
         getActivityRecords() {
-            db.readSomething('activitySessions', {chart: this.student.class})
+            db.sortThings('activitySessions', {chart: this.student.class}, {'date._d': -1})
                 .then((results) => {
                     if (results.length > 0) {
                         let studentResults = []
@@ -456,14 +442,7 @@ export default {
                             }
                         }
 
-                        this.activitySessions = studentResults.sort((a, b) => {
-                            let dateA = a.date._d
-                            let dateB = b.date._d
-
-                            return dateA < dateB ? 1 : -1
-                        })
-
-                        console.log(this.activitySessions)
+                        this.activitySessions = studentResults
 
                         this.activitiesLoaded = true
                     } 

@@ -188,16 +188,9 @@ export default {
                 chart: ''
             }]
 
-            db.readSomething('activitySessions', {})
+            db.sortThings('activitySessions', {}, {'date._id': -1})
                 .then((results) => {
-                    let sorted = results.sort((a, b) => {
-                        let dateA = a.date._d
-                        let dateB = b.date._d
-
-                        return dateA < dateB ? 1 : -1
-                    })
-
-                    this.activitySessions = sorted
+                    this.activitySessions = results
 
                     this.sessionSorting = false
                     this.allSessionsDisplayed = true
@@ -219,22 +212,14 @@ export default {
 
             let thisMonth = moment().month()
 
-            db.readSomething('activitySessions', {})
+            db.sortThings('activitySessions', {}, {'date._d': -1})
                 .then((results) => {
-                    let sessionsThisMonth = results.filter((session) => {
+                    this.activitySessions = results.filter((session) => {
                         if (moment(session.date._d).month() == thisMonth) {
                             return session
                         }
                     })
 
-                    let sorted = sessionsThisMonth.sort((a, b) => {
-                        let dateA = a.date._d
-                        let dateB = b.date._d
-
-                        return dateA < dateB ? 1 : -1
-                    })
-
-                    this.activitySessions = sorted
                     this.sessionSorting = false
                     this.sessionScope = 'Month'
                     window.scrollTo(0, 0)
@@ -254,22 +239,13 @@ export default {
 
             let thisWeek = moment().week()
 
-            db.readSomething('activitySessions', {})
+            db.sortThings('activitySessions', {}, {'date._d': -1})
                 .then((results) => {
-                    let sessionsThisWeek = results.filter((session) => {
+                    this.activitySessions = results.filter((session) => {
                         if (moment(session.date._d).week() == thisWeek) {
                             return session
                         }
                     })
-
-                    let sorted = sessionsThisWeek.sort((a, b) => {
-                        let dateA = a.date._d
-                        let dateB = b.date._d
-
-                        return dateA < dateB ? 1 : -1
-                    })
-
-                    this.activitySessions = sorted
 
                     this.sessionSorting = false
                     this.sessionScope = 'Week'
@@ -281,14 +257,9 @@ export default {
             this.loadWeekActivitySessions()
         },
         getActivities() {
-        	db.readSomething('activities', {})
+        	db.readSomething('activities', {}, {'dateCreated._d': -1})
                 .then((results) => {
-                    this.activities = results.sort((a, b) => {
-                        let dateA = a.dateCreated._d
-                        let dateB = b.dateCreated._d
-
-                        return dateA < dateB ? -1 : 1
-                    })
+                    this.activities = results
                 })
         },
         editActivity(id) {

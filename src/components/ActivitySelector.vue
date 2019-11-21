@@ -97,29 +97,17 @@ export default {
 	},
 	methods: {
 		getActivities() {
-        	db.readSomething('activities', {})
+        	db.sortThings('activities', {}, {'dateCreated._d': -1})
                 .then((results) => {
-                    this.activities = results.sort((a, b) => {
-                        let dateA = a.dateCreated._d
-                        let dateB = b.dateCreated._d
-
-                        return dateA < dateB ? -1 : 1
-                    })
+                    this.activities = results
 
                     this.getActivitySessions()
                 })
         },
         getActivitySessions() {
-        	db.readSomething('activitySessions', {chart: this.chart})
+        	db.sortThings('activitySessions', {chart: this.chart}, {'date._d': -1})
                 .then((results) => {
-                    this.activitySessions = results.sort((a, b) => {
-                        let dateA = a.date._d
-                        let dateB = b.date._d
-
-                        return dateA < dateB ? 1 : -1
-                    })
-
-                    console.log(this.activitySessions)
+                    this.activitySessions = results
                 })
         },
         setActivityChoice(activityIndex) {
