@@ -90,7 +90,7 @@
 									<button class="delete-response-button" @click="deleteResponse(index)" disabled>
 										<img src="@/assets/delete.svg" alt="delete icon">
 									</button>
-									<h4>{{ response.response }}</h4>
+									<h4 @click="copyToClipboard(response.response)">{{ response.response }}</h4>
 									<button class="hide-button" @click="hideResponse(index)">
 										<img src="@/assets/hide.svg" alt="hide icon">
 									</button>
@@ -139,7 +139,7 @@
 									<button class="delete-response-button" @click="deleteResponse(index)">
 										<img src="@/assets/delete.svg" alt="delete icon">
 									</button>
-									<h4>{{ response.response }}</h4>
+									<h4 @click="copyToClipboard(response.response)">{{ response.response }}</h4>
 									<button class="hide-button" @click="hideResponse(index)">
 										<img src="@/assets/hide.svg" alt="hide icon">
 									</button>
@@ -207,6 +207,8 @@
 </template>
 
 <script>
+const {clipboard} = require('electron')
+
 import db from '@/db.js'
 import sjcl from 'sjcl'
 import moment from 'moment'
@@ -638,6 +640,10 @@ export default {
         	}
 
         	this.saveActivitySession()
+        },
+        copyToClipboard(response) {
+        	clipboard.write({text: response})
+        	console.log(response)
         }
 	},
 	sockets: {
@@ -897,6 +903,10 @@ li {
 	margin: 15px 0;
 	align-items: center;
 	justify-content: center;
+}
+
+h4:hover {
+	cursor: grab;
 }
 
 .action-button {
