@@ -104,8 +104,13 @@
                             <p class="response-text" v-else-if="session.responses.response.choice">
                                 {{ session.responses.response.choice }}
                             </p>
-                            <p class="response-text" v-else>
-                                (Click the button below to view complete session records.)
+                            <p class="response-text" v-else-if="session.responses.response.assignment !== undefined && session.activity.content.assignments[parseInt(session.responses.response.assignment)].resourceType == 'text'">
+                                {{ session.activity.content.assignments[parseInt(session.responses.response.assignment)].resourceData }}
+                            </p>
+                            <p class="response-text" v-else-if="session.responses.response.assignment !== undefined">
+                                <button @click="openExternal(session.activity.content.assignments[parseInt(session.responses.response.assignment)].resourceData)">
+                                    link
+                                </button>
                             </p>
                             <button @click="routeToActivitySession(session._id)">view session</button>
                         </section>
@@ -155,6 +160,8 @@
 </template>
 
 <script>
+const shell = require('electron').shell
+
 import db from '@/db'
 import moment from 'moment'
 
@@ -568,6 +575,9 @@ export default {
         },
         routeToActivitySession(sessionId) {
             this.$router.push(`/session/${sessionId}`)
+        },
+        openExternal(url) {
+            shell.openExternal(url)
         }
     },
     mounted() {
@@ -987,6 +997,10 @@ main {
     margin: 15px 0 10px 0;
     text-align: left;
     box-shadow: 1px 1px 5px 1px var(--light-gray);
+}
+
+.response-text > button {
+    font-size: 18px;
 }
 
 .fade-enter-active, .fade-leave-active {

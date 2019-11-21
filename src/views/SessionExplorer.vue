@@ -160,6 +160,16 @@
                                     {{ response.respondent.firstName }} 
                                     {{ response.respondent.lastName }}
                                 </router-link></h5>
+                                <p v-if="session.activity.content.assignments[parseInt(response.response.assignment)] && session.activity.content.assignments[parseInt(response.response.assignment)].resourceType == 'text'">
+                                    {{ session.activity.content.assignments[parseInt(response.response.assignment)].resourceData }}
+                                </p>
+                                <p v-else-if="session.activity.content.assignments[parseInt(response.response.assignment)]">
+                                    <button 
+                                        @click="openExternal(session.activity.content.assignments[parseInt(response.response.assignment)].resourceData)"
+                                    >
+                                        link
+                                    </button>
+                                </p>
                             </section>
                         </div>
                     </sequential-entrance>
@@ -316,7 +326,7 @@ export default {
 
                     let obj = {
                         value: 0,
-                        label: `item ${i + 1}`,
+                        label: `${this.session.activity.content.assignments[i].resourceData}`,
                         color: this.donutSectionColorSpectrum[spectrumIndex]
                     }
 
@@ -328,9 +338,12 @@ export default {
                 // increment section values based upon participant responses
                 for (let j=0; j<responses.length; j++) {
                     for (let k=0; k<sections.length; k++) {
-                        if (sections[k].label == `item ${parseInt(responses[j].response.assignment) + 1}`) {
-                            sections[k].value++
-                            break
+
+                        if (this.session.activity.content.assignments[parseInt(responses[j].response.assignment) + 1]) {
+                            if (sections[k].label == `${this.session.activity.content.assignments[parseInt(responses[j].response.assignment) + 1].resourceData}`) {
+                                sections[k].value++
+                                break
+                            }
                         }
                     }
                 }
@@ -415,6 +428,9 @@ export default {
                 .then(() => {
                     this.$router.go(-1)
                 })
+        },
+        openExternal(url) {
+            shell.openExternal(url)
         }
 	},
 	mounted() {
@@ -646,6 +662,11 @@ ul {
     border-radius: 3px;
     margin: 15px 0 10px 0;
     text-align: left;
+    word-wrap: break-word;
+}
+
+.response-body > p > button {
+    font-size: 18px;
 }
 
 #errorIcon {
