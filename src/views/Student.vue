@@ -112,6 +112,9 @@
                                     link
                                 </button>
                             </p>
+                            <p class="response-text" v-else>
+                                (Click the button below to review more information.)
+                            </p>
                             <button @click="routeToActivitySession(session._id)">view session</button>
                         </section>
                     </div>
