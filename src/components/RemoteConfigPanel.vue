@@ -3,21 +3,14 @@
 		<section class="panel" v-if="remoteConnected && !remoteClientConnected">
 			<h3 class="panel-header">
 				Remote | 
-					<span v-if="showQR">Scan to Connect</span>
-					<span v-if="!showQR">Enter the Code</span>
+					<span>Scan to Connect</span>
 			</h3>
 			<section>
 				<qriously 
 					id="qr"
-					v-if="showQR"
 					:value="`https://remote.seatsmart.tech/code/${roomID}`" 
 					:size="200" 
 				/>
-				<div id="qrGhost" v-else>
-					<h1>{{ roomID }}</h1>
-				</div>
-				<button class="qr-toggle" v-if="showQR" @click="showQR = false">get the code</button>
-				<button class="qr-toggle" v-else @click="showQR = true">show QR</button>
 			</section>
 		</section>
 		<section class="panel" v-else-if="remoteConnected && remoteClientConnected">
@@ -72,11 +65,6 @@ export default {
 					scope.$emit('trigger-modal-close')
 				}, 2000)
 			}
-		}
-	},
-	data() {
-		return {
-			showQR: true
 		}
 	},
 	mounted() {
@@ -137,35 +125,10 @@ export default {
 	background: var(--white);
 	width: 200px;
 	height: 200px;
-	margin: 5px auto 25px auto;
+	margin: 20px auto 5px auto;
 	padding: 10px;
 	border-radius: 5px;
 	vertical-align: middle;
-}
-
-#qrGhost {
-	background: var(--light-gray);
-	width: 200px;
-	height: 200px;
-	margin: 5px auto 25px auto;
-	padding: 10px;
-	border-radius: 5px;
-	display: grid;
-	align-items: center;
-	color: var(--black);
-	text-align: center;
-}
-
-.qr-toggle {
-	padding: 3px 8px;
-	background: var(--light-gray);
-	color: var(--black);
-	font-size: 15px;
-	border-radius: 5px;
-	cursor: pointer;
-	outline: none;
-	display: block;
-	margin: 10px auto;
 }
 
 h3 {
