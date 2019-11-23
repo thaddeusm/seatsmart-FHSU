@@ -201,7 +201,8 @@
 <script>
 const shell = require('electron').shell
 const { dialog } = require('electron').remote
-const fs = require('fs')
+
+import fs from 'fs'
 
 import db from '@/db.js'
 import moment from 'moment'
@@ -358,8 +359,6 @@ export default {
                 .then((results) => {
                     this.session = results[0]
                     this.loaded = true
-
-                    console.log(results)
                 })
 		},
 		routeBack() {
@@ -392,7 +391,7 @@ export default {
             for (let i=0; i<this.session.responses.length; i++) {
                 let text = this.session.responses[i].response.text.split('\n').join()
 
-                responseString +=  `${text} \n`
+                responseString +=  `${text.slice(0, text.length -1 ).trimEnd()} \n`
             }
 
             let defaultFilename = this.session.activity.name
@@ -564,20 +563,19 @@ ul {
     list-style: none;
 }
 
+li {
+    margin: 50px auto;
+}
+
 #responsePoolList > li > h4 {
     background: var(--gray);
     color: var(--white);
     padding: 10px;
-    margin: 50px 0 5px 0;
-}
-
-#responsePoolList > li > h4:first-child {
-    margin: 20px 0 5px 0;
 }
 
 #responsePoolList > li > h5 {
     text-align: right;
-    margin-bottom: 50px;
+    margin-top: 10px;
 }
 
 #individualizedResponses {

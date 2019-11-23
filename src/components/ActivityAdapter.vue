@@ -207,7 +207,7 @@
 </template>
 
 <script>
-const {clipboard} = require('electron')
+import {clipboard} from 'electron'
 
 import db from '@/db.js'
 import sjcl from 'sjcl'
@@ -632,9 +632,6 @@ export default {
 		    return arr
         },
         mergeResponses(arrayOfResponses) {
-        	console.log('Responses from host device: ', this.responses)
-        	console.log('Responses from server: ', arrayOfResponses)
-
         	if (arrayOfResponses.length > this.responses.length) {
         		this.responses = arrayOfResponses
         	}
@@ -643,7 +640,6 @@ export default {
         },
         copyToClipboard(response) {
         	clipboard.write({text: response})
-        	console.log(response)
         }
 	},
 	sockets: {
@@ -748,8 +744,6 @@ export default {
 			this.addResponse(decrypted)
 		},
 		incomingResponses(encryptedArray) {
-			console.log('Responses coming from server: ', encryptedArray)
-
 			let decryptedArray = []
 
 			for (let i=0; i<encryptedArray.length; i++) {
