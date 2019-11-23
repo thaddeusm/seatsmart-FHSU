@@ -308,7 +308,7 @@
 				Seatsmart Remote is an optional feature that allows you to take advantage of basic functions without being tied to a computer.  Actions currently supported include selecting a random student, adding a new note about a student/students, and controlling Activities (see next section).  This feature requires Internet access on both the computer and the mobile device (with or without a VPN).  
 			</p>
 			<p>
-				Realtime communication occurs over a secure server with data encrypted in transport (the server cannot decode the information).  The server does not store this information anywhere.  <strong>The QR code (or optional 4-digit numeric code) should be kept hidden from students</strong>.  You can begin and end a remote connection by clicking <img class="embedded-icon" src="@/assets/remote.svg" alt="remote icon"> at the top right corner of the chart.  This icon will turn yellow when the connection is active and red when it is attempting to restore a connection.
+				Realtime communication occurs over a secure server with data encrypted in transport (the server cannot decode the information).  The server does not store this information anywhere.  <strong>The QR code used to connect your remote device should be kept hidden from students</strong>.  You can begin and end a remote connection by clicking <img class="embedded-icon" src="@/assets/remote.svg" alt="remote icon"> at the top right corner of the chart.  This icon will turn yellow when the connection is active and red when it is attempting to restore a connection.
 			</p>
 			<p>
 				The remote connection is automatically broken when you leave the chart.  This helps to shorten the remote session, which decreases the likelihood of any security or device performance issues.
@@ -319,7 +319,7 @@
 				Activities
 			</h4>
 			<p>
-				Like Remote, Seatsmart Activites is an optional feature that requires access to the Internet.  Further, it also requires that students have access to Internet-connected devices (smartphones).  The goal of Activities is to engage students while providing you simple, in-class assessment tools.  
+				Like Remote, Seatsmart Activites is an optional feature that requires access to the Internet.  Further, it requires that students have access to Internet-connected devices (smartphones).  Activites are meant to engage students while providing you simple, in-class assessment tools.  
 			</p>
 			<p>
 				The activities you launch through Seatsmart should not make students feel like they are taking a quiz.  Ideally, the process will be somewhat gamified and encourage willing participation.  Since students will be using their own devices to connect, it is important to communicate the short duration and specific purpose of your activities.  Be sure to state beforehand whether or not you would expect students to switch to other applications during or after your activity.
