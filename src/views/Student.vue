@@ -104,6 +104,9 @@
                             <p class="response-text" v-else-if="session.responses.response.choice">
                                 {{ session.responses.response.choice }}
                             </p>
+                            <p class="response-text" v-else-if="session.activity.content.assignments[parseInt(session.responses.response.assignment)] == undefined">
+                                (Click the button below to review more information.)
+                            </p>
                             <p class="response-text" v-else-if="session.responses.response.assignment !== undefined && session.activity.content.assignments[parseInt(session.responses.response.assignment)].resourceType == 'text'">
                                 {{ session.activity.content.assignments[parseInt(session.responses.response.assignment)].resourceData }}
                             </p>
@@ -433,6 +436,7 @@ export default {
         getActivityRecords() {
             db.sortThings('activitySessions', {chart: this.student.class}, {'date._d': -1})
                 .then((results) => {
+
                     if (results.length > 0) {
                         let studentResults = []
 
@@ -445,9 +449,9 @@ export default {
                                 let respondent = result.responses[j].respondent.id
                                 
                                 if (respondent == this.student._id) {
-                                    studentResults.push(result)
-                                    result.responses = result.responses[j]
-                                    break
+                                    let record = {...result}
+                                    record.responses = result.responses[j]
+                                    studentResults.push(record)
                                 }
                             }
                         }
