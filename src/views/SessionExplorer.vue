@@ -8,7 +8,8 @@
                 <TitleBar v-if="session.chart !== 'anonymous' && loaded && chartExists" :classID="session.chart" :compact="true" :link="true" />
                 <div id="illustrationArea" v-if="loaded">
                 	<img v-if="session.activity.activityType == 'survey'" src="@/assets/survey-illustration.svg" alt="survey illustration">
-                	<img v-else src="@/assets/response-pool-illustration.svg" alt="response pool illustration">
+                	<img v-else-if="session.activity.activityType == 'response pool'" src="@/assets/response-pool-illustration.svg" alt="response pool illustration">
+                    <img v-else src="@/assets/information-gap-illustration.svg" alt="information gap illustration">
                 </div>
                 <h5>
                 	{{ makePrettyDate(session.date._d) }}
@@ -123,7 +124,6 @@
                     <vc-donut
                         background="black" foreground="black"
                         :size="250" unit="px" :thickness="20"
-                        has-legend
                         :sections="assignmentDonutSections" :total="session.responses.length"
                     >
                         <h5 v-if="session.responses.length == 1">1 item assigned</h5>
@@ -145,7 +145,7 @@
                             >
                                 <div 
                                     class="circle"
-                                    v-if="response.response.assignment" 
+                                    v-if="response.response.hasOwnProperty('assignment')" 
                                     :style="{background: findSpectrumColor(response.response.assignment)}">
                                 </div>
                                 <div 
@@ -340,8 +340,8 @@ export default {
                 for (let j=0; j<responses.length; j++) {
                     for (let k=0; k<sections.length; k++) {
 
-                        if (this.session.activity.content.assignments[parseInt(responses[j].response.assignment) + 1]) {
-                            if (sections[k].label == `${this.session.activity.content.assignments[parseInt(responses[j].response.assignment) + 1].resourceData}`) {
+                        if (this.session.activity.content.assignments[parseInt(responses[j].response.assignment)]) {
+                            if (sections[k].label == `${this.session.activity.content.assignments[parseInt(responses[j].response.assignment)].resourceData}`) {
                                 sections[k].value++
                                 break
                             }
@@ -359,6 +359,8 @@ export default {
                 .then((results) => {
                     this.session = results[0]
                     this.loaded = true
+
+                    console.log(this.session)
                 })
 		},
 		routeBack() {
@@ -377,6 +379,7 @@ export default {
                     index = choice % 9
                 } else {
                     index = choice
+                    console.log(choice)
                 }
             }
             return this.donutSectionColorSpectrum[index]
