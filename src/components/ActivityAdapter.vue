@@ -483,7 +483,7 @@ export default {
 
 					assignmentDictionary[student] = assignmentIndex
 					
-					if (assignmentIndex !== assignments.length) {
+					if (assignmentIndex < assignments.length - 1) {
 						assignmentIndex++
 					} else {
 						assignmentIndex = 0
