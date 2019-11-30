@@ -18,7 +18,7 @@
 			<div class="activity-button-area">
 				<ButtonCard icon="+" text="activity" to="/activity/new"/>
 			</div>
-			<h3>
+			<h3 v-if="activitySessions[0]">
 				Review Previous Activity Sessions
 			</h3>
 			<div class="activity-button-area" v-for="(session, index) in activitySessions" v-if="activitySessions[0].chart">
