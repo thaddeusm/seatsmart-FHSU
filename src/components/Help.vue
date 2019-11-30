@@ -71,7 +71,7 @@
 							<img src="@/assets/rearrange.svg" alt="rearrange icon">
 							<h5>Rearrange Student Seating</h5>
 							<p>
-								You can return to this screen any time to change the seating of one or more students.
+								Change the seating of one or more students anytime.
 							</p>
 						</li>
 						<li>
@@ -79,7 +79,7 @@
 							<h5>Highlight Students</h5>
 							<p>
 								Drag and drop a color from 15 options to add another way to distinguish students.
-								This is especially useful when organizing teams.
+								This is especially useful when organizing teams.  You can even have Seatsmart randomly sort students into teams.
 							</p>
 						</li>
 						<li>
@@ -105,7 +105,7 @@
 							<h5>Recent Participation Trends</h5>
 							<p>
 								Clicking this button displays each student's recent participation trend.
-								This is helpful when updating participation grades in Blackboard.  You can change the interval being considered in this calculation in the <button class="inner-link" @click="$emit('change-content', 'cards')">Name Cards</button> section settings.
+								This is helpful when updating participation grades in Blackboard.  You can change the interval being considered in this calculation in the <button class="inner-link" @click="$emit('change-content', 'calculation')">Calculation</button> settings.
 							</p>
 						</li>
 						<li>
@@ -234,7 +234,7 @@
 							<img src="@/assets/rearrange.svg" alt="rearrange icon">
 							<h5>Rearrange Student Seating</h5>
 							<p>
-								You can return to this screen any time to change the seating of one or more students.
+								Change the seating of one or more students anytime.
 							</p>
 						</li>
 						<li>
@@ -242,7 +242,7 @@
 							<h5>Highlight Students</h5>
 							<p>
 								Drag and drop a color from 15 options to add another way to distinguish students.
-								This is especially useful when organizing teams.
+								This is especially useful when organizing teams.  You can even have Seatsmart randomly sort students into teams.
 							</p>
 						</li>
 						<li>
@@ -268,7 +268,7 @@
 							<h5>Recent Participation Trends</h5>
 							<p>
 								Clicking this button displays each student's recent participation trend.
-								This is helpful when updating participation grades in Blackboard.  You can change the interval being considered in this calculation in the <button class="inner-link" @click="$emit('change-content', 'cards')">Name Cards</button> section settings.
+								This is helpful when updating participation grades in Blackboard.  You can change the interval being considered in this calculation in the <button class="inner-link" @click="$emit('change-content', 'calculation')">Calculation</button> settings.
 							</p>
 						</li>
 						<li>
