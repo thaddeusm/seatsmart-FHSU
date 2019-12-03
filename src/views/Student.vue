@@ -52,7 +52,7 @@
                     :gradient="['var(--red)', 'orange', 'var(--yellow)']"
                     class="trend"
                     :auto-draw="true"
-                    :autoDrawDuration="3000"
+                    :autoDrawDuration="2500"
                     :smooth="true"
                     gradientDirection="bottom"
                     :key="trendScope"
@@ -430,7 +430,7 @@ export default {
                     let scope = this
                     setTimeout(function() {
                         scope.getActivityRecords()
-                    }, 1500, scope)
+                    }, 2700, scope)
                 })
         },
         getActivityRecords() {
