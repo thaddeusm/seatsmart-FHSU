@@ -394,7 +394,7 @@ export default {
             for (let i=0; i<this.session.responses.length; i++) {
                 let text = this.session.responses[i].response.text.split('\n').join()
 
-                responseString +=  `${text.slice(0, text.length -1 ).trimEnd()} \n`
+                responseString += `${text.trimEnd()} \n`
             }
 
             let defaultFilename = this.session.activity.name

@@ -188,7 +188,7 @@ export default {
                 chart: ''
             }]
 
-            db.sortThings('activitySessions', {}, {'date._id': -1})
+            db.sortThings('activitySessions', {}, {'date._d': -1})
                 .then((results) => {
                     this.activitySessions = results
 
