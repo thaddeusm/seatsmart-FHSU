@@ -42,6 +42,7 @@
 						:deselect="deselect"
 						:showTooltip="true"
 						v-on:open-note-modal="openNoteModal"
+						v-on:open-iterable-note-modal="openIterableNoteModal"
 						v-on:open-new-student-modal="openNewStudentModal"
 						v-on:open-edit-student-modal="openEditStudentModal"
 						v-on:absence="addAbsence"
@@ -60,6 +61,7 @@
 						:classId="classInfo._id"
 						:showTooltip="true"
 						v-on:open-note-modal="openNoteModal"
+						v-on:open-iterable-note-modal="openIterableNoteModal"
 						v-on:open-new-student-modal="openNewStudentModal"
 						v-on:open-edit-student-modal="openEditStudentModal"
 						v-on:absence="addAbsence"
@@ -127,6 +129,17 @@
 					type="single"
 					:student="newNoteStudent"
 					v-on:trigger-modal-close="noteModalOpen = false"
+					v-on:absence="addAbsence"
+				/>
+    		</template>
+  		</Modal>
+  		<Modal v-if="iterableNoteModalOpen" v-on:trigger-close="iterableNoteModalOpen = false" :dismissable="true" size="large">
+    		<template slot="content">
+      			<NoteForm
+					type="single"
+					:student="newNoteStudent"
+					:iterable="true"
+					v-on:trigger-modal-close="iterableNoteModalOpen = false"
 					v-on:absence="addAbsence"
 				/>
     		</template>
@@ -320,6 +333,7 @@ export default {
 			},
 			modalOpen: false,
 			noteModalOpen: false,
+			iterableNoteModalOpen: false,
 			newStudentModalOpen: false,
 			editStudentModalOpen: false,
 			newNoteStudent: {
@@ -486,6 +500,11 @@ export default {
     	},
     	openNoteModal(student) {
     		this.noteModalOpen = true
+    		this.newNoteStudent = student
+    	},
+    	openIterableNoteModal(student) {
+    		console.log('opening iterable')
+    		this.iterableNoteModalOpen = true
     		this.newNoteStudent = student
     	},
 		openNewStudentModal(column, row) {

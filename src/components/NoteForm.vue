@@ -1,9 +1,19 @@
 <template>
 	<div id="noteFormContainer" :class="[type == 'multiple' ? 'contain-self' : '']">
 		<section id="noteFormHeader">
-			<h1 v-if="type === 'single' && noteToEdit == undefined">New Note about {{student.firstName}}</h1>
-			<h1 v-if="type === 'single' && noteToEdit !== undefined">Edit Note about {{student.firstName}}</h1>
-			<h1 v-if="type !== 'single'">New Bulk Note</h1>
+			<h1 v-if="type === 'single' && noteToEdit == undefined && !iterable">New Note about {{student.firstName}}</h1>
+			<h1 v-else-if="type === 'single' && noteToEdit !== undefined && !iterable">Edit Note about {{student.firstName}}</h1>
+			<h1 v-else-if="type !== 'single' && !iterable">New Bulk Note</h1>
+			<h1>
+				<select class="iteration-select" v-if="type === 'single' && iterable" name="iterations" v-model="iterations">
+					<option value="1">1 Note</option>
+					<option value="2">2 Notes</option>
+					<option value="3">3 Notes</option>
+					<option value="4">4 Notes</option>
+					<option value="5">5 Notes</option>
+				</select>
+				 about {{student.firstName}}
+			</h1>
 		</section>
 		<section id="noteFormBody">
 			<section id="noteStepOne" v-if="step == 1">
@@ -43,7 +53,8 @@ export default {
 		student: Object, 
 		students: Array, 
 		to: String, 
-		noteToEdit: Object
+		noteToEdit: Object,
+		iterable: Boolean
 	},
 	components: {
 		AbbreviationCircle
@@ -61,7 +72,8 @@ export default {
 				comment: null,
 				type: null
 			},
-			step: 1
+			step: 1,
+			iterations: 1
 		}
 	},
 	computed: {
@@ -103,7 +115,14 @@ export default {
 						}
 					}
 
-					db.createSomething('notes', this.note)
+					let promises = []
+					let iterations = parseInt(this.iterations)
+
+					for (let i=0; i<iterations; i++) {
+						promises.push(db.createSomething('notes', this.note))
+					}
+
+					Promise.all(promises)
 						.then(() => {
 							// clear most recent updated student first
 							let scope = this
@@ -279,7 +298,7 @@ export default {
 }
 
 #noteFormHeader > h1 {
-	margin: 3% 0;
+	margin: 2.8% 0;
 }
 
 #noteFormBody {
@@ -369,5 +388,16 @@ textarea {
 a {
 	text-decoration: none;
 	color: var(--black);
+}
+
+.iteration-select {
+	font-size: 32px;
+	width: 130px;
+	margin: 0;
+	padding: 2px 10px;
+}
+
+.iteration-select > option {
+	font-size: 12px;
 }
 </style>

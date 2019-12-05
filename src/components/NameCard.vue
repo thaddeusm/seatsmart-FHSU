@@ -29,7 +29,7 @@
 			<button v-else class="simple-button" @click="toggleSelected"><img class="star" src="@/assets/yellowstar.svg" v-on:mouseover="$emit('show-caption', 'select a student')"></button>
 		</section>
 		<section id="cardBody">
-			<h5 class="student-name" v-on:mouseover="$emit('show-caption', 'student name')">
+			<h5 class="student-name" v-on:mouseover="$emit('show-caption', 'student name, double click to enter multiple notes')">
 				Tommy L.
 			</h5>
 		</section>
@@ -79,10 +79,10 @@
 			<button v-else class="simple-button" @click="toggleSelected"><img class="star" src="@/assets/yellowstar.svg"></button>
 		</section>
 		<section id="cardBody" v-if="student.firstName !== ''">
-			<h6 class="student-name" v-if="conserveSpace">
+			<h6 class="student-name" v-if="conserveSpace" @dblclick="$emit('open-iterable-note-modal', student)">
 				{{ abbreviatedName(student.firstName) }} {{ student.lastName[0] }}.
 			</h6>
-			<h4 class="student-name" v-else>
+			<h4 class="student-name" v-else @dblclick="$emit('open-iterable-note-modal', student)">
 				{{ abbreviatedName(student.firstName) }} {{ student.lastName[0] }}.
 			</h4>
 		</section>
