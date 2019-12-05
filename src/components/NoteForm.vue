@@ -4,8 +4,8 @@
 			<h1 v-if="type === 'single' && noteToEdit == undefined && !iterable">New Note about {{student.firstName}}</h1>
 			<h1 v-else-if="type === 'single' && noteToEdit !== undefined && !iterable">Edit Note about {{student.firstName}}</h1>
 			<h1 v-else-if="type !== 'single' && !iterable">New Bulk Note</h1>
-			<h1>
-				<select class="iteration-select" v-if="type === 'single' && iterable" name="iterations" v-model="iterations">
+			<h1 v-else-if="type === 'single' && iterable">
+				<select class="iteration-select" name="iterations" v-model="iterations">
 					<option value="1">1 Note</option>
 					<option value="2">2 Notes</option>
 					<option value="3">3 Notes</option>
