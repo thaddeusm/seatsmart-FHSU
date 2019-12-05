@@ -371,7 +371,7 @@ export default {
 								this.student.firstName = this.student.firstName.split(' ')[0]
 							}
 
-							db.readSomething('notes', {student: this.studentID}, {'dateNoted._d': -1})
+							db.sortThings('notes', {student: this.studentID}, {'dateNoted._d': -1})
 								.then((notes) => {
 									this.notes = notes
 
