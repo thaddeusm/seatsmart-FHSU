@@ -766,8 +766,6 @@ export default {
 		},
 		setActivityChoice(chosenActivity) {
 			this.activityChoice = chosenActivity
-
-			console.log(this.activityChoice)
 		},
 		cancelActivity() {
 			this.activityModalOpen = false
@@ -851,10 +849,8 @@ export default {
 						// check for activity launch query params
 						if (this.$route.query.activityToLaunch) {
 							// find the activity by provided DB id
-							console.log(this.$route.query.activityToLaunch)
 							db.readSomething('activities', {_id: this.$route.query.activityToLaunch})
 								.then((results) => {
-									console.log(results[0])
 									this.activityChoice = results[0]
 									this.activityModalOpen = true
 								})
