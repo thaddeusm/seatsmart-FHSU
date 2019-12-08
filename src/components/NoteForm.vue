@@ -321,7 +321,7 @@ export default {
 
 .behaviors > button {
 	box-shadow: 0px 0px 2px var(--black);
-	width: 300px;
+	width: 350px;
 	display: block;
 	font-size: 1.4em;
 	padding: 10px;
@@ -391,7 +391,7 @@ a {
 }
 
 .iteration-select {
-	font-size: 32px;
+	font-size: 30px;
 	width: 130px;
 	margin: 0;
 	padding: 2px 10px;
