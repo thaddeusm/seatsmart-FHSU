@@ -193,7 +193,7 @@ export default {
 				let intervalNotes = []
 
 				switch (thisInterval) {
-					case ('weekly'):
+					case 'weekly':
 						thisInterval = moment().week()
 
 						for (let i=0; i<this.notes.length; i++) {
@@ -203,7 +203,7 @@ export default {
 						}
 
 						break
-					case ('bi-weekly'):
+					case 'bi-weekly':
 						thisInterval = [moment().week(), moment().week() - 1]
 
 						for (let i=0; i<this.notes.length; i++) {
@@ -213,7 +213,7 @@ export default {
 						}
 
 						break
-					case ('monthly'):
+					case 'monthly':
 						thisInterval = moment().month()
 
 						for (let i=0; i<this.notes.length; i++) {
@@ -222,6 +222,9 @@ export default {
 							}
 						}
 
+						break
+					case 'cumulative':
+						intervalNotes = this.notes
 						break
 				}
 
