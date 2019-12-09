@@ -446,9 +446,14 @@ export default {
 
 
                             for (let j=0; j<result.responses.length; j++) {
-                                let respondent = result.responses[j].respondent.id
-                                
-                                if (respondent == this.student._id) {
+                                let respondent = result.responses[j].respondent
+
+                                // filter by ID first, then by first/last name for imported charts
+                                if (respondent.id == this.student._id) {
+                                    let record = {...result}
+                                    record.responses = result.responses[j]
+                                    studentResults.push(record)
+                                } else if (respondent.firstName.includes(this.student.firstName) && respondent.lastName == this.student.lastName) {
                                     let record = {...result}
                                     record.responses = result.responses[j]
                                     studentResults.push(record)
