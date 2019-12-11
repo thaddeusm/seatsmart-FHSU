@@ -430,7 +430,7 @@ export default {
                     let scope = this
                     setTimeout(function() {
                         scope.getActivityRecords()
-                    }, 2700, scope)
+                    }, 3700, scope)
                 })
         },
         getActivityRecords() {
