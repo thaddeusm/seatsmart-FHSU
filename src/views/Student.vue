@@ -7,9 +7,11 @@
                     <img src="@/assets/tiger.png" id="tigerLogo" alt="FHSU tiger logo">
                     <h5>{{ student.tigerID }}</h5>
                 </div>
-                <transition name="fade">
-                    <TitleBar v-if="loaded" :classID="classInfo._id" :compact="true" :link="true" />
-                </transition>
+                <div id="titleContainer">
+                    <transition name="fade">
+                        <TitleBar v-if="loaded" :classID="classInfo._id" :compact="true" :link="true" />
+                    </transition>
+                </div>
                 <transition name="fade">
                     <SeatingDiagram 
                         :compact="true" 
@@ -430,7 +432,7 @@ export default {
                     let scope = this
                     setTimeout(function() {
                         scope.getActivityRecords()
-                    }, 3700, scope)
+                    }, 4500, scope)
                 })
         },
         getActivityRecords() {
@@ -747,6 +749,10 @@ main {
     width: 24px;
     vertical-align: middle;
     margin-right: 10px;
+}
+
+#titleContainer {
+    min-height: 80px;
 }
 
 #highlightArea {
