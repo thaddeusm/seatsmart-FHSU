@@ -241,9 +241,11 @@ export default {
                     thisSemester = 'Fall'
                     break
                     case 11:
-                    thisSemester = 'fall'
+                    thisSemester = 'Fall'
                     break
                 }
+
+                console.log('This semester is ', thisSemester)
 
                 // find last semester
                 switch (thisSemester) {
@@ -258,10 +260,12 @@ export default {
                     break
                 }
 
+                console.log('Last semester was ', lastSemester)
+
                 for (let i=0; i<unordered.length; i++) {
                     if (unordered[i].year == thisYear && unordered[i].semester == thisSemester) {
                         firstPriority.push(unordered[i])
-                    } else if (unordered[i].semester == lastSemester) {
+                    } else if (unordered[i].semester == lastSemester && unordered[i].year == thisYear - 1) {
                         secondPriority.push(unordered[i])
                     } else {
                         remainder.push(unordered[i])
