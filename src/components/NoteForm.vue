@@ -33,7 +33,7 @@
 			<button class="footer-button white" v-if="type !== 'multiple'" @click="closeModal">Cancel</button>
 			<router-link class="footer-button white" v-else :to="to">Cancel</router-link>
 			<button v-if="step == 1" @click="changeStep(2)" class="footer-button positive" ref="nextButton" :disabled="note.behavior.Abbreviation == null">Add a Comment</button>
-			<button v-if="step == 1" @click="saveNote" class="footer-button positive" ref="quickSaveButton" :disabled="note.behavior.Abbreviation == null">Quick Save</button>
+			<button v-if="step == 1" @click="saveNote" class="footer-button positive" ref="quickSaveButton" :disabled="note.behavior.Abbreviation == null">Save</button>
 			<button v-else-if="step == 2 && type == 'multiple'" @click="saveNote" class="footer-button positive" :disabled="type !== 'single' && students.length == 0">Save</button>
 			<button v-else-if="step == 2 && type !== 'multiple'" @click="saveNote" class="footer-button positive">Save</button>
 		</section>
