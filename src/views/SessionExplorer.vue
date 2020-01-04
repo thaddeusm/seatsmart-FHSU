@@ -18,8 +18,22 @@
                 	{{ session.responses.length }} responses
                 </h6>
                 <button 
+                    v-if="loaded && session.chart !== 'anonymous' && session.activity.activityType == 'response pool' && !displayRespondents"
+                    class="options-button"
+                    @click="toggleRespondentsDisplay" 
+                >
+                    show respondents
+                </button>
+                <button 
+                    v-if="loaded && session.chart !== 'anonymous' && session.activity.activityType == 'response pool' && displayRespondents"
+                    class="options-button"
+                    @click="toggleRespondentsDisplay" 
+                >
+                    hide respondents
+                </button>
+                <button 
                     v-if="loaded && session.activity.activityType == 'response pool'"
-                    id="exportResponsesButton" 
+                  class="options-button"
                     @click="startExport" 
                     :disabled="exporting"
                 >
@@ -44,7 +58,7 @@
                 <ul v-if="session.responses.length > 0" id="responsePoolList">
                     <li v-for="(response, index) in session.responses" v-if="response.response.text" :key="`response${index}`">
                         <h4>{{ response.response.text }}</h4>
-                        <h5 v-if="response.respondent !== 'anonymous'"><router-link :to="`/student/${response.respondent.id}`">
+                        <h5 v-if="response.respondent !== 'anonymous' && displayRespondents"><router-link :to="`/student/${response.respondent.id}`">
                             {{ response.respondent.firstName }} 
                             {{ response.respondent.lastName }}
                         </router-link></h5>
@@ -250,6 +264,7 @@ export default {
                 '#F66239'
             ],
             exporting: false,
+            displayRespondents: false,
             alertModalOpen: false
 		}
 	},
@@ -433,6 +448,9 @@ export default {
         },
         openExternal(url) {
             shell.openExternal(url)
+        },
+        toggleRespondentsDisplay() {
+            this.displayRespondents = !this.displayRespondents
         }
 	},
 	mounted() {
@@ -490,7 +508,7 @@ export default {
 	margin: 20px 0;
 }
 
-#exportResponsesButton {
+.options-button {
     padding: 5px 10px;
     background: var(--yellow);
     color: var(--black);
@@ -502,7 +520,7 @@ export default {
     margin: 50px auto 10px auto;
 }
 
-#exportResponsesButton:disabled {
+.options-button:disabled {
     background: var(--light-gray);
     opacity: .6;
     cursor: not-allowed;
