@@ -236,7 +236,7 @@
 				<h3>Current Version</h3>
 				<p>
 					<button @click="openHomePage('notes')" class="inner-link">v.{{ version }}</button> 
-					| Copyright 2019 <button class="inner-link" @click="openEmail">Thaddeus McCleary</button>
+					| Copyright {{ year }} <button class="inner-link" @click="openEmail">Thaddeus McCleary</button>
 				</p>
 				<h3>MIT License</h3>
 				<p>
@@ -264,6 +264,7 @@
 <script>
 const shell = require('electron').shell
 
+import moment from 'moment'
 import Tabs from '@/components/Tabs.vue'
 import Transfer from '@/components/Transfer.vue'
 import Help from '@/components/Help.vue'
@@ -308,7 +309,8 @@ export default {
 			weightOptions: [
 				'low', 'medium', 'strong'
 			],
-			transferring: false
+			transferring: false,
+			year: null
 		}
 	},
 	computed: {
@@ -456,6 +458,8 @@ export default {
 		}
 	},
 	mounted() {
+		this.year = moment().year()
+
 		// grab existing user settings from store and set as local props for editing
 		this.calculation = this.$store.state.preferences.calculation
 		this.positiveBehaviors = this.$store.state.preferences.positiveBehaviors
