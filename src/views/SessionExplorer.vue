@@ -18,14 +18,14 @@
                 	{{ session.responses.length }} responses
                 </h6>
                 <button 
-                    v-if="loaded && session.chart !== 'anonymous' && session.activity.activityType == 'response pool' && !displayRespondents"
+                    v-if="loaded && session.chart !== 'anonymous' && !displayRespondents"
                     class="options-button"
                     @click="toggleRespondentsDisplay" 
                 >
                     show respondents
                 </button>
                 <button 
-                    v-if="loaded && session.chart !== 'anonymous' && session.activity.activityType == 'response pool' && displayRespondents"
+                    v-if="loaded && session.chart !== 'anonymous' && displayRespondents"
                     class="options-button"
                     @click="toggleRespondentsDisplay" 
                 >
@@ -118,10 +118,12 @@
                                 </div>
                             </section>
                             <section class="response-body">
-                                <h5><router-link :to="`/student/${response.respondent.id}`">
-                                    {{ response.respondent.firstName }} 
-                                    {{ response.respondent.lastName }}
-                                </router-link></h5>
+                                <h5 v-if="displayRespondents">
+                                    <router-link :to="`/student/${response.respondent.id}`">
+                                        {{ response.respondent.firstName }} 
+                                        {{ response.respondent.lastName }}
+                                    </router-link>
+                                </h5>
                                 <p v-if="response.response.choice">
                                     {{ response.response.choice }}
                                 </p>
@@ -170,10 +172,12 @@
                                 </div>
                             </section>
                             <section class="response-body">
-                                <h5><router-link :to="`/student/${response.respondent.id}`">
-                                    {{ response.respondent.firstName }} 
-                                    {{ response.respondent.lastName }}
-                                </router-link></h5>
+                                <h5 v-if="displayRespondents">
+                                    <router-link :to="`/student/${response.respondent.id}`">
+                                        {{ response.respondent.firstName }} 
+                                        {{ response.respondent.lastName }}
+                                    </router-link>
+                                </h5>
                                 <p v-if="session.activity.content.assignments[parseInt(response.response.assignment)] && session.activity.content.assignments[parseInt(response.response.assignment)].resourceType == 'text'">
                                     {{ session.activity.content.assignments[parseInt(response.response.assignment)].resourceData }}
                                 </p>
@@ -394,7 +398,6 @@ export default {
                     index = choice % 9
                 } else {
                     index = choice
-                    console.log(choice)
                 }
             }
             return this.donutSectionColorSpectrum[index]
