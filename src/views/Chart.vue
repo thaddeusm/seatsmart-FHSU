@@ -489,8 +489,8 @@ export default {
 			let gaps = this.classInfo.rows + 2
 			let verticalMargin = remainingVerticalSpace / gaps
 			this.cardStyle.width = `${totalCardWidth * .9}px`
-			this.cardStyle.marginRight = `${totalCardWidth * .05}px`
-			this.cardStyle.marginLeft = `${totalCardWidth * .05}px`
+			this.cardStyle.marginRight = `${totalCardWidth * .04}px`
+			this.cardStyle.marginLeft = `${totalCardWidth * .04}px`
 			this.cardStyle.height = `${totalCardHeight * .7}px`
 			this.rowMargins.marginTop = `${verticalMargin}px`
 			this.rowMargins.marginBottom = `${verticalMargin}px`
