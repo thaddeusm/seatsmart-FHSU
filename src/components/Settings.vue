@@ -594,7 +594,7 @@ input {
 	border-radius: 4px;
 	font-size: 15px;
 	padding: 7px 10px 9px 10px;
-	margin: 10px 10px;
+	margin: 10px 8px;
 	color: var(--black);
 	border: 1px solid var(--light-gray);
 	outline: none;
@@ -605,7 +605,7 @@ input {
 }
 
 .small-input {
-	width: 169px;
+	width: 168px;
 }
 
 .label-row {
@@ -645,7 +645,7 @@ input {
 	border: none;
 	cursor: pointer;
 	margin-top: -10px;
-	margin-left: 10px;
+	margin-left: 5px;
 	vertical-align: middle;
 }
 

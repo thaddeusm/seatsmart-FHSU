@@ -49,7 +49,17 @@ const isDevelopment = process.env.NODE_ENV !== 'production'
 let win
 
 // Standard scheme must be registered before the app is ready
-protocol.registerStandardSchemes(['app'], { secure: true })
+// protocol.registerStandardSchemes(['app'], { secure: true })
+protocol.registerSchemesAsPrivileged([{
+  scheme: 'atom',
+  privileges: {
+    // The following setting
+    // is causing the memoryleak
+    standard: true
+  }
+}])
+
+
 function createWindow () {
 
   // Create the frameless window but hide until load
@@ -60,7 +70,11 @@ function createWindow () {
     'vibrancy': 'dark',
     'fullscreenWindowTitle': true,
     'titleBarStyle': 'hiddenInset',
-    webPreferences: { webSecurity: false }
+    webPreferences: { 
+      webSecurity: false,
+      nodeIntegration: true,
+      enableRemoteModule: true 
+    }
   })
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
