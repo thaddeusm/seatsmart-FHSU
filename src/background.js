@@ -6,8 +6,8 @@ const { autoUpdater } = require("electron-updater")
 // Vue JS modules
 import {
   createProtocol,
-  installVueDevtools
 } from 'vue-cli-plugin-electron-builder/lib'
+import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 
 // modules to support persistence
 import path from 'path'
@@ -157,7 +157,7 @@ app.on('activate', () => {
 app.on('ready', async () => {
   if (isDevelopment && !process.env.IS_TEST) {
     // Install Vue Devtools
-    await installVueDevtools()
+    await installExtension(VUEJS_DEVTOOLS)
   }
   createWindow()
 })

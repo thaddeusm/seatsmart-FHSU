@@ -7,8 +7,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "release:win": "vue-cli-service electron:build -w -p always",
-    "release": "vue-cli-service electron:build -p always",
+    "release": "vue-cli-service electron:build -wm -p always",
     "electron:build": "vue-cli-service electron:build",
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps"
@@ -18,6 +17,7 @@
     "url": "git+https://github.com/thaddeusm/seatsmart-FHSU.git"
   },
   "dependencies": {
+    "electron-devtools-installer": "^3.1.0",
     "electron-updater": "^4.0.6",
     "moment": "^2.23.0",
     "nedb": "^1.8.0",
@@ -38,7 +38,7 @@
     "@vue/cli-service": "^3.12.1",
     "electron": "^8.0.0",
     "electron-notarize": "^0.3.0",
-    "vue-cli-plugin-electron-builder": "^1.4.0",
+    "vue-cli-plugin-electron-builder": "^2.0.0",
     "vue-template-compiler": "^2.5.17"
   },
   "postcss": {
