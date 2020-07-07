@@ -1,7 +1,7 @@
 {
   "name": "Seatsmart",
   "productName": "Seatsmart",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "author": "Thaddeus McCleary",
   "description": "a classroom participation tracking application",
   "scripts": {
@@ -36,7 +36,7 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.12.1",
     "@vue/cli-service": "^3.12.1",
-    "electron": "^9.1.0",
+    "electron": "^8.0.0",
     "electron-notarize": "^0.3.0",
     "vue-cli-plugin-electron-builder": "^1.4.0",
     "vue-template-compiler": "^2.5.17"
