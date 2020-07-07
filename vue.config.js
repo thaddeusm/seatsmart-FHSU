@@ -2,11 +2,13 @@ module.exports = {
   pluginOptions: {
     electronBuilder: {
       nodeIntegration: true,
-      "appId": "com.thaddeusmccleary.seatsmart",
-      "afterSign": "./afterSignHook.js",
-      "mac": {
+      builderOptions: {
+      	"appId": "com.thaddeusmccleary.seatsmart",
+     	"afterSign": "electron-builder-notarize",
+      	"mac": {
 	      "entitlements": "./build/entitlements.mac.inherit.plist"
-	   }
+	   	}
+      }
     }
   }
 }
