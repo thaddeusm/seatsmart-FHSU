@@ -113,7 +113,6 @@ export default {
 			// open config panel on button click
 			if (!this.enabled) {
 				this.enabled = true
-
 				this.$socket.emit('establishRoom')
 			}
 

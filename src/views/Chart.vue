@@ -503,7 +503,6 @@ export default {
     		this.newNoteStudent = student
     	},
     	openIterableNoteModal(student) {
-    		console.log('opening iterable')
     		this.iterableNoteModalOpen = true
     		this.newNoteStudent = student
     	},
@@ -559,7 +558,6 @@ export default {
 				columns.reverse()
 
 				this.chosenSeat = {row: rows.indexOf(student.seat.row) + 1, column: columns.indexOf(student.seat.column) + 1}
-				console.log(this.chosenSeat)
 			} else {
 				this.chosenSeat.row = student.seat.row
 				this.chosenSeat.column = student.seat.column
@@ -647,7 +645,7 @@ export default {
 				.then(() => {
 					db.deleteSomething('notes', {student: this.studentToEdit._id})
 						.then((numNotesDeleted) => {
-							console.log(`${numNotesDeleted} notes were deleted`)
+							
 						})
 
 					for (let i=0; i<this.students.length; i++) {

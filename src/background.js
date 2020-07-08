@@ -61,7 +61,6 @@ protocol.registerSchemesAsPrivileged([{
 
 
 function createWindow () {
-
   // Create the frameless window but hide until load
   win = new BrowserWindow({
     'backgroundColor': '#000000',
@@ -73,7 +72,8 @@ function createWindow () {
     webPreferences: { 
       webSecurity: false,
       nodeIntegration: true,
-      enableRemoteModule: true 
+      enableRemoteModule: true,
+      preload: path.join(__dirname, 'preload.js') 
     }
   })
 
