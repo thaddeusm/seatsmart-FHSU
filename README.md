@@ -60,7 +60,7 @@ Though its implementation in this repo is specific to the format of FHSU's roste
 this could be refactored in forked projects for other institutional settings.
 
 ## Development Timeline
-Seatsmart graduated from beta during the Spring 2019 semester and is currently being used by faculty members across several academic departments.  Basic features are complete with further remote/realtime functionality being planned for the upcoming academic year (2019-2020) to allow students to connect with their personal devices to complete small formative assessment activities for greater engagement during class periods.
+Seatsmart was designed and developed to enhance face-to-face (traditional) course delivery. As courses have moved online during the COVID-19 pandemic, features may be introduced to make Seatsmart useful in this new medium.
 
 ## Design Concepts and Inspiration
 [mockups @Figma](https://www.figma.com/file/OxI3WKOFswThYuEfOR6UaV7V/Seatsmart)
