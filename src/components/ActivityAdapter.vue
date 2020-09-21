@@ -90,7 +90,7 @@
 									<button class="delete-response-button" @click="deleteResponse(index)" disabled>
 										<img src="@/assets/delete.svg" alt="delete icon">
 									</button>
-									<h4 @click="copyToClipboard(response.response)">{{ response.response }}</h4>
+									<h1 @click="copyToClipboard(response.response)">{{ response.response }}</h1>
 									<button class="hide-button" @click="hideResponse(index)">
 										<img src="@/assets/hide.svg" alt="hide icon">
 									</button>
@@ -139,7 +139,7 @@
 									<button class="delete-response-button" @click="deleteResponse(index)">
 										<img src="@/assets/delete.svg" alt="delete icon">
 									</button>
-									<h4 @click="copyToClipboard(response.response)">{{ response.response }}</h4>
+									<h1 @click="copyToClipboard(response.response)">{{ response.response }}</h1>
 									<button class="hide-button" @click="hideResponse(index)">
 										<img src="@/assets/hide.svg" alt="hide icon">
 									</button>
@@ -830,7 +830,7 @@ export default {
 .activity-body-narrow {
 	grid-area: body;
 	display: grid;
-	grid-template-columns: 47% 1fr;
+	grid-template-columns: 40% 1fr;
 	align-items: center;
 	grid-template-areas: "banner display";
 }
