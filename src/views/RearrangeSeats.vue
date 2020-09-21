@@ -54,10 +54,10 @@
 	    	</Modal>
 		</transition>
 		<TouchBar :show="!choiceModalOpen" :bar="[
+				{type: 'button', label: 'save changes', method: function() {saveSeats()}},
 				{type: 'spacer', size: 'flexible'},
 				{type: 'button', label: 'discard changes', method: function() {$router.push(`/chart/${id}`)}}
 	    	]" 
-	    	:escapeItem="{type: 'button', label: 'save changes', method: function() {saveSeats()}}"
 	    />
 	</div>
 </template>

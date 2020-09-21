@@ -154,6 +154,7 @@
             </Modal>
         </transition>
         <TouchBar :show="!modalOpen && !alertModalOpen" :bar="[
+            {type: 'button', label: 'Back', method: function() {routeBack()}},
             {type: 'spacer', size: 'flexible'},
             {type: 'button', label: '⭐️', method: function() {toggleSelected()}},
             {type: 'spacer', size: 'flexible'},
@@ -162,7 +163,6 @@
             {type: 'spacer', size: 'flexible'},
 			{type: 'button', label: '📝', method: function() {openModal('note')}}
 	       ]" 
-           :escapeItem="{type: 'button', label: 'Back', method: function() {routeBack()}}"
         />
     </div>
 </template>

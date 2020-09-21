@@ -278,7 +278,7 @@
         </Modal>
 		<TouchBar 
 			:show="true" 
-            :escapeItem="{type: 'button', label: 'back', method: function() {routeBack()}}"
+            :bar="[{type: 'button', label: 'back', method: function() {routeBack()}}]"
         />
 	</div>
 </template>

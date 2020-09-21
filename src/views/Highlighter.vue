@@ -71,13 +71,13 @@
     		</template>
     	</Modal>
 		<TouchBar :show="true" :bar="[
+				{type: 'button', label: 'save changes', method: function() {saveChanges()}},
 				{type: 'spacer', size: 'flexible'},
 				{type: 'button', label: 'clear all highlights', method: function() {clearAllHighlights()}},
 				{type: 'button', label: 'make teams', method: function() {promptTeamHighlighter()}},
 				{type: 'spacer', size: 'flexible'},
 				{type: 'button', label: 'discard changes', method: function() {$router.push(`/chart/${id}`)}}
 	    	]" 
-	    	:escapeItem="{type: 'button', label: 'save changes', method: function() {saveChanges()}}"
 	    />
 	</div>
 </template>

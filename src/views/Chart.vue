@@ -269,7 +269,6 @@
 				{type: 'button', label: '📝', method: function() {createBulkNote()}},
 				{type: 'button', label: '🌠', method: function() {deselectStudents()}}
 	    	]" 
-	    	:escapeItem="{type: 'button', label: '✏️', method: function() {toggleEditMode()}}"
 	    />
 	</div>
 </template>

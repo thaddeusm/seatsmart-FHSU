@@ -207,11 +207,10 @@
             </template>
         </Modal>
         <TouchBar :show="true" :bar="[
+                {type: 'button', label: 'Back', method: function() {routeBack()}},
                 {type: 'spacer', size: 'flexible'},
                 {type: 'button', label: 'Delete Session', method: function() {alertModalOpen = true}},
-                {type: 'spacer', size: 'flexible'},
-        ]" 
-           :escapeItem="{type: 'button', label: 'Back', method: function() {routeBack()}}"
+            ]" 
         />
     </div>
 </template>

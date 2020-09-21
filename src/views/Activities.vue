@@ -91,13 +91,13 @@
         </Modal>
         <TouchBar 
             :bar="[
+                {type: 'button', label: '🏠', method: function() {routeBack()}},
                 {type: 'spacer', size: 'flexible'},
                 {type: 'button', label: 'New Activity', method: function() {$router.push('/activity/new')}},
                 {type: 'spacer', size: 'flexible'},
                 {type: 'button', label: 'Load All Sessions', method: function() {loadAllActivitySessions()}}
             ]"
             :show="!modalOpen && !alertModalOpen" 
-            :escapeItem="{type: 'button', label: '🏠', method: function() {routeBack()}}"
         />
 	</div> 
 </template>

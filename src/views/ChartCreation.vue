@@ -176,8 +176,9 @@
 				</template>
 			</Modal>
 		</transition>
-		<TouchBar :show="true" :bar="[]"
-			:escapeItem="{type: 'button', label: 'Back', method: routeBack}"
+		<TouchBar :show="true" :bar="[
+			{type: 'button', label: 'Back', method: routeBack}
+		]"
 		/>
 	</div>
 </template>

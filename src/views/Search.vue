@@ -53,11 +53,11 @@
     		</template>
   		</Modal>
         <TouchBar :show="!noteModalOpen" :bar="[
+            {type: 'button', label: '🏠', method: routeHome},
             {type: 'spacer', size: 'flexible'},
             {type: 'button', label: '📦', method: function() {toggleIncludeArchived()}},
             {type: 'button', label: '🎫', method: function() {toggleCardStyle()}}
 	       ]" 
-           :escapeItem="{type: 'button', label: '🏠', method: routeHome}"
         />
     </div>
 </template>
