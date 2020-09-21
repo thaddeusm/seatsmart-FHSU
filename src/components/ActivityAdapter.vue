@@ -46,13 +46,13 @@
 					<section class="button-container" v-if="activityStage == 'launched'">
 						<h3 v-if="roomID !== ''">Scan to Connect</h3>
 						<h3 v-else>Connecting...</h3>
-						<qriously 
-							v-if="roomID !== ''"
-							id="qr"
-							:value="`https://activities.seatsmart.tech/code/${roomID}`"
-							:size="200" 
-						/>
-						<section id="roomIDLoading" v-else></section>
+						<div class="qr-area" @click="copyToClipboard(`https://activities.seatsmart.tech/code/${roomID}`)">
+							<qriously 
+								id="qr"
+								:value="`https://activities.seatsmart.tech/code/${roomID}`"
+								:size="200" 
+							/>
+						</div>
 						<div class="actions-wrapper">
 							<button 
 								class="action-button cancel-button" 
@@ -994,6 +994,10 @@ h4:hover {
 	margin: 25px auto;
 	border-radius: 5px;
 	vertical-align: middle;
+}
+
+.qr-area {
+	cursor: pointer;
 }
 
 #roomIDLoading {
