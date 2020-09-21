@@ -810,11 +810,12 @@ button {
 	border-radius: 10px;
 	display: grid;
 	grid-template-columns: auto 1fr;
-	grid-template-rows: 70% 30%;
+	grid-template-rows: auto auto;
 	grid-template-areas: 
 		"label switch"
 		"config config";
 	align-items: center;
+	justify-content: center;
 	margin: 15px 0;
 }
 
@@ -848,6 +849,7 @@ button {
 
 .label-row {
 	text-align: left;
+	padding-left: 5px;
 }
 
 .label-row > span {
