@@ -93,7 +93,7 @@
 					<div class="input-area">
 						<drop :class="[over ? 'drop-bold-outline' : 'drop-light-outline', 'drop-area']" @drop="handleDrop" @dragover="over = true" @dragleave="over = false" v-if="mode === 'new' && !importSuccess">
 							<button class="drop-area-button" @click="handleOpen">import roster</button>
-							<span>or drag and drop here</span>
+							<span>or drag and drop here <button class="modal-button-white" @click="modalOpen = true">(?)</button></span>
 						</drop>
 						<div class="drop-area" v-else-if="mode === 'new' && importSuccess">
 							<button class="drop-area-button" @click="resetImport">import a different file</button>
@@ -129,7 +129,7 @@
 			<Modal v-if="modalOpen" v-on:trigger-close="modalOpen = false" :dismissable="true" size="large">
 				<template slot="content">
 					<div class="modal-header">
-						<h1>Import a FHSU Roster</h1>
+						<h1>Import a Roster (FHSU Users)</h1>
 					</div>
 					<div class="modal-body">
 						<div class="step">
@@ -918,6 +918,16 @@ progress-button:disabled {
 	font-size: 14px;
 }
 
+.modal-button-white {
+	background: none;
+	outline: none;
+	color: var(--white);
+	border: none;
+	cursor: pointer;
+	vertical-align: text-top;
+	font-size: 14px;
+}
+
 .modal-header {
 	background: var(--gray);
 	text-align: center;
@@ -927,6 +937,7 @@ progress-button:disabled {
 
 .modal-header > h1 {
 	color: var(--white);
+	margin-top: 0;
 }
 
 .modal-body {

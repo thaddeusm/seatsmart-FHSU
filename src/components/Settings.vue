@@ -214,20 +214,17 @@
 			<section v-if="content == 'about'">
 				<h1>About</h1>
 				<p>
-					<button @click="openHomePage('main')" class="inner-link">Seatsmart</button>  offers a convenient way to implement classroom
-					participation guidance by the Department of English at Fort Hays State University for
-					courses conducted at campuses in China.
+					<button @click="openHomePage('main')" class="inner-link">Seatsmart</button>  offers a convenient way to encourage active participation in cooperative learning and to manage classrooms.
 				</p>
 				<p>
-					Participation is considered an essential part of student performance and can impact final
-					course grades. A student begins the semester at the level of a 'C' letter grade for participation.
-					The instructor regularly adjusts the grade throughout the semester, making it visible on Blackboard.
+					Participation is considered an essential part of student performance. One possible strategy would be to begin a semester with each student at a 'C' letter grade (70%) for participation.
+					The instructor regularly adjusts the grade throughout the semester, making it visible to students.
 					This is intended to motivate students to make positive contributions during class sessions.  A
 					course syllabus should define how the instructor calculates the score, spelling out what behaviors
 					are encouraged and discouraged.
 				</p>
 				<p>
-					FHSU policies related to technology use and information security were carefully considered in the
+					Information security was carefully considered in the
 					development of Seatsmart.  The basic features of the application do not require Internet access.  All data is stored locally on your computer.  This data is intended to remain
 					on your local hard drive and not transfered to any cloud storage system.  This helps ensure that data
 					related to students remains confidential.  Records in Seatsmart may relate to a student's academic

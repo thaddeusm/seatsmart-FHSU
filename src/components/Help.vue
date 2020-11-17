@@ -1,10 +1,6 @@
 <template>
 	<div>
 		<h1>Help</h1>
-		<p>
-			<button @click="openWebPage('video')" class="inner-link">Watch a comprehensive walkthrough video</button> (Internet access required).
-		</p>
-		<br><br>
 		<!-- Show intro help about setting behaviors and calculation -->
 		<section v-if="progress.indexOf('created class') === -1">
 			<h4>Getting Started</h4>
