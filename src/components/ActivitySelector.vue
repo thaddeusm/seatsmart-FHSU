@@ -223,6 +223,13 @@ h1 {
 	background-position: left;
 }
 
+.word-cloud {
+	background-image: linear-gradient(rgba(255, 255, 255, .8)), url('~@/assets/word-cloud-illustration.svg');
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: left;
+}
+
 #footer {
 	text-align: center;
 }

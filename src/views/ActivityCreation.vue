@@ -24,6 +24,12 @@
 					<h5>information gap</h5>
 				</button>
 			</div>
+			<div class="activity-choice-container">
+				<button class="activity-button" @click="chooseActivity('word cloud')" :class="[activityChoice == 'word cloud' ? 'selected' : '']" :disabled="progress !== 1">
+					<img src="@/assets/word-cloud-illustration.svg" alt="word cloud illustration">
+					<h5>word cloud</h5>
+				</button>
+			</div>
 		</section>
 		<section id="border"></section>
 		<section id="activityForm">
@@ -162,6 +168,72 @@
 					</section>
 				</section>
 			</div>
+			<div v-else-if="activityChoice == 'word cloud'">
+				<section class="form-one" v-if="progress == 1">
+					<div class="form-container">
+						<h3>Options</h3>
+						<div class="input-wrapper">
+							<h5>Name</h5>
+							<input class="large-input" type="text" name="surveyName" v-model="wordCloudData.name" placeholder="Word Cloud name...">
+						</div>
+						<div class="switch-wrapper">
+							<h5>Allow Multiple Responses</h5>
+							<button :class="[wordCloudData.allowMultipleResponses ? 'on' : 'off' ,'switch']" @click="toggleAllowMultipleResponses">
+								<img src="@/assets/switch-circle.svg" alt="switch circle">
+							</button>
+						</div>
+						<div class="switch-wrapper">
+							<h5>Time Limit</h5>
+							<button :class="[wordCloudData.timeLimit.enabled ? 'on' : 'off' ,'switch']" @click="toggleTimer">
+								<img src="@/assets/switch-circle.svg" alt="switch circle">
+							</button>
+							<div class="switch-config" v-if="wordCloudData.timeLimit.enabled">
+								<div class="label-row">
+									<span v-if="wordCloudData.timeLimit.minutes !== '1'">
+										Minutes
+									</span>
+									<span v-else>
+										Minute
+									</span>
+									<span v-if="wordCloudData.timeLimit.seconds !== '1'">
+										Seconds
+									</span>
+									<span v-else>
+										Second
+									</span>
+								</div>
+								<div>
+									<div class="form-group">
+										<input class="small-input" type="number" min="0" max="59" name="timeLimitMinutes" v-model="wordCloudData.timeLimit.minutes">
+										<input class="small-input" type="number" min="0" max="59" name="timeLimitSeconds" v-model="wordCloudData.timeLimit.seconds">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<section class="progress-button-area">
+						<button class="progress-button" @click="routeBack"><img class="back-icon" src="@/assets/backarrowwhite.svg" alt="back icon"></button>
+						<button class="progress-button" @click="changeProgress(2)">add word cloud content</button>
+					</section>
+				</section>
+				<section class="form-two" v-if="progress == 2">
+					<div class="form-container">
+						<h3>Content</h3>
+						<div class="input-wrapper">
+							<h5>Prompt</h5>
+							<input class="large-input" type="text" name="wordCloudPrompt" v-model="wordCloudData.prompt" placeholder="Prompt...">
+						</div>
+						<div class="input-wrapper">
+							<h5>Example Response</h5>
+							<input class="large-input" type="text" name="wordCloudExample" v-model="wordCloudData.example" placeholder="Example response...">
+						</div>
+					</div>
+					<section class="progress-button-area">
+						<button class="progress-button" @click="routeBack"><img class="back-icon" src="@/assets/backarrowwhite.svg" alt="back icon"></button>
+						<button class="progress-button" @click="startPreview">preview word cloud</button>
+					</section>
+				</section>
+			</div>
 			<div v-else>
 				<section class="form-one" v-if="progress == 1">
 					<div class="form-container">
@@ -270,6 +342,9 @@
                 	<p v-else-if="activityChoice == 'response pool'">
                 		Response pools offer an open-ended format for feedback, which can even be configured to allow students to submit multiple responses.  Responses will be displayed anonymously as they are received by your computer.  Two moderation options will be presented to you during the activity: hiding or deleting responses.
                 	</p>
+                	<p v-else-if="activityChoice == 'word cloud'">
+                		Word Clouds offer an open-ended format for feedback in a unique design, which can even be configured to allow students to submit multiple responses.  Responses will be displayed anonymously as they are received by your computer.  When users submit the same or similar responses, the words will be emphasized in the cloud.
+                	</p>
                 	<p v-else>
                 		Information Gaps provide a simple solution to a common aspect of a classroom activity - randomly distributing content.  Like other activities, this is meant to be used during simple, low-stakes tasks.  Also, if you use highlight colors to visually group students, you can have Seatsmart ensure that students with the same highlight color receive the same information gap assignment.
                 	</p>
@@ -328,6 +403,17 @@ export default {
 				example: '',
 				allowMultipleResponses: true
 			},
+			wordCloudData: {
+				name: '',
+				timeLimit: {
+					enabled: true,
+					minutes: '1',
+					seconds: '0'
+				},
+				prompt: '',
+				example: '',
+				allowMultipleResponses: true
+			},
 			informationGapData: {
 				name: '',
 				prompt: '',
@@ -364,6 +450,8 @@ export default {
 				activityData = this.surveyData
 			} else if (this.activityChoice == 'response pool') {
 				activityData = this.responsePoolData
+			} else if (this.activityChoice == 'word cloud') {
+				activityData = this.wordCloudData
 			} else {
 				activityData = this.informationGapData
 			}
@@ -407,7 +495,11 @@ export default {
 			this.informationGapData.assignByHighlight = !this.informationGapData.assignByHighlight
 		},
 		toggleAllowMultipleResponses() {
-			this.responsePoolData.allowMultipleResponses = !this.responsePoolData.allowMultipleResponses
+			if (this.activityChoice == 'response pool') {
+				this.responsePoolData.allowMultipleResponses = !this.responsePoolData.allowMultipleResponses
+			} else {
+				this.wordCloudData.allowMultipleResponses = !this.wordCloudData.allowMultipleResponses
+			}
 		},
 		addSurveyChoice() {
 			this.surveyData.choices.push('')
@@ -479,6 +571,35 @@ export default {
 								this.alertMessage = 'Please provide a response pool prompt.'
 								check = true
 							} else if (this.responsePoolData.example == '') {
+								this.alertMessage = 'Please provide an example response.'
+								check = true
+							}
+							break
+						case 3:
+							break
+					}
+				break
+				case 'word cloud':
+					switch (this.progress) {
+						case 1:
+							if (this.wordCloudData.name == '') {
+								this.alertMessage = 'Please name the word cloud activity.'
+								check = true
+							} else if (this.wordCloudData.timeLimit.enabled) {
+								if (this.wordCloudData.timeLimit.seconds > 59) {
+									this.alertMessage = 'Please enter a valid number of seconds.'
+									check = true
+								} else if (this.wordCloudData.timeLimit.minutes < 1 && this.wordCloudData.timeLimit.seconds < 1) {
+									this.alertMessage = 'Please enter a time limit'
+									check = true
+								}
+							}
+							break
+						case 2:
+							if (this.wordCloudData.prompt == '') {
+								this.alertMessage = 'Please provide a word cloud prompt.'
+								check = true
+							} else if (this.wordCloudData.example == '') {
 								this.alertMessage = 'Please provide an example response.'
 								check = true
 							}
@@ -566,6 +687,24 @@ export default {
 							allowMultipleResponses: this.responsePoolData.allowMultipleResponses
 						}
 					}
+			} else if (this.activityChoice == 'word cloud') {
+				dataToSave = {
+						name: this.wordCloudData.name,
+						activityType: 'word cloud',
+						dateCreated: this.dateCreated,
+						content: {
+							prompt: this.wordCloudData.prompt,
+							example: this.wordCloudData.example
+						},
+						options: {
+							timeLimit: {
+								enabled: this.wordCloudData.timeLimit.enabled,
+								minutes: this.wordCloudData.timeLimit.minutes,
+								seconds: this.wordCloudData.timeLimit.seconds
+							},
+							allowMultipleResponses: this.wordCloudData.allowMultipleResponses
+						}
+					}
 			} else {
 				dataToSave = {
 						name: this.informationGapData.name,
@@ -650,6 +789,14 @@ export default {
 						this.responsePoolData.timeLimit.seconds = existingActivity[0].options.timeLimit.seconds
 						this.responsePoolData.prompt = existingActivity[0].content.prompt
 						this.responsePoolData.example = existingActivity[0].content.example
+						this.dateCreated = existingActivity[0].dateCreated
+					} else if (existingActivity[0].activityType == 'word cloud') {
+						this.wordCloudData.name = existingActivity[0].name
+						this.wordCloudData.timeLimit.enabled = existingActivity[0].options.timeLimit.enabled
+						this.wordCloudData.timeLimit.minutes = existingActivity[0].options.timeLimit.minutes
+						this.wordCloudData.timeLimit.seconds = existingActivity[0].options.timeLimit.seconds
+						this.wordCloudData.prompt = existingActivity[0].content.prompt
+						this.wordCloudData.example = existingActivity[0].content.example
 						this.dateCreated = existingActivity[0].dateCreated
 					} else {
 						this.informationGapData.name = existingActivity[0].name

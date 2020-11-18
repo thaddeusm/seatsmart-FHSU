@@ -986,6 +986,13 @@ h4:hover {
 	background-position: 0px -5px;
 }
 
+.word-cloud {
+	background-image: url('~@/assets/word-cloud-illustration.svg');
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: -20px -50px;
+}
+
 #qr {
 	background: var(--white);
 	box-shadow: 2px 2px 5px var(--black);
