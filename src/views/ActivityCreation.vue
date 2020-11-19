@@ -456,7 +456,6 @@ export default {
 				activityData = this.informationGapData
 			}
 
-
 			let data = {
 				activityType: this.activityChoice,
 				activityData: activityData,

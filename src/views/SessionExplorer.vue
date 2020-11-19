@@ -9,6 +9,7 @@
                 <div id="illustrationArea" v-if="loaded">
                 	<img v-if="session.activity.activityType == 'survey'" src="@/assets/survey-illustration.svg" alt="survey illustration">
                 	<img v-else-if="session.activity.activityType == 'response pool'" src="@/assets/response-pool-illustration.svg" alt="response pool illustration">
+                    <img v-else-if="session.activity.activityType == 'word cloud'" src="@/assets/word-cloud-illustration.svg" alt="word cloud illustration">
                     <img v-else src="@/assets/information-gap-illustration.svg" alt="information gap illustration">
                 </div>
                 <h5>
@@ -50,6 +51,31 @@
         			<button class="back-button" @click="routeBack"><img class="back-arrow" src="@/assets/backarrow.svg" alt="back arrow"> back</button>
         		</section>
             </header>
+            <section v-if="loaded && session.activity.activityType == 'word cloud'" class="word-cloud">
+                <h3 class="prompt">
+                    {{ session.activity.content.prompt }}
+                </h3>
+                <vue-word-cloud
+                  style="
+                    height: 350px;
+                    width: 100%;
+                    margin: 100px auto 50px auto;
+                  "
+                  :words="wordCloudWordArray"
+                  :color="([, weight]) => weight > 10 ? '#FCBB04' : weight > 5 ? '#D2360A' : '#6C6C6C'"
+                  font-family="ArchivoNarrow"
+                  v-if="session.responses.length > 0"
+                />
+                <ul v-if="session.responses.length > 0" id="responsePoolList">
+                    <li v-for="(response, index) in session.responses" v-if="response.response.text" :key="`response${index}`">
+                        <h4>{{ response.response.text }}</h4>
+                        <h5 v-if="response.respondent !== 'anonymous' && displayRespondents"><router-link :to="`/student/${response.respondent.id}`">
+                            {{ response.respondent.firstName }} 
+                            {{ response.respondent.lastName }}
+                        </router-link></h5>
+                    </li>
+                </ul>
+            </section>
             <section v-if="loaded && session.activity.activityType == 'response pool' && !responsesMissing" class="response-pool">
                 <h3 class="prompt">
                     {{ session.activity.content.prompt }}
@@ -220,6 +246,7 @@ const shell = require('electron').shell
 const { dialog } = require('electron').remote
 
 import fs from 'fs'
+import VueWordCloud from 'vuewordcloud'
 
 import db from '@/db.js'
 import moment from 'moment'
@@ -241,7 +268,8 @@ export default {
 	components: {
 		TitleBar,
 		TouchBar,
-        Modal
+        Modal,
+        [VueWordCloud.name]: VueWordCloud,
 	},
 	data() {
 		return {
@@ -369,6 +397,27 @@ export default {
             }
 
             return sections
+        },
+        wordCloudWordArray() {
+            let responses = this.session.responses
+            let wordDictionary = {}
+
+            // increment word weights based upon participant responses
+            for (let i=0; i<this.session.responses.length; i++) {
+                let response = responses[i]
+                if (wordDictionary.hasOwnProperty([response.response.text])) {
+                    wordDictionary[response.response.text]++
+                } else {
+                    wordDictionary[response.response.text] = 1
+                }
+            }
+
+            let keys = Object.keys(wordDictionary)
+            let values = Object.values(wordDictionary)
+
+            return keys.map((key, index) => {
+                return [key, values[index]]
+            })
         }
 	},
 	methods: {

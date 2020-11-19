@@ -109,6 +109,18 @@
 							>
 							</vc-donut>
 						</div>
+						<div v-if="activity.activityType == 'word cloud'">
+							<vue-word-cloud
+							  style="
+							    height: 250px;
+							    width: 100%;
+							  "
+							  :words="wordCloudWordArray"
+							  :color="([, weight]) => weight > 10 ? '#FCBB04' : weight > 5 ? '#D2360A' : '#E5E5E5'"
+							  font-family="ArchivoNarrow"
+							  v-if="responses.length > 0"
+							/>
+						</div>
 						<section id="waitingForResponses" v-if="responses.length == 0"></section>
 						<div class="actions-wrapper">
 							<button 
@@ -148,6 +160,18 @@
 							<button v-if="responses.length > 0" class="show-all-button" @click="hiddenResponses = []" :disabled="hiddenResponses.length == 0">
 								show all
 							</button>
+						</div>
+						<div v-if="activity.activityType == 'word cloud'">
+							<vue-word-cloud
+							  style="
+							    height: 250px;
+							    width: 100%;
+							  "
+							  :words="wordCloudWordArray"
+							  :color="([, weight]) => weight > 10 ? '#FCBB04' : weight > 5 ? '#D2360A' : '#E5E5E5'"
+							  font-family="ArchivoNarrow"
+							  v-if="responses.length > 0"
+							/>
 						</div>
 						<div v-if="activity.activityType == 'information gap'">
 							<vc-donut
@@ -212,6 +236,7 @@ import {clipboard} from 'electron'
 import db from '@/db.js'
 import sjcl from 'sjcl'
 import moment from 'moment'
+import VueWordCloud from 'vuewordcloud'
 
 import NoteForm from '@/components/NoteForm.vue'
 import Countdown from '@/components/Countdown.vue'
@@ -228,7 +253,8 @@ export default {
 	},
 	components: {
 		NoteForm,
-		Countdown
+		Countdown,
+		[VueWordCloud.name]: VueWordCloud,
 	},
 	data() {
 		return {
@@ -345,6 +371,27 @@ export default {
 			}
 
 			return sections
+		},
+		wordCloudWordArray() {
+			let responses = this.responses
+			let wordDictionary = {}
+
+			// increment word weights based upon participant responses
+			for (let i=0; i<responses.length; i++) {
+				let response = responses[i]
+				if (wordDictionary.hasOwnProperty([response.response])) {
+					wordDictionary[response.response]++
+				} else {
+					wordDictionary[response.response] = 1
+				}
+			}
+
+			let keys = Object.keys(wordDictionary)
+			let values = Object.values(wordDictionary)
+
+			return keys.map((key, index) => {
+				return [key, values[index]]
+			})
 		},
 		responsesInDBFormat() {
 			return this.responses.map((response) => {
@@ -681,6 +728,33 @@ export default {
 					}
 				}
 			} else if (this.activity.activityType == 'response pool') {
+				if (this.launchChoice.id == 'anonymously') {
+					data = {
+						activityType: this.activity.activityType,
+						activityData: {
+							timeLimit: this.activity.options.timeLimit,
+							prompt: this.activity.content.prompt,
+							example: this.activity.content.example,
+							allowMultipleResponses: this.activity.options.allowMultipleResponses
+						},
+						activityMode: this.launchChoice.id,
+						activityDate: moment()
+					}
+				} else {
+					data = {
+						activityType: this.activity.activityType,
+						activityData: {
+							timeLimit: this.activity.options.timeLimit,
+							prompt: this.activity.content.prompt,
+							example: this.activity.content.example,
+							allowMultipleResponses: this.activity.options.allowMultipleResponses
+						},
+						activityMode: this.launchChoice.id,
+						activityDate: moment(),
+						students: this.students
+					}
+				}
+			} else if (this.activity.activityType == 'word cloud') {
 				if (this.launchChoice.id == 'anonymously') {
 					data = {
 						activityType: this.activity.activityType,
