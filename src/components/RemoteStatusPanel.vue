@@ -26,7 +26,7 @@
 					</div>
 					<button class="qr-toggle" v-if="showQR" @click="showQR = false">hide QR</button>
 					<button class="qr-toggle" v-else @click="showQR = true">show QR</button>
-					<button class="cancel-button" @click="closeConnection">End Remote Connection</button>
+					<button class="cancel-button" @click="closeConnection">end remote connection</button>
 				</section>
 				<section class="right-panel">
 					<h4>

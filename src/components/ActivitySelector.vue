@@ -45,14 +45,14 @@
 				class="action-button cancel-button" 
 				@click="cancelActivity"
 			>
-				Cancel
+				cancel
 			</button>
 			<button 
 				class="action-button launch-button"
 				@click="launchActivity"
 				:disabled="activityChoice == null"
 			>
-				Launch Activity
+				launch activity
 			</button>
 		</section>
 	</div>

@@ -33,13 +33,13 @@
 								class="action-button cancel-button" 
 								@click="$emit('trigger-modal-close')"
 							>
-								Cancel
+								cancel
 							</button>
 							<button 
 								class="action-button launch-button"
 								@click="launchActivity"
 							>
-								Go
+								go
 							</button>
 						</div>
 					</section>
@@ -58,14 +58,14 @@
 								class="action-button cancel-button" 
 								@click="cancelActivity"
 							>
-								Cancel
+								cancel
 							</button>
 							<button 
 								class="action-button launch-button"
 								@click="startActivity"
 								:disabled="connectedUsers.length == 0"
 							>
-								Start
+								start
 							</button>
 						</div>
 					</section>
@@ -129,7 +129,7 @@
 								@click="endActivity"
 								:disabled="ending"
 							>
-								End {{ activity.activityType }}
+								end {{ activity.activityType }}
 							</button>
 						</div>
 					</section>
@@ -188,7 +188,7 @@
 								class="action-button cancel-button"
 								@click="$emit('trigger-modal-close')"
 							>
-								Close
+								close
 							</button>
 						</div>
 						<div class="actions-wrapper" v-else>
@@ -196,14 +196,14 @@
 								class="action-button cancel-button"
 								@click="$emit('trigger-modal-close')"
 							>
-								Close without Notes
+								close without notes
 							</button>
 							<button 
 								class="action-button launch-button"
 								@click="beginAddNotes"
 								v-if="responses.length > 0"
 							>
-								Add Participation Notes
+								add participation notes
 							</button>
 						</div>
 					</section>

@@ -12,7 +12,7 @@
 				<li class="inactive" ref="about"><button class="button-link" @click="changeContent('about')">About</button></li>
 			</ul>
 			<div id="navigationFooter">
-				<button @click="saveChanges" :disabled="transferring">Close</button>
+				<button @click="saveChanges" :disabled="transferring">close</button>
 			</div>
 		</aside>
 		<section id="settingsContent">
