@@ -65,8 +65,8 @@
 					</select>
     			</div>
     			<div class="team-modal-footer">
-    				<button class="modal-footer-button" @click="teamModalOpen = false">Cancel</button>
-    				<button class="modal-footer-button yellow" @click="startTeamHighlights">Make Teams</button>
+    				<button class="modal-footer-button" @click="teamModalOpen = false">cancel</button>
+    				<button class="modal-footer-button yellow" @click="startTeamHighlights">make teams</button>
     			</div>
     		</template>
     	</Modal>

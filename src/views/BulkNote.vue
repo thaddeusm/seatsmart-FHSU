@@ -8,8 +8,8 @@
                 <NoteForm :students="studentIDs" type="multiple" :to="`/chart/${id}`" />
             </section>
             <section id="quickSelectButtons">
-                <button v-if="allSelected" @click="toggleSelectAll">Deselect All</button>
-                <button v-else @click="toggleSelectAll">Select All</button>
+                <button v-if="allSelected" @click="toggleSelectAll">deselect all</button>
+                <button v-else @click="toggleSelectAll">select all</button>
             </section>
             <section id="buttonCardArea" v-if="loaded">
                 <div class="row" v-for="(row, index) in grid" :key="`row${index}`">

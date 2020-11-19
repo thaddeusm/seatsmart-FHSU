@@ -47,8 +47,8 @@
 	    				<h4>Do you want to start with a blank chart or students' current seats?</h4>
 	    			</div>
 	    			<div class="choice-modal-footer">
-	    				<button class="modal-footer-button yellow" @click="setChoice('blank')">Blank</button>
-	    				<button class="modal-footer-button" @click="setChoice('current')">Current</button>
+	    				<button class="modal-footer-button yellow" @click="setChoice('blank')">blank</button>
+	    				<button class="modal-footer-button" @click="setChoice('current')">current</button>
 	    			</div>
 	    		</template>
 	    	</Modal>
