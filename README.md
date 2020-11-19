@@ -1,7 +1,7 @@
 ![Seatsmart Icon](https://seatsmart.tech/img/logo.b38f8b88.svg)
 
 # Seatsmart
-Seatsmart offers a convenient way to encourage active participation in cooperative learning and to manage classrooms.  
+Seatsmart offers a convenient way to to manage classrooms by encouraging learners to make positive contributions during a lesson.  
 
 ## Application Scope
 Internet connection stability is a serious concern in educational settings.  In addition, 

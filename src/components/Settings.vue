@@ -214,14 +214,10 @@
 			<section v-if="content == 'about'">
 				<h1>About</h1>
 				<p>
-					<button @click="openHomePage('main')" class="inner-link">Seatsmart</button>  offers a convenient way to encourage active participation in cooperative learning and to manage classrooms.
+					<button @click="openHomePage('main')" class="inner-link">Seatsmart</button>  offers a convenient way to to manage classrooms by encouraging learners to make positive contributions during a lesson.
 				</p>
 				<p>
-					Participation is considered an essential part of student performance. One possible strategy would be to begin a semester with each student at a 'C' letter grade (70%) for participation.
-					The instructor regularly adjusts the grade throughout the semester, making it visible to students.
-					This is intended to motivate students to make positive contributions during class sessions.  A
-					course syllabus should define how the instructor calculates the score, spelling out what behaviors
-					are encouraged and discouraged.
+					Instructors can use the application to track each student's participation throughout the course.  This makes feedback to students more transparent and actionable.
 				</p>
 				<p>
 					Information security was carefully considered in the
