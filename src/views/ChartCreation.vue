@@ -397,6 +397,8 @@ export default {
 		processXLSX(path) {
 			var workbook = XLSX.readFile(path)
 
+			console.log(workbook)
+
 			// FHSU-specific processing
 			var worksheet = workbook.Sheets['Course Roster']
 

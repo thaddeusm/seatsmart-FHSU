@@ -45,7 +45,7 @@ the context of Seatsmart users.
 ### SheetJS
 [repo](https://github.com/SheetJS/js-xlsx)
 
-SheetJS allows some class rosters to be imported directly as a convenience for instructors, provided that the roster is in XLSX format and contains at least a "first name" column. 
+SheetJS allows Fort Hays State University class rosters to be imported directly as a convenience for instructors.
 
 ## Design Concepts and Inspiration
 [mockups @Figma](https://www.figma.com/file/OxI3WKOFswThYuEfOR6UaV7V/Seatsmart)
