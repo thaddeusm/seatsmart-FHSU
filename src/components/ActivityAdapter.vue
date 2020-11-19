@@ -112,8 +112,9 @@
 						<div v-if="activity.activityType == 'word cloud'">
 							<vue-word-cloud
 							  style="
-							    height: 250px;
+							    height: 300px;
 							    width: 100%;
+							    margin: 25px auto;
 							  "
 							  :words="wordCloudWordArray"
 							  :color="([, weight]) => weight > 10 ? '#FCBB04' : weight > 5 ? '#D2360A' : '#E5E5E5'"
@@ -164,8 +165,9 @@
 						<div v-if="activity.activityType == 'word cloud'">
 							<vue-word-cloud
 							  style="
-							    height: 250px;
+							    height: 300px;
 							    width: 100%;
+							    margin: 25px auto;
 							  "
 							  :words="wordCloudWordArray"
 							  :color="([, weight]) => weight > 10 ? '#FCBB04' : weight > 5 ? '#D2360A' : '#E5E5E5'"

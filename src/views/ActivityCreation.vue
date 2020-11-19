@@ -486,8 +486,10 @@ export default {
 		toggleTimer() {
 			if (this.activityChoice === 'survey') {
 				this.surveyData.timeLimit.enabled = !this.surveyData.timeLimit.enabled
-			} else {
+			} else if (this.activityChoice === 'response pool') {
 				this.responsePoolData.timeLimit.enabled = !this.responsePoolData.timeLimit.enabled
+			} else if (this.activityChoice === 'word cloud') {
+				this.wordCloudData.timeLimit.enabled = !this.wordCloudData.timeLimit.enabled
 			}
 		},
 		toggleAssignByHighlight() {
@@ -496,7 +498,7 @@ export default {
 		toggleAllowMultipleResponses() {
 			if (this.activityChoice == 'response pool') {
 				this.responsePoolData.allowMultipleResponses = !this.responsePoolData.allowMultipleResponses
-			} else {
+			} else if (this.activityChoice === 'word cloud') {
 				this.wordCloudData.allowMultipleResponses = !this.wordCloudData.allowMultipleResponses
 			}
 		},
