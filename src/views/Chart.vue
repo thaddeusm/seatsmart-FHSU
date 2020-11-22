@@ -808,7 +808,13 @@ export default {
 			this.remoteStartActivity = true
 		},
 		cancelActivityFromRemote(activity) {
-			this.cancelActivity()
+			this.$socket.emit('endActivitySession')
+
+			let scope = this
+
+			setTimeout(function() {
+				scope.cancelActivity()
+			}, 1000, scope)
 		}
 	},
 	mounted() {

@@ -179,7 +179,7 @@
 				<img class="profile-image" src="@/assets/thaddeus.png" alt="sketched image of Thaddeus">
 				<div class="text-bubble">
 					<p>
-						This is a very new feature in Seatsmart that I look forward to exploring in my classes this fall.  I hope you find it convenient that it integrates with your other classroom records and does not require logging into anything, which cannot be said of Kahoot, Socrative, or other popular education apps.
+						I hope you find this feature convenient in that it integrates with your other classroom records and does not require logging into anything, which cannot be said of Kahoot, Socrative, or other popular formative assessment apps.
 					</p>
 					<p>
 						For example, before beginning a Composition class about ways to structure writing, I might launch a survey that asks students how long a typical paragraph should be.  The idea is not to look for a "correct answer", but instead to get a baseline of what students have heard/guessed before starting the lesson.  Students themselves may be interested in watching the screen as results are tabulated in realtime.
@@ -190,7 +190,7 @@
 				</div>
 			</div>
 			<p>
-				Tip: Take advantage of the preview feature when creating an activity to get a sense of a student's experience.  Activities should feel more like a game than a quiz.  Also, keep in mind language barriers (keep wording concise or define beforehand).
+				Tip: Take advantage of the preview feature when creating an activity to get a sense of a student's experience.  Activities should feel more like a game than a quiz.
 			</p>
 		</section>
 		<!-- Final help docs / onboarding complete -->
@@ -301,7 +301,7 @@
 				Remote
 			</h4>
 			<p>
-				Seatsmart Remote is an optional feature that allows you to take advantage of basic functions without being tied to a computer.  Actions currently supported include selecting a random student, adding a new note about a student/students, and controlling Activities (see next section).  This feature requires Internet access on both the computer and the mobile device (with or without a VPN).  
+				Seatsmart Remote is an optional feature that allows you to take advantage of basic functions without being tied to a computer.  Actions currently supported include selecting a random student, adding a new note about a student/students, and controlling Activities (see next section).  This feature requires Internet access on both the computer and the mobile device.  
 			</p>
 			<p>
 				Realtime communication occurs over a secure server with data encrypted in transport (the server cannot decode the information).  The server does not store this information anywhere.  <strong>The QR code used to connect your remote device should be kept hidden from students</strong>.  You can begin and end a remote connection by clicking <img class="embedded-icon" src="@/assets/remote.svg" alt="remote icon"> at the top right corner of the chart.  This icon will turn yellow when the connection is active and red when it is attempting to restore a connection.
@@ -321,7 +321,10 @@
 				The activities you launch through Seatsmart should not make students feel like they are taking a quiz.  Ideally, the process will be somewhat gamified and encourage willing participation.  Since students will be using their own devices to connect, it is important to communicate the short duration and specific purpose of your activities.  Be sure to state beforehand whether or not you would expect students to switch to other applications during or after your activity.
 			</p>
 			<p>
-				This feature will be under active development throughout the 2019-2020 academic year.  Bug reports, feature suggestions, and other comments about Activities are appreciated (see the <button class="inner-link" @click="$emit('change-content', 'about')">About</button> section for contact links).
+				You can initiate an activity by clicking <img class="embedded-icon" src="@/assets/activities-circle.svg" alt="activities icon"> at the top right corner of the chart.  If your students are not familiar with QR codes, you can click on the code to copy the URL for the activity to your clipboard.  You can then share that URL with your students.
+			</p>
+			<p>
+				This feature is under active development.  Bug reports, feature suggestions, and other comments about Activities are appreciated (see the <button class="inner-link" @click="$emit('change-content', 'about')">About</button> section for contact links).
 			</p>
 		</section>
 	</div>
@@ -354,11 +357,7 @@ export default {
 			this.caption = caption
 		},
 		openWebPage(page) {
-			if (page == 'video') {	
-				shell.openExternal('https://mailfhsu-my.sharepoint.com/:v:/g/personal/tbmccleary_fhsu_edu/ERWcdtM1yBJPhffl5rvttiwBP8JNyhQA9_RoBg-kEkw4Pw?e=iyrKnZ')
-			} else {
-				shell.openExternal('https://seatsmart.tech/')
-			}
+			shell.openExternal('https://seatsmart.tech/')
 		}
 	}
 }
