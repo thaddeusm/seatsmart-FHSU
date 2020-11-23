@@ -112,9 +112,9 @@
 						<div v-if="activity.activityType == 'word cloud'">
 							<vue-word-cloud
 							  style="
-							    height: 300px;
+							    height: 285px;
 							    width: 100%;
-							    margin: 25px auto;
+							    margin: 15px auto;
 							  "
 							  :words="wordCloudWordArray"
 							  :color="([, weight]) => weight > 10 ? '#FCBB04' : weight > 5 ? '#D2360A' : '#E5E5E5'"
@@ -165,9 +165,9 @@
 						<div v-if="activity.activityType == 'word cloud'">
 							<vue-word-cloud
 							  style="
-							    height: 300px;
+							    height: 285px;
 							    width: 100%;
-							    margin: 25px auto;
+							    margin: 15px auto;
 							  "
 							  :words="wordCloudWordArray"
 							  :color="([, weight]) => weight > 10 ? '#FCBB04' : weight > 5 ? '#D2360A' : '#E5E5E5'"
@@ -898,7 +898,7 @@ export default {
 .activity-body-wide {
 	grid-area: body;
 	display: grid;
-	grid-template-columns: 66% 1fr;
+	grid-template-columns: 70% 30%;
 	align-items: center;
 	grid-template-areas: "banner display";
 }
@@ -906,7 +906,7 @@ export default {
 .activity-body-narrow {
 	grid-area: body;
 	display: grid;
-	grid-template-columns: 40% 1fr;
+	grid-template-columns: 30% 70%;
 	align-items: center;
 	grid-template-areas: "banner display";
 }
