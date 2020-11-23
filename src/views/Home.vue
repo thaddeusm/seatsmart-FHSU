@@ -62,11 +62,11 @@
             </template>
         </Modal>
         <TouchBar :show="!modalOpen && !alertModalOpen" :bar="[
+                {type: 'button', label: 'Activities', method: function() {routeToActivities()}},
+                {type: 'spacer', size: 'flexible'},
                 {type: 'button', label: 'New Chart', method: function() {$router.push('/charts/new')}},
                 {type: 'spacer', size: 'flexible'},
-                {type: 'button', label: 'Settings', method: openModal},
-                {type: 'spacer', size: 'flexible'},
-                {type: 'button', label: 'Activities', method: function() {routeToActivities()}}
+                {type: 'button', label: 'Settings', method: openModal}
             ]" 
         />
     </div>

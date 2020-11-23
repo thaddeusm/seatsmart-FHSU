@@ -211,11 +211,12 @@ export default {
             }]
 
             let thisMonth = moment().month()
+            let thisYear = moment().year()
 
             db.sortThings('activitySessions', {}, {'date._d': -1})
                 .then((results) => {
                     this.activitySessions = results.filter((session) => {
-                        if (moment(session.date._d).month() == thisMonth) {
+                        if (moment(session.date._d).month() == thisMonth && moment(session.date._d).year() == thisYear) {
                             return session
                         }
                     })
@@ -238,11 +239,12 @@ export default {
             }]
 
             let thisWeek = moment().week()
+            let thisYear = moment().year()
 
             db.sortThings('activitySessions', {}, {'date._d': -1})
                 .then((results) => {
                     this.activitySessions = results.filter((session) => {
-                        if (moment(session.date._d).week() == thisWeek) {
+                        if (moment(session.date._d).week() == thisWeek && moment(session.date._d).year() == thisYear) {
                             return session
                         }
                     })
