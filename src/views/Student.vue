@@ -106,13 +106,10 @@
                             <p class="response-text" v-else-if="session.responses.response.choice">
                                 {{ session.responses.response.choice }}
                             </p>
-                            <p class="response-text" v-else-if="session.activity.content.assignments[parseInt(session.responses.response.assignment)] == undefined">
-                                (Click the button below to review more information.)
-                            </p>
                             <p class="response-text" v-else-if="session.responses.response.assignment !== undefined && session.activity.content.assignments[parseInt(session.responses.response.assignment)].resourceType == 'text'">
                                 {{ session.activity.content.assignments[parseInt(session.responses.response.assignment)].resourceData }}
                             </p>
-                            <p class="response-text" v-else-if="session.responses.response.assignment !== undefined">
+                            <p class="response-text" v-else-if="session.responses.response.assignment !== undefined && session.activity.content.assignments[parseInt(session.responses.response.assignment)].resourceType == 'url'"">
                                 <button @click="openExternal(session.activity.content.assignments[parseInt(session.responses.response.assignment)].resourceData)">
                                     link
                                 </button>
@@ -966,6 +963,13 @@ main {
 
 .information-gap {
     background-image: linear-gradient(rgba(255, 255, 255, .7)), url('~@/assets/information-gap-illustration.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: left;
+}
+
+.word-cloud {
+    background-image: linear-gradient(rgba(255, 255, 255, .8)), url('~@/assets/word-cloud-illustration.svg');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: left;
