@@ -62,7 +62,7 @@
                     margin: 100px auto 50px auto;
                   "
                   :words="wordCloudWordArray"
-                  :color="([, weight]) => weight > 10 ? '#FCBB04' : weight > 5 ? '#D2360A' : '#6C6C6C'"
+                  :color="([, weight]) => weight > 6 ? '#FCBB04' : weight > 3 ? '#D2360A' : '#6C6C6C'"
                   font-family="ArchivoNarrow"
                   v-if="session.responses.length > 0"
                 />
