@@ -112,14 +112,15 @@
 						<div v-if="activity.activityType == 'word cloud'">
 							<vue-word-cloud
 							  style="
-							    height: 285px;
+							    height: 280px;
 							    width: 100%;
-							    margin: 15px auto;
+							    margin: 45px auto -15px auto;
 							  "
 							  :words="wordCloudWordArray"
-							  :color="([, weight]) => weight > 10 ? '#FCBB04' : weight > 5 ? '#D2360A' : '#E5E5E5'"
+							  :color="([, weight]) => weight > 6 ? '#FCBB04' : weight > 3 ? '#D2360A' : '#E5E5E5'"
 							  font-family="ArchivoNarrow"
 							  v-if="responses.length > 0"
+							  @click="toggleWordCloudView"
 							/>
 						</div>
 						<section id="waitingForResponses" v-if="responses.length == 0"></section>
@@ -165,12 +166,12 @@
 						<div v-if="activity.activityType == 'word cloud'">
 							<vue-word-cloud
 							  style="
-							    height: 285px;
+							    height: 280px;
 							    width: 100%;
-							    margin: 15px auto;
+							    margin: 45px auto -15px auto;
 							  "
 							  :words="wordCloudWordArray"
-							  :color="([, weight]) => weight > 10 ? '#FCBB04' : weight > 5 ? '#D2360A' : '#E5E5E5'"
+							  :color="([, weight]) => weight > 6 ? '#FCBB04' : weight > 3 ? '#D2360A' : '#E5E5E5'"
 							  font-family="ArchivoNarrow"
 							  v-if="responses.length > 0"
 							/>
@@ -689,6 +690,9 @@ export default {
         },
         copyToClipboard(response) {
         	clipboard.write({text: response})
+        },
+        toggleWordCloudView() {
+        	console.log('clicked')
         }
 	},
 	sockets: {
