@@ -52,7 +52,7 @@
 				</div>
 			</section>
 			<section v-if="inverted" class="row" v-for="(row, index) in classInfo.rows" :style="rowMargins" :key="`invertedRow${index},${students.length}`">
-				<div v-for="(column, subIndex) in classInfo.columns" class="column" :style="cardStyle">			
+				<div v-for="(column, subIndex) in classInfo.columns" class="column" :style="cardStyle">	
 					<NameCard
 						:type="cardType"
 						:conserveSpace="isHuge"
@@ -475,9 +475,9 @@ export default {
 
 			let ratio = totalCardWidth / totalCardHeight
 			// enforce consistent dimensions
-			if (ratio > 1.2) {
-				totalCardWidth = totalCardHeight * 1.2
-			} else if (ratio < 1.2) {
+			if (ratio > 1.05) {
+				totalCardWidth = totalCardHeight * 1.05
+			} else if (ratio < 1.05) {
 				totalCardHeight = totalCardWidth * .835
 			}
 

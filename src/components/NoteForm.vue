@@ -333,11 +333,13 @@ export default {
 
 .positive {
 	background: var(--yellow);
+	border: 1px solid transparent;
 }
 
 .negative {
 	background: var(--red);
 	color: var(--white);
+	border: 1px solid transparent;
 }
 
 .selected {
