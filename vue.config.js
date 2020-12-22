@@ -7,7 +7,14 @@ module.exports = {
       	"appId": "com.thaddeusmccleary.seatsmart",
      	  "afterSign": "electron-builder-notarize",
       	"mac": {
-	        "entitlements": "./build/entitlements.mac.inherit.plist"
+	        "hardenedRuntime" : true,
+          "gatekeeperAssess": false,
+          "entitlements": "./build/entitlements.mac.inherit.plist",
+          "entitlementsInherit": "./build/entitlements.mac.inherit.plist",
+          "target": {
+              "target": "dir",
+              "arch": "universal"
+          },
 	   	  }
       }
     }
