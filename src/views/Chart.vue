@@ -462,6 +462,7 @@ export default {
 			// determine ideal card dimensions
 			let totalWidth = window.innerWidth
 			let totalHeight = window.innerHeight
+			let height = totalHeight * .76
 			let heightAdjusted
 
 			if (!this.expanded) {
@@ -471,7 +472,7 @@ export default {
 			}
 
 			let totalCardWidth = totalWidth / this.classInfo.columns
-			let totalCardHeight = heightAdjusted / this.classInfo.rows
+			let totalCardHeight = height / this.classInfo.rows
 
 			let ratio = totalCardWidth / totalCardHeight
 			// enforce consistent dimensions
