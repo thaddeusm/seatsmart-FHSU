@@ -13,9 +13,9 @@ module.exports = {
           "entitlementsInherit": "./build/entitlements.mac.inherit.plist",
           "target": {
               "target": "dir",
-              "arch": "universal",
-              "publish": ["github"]
+              "arch": "universal"
           },
+          "publish": "github"
 	   	  }
       }
     }
