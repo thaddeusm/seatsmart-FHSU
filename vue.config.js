@@ -14,7 +14,7 @@ module.exports = {
           "target": {
               "target": "dir",
               "arch": "universal",
-              "publish": "github"
+              "publish": ["github"]
           },
 	   	  }
       }
