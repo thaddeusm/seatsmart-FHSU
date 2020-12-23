@@ -46,12 +46,15 @@
 					<section class="button-container" v-if="activityStage == 'launched'">
 						<h3 v-if="roomID !== ''">Scan to Connect</h3>
 						<h3 v-else>Connecting...</h3>
-						<div class="qr-area" @click="copyToClipboard(`https://activities.seatsmart.tech/code/${roomID}`)">
+						<div v-if="roomID !== ''" class="qr-area" @click="copyToClipboard(`https://activities.seatsmart.tech/code/${roomID}`)">
 							<qriously 
 								id="qr"
 								:value="`https://activities.seatsmart.tech/code/${roomID}`"
 								:size="200" 
 							/>
+						</div>
+						<div v-else id="loading">
+							
 						</div>
 						<div class="actions-wrapper">
 							<button 
@@ -1107,6 +1110,21 @@ h4:hover {
     width: 240px;
     margin: 20px auto;
     border-radius: 240px;
+    border-top: 5px solid var(--light-gray);
+    border-right: 5px solid var(--yellow);
+    border-bottom: 5px solid var(--yellow);
+    border-left: 5px solid var(--yellow);
+    animation-name: spin;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+}
+
+#loading {
+	height: 180px;
+    width: 180px;
+    margin: 20px auto;
+    border-radius: 180px;
     border-top: 5px solid var(--light-gray);
     border-right: 5px solid var(--yellow);
     border-bottom: 5px solid var(--yellow);
