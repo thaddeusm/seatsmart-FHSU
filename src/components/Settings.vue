@@ -195,15 +195,17 @@
 					You can enter alternative values below:
 				</p>
 				<br>
-				<div class="label-row black-border">
-					<span class="calculation-label">Low</span>
-					<span class="calculation-label">Medium</span>
-					<span class="calculation-label">Strong</span>
-				</div>
-				<div class="form-group">
-					<input class="small-input" type="number" name="low" v-model="weightValues.low">
-					<input class="small-input" type="number" name="medium" v-model="weightValues.medium">
-					<input class="small-input" type="number" name="strong" v-model="weightValues.strong">
+				<div id="weightValueContainer">
+					<div id="weightValueLabels" class="black-border">
+						<span class="calculation-label">Low</span>
+						<span class="calculation-label">Medium</span>
+						<span class="calculation-label">Strong</span>
+					</div>
+					<div id="weightValueInputs" class="form-group">
+						<input class="small-input" type="number" name="low" v-model="weightValues.low">
+						<input class="small-input" type="number" name="medium" v-model="weightValues.medium">
+						<input class="small-input" type="number" name="strong" v-model="weightValues.strong">
+					</div>
 				</div>
 			</section>
 			<section v-if="content == 'transfer'">
@@ -597,8 +599,28 @@ input {
 	width: 300px;
 }
 
-.small-input {
-	width: 168px;
+#weightValueContainer {
+	display: grid;
+	grid-template-rows: .5fr 1fr;
+}
+
+#weightValueLabels {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+}
+
+#weightValueLabels > span {
+	display: block;
+	justify-self: center;
+}
+
+#weightValueInputs {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+}
+
+#weightValueInputs > * {
+	display: block;
 }
 
 .label-row {
