@@ -132,18 +132,23 @@ export default {
 			// determine ideal card dimensions
 			let totalWidth = window.innerWidth
 			let totalHeight = window.innerHeight
+			let height = totalHeight * .76
 			let heightAdjusted
 
-			heightAdjusted = totalHeight * .76
+			if (!this.expanded) {
+				heightAdjusted = totalHeight * .76
+			} else {
+				heightAdjusted = totalHeight * .84
+			}
 
 			let totalCardWidth = totalWidth / this.classChart.columns
-			let totalCardHeight = heightAdjusted / this.classChart.rows
+			let totalCardHeight = height / this.classChart.rows
 
 			let ratio = totalCardWidth / totalCardHeight
 			// enforce consistent dimensions
-			if (ratio > 1.2) {
-				totalCardWidth = totalCardHeight * 1.2
-			} else if (ratio < 1.2) {
+			if (ratio > 1.05) {
+				totalCardWidth = totalCardHeight * 1.05
+			} else if (ratio < 1.05) {
 				totalCardHeight = totalCardWidth * .835
 			}
 
