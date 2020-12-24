@@ -12,12 +12,15 @@ module.exports = {
           "entitlements": "./build/entitlements.mac.inherit.plist",
           "entitlementsInherit": "./build/entitlements.mac.inherit.plist",
           "target": {
-              "target": "default",
-              "arch": "universal"
+            "target": "default",
+            "arch": "universal"
           },
           "publish": "github"
 	   	  },
         "win": {
+          "target": {
+            "target": "default"
+          },
           "publish": "github"
         }
       }
