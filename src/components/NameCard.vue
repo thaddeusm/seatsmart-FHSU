@@ -599,7 +599,7 @@ export default {
 	width: 180px;
 	text-align: center;
 	margin-top: -4%;
-	margin-left: -90px;
+	margin-left: -94px;
 	z-index: 1000;
 	border-radius: 5px;
 	font-family: "ArchivoNarrow";
