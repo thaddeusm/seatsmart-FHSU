@@ -149,7 +149,7 @@ export default {
 	display: grid;
 	grid-template-rows: 15% auto 15%;
 	align-items: center;
-	justify-content: center;
+	/*justify-content: center;*/
 }
 
 h1 {
@@ -161,6 +161,7 @@ h1 {
 	margin: 20px auto;
 	text-align: center;
 	overflow: auto;
+	width: 100%;
 	max-height: 350px;
 }
 
