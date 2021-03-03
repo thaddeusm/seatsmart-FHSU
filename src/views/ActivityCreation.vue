@@ -820,24 +820,18 @@ export default {
 	width: 100%;
 	height: 100%;
 	display: grid;
-	grid-template-rows: 20vh 65vh 15vh;
-	grid-template-columns: 50% auto 50%;
+	grid-template-rows: 20% 65% 15%;
+	grid-template-columns: 49% auto 49%;
 	grid-template-areas:
-	'head head head'
-	'activityChoice border activityForm'
-	'. . .';
+		"head head head"
+		"activityChoice border activityForm"
+		"progressNodes progressNodes progressNodes";
 	align-items: center;
 }
 
 header {
 	grid-area: head;
 	text-align: center;
-	margin-bottom: 40px;
-}
-
-h1 {
-	margin-top: 70px;
-	margin-bottom: 15px;
 }
 
 button {
@@ -850,6 +844,7 @@ button {
 #border {
 	height: 100%;
 	width: 2px;
+	margin: 0 auto;
 	background: var(--dark-gray);
 	grid-area: border;
 }
@@ -888,6 +883,7 @@ button {
 	cursor: pointer;
 	vertical-align: text-top;
 	font-size: 14px;
+	margin-top: 10px;
 }
 
 .activity-info {
@@ -1085,9 +1081,7 @@ button {
 }
 
 #progressNodes {
-	position: fixed;
-	bottom: 0;
-	width: 100%;
+	grid-area: progressNodes;
 	background: var(--light-gray);
 }
 

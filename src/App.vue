@@ -43,7 +43,13 @@ export default {
 
 html, body {
     width: 100%;
+    height: 100%;
     background: var(--black);
+}
+
+#app {
+    width: 100%;
+    height: 100%;
 }
 
 h1 {

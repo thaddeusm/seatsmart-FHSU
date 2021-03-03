@@ -1059,7 +1059,7 @@ h4:hover {
 	background-image: url('~@/assets/response-pool-illustration.svg');
 	background-repeat: no-repeat;
 	background-size: cover;
-	background-position: 0 -20px;
+	background-position: 55px -50px;
 }
 
 .information-gap {
