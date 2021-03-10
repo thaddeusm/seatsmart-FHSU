@@ -205,7 +205,8 @@ export default {
 }
 
 #buttonCardArea {
-    margin: 0 auto 50px auto;
+    margin: 0 auto;
+    padding-bottom: 100px;
     text-align: center;
 }
 

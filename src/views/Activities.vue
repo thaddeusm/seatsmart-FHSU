@@ -292,7 +292,7 @@ export default {
             this.$router.push(`/session/${this.activitySessions[index]._id}`)
         },
         makePrettyDate(dateObj) {
-            return moment(dateObj).format('dddd, MMM D')
+            return moment(dateObj).format('dddd, MMM D, YYYY')
         },
         abbreviatedName(name) {
             if (name.length > 15) {

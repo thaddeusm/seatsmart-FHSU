@@ -684,7 +684,6 @@ main {
     grid-area: main;
     background: var(--light-gray);
     padding: 0 10%;
-    min-height: 100vh;
     height: 100%;
 }
 

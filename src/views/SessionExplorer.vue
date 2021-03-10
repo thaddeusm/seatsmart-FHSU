@@ -426,8 +426,6 @@ export default {
                 .then((results) => {
                     this.session = results[0]
                     this.loaded = true
-
-                    console.log(this.session)
                 })
 		},
 		routeBack() {
@@ -522,7 +520,7 @@ export default {
     height: 100%;
     display: grid;
     grid-template-columns: 25% 1fr;
-    grid-template-rows: auto;
+    grid-template-rows: 1fr;
     grid-template-areas: "leftPanel main";
 }
 
@@ -595,7 +593,6 @@ main {
     grid-area: main;
     background: var(--light-gray);
     padding: 0 10%;
-    min-height: 100vh;
     height: 100%;
 }
 
