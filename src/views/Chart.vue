@@ -460,7 +460,7 @@ export default {
 	methods: {
 		calculateCardSize() {
 			// determine ideal card dimensions
-			let totalWidth = window.innerWidth
+			let totalWidth = window.innerWidth - 35
 			let totalHeight = window.innerHeight
 			let height = totalHeight * .76
 			let heightAdjusted
