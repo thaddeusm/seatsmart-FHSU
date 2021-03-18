@@ -343,6 +343,11 @@ button {
 .drag-area {
 	width: auto;
 	background: var(--light-gray);
+	overflow-x: scroll;
+}
+
+::-webkit-scrollbar {
+    display: none;
 }
 
 .drag {
@@ -354,7 +359,6 @@ button {
 .drag > span {
 	font-size: 22px;
 	cursor: move;
-	vertical-align: middle;
 	color: var(--black);
 }
 
