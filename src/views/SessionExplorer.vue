@@ -15,8 +15,8 @@
                 <h5>
                 	{{ makePrettyDate(session.date._d) }}
                 </h5>
-                <h6 id="responses" v-if="session.responses.length > 1">
-                	{{ session.responses.length }} responses
+                <h6 id="responses" v-if="filteredResponses.length > 1">
+                	{{ filteredResponses.length }} responses
                 </h6>
                 <button 
                     v-if="loaded && session.chart !== 'anonymous' && !displayRespondents"
@@ -64,10 +64,10 @@
                   :words="wordCloudWordArray"
                   :color="([, weight]) => weight > 6 ? '#FCBB04' : weight > 3 ? '#D2360A' : '#6C6C6C'"
                   font-family="ArchivoNarrow"
-                  v-if="session.responses.length > 0"
+                  v-if="filteredResponses.length > 0"
                 />
-                <ul v-if="session.responses.length > 0" id="responsePoolList">
-                    <li v-for="(response, index) in session.responses" v-if="response.response.text" :key="`response${index}`">
+                <ul v-if="filteredResponses.length > 0" id="responsePoolList">
+                    <li v-for="(response, index) in filteredResponses" v-if="response.response.text" :key="`response${index}`">
                         <h4>{{ response.response.text }}</h4>
                         <h5 v-if="response.respondent !== 'anonymous' && displayRespondents"><router-link :to="`/student/${response.respondent.id}`">
                             {{ response.respondent.firstName }} 
@@ -81,8 +81,8 @@
                     {{ session.activity.content.prompt }}
                 </h3>
                 <h2>Responses</h2>
-                <ul v-if="session.responses.length > 0" id="responsePoolList">
-                    <li v-for="(response, index) in session.responses" v-if="response.response.text" :key="`response${index}`">
+                <ul v-if="filteredResponses.length > 0" id="responsePoolList">
+                    <li v-for="(response, index) in filteredResponses" v-if="response.response.text" :key="`response${index}`">
                         <h4>{{ response.response.text }}</h4>
                         <h5 v-if="response.respondent !== 'anonymous' && displayRespondents"><router-link :to="`/student/${response.respondent.id}`">
                             {{ response.respondent.firstName }} 
@@ -106,15 +106,15 @@
                 </div>
             </section>
             <section v-else-if="loaded && session.activity.activityType == 'survey'">
-                <div class="survey" v-if="session.responses.length > 0">
+                <div class="survey" v-if="filteredResponses.length > 0">
                     <vc-donut
                         background="black" foreground="black"
                         :size="250" unit="px" :thickness="20"
                         has-legend legend-placement="bottom"
-                        :sections="donutSections" :total="session.responses.length"
+                        :sections="donutSections" :total="filteredResponses.length"
                     >
-                        <h5 v-if="session.responses.length == 1">1 response</h5>
-                        <h5 v-else>{{ session.responses.length }} responses</h5>
+                        <h5 v-if="filteredResponses.length == 1">1 response</h5>
+                        <h5 v-else>{{ filteredResponses.length }} responses</h5>
                     </vc-donut>
                 </div>
                 <div id="responseArea">
@@ -123,7 +123,7 @@
                     </h2>
                     <sequential-entrance fromTop delay="20">
                         <div 
-                            v-for="(response, index) in session.responses" 
+                            v-for="(response, index) in filteredResponses" 
                             :key="`response${index}`"
                             class="response-card"
                         >
@@ -162,14 +162,14 @@
                 </div>
             </section>
             <section v-else-if="loaded && session.activity.activityType == 'information gap'">
-                <div class="survey" v-if="session.responses.length > 0">
+                <div class="survey" v-if="filteredResponses.length > 0">
                     <vc-donut
                         background="black" foreground="black"
                         :size="250" unit="px" :thickness="20"
-                        :sections="assignmentDonutSections" :total="session.responses.length"
+                        :sections="assignmentDonutSections" :total="filteredResponses.length"
                     >
-                        <h5 v-if="session.responses.length == 1">1 item assigned</h5>
-                        <h5 v-else>{{ session.responses.length }} items assigned</h5>
+                        <h5 v-if="filteredResponses.length == 1">1 item assigned</h5>
+                        <h5 v-else>{{ filteredResponses.length }} items assigned</h5>
                     </vc-donut>
                 </div>
                 <div id="responseArea">
@@ -178,7 +178,7 @@
                     </h2>
                     <sequential-entrance fromTop delay="20">
                         <div 
-                            v-for="(response, index) in session.responses" 
+                            v-for="(response, index) in filteredResponses" 
                             :key="`response${index}`"
                             class="response-card"
                         >
@@ -328,8 +328,57 @@ export default {
 
             return false
         },
+        filteredResponses() {
+            let filtered = []
+
+            if (this.session.activity.activityType == 'response pool' || this.session.activity.activityType == 'word cloud') {
+                filtered = this.session.responses.filter((response) => {
+                    if (response.response.text !== undefined) {
+                        if (this.session.chart !== 'anonymous') {
+                            if (response.respondent.firstName !== undefined && response.respondent.firstName.length !== 0) {
+                                return true
+                            } else {
+                                return false
+                            }
+                        }
+                    } else {
+                        return false
+                    }
+                })
+            } else if (this.session.activity.activityType == 'survey') {
+                filtered = this.session.responses.filter((response) => {
+                    if (response.response.choice !== undefined) {
+                        if (this.session.chart !== 'anonymous') {
+                            if (response.respondent) {
+                                return true
+                            } else {
+                                return false
+                            }
+                        }
+                    } else {
+                        return false
+                    }
+                })
+            } else if (this.session.activity.activityType == 'information gap') {
+                filtered = this.session.responses.filter((response) => {
+                    if (response.response.assignment !== undefined) {
+                        if (this.session.chart !== 'anonymous') {
+                            if (response.respondent) {
+                                return true
+                            } else {
+                                return false
+                            }
+                        }
+                    } else {
+                        return false
+                    }
+                })
+            }
+
+            return filtered
+        },
         donutSections() {
-            let responses = this.session.responses
+            let responses = this.filteredResponses
 
             let sections = []
 
@@ -359,7 +408,7 @@ export default {
             return sections
         },
         assignmentDonutSections() {
-            let responses = this.session.responses
+            let responses = this.filteredResponses
             let sections = []
 
             let spectrumIndex = 0
@@ -399,11 +448,11 @@ export default {
             return sections
         },
         wordCloudWordArray() {
-            let responses = this.session.responses
+            let responses = this.filteredResponses
             let wordDictionary = {}
 
             // increment word weights based upon participant responses
-            for (let i=0; i<this.session.responses.length; i++) {
+            for (let i=0; i<responses.length; i++) {
                 let response = responses[i]
                 if (wordDictionary.hasOwnProperty([response.response.text])) {
                     wordDictionary[response.response.text]++

@@ -40,7 +40,7 @@
                 </div>
                 <div v-else class="activity-button-area" v-for="(session, index) in activitySessions">
                     <ButtonCard 
-                        :text="`${abbreviatedName(session.activity.name)} (${session.responses.length})`" 
+                        :text="`${abbreviatedName(session.activity.name)}`" 
                         :button="true"
                         :display="true"
                         :simple="true"
