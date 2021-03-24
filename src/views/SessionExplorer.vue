@@ -340,6 +340,8 @@ export default {
                             } else {
                                 return false
                             }
+                        } else {
+                            return true
                         }
                     } else {
                         return false
@@ -354,6 +356,8 @@ export default {
                             } else {
                                 return false
                             }
+                        } else {
+                            return true
                         }
                     } else {
                         return false
@@ -368,6 +372,8 @@ export default {
                             } else {
                                 return false
                             }
+                        } else {
+                            return true
                         }
                     } else {
                         return false
@@ -475,6 +481,8 @@ export default {
                 .then((results) => {
                     this.session = results[0]
                     this.loaded = true
+
+                    console.log(results[0])
                 })
 		},
 		routeBack() {
