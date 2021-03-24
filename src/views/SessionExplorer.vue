@@ -502,10 +502,11 @@ export default {
         },
         startExport() {
             this.exporting = true
+            let responses = this.filteredResponses
             let responseString = ''
 
-            for (let i=0; i<this.session.responses.length; i++) {
-                let text = this.session.responses[i].response.text.split('\n').join()
+            for (let i=0; i<responses.length; i++) {
+                let text = responses[i].response.text.split('\n').join()
 
                 responseString += `${text.trimEnd()} \n`
             }
@@ -524,12 +525,10 @@ export default {
 
             this.exportMessage = `${defaultFilename} is ready for export.`
 
-            dialog.showSaveDialog(options, (filename) => {
-                this.fileSavePath = filename
-
+            dialog.showSaveDialog(options).then(result => {
                 // handle cancelation
-                if (filename !== undefined) {
-                    fs.writeFileSync(filename, responseString, 'utf-8', this.resetExport())
+                if (result.filePath !== undefined) {
+                    fs.writeFileSync(result.filePath, responseString, 'utf-8', this.resetExport())
                 } else {
                     this.resetExport()
                 }
