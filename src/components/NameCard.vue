@@ -300,12 +300,13 @@ export default {
 			} else {
 				let arr = []
 				let today = moment().dayOfYear()
+				let thisYear = moment().year()
 				let absentToday = false
 
 				for (let i=0; i<this.notes.length; i++) {
 					if (this.notes[i].type === 'negative' && this.notes[i].behavior.Abbreviation === 'A') {
 
-						if (moment(this.notes[i].dateNoted._d).dayOfYear() === today) {
+						if (moment(this.notes[i].dateNoted._d).dayOfYear() === today && moment(this.notes[i].dateNoted._d).year() === thisYear) {
 							absentToday = true
 							break
 						}
