@@ -9,7 +9,7 @@
 				v-on:edit-info="setLastView(`/chart/${id}`)"
 				:title="classInfo.name"
 			/>
-			<RemoteAdapter 
+			<RemoteAdapter
 				v-on:open-remote-panel="openRemotePanel"
 				v-on:set-room-id="setRemoteRoomID"
 				v-on:remote-connected="remoteClientConnected = true"
@@ -52,7 +52,7 @@
 				</div>
 			</section>
 			<section v-if="inverted" class="row" v-for="(row, index) in classInfo.rows" :style="rowMargins" :key="`invertedRow${index},${students.length}`">
-				<div v-for="(column, subIndex) in classInfo.columns" class="column" :style="cardStyle">	
+				<div v-for="(column, subIndex) in classInfo.columns" class="column" :style="cardStyle">
 					<NameCard
 						:type="cardType"
 						:conserveSpace="isHuge"
@@ -67,7 +67,7 @@
 						v-on:absence="addAbsence"
 						:deselect="deselect"
 						:key="students[students.length - 1]._id + index"
-						:chosen="chosenSeat.row == index + 1 && chosenSeat.column == subIndex + 1" 
+						:chosen="chosenSeat.row == index + 1 && chosenSeat.column == subIndex + 1"
 					/>
 				</div>
 			</section>
@@ -215,7 +215,7 @@
 		</Modal>
 		<Modal v-if="remotePanelOpen" v-on:trigger-close="closeRemotePanel" :dismissable="true" size="small">
 			<template slot="content">
-				<RemoteConfigPanel 
+				<RemoteConfigPanel
 					v-if="!remoteConfigured"
 					v-on:trigger-modal-close="closeRemotePanel"
 					v-on:end-config="remoteConfigured = true"
@@ -223,7 +223,7 @@
 					:remoteClientConnected="remoteClientConnected"
 					:remoteConnected="remoteConnected"
 				/>
-				<RemoteStatusPanel 
+				<RemoteStatusPanel
 					v-else
 					v-on:disconnect="closeRemoteConnection"
 					v-on:trigger-modal-close="closeRemotePanel"
@@ -236,13 +236,13 @@
 		</Modal>
 		<Modal v-if="activityModalOpen" v-on:trigger-close="activityModalOpen = false" :dismissable="false" size="large">
             <template slot="content">
-            	<ActivitySelector 
-            		v-if="activityChoice == null" 
+            	<ActivitySelector
+            		v-if="activityChoice == null"
             		v-on:set-activity-choice="setActivityChoice"
             		v-on:cancel-activity="cancelActivity"
             		:chart="id"
             	/>
-                <ActivityAdapter 
+                <ActivityAdapter
                 	v-else
                 	:allowAnonymous="false"
                 	:chart="id"
@@ -258,7 +258,7 @@
                 />
             </template>
         </Modal>
-		<TouchBar :show="!modalOpen" 
+		<TouchBar :show="!modalOpen"
 			:bar="[
 				{type: 'button', label: '🔀', method: function() {rearrangeSeats()}},
 				{type: 'button', label: '🌈', method: function() {highlightStudents()}},
@@ -268,7 +268,7 @@
 				{type: 'button', label: '📺', method: function() {invertChart()}},
 				{type: 'button', label: '📝', method: function() {createBulkNote()}},
 				{type: 'button', label: '🌠', method: function() {deselectStudents()}}
-	    	]" 
+	    	]"
 	    />
 	</div>
 </template>
@@ -645,7 +645,7 @@ export default {
 				.then(() => {
 					db.deleteSomething('notes', {student: this.studentToEdit._id})
 						.then((numNotesDeleted) => {
-							
+
 						})
 
 					for (let i=0; i<this.students.length; i++) {
@@ -820,7 +820,7 @@ export default {
 	},
 	mounted() {
 		let scope = this
-		if (this.$store.state.preferences.progress.indexOf('rearranged seats') === -1) {
+		if (this.$store.state.preferences.progress.indexOf('rearranged seats') === -1 && !this.$store.state.allClasses) {
 			// display tutorial info
 			setTimeout(function() {
 				scope.alert.isAlert = true
@@ -900,7 +900,7 @@ body {
 }
 
 #chartHeader {
-	
+
 }
 
 #activityLaunchButton {
@@ -914,7 +914,7 @@ body {
 }
 
 #chartMain {
-	
+
 }
 
 #chartFooter {

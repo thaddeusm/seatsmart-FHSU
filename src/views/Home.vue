@@ -67,7 +67,7 @@
                 {type: 'button', label: 'New Chart', method: function() {$router.push('/charts/new')}},
                 {type: 'spacer', size: 'flexible'},
                 {type: 'button', label: 'Settings', method: openModal}
-            ]" 
+            ]"
         />
     </div>
 </template>
@@ -141,7 +141,7 @@ export default {
         archiveClass(id) {
             db.updateSomething('classes', {_id: id}, {
                 $set: {
-                    "archived": true 
+                    "archived": true
                 }
             }).then(() => {
                 this.populateClasses()
@@ -150,7 +150,7 @@ export default {
         unarchiveClass(id) {
             db.updateSomething('classes', {_id: id}, {
                 $set: {
-                    "archived": false 
+                    "archived": false
                 }
             }).then(() => {
                 this.populateClasses()
@@ -310,49 +310,52 @@ export default {
 
         setTimeout(function() {
             let progress = scope.$store.state.preferences.progress
+            let classes = scope.$store.state.allClasses
 
-            if (progress.indexOf('created class') == -1) {
-                scope.modalOpen = true
-            } else if (progress.indexOf('read remote features info') == -1) {
-                scope.modalOpen = true
+            if (!classes) {
+              if (progress.indexOf('created class') == -1) {
+                  scope.modalOpen = true
+              } else if (progress.indexOf('read remote features info') == -1) {
+                  scope.modalOpen = true
 
-                // update onboarding progress
-                scope.$store.dispatch('setPreferences', {
-                    progress: ['created class', 'rearranged seats', 'viewed class chart', 'viewed a student page', 'read remote features info']
-                })
+                  // update onboarding progress
+                  scope.$store.dispatch('setPreferences', {
+                      progress: ['created class', 'rearranged seats', 'viewed class chart', 'viewed a student page', 'read remote features info']
+                  })
+              }
+
+              // check to ensure behaviorToTally is set
+              if (!scope.$store.state.preferences.hasOwnProperty('behaviorToTally')) {
+                  scope.$store.dispatch('setPreferences', {
+                      behaviorToTally: '(-) Absent'
+                  })
+
+                  scope.$store.dispatch('getPreferences')
+              }
+
+              // check to ensure calculationInterval is set
+              if (!scope.$store.state.preferences.hasOwnProperty('calculationInterval')) {
+                  scope.$store.dispatch('setPreferences', {
+                      calculationInterval: 'weekly'
+                  })
+
+                  scope.$store.dispatch('getPreferences')
+              }
+
+              // check to ensure weightValues is set
+              if (!scope.$store.state.preferences.hasOwnProperty('weightValues')) {
+                  scope.$store.dispatch('setPreferences', {
+                      weightValues: {
+                          low: 2,
+                          medium: 4,
+                          strong: 8
+                      }
+                  })
+
+                  scope.$store.dispatch('getPreferences')
+              }
+
             }
-
-            // check to ensure behaviorToTally is set
-            if (!scope.$store.state.preferences.hasOwnProperty('behaviorToTally')) {
-                scope.$store.dispatch('setPreferences', {
-                    behaviorToTally: '(-) Absent'
-                })
-
-                scope.$store.dispatch('getPreferences')
-    		}
-
-            // check to ensure calculationInterval is set
-            if (!scope.$store.state.preferences.hasOwnProperty('calculationInterval')) {
-                scope.$store.dispatch('setPreferences', {
-                    calculationInterval: 'weekly'
-                })
-
-                scope.$store.dispatch('getPreferences')
-            }
-
-            // check to ensure weightValues is set
-            if (!scope.$store.state.preferences.hasOwnProperty('weightValues')) {
-                scope.$store.dispatch('setPreferences', {
-                    weightValues: {
-                        low: 2,
-                        medium: 4,
-                        strong: 8
-                    }
-                })
-
-                scope.$store.dispatch('getPreferences')
-            }
-
         }, 3000, scope)
     }
 }
@@ -371,7 +374,7 @@ header {
     display: grid;
     grid-template-rows: 20% 20% 1fr;
     grid-template-columns: 5% 18% 1fr 18% 5%;
-    grid-template-areas: 
+    grid-template-areas:
         ". . . . ."
         ". activities . search ."
         "logo logo logo logo logo";

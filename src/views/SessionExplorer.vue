@@ -18,24 +18,24 @@
                 <h6 id="responses" v-if="filteredResponses.length > 1">
                 	{{ filteredResponses.length }} responses
                 </h6>
-                <button 
+                <button
                     v-if="loaded && session.chart !== 'anonymous' && !displayRespondents"
                     class="options-button"
-                    @click="toggleRespondentsDisplay" 
+                    @click="toggleRespondentsDisplay"
                 >
                     show respondents
                 </button>
-                <button 
+                <button
                     v-if="loaded && session.chart !== 'anonymous' && displayRespondents"
                     class="options-button"
-                    @click="toggleRespondentsDisplay" 
+                    @click="toggleRespondentsDisplay"
                 >
                     hide respondents
                 </button>
-                <button 
+                <button
                     v-if="loaded && session.activity.activityType == 'response pool'"
                   class="options-button"
-                    @click="startExport" 
+                    @click="startExport"
                     :disabled="exporting"
                 >
                     export responses
@@ -70,7 +70,7 @@
                     <li v-for="(response, index) in filteredResponses" v-if="response.response.text" :key="`response${index}`">
                         <h4>{{ response.response.text }}</h4>
                         <h5 v-if="response.respondent !== 'anonymous' && displayRespondents"><router-link :to="`/student/${response.respondent.id}`">
-                            {{ response.respondent.firstName }} 
+                            {{ response.respondent.firstName }}
                             {{ response.respondent.lastName }}
                         </router-link></h5>
                     </li>
@@ -85,7 +85,7 @@
                     <li v-for="(response, index) in filteredResponses" v-if="response.response.text" :key="`response${index}`">
                         <h4>{{ response.response.text }}</h4>
                         <h5 v-if="response.respondent !== 'anonymous' && displayRespondents"><router-link :to="`/student/${response.respondent.id}`">
-                            {{ response.respondent.firstName }} 
+                            {{ response.respondent.firstName }}
                             {{ response.respondent.lastName }}
                         </router-link></h5>
                     </li>
@@ -122,23 +122,23 @@
                         Individual Responses
                     </h2>
                     <sequential-entrance fromTop delay="20">
-                        <div 
-                            v-for="(response, index) in filteredResponses" 
+                        <div
+                            v-for="(response, index) in filteredResponses"
                             :key="`response${index}`"
                             class="response-card"
                         >
-                            <section 
+                            <section
                                 class="response-header"
                             >
-                                <div 
-                                    class="circle" 
+                                <div
+                                    class="circle"
                                     v-if="response.response.choice"
                                     :style="{background: findSpectrumColor(response.response.choice)}"
                                 >
                                 </div>
-                                <div 
+                                <div
                                     v-else
-                                    class="circle" 
+                                    class="circle"
                                     :style="{background: '#000000'}"
                                 >
                                 </div>
@@ -146,7 +146,7 @@
                             <section class="response-body">
                                 <h5 v-if="displayRespondents">
                                     <router-link :to="`/student/${response.respondent.id}`">
-                                        {{ response.respondent.firstName }} 
+                                        {{ response.respondent.firstName }}
                                         {{ response.respondent.lastName }}
                                     </router-link>
                                 </h5>
@@ -177,22 +177,22 @@
                         Content Assignments
                     </h2>
                     <sequential-entrance fromTop delay="20">
-                        <div 
-                            v-for="(response, index) in filteredResponses" 
+                        <div
+                            v-for="(response, index) in filteredResponses"
                             :key="`response${index}`"
                             class="response-card"
                         >
-                            <section 
+                            <section
                                 class="response-header"
                             >
-                                <div 
+                                <div
                                     class="circle"
-                                    v-if="response.response.hasOwnProperty('assignment')" 
+                                    v-if="response.response.hasOwnProperty('assignment')"
                                     :style="{background: findSpectrumColor(response.response.assignment)}">
                                 </div>
-                                <div 
+                                <div
                                     v-else
-                                    class="circle" 
+                                    class="circle"
                                     :style="{background: '#000000'}"
                                 >
                                 </div>
@@ -200,7 +200,7 @@
                             <section class="response-body">
                                 <h5 v-if="displayRespondents">
                                     <router-link :to="`/student/${response.respondent.id}`">
-                                        {{ response.respondent.firstName }} 
+                                        {{ response.respondent.firstName }}
                                         {{ response.respondent.lastName }}
                                     </router-link>
                                 </h5>
@@ -208,7 +208,7 @@
                                     {{ session.activity.content.assignments[parseInt(response.response.assignment)].resourceData }}
                                 </p>
                                 <p v-else-if="session.activity.content.assignments[parseInt(response.response.assignment)]">
-                                    <button 
+                                    <button
                                         @click="openExternal(session.activity.content.assignments[parseInt(response.response.assignment)].resourceData)"
                                     >
                                         link
@@ -236,7 +236,7 @@
                 {type: 'button', label: 'Back', method: function() {routeBack()}},
                 {type: 'spacer', size: 'flexible'},
                 {type: 'button', label: 'Delete Session', method: function() {alertModalOpen = true}},
-            ]" 
+            ]"
         />
     </div>
 </template>
@@ -481,8 +481,6 @@ export default {
                 .then((results) => {
                     this.session = results[0]
                     this.loaded = true
-
-                    console.log(results[0])
                 })
 		},
 		routeBack() {
