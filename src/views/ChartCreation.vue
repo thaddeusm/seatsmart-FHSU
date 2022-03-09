@@ -155,7 +155,6 @@ import ProgressNodes from '@/components/ProgressNodes.vue'
 import TouchBar from '@/components/TouchBar.vue'
 import Modal from '@/components/Modal.vue'
 import moment from 'moment'
-import XLSX from 'xlsx'
 const { dialog } = require('electron').remote
 
 export default {

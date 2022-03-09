@@ -39,34 +39,34 @@
 						<div ref="formArea">
 							<div class="form-group" v-for="(behavior, index) in positiveBehaviors" :key="index">
 								<section class="inline">
-									<select 
+									<select
 										name="posAbbreviation"
 										v-model="behavior.Abbreviation"
 										class="narrow-select"
 									>
-										<option 
-											v-for="(abbreviationOption, index) in abbreviationOptions" 
+										<option
+											v-for="(abbreviationOption, index) in abbreviationOptions"
 											:value="abbreviationOption"
 											:key="`posAbbreviation${index}`"
 										>
-											{{ abbreviationOption }}	
-										</option>		
+											{{ abbreviationOption }}
+										</option>
 									</select>
 								</section>
 								<input class="large-input" type="text" name="description" v-model="behavior.Description">
 								<section class="inline">
-									<select 
+									<select
 										name="posWeight"
 										v-model="behavior.Weight"
 										class="wide-select"
 									>
-										<option 
-											v-for="(weightOption, index) in weightOptions" 
+										<option
+											v-for="(weightOption, index) in weightOptions"
 											:value="weightOption"
 											:key="`posWeight${index}`"
 										>
-											{{ weightOption }}	
-										</option>		
+											{{ weightOption }}
+										</option>
 									</select>
 								</section>
 								<button class="delete-button black-text" @click="removeFormGroup('positive', index)">-</button>
@@ -85,34 +85,34 @@
 						<div ref="formArea">
 							<div class="form-group" v-for="(behavior, index) in negativeBehaviors" :key="index">
 								<section class="inline">
-									<select 
+									<select
 										name="negAbbreviation"
 										v-model="behavior.Abbreviation"
 										class="narrow-select"
 									>
-										<option 
-											v-for="(abbreviationOption, index) in abbreviationOptions" 
+										<option
+											v-for="(abbreviationOption, index) in abbreviationOptions"
 											:value="abbreviationOption"
 											:key="`negAbbreviation${index}`"
 										>
-											{{ abbreviationOption }}	
-										</option>		
+											{{ abbreviationOption }}
+										</option>
 									</select>
 								</section>
 								<input class="large-input" type="text" name="description" v-model="behavior.Description">
 								<section class="inline">
-									<select 
+									<select
 										name="negWeight"
 										v-model="behavior.Weight"
 										class="wide-select"
 									>
-										<option 
-											v-for="(weightOption, index) in weightOptions" 
+										<option
+											v-for="(weightOption, index) in weightOptions"
 											:value="weightOption"
 											:key="`negWeight${index}`"
 										>
-											{{ weightOption }}	
-										</option>		
+											{{ weightOption }}
+										</option>
 									</select>
 								</section>
 								<button v-if="index !== 0" class="delete-button white-text" @click="removeFormGroup('negative', index)">-</button>
@@ -130,8 +130,8 @@
 					By default, Seatsmart displays absences.  You can choose an alternative behavior below:
 				</p>
 				<select name="tally" v-model="behaviorToTally" class="block-select">
-					<option 
-						v-for="(behavior, index) in allBehaviors" 
+					<option
+						v-for="(behavior, index) in allBehaviors"
 						:value="behavior"
 						:key="`behavior${index}tally`"
 					>
@@ -209,7 +209,7 @@
 				</div>
 			</section>
 			<section v-if="content == 'transfer'">
-				<Transfer 
+				<Transfer
 					v-on:toggle-transfer-progress="toggleTransferring"
 				/>
 			</section>
@@ -230,7 +230,7 @@
 				</p>
 				<h3>Current Version</h3>
 				<p>
-					<button @click="openHomePage('notes')" class="inner-link">v.{{ version }}</button> 
+					<button @click="openHomePage('notes')" class="inner-link">v.{{ version }}</button>
 					| Copyright {{ year }} <button class="inner-link" @click="openEmail">Thaddeus McCleary</button>
 				</p>
 				<h3>MIT License</h3>
@@ -310,8 +310,8 @@ export default {
 	},
 	computed: {
 		version() {
-            return this.$store.state.version
-        },
+      return this.$store.state.version
+    },
 		allBehaviors() {
 			let all = []
 
@@ -439,7 +439,7 @@ export default {
 			}
 		},
 		openHomePage(section) {
-			if (section == 'main') {	
+			if (section == 'main') {
 				shell.openExternal('https://seatsmart.tech/')
 			} else {
 				shell.openExternal('https://seatsmart.tech/#releaseNotes')
