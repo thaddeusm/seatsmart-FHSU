@@ -3,8 +3,7 @@
         <transition name="fade">
             <aside id="leftPanel">
                 <h1>{{ student.firstName }} {{ student.lastName }}</h1>
-                <div id="tigerArea" v-if="student.tigerID !== null && student.tigerID !== ''">
-                    <img src="@/assets/tiger.png" id="tigerLogo" alt="FHSU tiger logo">
+                <div id="idArea" v-if="student.tigerID !== null && student.tigerID !== ''">
                     <h5>{{ student.tigerID }}</h5>
                 </div>
                 <div id="titleContainer">
@@ -13,13 +12,13 @@
                     </transition>
                 </div>
                 <transition name="fade">
-                    <SeatingDiagram 
-                        :compact="true" 
-                        :inverted="true" 
-                        :rows="classInfo.rows" 
-                        :columns="classInfo.columns" 
-                        :selected="`${this.student.seat.row},${this.student.seat.column}`" 
-                        :classID="classInfo._id" 
+                    <SeatingDiagram
+                        :compact="true"
+                        :inverted="true"
+                        :rows="classInfo.rows"
+                        :columns="classInfo.columns"
+                        :selected="`${this.student.seat.row},${this.student.seat.column}`"
+                        :classID="classInfo._id"
                         :title="classInfo.name"
                         v-on:change-route="changeStudents"
                     />
@@ -34,10 +33,10 @@
                 </div>
                 <section id="switchArea" v-if="activitiesLoaded">
                     <p>
-                        <span class="switch-label">notes</span> 
+                        <span class="switch-label">notes</span>
                         <button :class="[showActivities ? 'on' : 'off' ,'switch']" @click="toggleRecordsDisplay">
                             <img src="@/assets/switch-circle.svg" alt="switch circle">
-                        </button> 
+                        </button>
                          <span class="switch-label">activities</span>
                     </p>
                 </section>
@@ -159,7 +158,7 @@
             {type: 'button', label: 'Toggle Notes/Activities', method: function() {toggleRecordsDisplay()}},
             {type: 'spacer', size: 'flexible'},
 			{type: 'button', label: '📝', method: function() {openModal('note')}}
-	       ]" 
+	       ]"
         />
     </div>
 </template>
@@ -314,7 +313,7 @@ export default {
                 }
 
             }
-            
+
             return trendArr
         },
         monthTrend() {
@@ -463,7 +462,7 @@ export default {
                         this.activitySessions = studentResults
 
                         this.activitiesLoaded = true
-                    } 
+                    }
                 })
         },
         startEdit(note) {
@@ -731,20 +730,13 @@ main {
     text-align: right;
 }
 
-#tigerArea {
+#idArea {
     margin-top: 15px;
 }
 
-#tigerArea > h5 {
-    display: inline-block;
+#idArea > h5 {
     color: var(--yellow);
     font-size: 18px;
-}
-
-#tigerLogo {
-    width: 24px;
-    vertical-align: middle;
-    margin-right: 10px;
 }
 
 #titleContainer {

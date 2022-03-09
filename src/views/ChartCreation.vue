@@ -6,7 +6,7 @@
 			<h6 v-if="progress == 1">Enter the columns and rows of seating in the classroom:</h6>
 			<h6 v-if="progress == 2 && mode == 'new'">Fill in information about the class:</h6>
 			<h6 v-if="progress == 2 && mode == 'edit'">Edit information about the class:</h6>
-			<h6 v-if="progress == 3 && mode == 'new'">Create a student list or import the XLSX from TigerCentral <button class="modal-button" @click="modalOpen = true">(?)</button></h6>
+			<h6 v-if="progress == 3 && mode == 'new'">Create a student list</h6>
 			<h6 v-if="progress == 3 && mode == 'edit'">Edit the student list:</h6>
 		</header>
 		<section id="diagram">
@@ -24,7 +24,7 @@
 							<h5 class="select-label">How many chairs will you use in each row?</h5>
 						</div>
 						<select name="columns" v-model="classChart.columns">
-							<option 
+							<option
 								v-for="(columnOption, index) in columnOptions"
 								:key="`columnOption${index}`"
 								:value="columnOption"
@@ -36,7 +36,7 @@
 							<h5 class="select-label">How many rows will you use?</h5>
 						</div>
 						<select name="rows" v-model="classChart.rows">
-							<option 
+							<option
 								v-for="(rowOption, index) in rowOptions"
 								:key="`rowOption${index}`"
 								:value="rowOption"
@@ -71,7 +71,7 @@
 							<h5 class="select-label">Year</h5>
 						</div>
 						<select name="year" v-model="classChart.year">
-							<option 
+							<option
 								v-for="(year, index) in years"
 								:key="`year${index}`"
 								:value="year"
@@ -88,20 +88,13 @@
 			</section>
 			<section id="formThree" v-if="progress == 3">
 				<div class="form-container-large">
-					<h3 v-if="mode === 'new'">Import or Create Class Roster</h3>
+					<h3 v-if="mode === 'new'">Create Class Roster</h3>
 					<h3 v-else>Edit Class Roster</h3>
 					<div class="input-area">
-						<drop :class="[over ? 'drop-bold-outline' : 'drop-light-outline', 'drop-area']" @drop="handleDrop" @dragover="over = true" @dragleave="over = false" v-if="mode === 'new' && !importSuccess">
-							<button class="drop-area-button" @click="handleOpen">import roster</button>
-							<span>or drag and drop here <button class="modal-button-white" @click="modalOpen = true">(?)</button></span>
-						</drop>
-						<div class="drop-area" v-else-if="mode === 'new' && importSuccess">
-							<button class="drop-area-button" @click="resetImport">import a different file</button>
-						</div>
 						<div class="label-row black-border">
 							<span>First Name</span>
 							<span>Last Name</span>
-							<span>Tiger ID</span>
+							<span>ID</span>
 						</div>
 						<div ref="formArea">
 							<div class="form-group" v-for="(student, index) in classStudents" :key="index">
@@ -125,35 +118,6 @@
 		<section id="progressNodes">
 			<ProgressNodes :steps="steps" :progress="progress" />
 		</section>
-		<transition name="fade">
-			<Modal v-if="modalOpen" v-on:trigger-close="modalOpen = false" :dismissable="true" size="large">
-				<template slot="content">
-					<div class="modal-header">
-						<h1>Import a Roster (FHSU Users)</h1>
-					</div>
-					<div class="modal-body">
-						<div class="step">
-							<img src="@/assets/tiger.png" alt="FHSU tiger">
-							<h4>Teaching > Course Rosters on Tiger Central</h4>
-							<h4>1</h4>
-						</div>
-						<div class="step">
-							<img src="@/assets/excel.svg" alt="Excel file icon">
-							<h4>Click on the Excel icon next to a course</h4>
-							<h4>2</h4>
-						</div>
-						<div class="step">
-							<img src="@/assets/import.svg" alt="import icon">
-							<h4>import or drag the Excel file into Seatsmart</h4>
-							<h4>3</h4>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<button class="modal-footer-button" @click="modalOpen = false">Got it</button>
-					</div>
-				</template>
-			</Modal>
-		</transition>
 		<transition name="fade">
 			<Modal v-if="alertModalOpen" v-on:trigger-close="alertModalOpen = false" :dismissable="true" size="small">
 				<template slot="content">
@@ -208,13 +172,11 @@ export default {
 		return {
 			mode: 'new',
 			alertMessage: '',
-			modalOpen: false,
 			alertModalOpen: false,
 			over: false,
 			progress: 1,
 			steps: 3,
 			years: [],
-			importSuccess: false,
 			classChart: {
 				columns: 2,
 				rows: 1,
@@ -222,7 +184,7 @@ export default {
 				semester: null,
 				year: null,
 				_id: null,
-                archived: null
+        archived: null
 			},
 			classStudents: [
 				{
@@ -367,7 +329,7 @@ export default {
 			let scope = this
 			setTimeout(function() {
 				let lastInput = scope.classStudents.length - 1
-				
+
 				scope.$refs[lastInput][0].focus()
 			}, 300, scope)
 		},
@@ -377,102 +339,6 @@ export default {
 				this.deletedStudents.push(this.classStudents[index])
 			}
 			this.classStudents.splice(index, 1)
-		},
-		handleDrop(data, event) {
-			event.preventDefault()
-			const files = event.dataTransfer.files
-
-			let path = event.dataTransfer.files.item(0).path
-
-			this.processXLSX(path)
-		},
-		handleOpen() {
-			let path = dialog.showOpenDialog({ properties: ['openFile'] })
-
-			// in case they click 'cancel' on the dialog box
-			if (path !== undefined) {
-				this.processXLSX(path[0])
-			}
-		},
-		processXLSX(path) {
-			var workbook = XLSX.readFile(path)
-
-			console.log(workbook)
-
-			// FHSU-specific processing
-			var worksheet = workbook.Sheets['Course Roster']
-
-			var keys = Object.keys(worksheet)
-			var ids = []
-			var names = []
-			var students = []
-			var statuses = []
-
-			for (let i=0; i<keys.length; i++) {
-				if (keys[i][0] === 'A') {
-					names.push(worksheet[keys[i]].v)
-				} else if (keys[i][0] === 'B') {
-					ids.push(worksheet[keys[i]].v)
-				} else if (keys[i][0] === 'D') {
-					statuses.push(worksheet[keys[i]].v)
-				}
-			}
-
-			for (let i=0; i<names.length; i++) {
-				if (statuses[i] === 'EN') {
-					students.push({
-						name: names[i],
-						id: ids[i],
-						status: statuses[i]
-					})
-				}
-			}
-
-			for (let i=0; i<students.length; i++) {
-				let split = students[i].name.split(',')
-				let lastName = split[0]
-				let firstName = split[1].slice(1)
-
-
-				this.classStudents.push({
-					firstName: firstName,
-					lastName: lastName,
-					tigerID: '' + students[i].id + '',
-					selected: false,
-					highlight: '',
-					class: this.classChart._id,
-					seat: {
-						row: null,
-						column: null
-					}
-				})
-			}
-
-			this.classStudents.shift()
-
-			if (this.classStudents.length === 0) {
-				this.alertMessage = 'Please check the file type (xlsx) and try again.'
-			} else {
-				this.alertMessage = ''
-				this.importSuccess = true
-				this.over = false
-			}
-		},
-		resetImport() {
-			this.importSuccess = false
-			this.over = false
-			this.classStudents = [{
-				firstName: null,
-				lastName: null,
-				tigerID: null,
-				selected: false,
-				highlight: '',
-				class: null,
-				seat: {
-					row: null,
-					column: null
-				}
-			}]
 		},
 		routeBack() {
 			if (this.classChart._id !== null && this.mode == 'new') {
