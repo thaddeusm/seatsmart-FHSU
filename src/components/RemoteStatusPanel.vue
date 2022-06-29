@@ -2,27 +2,27 @@
 	<section id="panelContainer">
 		<section class="panel">
 			<section class="panel-header" v-if="remoteConnected">
-				<img src="@/assets/remoteconnect.svg" class="illustration"> 
+				<img src="@/assets/remoteconnect.svg" class="illustration">
 				<h3>
 					Remote Connected
 				</h3>
 			</section>
 			<section class="panel-header" v-else>
-				<img src="@/assets/remotedisconnect.svg" class="illustration"> 
+				<img src="@/assets/remotedisconnect.svg" class="illustration">
 				<h3>
 					Reconnecting...
 				</h3>
 			</section>
 			<section class="panel-body">
-				<section class="left-panel">				
-					<qriously 
+				<section class="left-panel">
+					<qriously
 						v-if="showQR"
 						id="qr"
-						:value="`https://remote.seatsmart.tech/code/${roomID}`" 
-						:size="100" 
+						:value="`https://seatsmart-remote.thaddeus.education/code/${roomID}`" 
+						:size="100"
 					/>
 					<div id="qrGhost" v-else>
-						
+
 					</div>
 					<button class="qr-toggle" v-if="showQR" @click="showQR = false">hide QR</button>
 					<button class="qr-toggle" v-else @click="showQR = true">show QR</button>
@@ -79,7 +79,7 @@ export default {
 	height: 100%;
 	display: grid;
 	grid-template-rows: 20% 80%;
-	grid-template-areas: 
+	grid-template-areas:
 		"panelHeader"
 		"panelBody";
 }

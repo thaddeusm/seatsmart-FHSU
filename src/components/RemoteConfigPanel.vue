@@ -2,14 +2,14 @@
 	<section id="panelContainer">
 		<section class="panel" v-if="remoteConnected && !remoteClientConnected">
 			<h3 class="panel-header">
-				Remote | 
+				Remote |
 					<span>Scan to Connect</span>
 			</h3>
 			<section>
-				<qriously 
+				<qriously
 					id="qr"
-					:value="`https://remote.seatsmart.tech/code/${roomID}`" 
-					:size="200" 
+					:value="`https://seatsmart-remote.thaddeus.education/code/${roomID}`" 
+					:size="200"
 				/>
 			</section>
 		</section>
@@ -88,7 +88,7 @@ export default {
 	height: 100%;
 	display: grid;
 	grid-template-rows: 20% 80%;
-	grid-template-areas: 
+	grid-template-areas:
 		"panelHeader"
 		"panelBody";
 }

@@ -45,9 +45,9 @@
 				<template slot="Student Cards">
 					<p class="center">{{ caption }}</p>
 					<div class="demo-area">
-						<NameCard 
-							class="demo-card" 
-							type="demo" 
+						<NameCard
+							class="demo-card"
+							type="demo"
 							v-on:show-caption="showCaption"
 						/>
 					</div>
@@ -125,7 +125,7 @@
 							<img src="@/assets/star-deselect.svg" alt="deselect students icon">
 							<h5>Deselect All Students</h5>
 							<p>
-								Get rid of all of the stars in one click!  That sounds a little depressing, but 
+								Get rid of all of the stars in one click!  That sounds a little depressing, but
 								it really is convenient sometimes.
 							</p>
 						</li>
@@ -208,9 +208,9 @@
 				<template slot="Student Cards">
 					<p class="center">{{ caption }}</p>
 					<div class="demo-area">
-						<NameCard 
-							class="demo-card" 
-							type="demo" 
+						<NameCard
+							class="demo-card"
+							type="demo"
 							v-on:show-caption="showCaption"
 						/>
 					</div>
@@ -288,7 +288,7 @@
 							<img src="@/assets/star-deselect.svg" alt="deselect students icon">
 							<h5>Deselect All Students</h5>
 							<p>
-								Get rid of all of the stars in one click!  That sounds a little depressing, but 
+								Get rid of all of the stars in one click!  That sounds a little depressing, but
 								it really is convenient sometimes.
 							</p>
 						</li>
@@ -301,7 +301,7 @@
 				Remote
 			</h4>
 			<p>
-				Seatsmart Remote is an optional feature that allows you to take advantage of basic functions without being tied to a computer.  Actions currently supported include selecting a random student, adding a new note about a student/students, and controlling Activities (see next section).  This feature requires Internet access on both the computer and the mobile device.  
+				Seatsmart Remote is an optional feature that allows you to take advantage of basic functions without being tied to a computer.  Actions currently supported include selecting a random student, adding a new note about a student/students, and controlling Activities (see next section).  This feature requires Internet access on both the computer and the mobile device.
 			</p>
 			<p>
 				Realtime communication occurs over a secure server with data encrypted in transport (the server cannot decode the information).  The server does not store this information anywhere.  <strong>The QR code used to connect your remote device should be kept hidden from students</strong>.  You can begin and end a remote connection by clicking <img class="embedded-icon" src="@/assets/remote.svg" alt="remote icon"> at the top right corner of the chart.  This icon will turn yellow when the connection is active and red when it is attempting to restore a connection.
@@ -315,7 +315,7 @@
 				Activities
 			</h4>
 			<p>
-				Like Remote, Seatsmart Activites is an optional feature that requires access to the Internet.  Further, it requires that students have access to Internet-connected devices (smartphones).  Activites are meant to engage students while providing you simple, in-class assessment tools.  
+				Like Remote, Seatsmart Activites is an optional feature that requires access to the Internet.  Further, it requires that students have access to Internet-connected devices (smartphones).  Activites are meant to engage students while providing you simple, in-class assessment tools.
 			</p>
 			<p>
 				The activities you launch through Seatsmart should not make students feel like they are taking a quiz.  Ideally, the process will be somewhat gamified and encourage willing participation.  Since students will be using their own devices to connect, it is important to communicate the short duration and specific purpose of your activities.  Be sure to state beforehand whether or not you would expect students to switch to other applications during or after your activity.
@@ -357,7 +357,7 @@ export default {
 			this.caption = caption
 		},
 		openWebPage(page) {
-			shell.openExternal('https://seatsmart.tech/')
+			shell.openExternal('https://seatsmart.thaddeus.education/')
 		}
 	}
 }

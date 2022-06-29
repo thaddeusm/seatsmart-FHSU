@@ -1,8 +1,8 @@
 <template>
 	<div class="container">
-		<NoteForm 
-			v-if="addNotes" 
-			:students="genuineParticipants" 
+		<NoteForm
+			v-if="addNotes"
+			:students="genuineParticipants"
 			type="multiple modal"
 			v-on:trigger-modal-close="$emit('trigger-modal-close')"
 		/>
@@ -12,15 +12,15 @@
 			</section>
 			<section :class="[activity.activityType.split(' ').join('-'), activityStage == 'started' ? 'activity-body-narrow':'activity-body-wide', activityStage == 'ended' ? 'activity-body-narrow':'activity-body-wide']">
 				<section id="activityBanner">
-					
+
 				</section>
 				<section class="activity-display">
 					<section class="button-container" v-if="allowAnonymous && activityStage == 'configuring'">
 						<h3>Launch</h3>
 						<div>
 							<select name="launch" v-model="launchChoice">
-								<option 
-									v-for="(launchOption, index) in launchOptions" 
+								<option
+									v-for="(launchOption, index) in launchOptions"
 									:value="launchOption"
 									:key="`option${index}`"
 								>
@@ -29,13 +29,13 @@
 							</select>
 						</div>
 						<div class="actions-wrapper">
-							<button 
-								class="action-button cancel-button" 
+							<button
+								class="action-button cancel-button"
 								@click="$emit('trigger-modal-close')"
 							>
 								cancel
 							</button>
-							<button 
+							<button
 								class="action-button launch-button"
 								@click="launchActivity"
 							>
@@ -46,24 +46,24 @@
 					<section class="button-container" v-if="activityStage == 'launched'">
 						<h3 v-if="roomID !== ''">Scan to Connect</h3>
 						<h3 v-else>Connecting...</h3>
-						<div v-if="roomID !== ''" class="qr-area" @click="copyToClipboard(`https://activities.seatsmart.tech/code/${roomID}`)">
-							<qriously 
+						<div v-if="roomID !== ''" class="qr-area" @click="copyToClipboard(`https://seatsmart-activities.thaddeus.education/code/${roomID}`)">
+							<qriously
 								id="qr"
-								:value="`https://activities.seatsmart.tech/code/${roomID}`"
-								:size="200" 
+								:value="`https://seatsmart-activities.thaddeus.education/code/${roomID}`"
+								:size="200"
 							/>
 						</div>
 						<div v-else id="loading">
-							
+
 						</div>
 						<div class="actions-wrapper">
-							<button 
-								class="action-button cancel-button" 
+							<button
+								class="action-button cancel-button"
 								@click="cancelActivity"
 							>
 								cancel
 							</button>
-							<button 
+							<button
 								class="action-button launch-button"
 								@click="startActivity"
 								:disabled="connectedUsers.length == 0"
@@ -128,7 +128,7 @@
 						</div>
 						<section id="waitingForResponses" v-if="responses.length == 0"></section>
 						<div class="actions-wrapper">
-							<button 
+							<button
 								class="action-button cancel-button"
 								@click="endActivity"
 								:disabled="ending"
@@ -188,7 +188,7 @@
 							</vc-donut>
 						</div>
 						<div class="actions-wrapper" v-if="allowAnonymous">
-							<button 
+							<button
 								class="action-button cancel-button"
 								@click="$emit('trigger-modal-close')"
 							>
@@ -196,13 +196,13 @@
 							</button>
 						</div>
 						<div class="actions-wrapper" v-else>
-							<button 
+							<button
 								class="action-button cancel-button"
 								@click="$emit('trigger-modal-close')"
 							>
 								close without notes
 							</button>
-							<button 
+							<button
 								class="action-button launch-button"
 								@click="beginAddNotes"
 								v-if="responses.length > 0"
@@ -222,8 +222,8 @@
 						</div>
 					</section>
 					<div v-if="activity.options.hasOwnProperty('timeLimit')">
-						<Countdown 
-							id="countdown"  
+						<Countdown
+							id="countdown"
 							v-if="activity.options.timeLimit.enabled && activityStage == 'started'"
 							:countdownRunning="countdownStarted"
 							:timeLimit="timeLimitInSeconds"
@@ -361,7 +361,7 @@ export default {
 					}
 
 					sections.push(obj)
-					
+
 					spectrumIndex++
 				}
 
@@ -535,7 +535,7 @@ export default {
 					let student = this.students[i].id
 
 					assignmentDictionary[student] = assignmentIndex
-					
+
 					if (assignmentIndex < assignments.length - 1) {
 						assignmentIndex++
 					} else {
@@ -823,7 +823,7 @@ export default {
 		},
 		incomingResponseData(encryptedData) {
 			let decrypted = this.decrypt(encryptedData)
-			
+
 			this.addResponse(decrypted)
 		},
 		incomingResponses(encryptedArray) {
@@ -890,7 +890,7 @@ export default {
 	height: 100%;
 	display: grid;
 	grid-template-rows: 15% 85%;
-	grid-template-areas: 
+	grid-template-areas:
 		"header"
 		"body";
 	background: rgba(255,255,255,1);

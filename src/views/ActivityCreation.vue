@@ -269,28 +269,28 @@
 									<option value="url">URL</option>
 									<option value="img">image</option>
 								</select>
-								<input 
+								<input
 									v-if="informationGapData.assignments[index].resourceType == 'text'"
-									class="medium-input" 
-									type="text" 
-									:name="`assignment${index}`" 
-									v-model="informationGapData.assignments[index].resourceData" 
+									class="medium-input"
+									type="text"
+									:name="`assignment${index}`"
+									v-model="informationGapData.assignments[index].resourceData"
 									placeholder="Content..."
 								>
-								<input 
+								<input
 									v-else-if="informationGapData.assignments[index].resourceType == 'url'"
-									class="medium-input" 
-									type="text" 
-									:name="`assignment${index}`" 
-									v-model="informationGapData.assignments[index].resourceData" 
+									class="medium-input"
+									type="text"
+									:name="`assignment${index}`"
+									v-model="informationGapData.assignments[index].resourceData"
 									placeholder="https://..."
 								>
-								<input 
+								<input
 									v-else
-									class="medium-input" 
-									type="text" 
-									:name="`assignment${index}`" 
-									v-model="informationGapData.assignments[index].resourceData" 
+									class="medium-input"
+									type="text"
+									:name="`assignment${index}`"
+									v-model="informationGapData.assignments[index].resourceData"
 									placeholder="https://....jpeg"
 								>
 								<button class="delete-button" @click="removeInformationGapAssignment(index)" :disabled="index < 2">-</button>
@@ -310,11 +310,11 @@
 				<section class="form-container">
 					<h3 v-if="previewRoomID == ''">Preview the {{ capitalizeString(activityChoice) }}</h3>
 					<h3 v-else>Scan to Connect</h3>
-					<qriously 
+					<qriously
 						v-if="previewRoomID !== ''"
 						id="qr"
-						:value="`https://activities.seatsmart.tech/code/${previewRoomID}`"
-						:size="200" 
+						:value="`https://seatsmart-activities.thaddeus.education/code/${previewRoomID}`"
+						:size="200"
 					/>
 					<section id="roomIDLoading" v-else></section>
 				</section>
@@ -351,8 +351,8 @@
                 </div>
             </template>
         </Modal>
-		<TouchBar 
-			:show="true" 
+		<TouchBar
+			:show="true"
             :bar="[{type: 'button', label: 'back', method: function() {routeBack()}}]"
         />
 	</div>
@@ -669,7 +669,7 @@ export default {
 								seconds: this.surveyData.timeLimit.seconds
 							}
 						}
-					}						
+					}
 			} else if (this.activityChoice == 'response pool') {
 				dataToSave = {
 						name: this.responsePoolData.name,
@@ -718,7 +718,7 @@ export default {
 						options: {
 							assignByHighlight: this.informationGapData.assignByHighlight
 						}
-					}	
+					}
 			}
 
 
@@ -887,7 +887,7 @@ button {
 }
 
 .activity-info {
-	
+
 }
 
 .activity-info > h2 {
@@ -955,7 +955,7 @@ button {
 	display: grid;
 	grid-template-columns: auto 1fr;
 	grid-template-rows: auto auto;
-	grid-template-areas: 
+	grid-template-areas:
 		"label switch"
 		"config config";
 	align-items: center;
