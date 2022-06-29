@@ -50,7 +50,7 @@
 							<qriously
 								id="qr"
 								:value="`https://seatsmart-activities.thaddeus.education/code/${roomID}`"
-								:size="200"
+								:size="195"
 							/>
 						</div>
 						<div v-else id="loading">
@@ -1079,9 +1079,10 @@ h4:hover {
 #qr {
 	background: var(--white);
 	box-shadow: 2px 2px 5px var(--black);
-	width: 200px;
-	height: 200px;
-	margin: 25px auto;
+	width: 195px;
+	height: 195px;
+	margin: 20px auto;
+	padding: 2px;
 	border-radius: 5px;
 	vertical-align: middle;
 }
