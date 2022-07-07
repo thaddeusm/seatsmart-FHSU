@@ -21,7 +21,7 @@
         <main>
             <div class="result" v-for="(classChart, index) in Object.values(results)" v-if="classChart.length > 0" :key="index">
                 <sequential-entrance fromTop delay="20">
-                    <TitleBar v-if="classChart.length > 0" :classID="Object.keys(results)[index]" :link="true" />  
+                    <TitleBar v-if="classChart.length > 0" :classID="Object.keys(results)[index]" :link="true" />
                     <div class="name-card-wrapper" v-for="(student, subIndex) in classChart">
                         <NameCard
                             :key="`${student}${subIndex}`"
@@ -36,9 +36,8 @@
             <div v-if="noResults" id="noResults">
                 <img id="searchSplash" src="@/assets/searchimage.svg" alt="search illustration">
                 <h2>No students were found.</h2>
-                <h4>Be sure to search using students' "English" names or Tiger IDs.</h4>
                 <h4 v-if="!includeArchived">
-                    Also, you can click the 
+                    Click the
                     <img class="archive-icon" src="@/assets/archivewhite.svg" alt="enable archive icon"> icon above to include students from archived classes.
                 </h4>
             </div>
@@ -57,7 +56,7 @@
             {type: 'spacer', size: 'flexible'},
             {type: 'button', label: '📦', method: function() {toggleIncludeArchived()}},
             {type: 'button', label: '🎫', method: function() {toggleCardStyle()}}
-	       ]" 
+	       ]"
         />
     </div>
 </template>
