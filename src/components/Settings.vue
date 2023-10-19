@@ -446,7 +446,7 @@ export default {
 			}
 		},
 		openEmail() {
-			shell.openExternal('mailto:tbmccleary@fhsu.edu?subject=Seatsmart')
+			shell.openExternal('mailto:verb_stanzas0a@icloud.com?subject=Seatsmart')
 		},
 		toggleTransferring() {
 			this.transferring = !this.transferring
