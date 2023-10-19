@@ -46,10 +46,10 @@
 					<section class="button-container" v-if="activityStage == 'launched'">
 						<h3 v-if="roomID !== ''">Scan to Connect</h3>
 						<h3 v-else>Connecting...</h3>
-						<div v-if="roomID !== ''" class="qr-area" @click="copyToClipboard(`https://seatsmart-activities.thaddeus.education/code/${roomID}`)">
+						<div v-if="roomID !== ''" class="qr-area" @click="copyToClipboard(`https://seatsmart-activities.vercel.app/code/${roomID}`)">
 							<qriously
 								id="qr"
-								:value="`https://seatsmart-activities.thaddeus.education/code/${roomID}`"
+								:value="`https://seatsmart-activities.vercel.app/code/${roomID}`"
 								:size="195"
 							/>
 						</div>

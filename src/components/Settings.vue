@@ -440,9 +440,9 @@ export default {
 		},
 		openHomePage(section) {
 			if (section == 'main') {
-				shell.openExternal('https://seatsmart.thaddeus.education/')
+				shell.openExternal('https://seatsmart.vercel.app/')
 			} else {
-				shell.openExternal('https://seatsmart.thaddeus.education/#releaseNotes')
+				shell.openExternal('https://seatsmart.vercel.app/#releaseNotes')
 			}
 		},
 		openEmail() {

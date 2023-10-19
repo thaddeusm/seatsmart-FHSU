@@ -1,4 +1,4 @@
-![Seatsmart Icon](https://seatsmart.thaddeus.education/img/logo.b38f8b88.svg)
+![Seatsmart Icon](https://seatsmart.vercel.app/img/logo.b38f8b88.svg)
 
 # Seatsmart
 Seatsmart offers a convenient way to to manage classrooms by encouraging learners to make positive contributions during a lesson.  

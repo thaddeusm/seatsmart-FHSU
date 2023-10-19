@@ -8,7 +8,7 @@
 			<section>
 				<qriously
 					id="qr"
-					:value="`https://seatsmart-remote.thaddeus.education/code/${roomID}`" 
+					:value="`https://seatsmart-remote.vercel.app/code/${roomID}`" 
 					:size="200"
 				/>
 			</section>

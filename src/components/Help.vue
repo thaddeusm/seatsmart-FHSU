@@ -357,7 +357,7 @@ export default {
 			this.caption = caption
 		},
 		openWebPage(page) {
-			shell.openExternal('https://seatsmart.thaddeus.education/')
+			shell.openExternal('https://seatsmart.vercel.app/')
 		}
 	}
 }

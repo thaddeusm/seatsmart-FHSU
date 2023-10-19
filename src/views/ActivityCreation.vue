@@ -313,7 +313,7 @@
 					<qriously
 						v-if="previewRoomID !== ''"
 						id="qr"
-						:value="`https://seatsmart-activities.thaddeus.education/code/${previewRoomID}`"
+						:value="`https://seatsmart-activities.vercel.app/code/${previewRoomID}`"
 						:size="200"
 					/>
 					<section id="roomIDLoading" v-else></section>

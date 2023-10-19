@@ -18,7 +18,7 @@
 					<qriously
 						v-if="showQR"
 						id="qr"
-						:value="`https://seatsmart-remote.thaddeus.education/code/${roomID}`" 
+						:value="`https://seatsmart-remote.vercel.app/code/${roomID}`" 
 						:size="100"
 					/>
 					<div id="qrGhost" v-else>
