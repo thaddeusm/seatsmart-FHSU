@@ -23,7 +23,7 @@ import VueSocketIO from 'vue-socket.io'
 
 Vue.use(new VueSocketIO({
     debug: true,
-    connection: SocketIO('https://seatsmart-remote-server.glitch.me')
+    connection: SocketIO('https://seatsmart-remote-server.onrender.com')
 }))
 
 import VueQriously from 'vue-qriously'
