@@ -66,7 +66,7 @@ $ npm install
 ```
 or
 ```
-$ yarn
+$ yarn install
 ```
 
 ### to serve the application during development
